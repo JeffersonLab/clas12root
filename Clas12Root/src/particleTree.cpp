@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
 // Run the TApplication (not needed if you only want to store the histograms.)
   app->SetPrompt("ParticleTree [%d] ");
 
-  app->ProcessLine(".x $CLAS12TOOL/RunRoot/LoadClas12Root.C");
+  app->ProcessLine(".x $CLAS12ROOT/RunRoot/LoadClas12Root.C");
   app->ProcessLine(Form("clas12root::ParticleTree treemaker{\"%s\",\"%s\"}",infilename.Data(),outfilename.Data()));
 
   if(argc==4) {

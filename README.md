@@ -1,4 +1,4 @@
-# Clas12Tool
+# Clas12Root
 
 Data Analysis Tools for hipo4 data format.
 
@@ -26,36 +26,34 @@ The Clas12Root package depends on both Hipo and Clas12Banks. This provides ROOT-
 
 ## To Download
 
-git clone --recurse-submodules https://github.com/dglazier/Clas12Tool.git
+git clone --recurse-submodules https://github.com/jeffersonlab/clas12root.git
 
-cd Clas12Tool
-
-git checkout restructure
+cd clas12root
 
 ## To setup Run ROOT
 
 for cshrc
 
-setenv CLAS12TOOL $PWD  (the actual path can be added in your bashrc or tchrc)
+setenv CLAS12ROOT $PWD  (the actual path can be added in your bashrc or tchrc)
 
-setenv PATH "$PATH":"$CLAS12TOOL/bin"
+setenv PATH "$PATH":"$CLAS12ROOT/bin"
 
 setenv HIPO /Where/Is/hipo
 
 or for bash
 
-export CLAS12TOOL=$PWD
+export CLAS12ROOT=$PWD
 
-export PATH="$PATH":"$CLAS12TOOL/bin"
+export PATH="$PATH":"$CLAS12ROOT/bin"
 
 export HIPO=/Where/Is/hipo
 
-## To install (either Hipo3 or Hipo4)
+## To install
 
    installC12Root
 
 
-If there are issues with cmake and your ROOTSYS you can try using the local FindROOT file. Edit the CMakeList.txt.hipo3 or 4 files removing the lines with comment ##USEROOTSYS and uncomment the line
+If there are issues with cmake and your ROOTSYS you can try using the local FindROOT file. Edit the CMakeList.txt files removing the lines with comment ##USEROOTSYS and uncomment the line
 
    	 #######include("cmake/FindROOT.cmake")
 
@@ -92,11 +90,11 @@ The clas12reader class performs the correlation of particle and detector inofmat
 
          clas12reader c12("file.hipo",{0,1,6});
 
-You can insepct the code [$CLAS12TOOL/RunRoot/Ex1_CLAS12Reader.C](https://github.com/dglazier/Clas12Tool/blob/master/RunRoot/Ex1_CLAS12Reader.C) for more guidance on how to use it.
+You can insepct the code [$CLAS12ROOT/RunRoot/Ex1_CLAS12Reader.C](https://github.com/jeffersonlab/clas12root/blob/master/RunRoot/Ex1_CLAS12Reader.C) for more guidance on how to use it.
 
 To run:
 
-       clas12root $CLAS12TOOL/RunRoot/Ex1_CLAS12Reader.C+ --in=/WHERE/IS/MY/HIPO/file.hipo
+       clas12root $CLAS12ROOT/RunRoot/Ex1_CLAS12Reader.C+ --in=/WHERE/IS/MY/HIPO/file.hipo
 
 Note the use of the + sign after the macro name. This compiles the script meaning it will run much faster.
 
@@ -106,7 +104,7 @@ To install rootbooks see https://root.cern.ch/how/how-create-rootbook
 
 mkdir myNotebooks
 
-cp -r $CLAS12TOOL/RunRoot/jupy myNotebooks/.
+cp -r $CLAS12ROOT/RunRoot/jupy myNotebooks/.
 
 cd myNotebooks/jupy
 
@@ -141,7 +139,7 @@ Instead of drawing histograms interactively at the prompt you may give predefine
 
 	particleDraw /WHERE/IS/MY/HIPO/file.hipo Ex2_HipoDraw.C
 
-See $CLAS12TOOL/RunRoot/Ex2_HipoDraw.C for details.
+See $CLAS12ROOT/RunRoot/Ex2_HipoDraw.C for details.
 
 There are predefined aliases for DST bank detector layers :
 

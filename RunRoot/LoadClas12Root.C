@@ -8,13 +8,13 @@ using namespace clas12root;
 
 void LoadClas12Root(){
  
-  TString CLAS12TOOL=gSystem->Getenv("CLAS12TOOL");
-  TString LIB=CLAS12TOOL+"/lib/";
+  TString CLAS12ROOT=gSystem->Getenv("CLAS12ROOT");
+  TString LIB=CLAS12ROOT+"/lib/";
   gSystem->Load(LIB+"liblz4");
   gSystem->Load(LIB+"libHipo4");
   gSystem->Load(LIB+"libClas12Banks");
   gSystem->Load(LIB+"libClas12Root");
 
-  gROOT->SetMacroPath(Form("%s:%s/RunRoot/",gROOT->GetMacroPath(),CLAS12TOOL.Data()));
+  gROOT->SetMacroPath(Form("%s:%s/RunRoot/",gROOT->GetMacroPath(),CLAS12ROOT.Data()));
 
 }

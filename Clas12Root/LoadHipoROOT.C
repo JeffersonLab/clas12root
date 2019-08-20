@@ -9,9 +9,9 @@ using namespace clas12root;
 void LoadHipoROOT(){
 
  
-  gROOT->LoadMacro("$CLAS12TOOL/RunRoot/importToROOT.C");
+  gROOT->LoadMacro("$CLAS12ROOT/RunRoot/importToROOT.C");
 
-  TString HIPOROOT=TString(gSystem->Getenv("CLAS12TOOL"))+"/RunRoot/clas12root/";
+  TString HIPOROOT=TString(gSystem->Getenv("CLAS12ROOT"))+"/RunRoot/clas12root/";
   gSystem->AddIncludePath(TString("-I")+HIPOROOT);
   
 

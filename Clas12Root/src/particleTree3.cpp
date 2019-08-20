@@ -21,11 +21,11 @@ int main(int argc, char **argv) {
 // Run the TApplication (not needed if you only want to store the histograms.)
   app->SetPrompt("ParticleTree [%d] ");
 
-  app->ProcessLine(".x $CLAS12TOOL/RunRoot/LoadClas12Root3.C");
-  // app->ProcessLine("gSystem->Load(\"$CLAS12TOOL/lib/liblz4\");");
-  // app->ProcessLine("gSystem->Load(\"$CLAS12TOOL/lib/libHipo3\");");
-  // app->ProcessLine("gSystem->Load(\"$CLAS12TOOL/lib/libClas12Banks3\");");
-  // app->ProcessLine("gSystem->Load(\"$CLAS12TOOL/lib/libClas12Root3\");");
+  app->ProcessLine(".x $CLAS12ROOT/RunRoot/LoadClas12Root3.C");
+  // app->ProcessLine("gSystem->Load(\"$CLAS12ROOT/lib/liblz4\");");
+  // app->ProcessLine("gSystem->Load(\"$CLAS12ROOT/lib/libHipo3\");");
+  // app->ProcessLine("gSystem->Load(\"$CLAS12ROOT/lib/libClas12Banks3\");");
+  // app->ProcessLine("gSystem->Load(\"$CLAS12ROOT/lib/libClas12Root3\");");
   app->ProcessLine(Form("clas12root::ParticleTree treemaker{\"%s\",\"%s\"}",infilename.Data(),outfilename.Data()));
 
   if(argc==4) {

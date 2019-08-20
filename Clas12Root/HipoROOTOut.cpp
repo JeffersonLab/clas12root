@@ -40,7 +40,7 @@ namespace clas12root{
   }
   void HipoROOTOut::AddAction(TString varExp,TString condExp){
     if(_curMacro==TString("")){
-      TString HIPOROOT=TString(gSystem->Getenv("CLAS12TOOL"))+"/Clas12Root/";
+      TString HIPOROOT=TString(gSystem->Getenv("CLAS12ROOT"))+"/Clas12Root/";
       TMacro macro(HIPOROOT+"template"+_tempActionName+".C");
       _curMacro=_tempDir+Form("asdf%d__%s__.C",_Nruns,_tempActionName.Data());
       Int_t NtempFiles=1;

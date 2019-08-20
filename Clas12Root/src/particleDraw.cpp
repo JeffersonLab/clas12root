@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
 // Run the TApplication (not needed if you only want to store the histograms.)
   app->SetPrompt("ParticleHist [%d] ");
 
-  app->ProcessLine(".x $CLAS12TOOL/RunRoot/LoadClas12Root.C");
+  app->ProcessLine(".x $CLAS12ROOT/RunRoot/LoadClas12Root.C");
   app->ProcessLine(Form("clas12root::ParticleHist hists{\"%s\"}",filename.Data()));
   if(argc==3) {
     TString script=argv[2];
