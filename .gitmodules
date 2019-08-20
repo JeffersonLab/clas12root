@@ -1,0 +1,3 @@
+[submodule "Lz4"]
+	path = Lz4
+	url = https://github.com/lz4/lz4.git

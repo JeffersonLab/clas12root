@@ -1,0 +1,243 @@
+clas12 reader is mainly concerned with DST particles and so you access the detector data via it associated particle.
+
+e.g.
+ clas12reader c12("my/hipo/file.hipo"); //open file
+ while(c12.next()) {//loop over events
+
+   auto particles = c12.getDetParticles(); //particles is now a std::vector of particles for this event
+
+//Loops.
+//If you just want to loop over all particles, best to use a c++11 range based for loop
+
+for(auto& p : particles){
+  float px = p->par()->getPx();
+  float ftof1aTime = p->scint(FTOF1A)->getTime();
+  ...
+}
+
+//or you can also use
+
+for(int i=0;i<particles.size();i++){
+  float px = particles[i]->par()->getPx();
+  float ftof1aTime= particles[i]->scint(FTOF1A)->getTime();
+  ...
+}
+**Please note, always access detector information deirectly from particle
+**i.e. do not do :
+**   auto pcal=particles[i]->cal(PCAL);
+**   ...
+**   pcalE=pcal->getEnergy();
+**always do
+**   pcalE=particles[i]->cal(PCAL)->getEnergy();
+
+///////////////////////////////////////////////////////////////////////////////////////
+In addition to actual banks the particle object has some additional functions
+wehre some choices have been made depending on which region they are in
+particles[i]->getPid();
+particles[i]->getTime();
+particles[i]->getPath();
+particles[i]->getDeltaEnergy();
+particles[i]->getSector();
+particles[i]->getRegion();
+particles[i]->getTheta();
+particles[i]->getPhi();
+particles[i]->getP();
+For FT Time, Path, comes from FTCAL, DeltaEnergy from FTHODO
+For FD, Time, Path, DeltaEnergy comes from FTOF1B, FTOF1A, FTOF2, PCAL in order of preference
+For CD Time, Path, DeltaEnergy comes from CTOF, then CND if no CTOF
+/////////////////////////////////////////////////////////////////////////////////////////
+// REC::Particle 
+particles[i]->par()->getPid();
+//or p->par()->getPid(); with range based loop
+particles[i]->par()->getPx();
+particles[i]->par()->getPy();
+particles[i]->par()->getPz();
+particles[i]->par()->getVx();
+particles[i]->par()->getVy();
+particles[i]->par()->getVz();
+particles[i]->par()->getBeta();
+particles[i]->par()->getChi2Pid();
+particles[i]->par()->getCharge();
+particles[i]->par()->getStatus();
+particles[i]->par()->getP(); //magnitude of momentum
+///////////////////////////////////////////////////////////////////////////////////////
+//RECFT::Particle
+particles[i]->par()->getFTBBeta();
+particles[i]->par()->getFTBChi2Pid();
+particles[i]->par()->getFTBCharge();
+particles[i]->par()->getFTBStatus();
+/////////////////////////////////////////////////////////////////////////////////////////
+// REC::Scintillator
+// DET can be replaced with FTOF1A, FTOF1B, FTOF2, CND1, CND2, CND3, CTOF
+particles[i]->sci(DET)->getPindex();
+particles[i]->sci(DET)->getDetector();
+particles[i]->sci(DET)->getLayer();
+particles[i]->sci(DET)->getComponent();
+particles[i]->sci(DET)->getTime();
+particles[i]->sci(DET)->getEnergy();
+particles[i]->sci(DET)->getPath();
+particles[i]->sci(DET)->getSector();
+particles[i]->sci(DET)->getStatus();
+particles[i]->sci(DET)->getX();
+particles[i]->sci(DET)->getY();
+particles[i]->sci(DET)->getZ();
+particles[i]->sci(DET)->getHX();
+particles[i]->sci(DET)->getHY();
+particles[i]->sci(DET)->getHZ();
+particles[i]->sci(DET)->getChi2();
+/////////////////////////////////////////////////////////////////////////////////////////
+// REC::Calorimeter
+// DET can be replaced with PCAL, ECIN, ECOUT
+particles[i]->cal(DET)->getPindex();
+particles[i]->cal(DET)->getDetector();
+particles[i]->cal(DET)->getLayer();
+particles[i]->cal(DET)->getTime();
+particles[i]->cal(DET)->getEnergy();
+particles[i]->cal(DET)->getPath();
+particles[i]->cal(DET)->getSector();
+particles[i]->cal(DET)->getX();
+particles[i]->cal(DET)->getY();
+particles[i]->cal(DET)->getZ();
+particles[i]->cal(DET)->getDu();
+particles[i]->cal(DET)->getDv();
+particles[i]->cal(DET)->getDw();
+particles[i]->cal(DET)->getHx();
+particles[i]->cal(DET)->getHy();
+particles[i]->cal(DET)->getHz();
+particles[i]->cal(DET)->getLu();
+particles[i]->cal(DET)->getLv();
+particles[i]->cal(DET)->getLw();
+particles[i]->cal(DET)->getM2u();
+particles[i]->cal(DET)->getM2v();
+particles[i]->cal(DET)->getM2w();
+particles[i]->cal(DET)->getM3u();
+particles[i]->cal(DET)->getM3v();
+particles[i]->cal(DET)->getM3w();
+particles[i]->cal(DET)->getStatus();
+////////////////////////////////////////////////////////////////////////////////////////
+// REC::Track
+// DET can be replaced with DC, CVT
+particles[i]->trk(DET)->getPindex();
+particles[i]->trk(DET)->getDetector();
+particles[i]->trk(DET)->getNDF();
+particles[i]->trk(DET)->getSector();
+particles[i]->trk(DET)->getStatus();
+particles[i]->trk(DET)->getCharge();
+particles[i]->trk(DET)->getChi2();
+particles[i]->trk(DET)->getChi2N(); //=Chi2/NDF
+//////////////////////////////////////////////////////////////////////////////////////
+// REC::Cherenkov
+// DET can be replace with LTCC, HTCC
+particles[i]->che(DET)->getPindex();
+particles[i]->che(DET)->getDetector();
+particles[i]->che(DET)->getNphe();
+particles[i]->che(DET)->getTime();
+particles[i]->che(DET)->getPath();
+particles[i]->che(DET)->getSector();
+particles[i]->che(DET)->getX();
+particles[i]->che(DET)->getY();
+particles[i]->che(DET)->getZ();
+particles[i]->che(DET)->getDtheta();
+particles[i]->che(DET)->getDphi();
+particles[i]->che(DET)->getStatus();
+/////////////////////////////////////////////////////////////////////////////////////
+//REC::ForwardTagger
+//DET can be replaced with FTCAL, FTHODO
+particles[i]->ft(DET)->getPindex();
+particles[i]->ft(DET)->getDetector();
+particles[i]->ft(DET)->getLayer();
+particles[i]->ft(DET)->getTime();
+particles[i]->ft(DET)->getEnergy();
+particles[i]->ft(DET)->getPath();
+particles[i]->ft(DET)->getStatus();
+particles[i]->ft(DET)->getX();
+particles[i]->ft(DET)->getY();
+particles[i]->ft(DET)->getZ();
+particles[i]->ft(DET)->getDx();
+particles[i]->ft(DET)->getDy();
+particles[i]->ft(DET)->getRadius();
+particles[i]->ft(DET)->getSizeFT(); //size
+particles[i]->ft(DET)->getChi2();
+/////////////////////////////////////////////////////////////////////////////////////
+//REC::Traj
+//a little bit more tricky........
+//DET can be replaced with DC, CVT, FTOF, LTCC, HTCC, ECAL, CTOF?, CND?
+//LAYER with the detector layer ids (see DST wiki)
+p->traj(DET,LAYER)->getPindex();
+p->traj(DET,LAYER)->getDetector();
+p->traj(DET,LAYER)->getLayer();
+p->traj(DET,LAYER)->getCx();
+p->traj(DET,LAYER)->getCy();
+p->traj(DET,LAYER)->getCz();
+p->traj(DET,LAYER)->getX();
+p->traj(DET,LAYER)->getY();
+p->traj(DET,LAYER)->getZ();
+p->traj(DET,LAYER)->getPath();
+/////////////////////////////////////////////////////////////////////////////////////
+// REC::CovMat
+particles[i]->cmat()->getC11();
+particles[i]->cmat()->getC12();
+particles[i]->cmat()->getC13();
+particles[i]->cmat()->getC14();
+particles[i]->cmat()->getC15();
+particles[i]->cmat()->getC22();
+particles[i]->cmat()->getC23();
+particles[i]->cmat()->getC24();
+particles[i]->cmat()->getC25();
+particles[i]->cmat()->getC33();
+particles[i]->cmat()->getC34();
+particles[i]->cmat()->getC35();
+particles[i]->cmat()->getC44();
+particles[i]->cmat()->getC45();
+particles[i]->cmat()->getC55();
+particles[i]->cmat()->matrix();
+// e.g. auto cm = particles[i]->cmat()->matrix();
+//   =>   C11=cm[0][0];  C14=cm[0][3];  C41=cm[3][0];
+////////////////////////////////////////////////////////////////////////////
+// MC::Lund
+// For the jth particle in the lund file
+c12.mcparts()->getPid(j);
+c12.mcparts()->getPx(j);
+c12.mcparts()->getPy(j);
+c12.mcparts()->getPz(j);
+c12.mcparts()->getVx(j);
+c12.mcparts()->getVy(j);
+c12.mcparts()->getVz(j);
+c12.mcparts()->getMass(j);
+or
+c12.mcparts()->setEntry(j);
+c12.mcparts()->getPid();
+c12.mcparts()->getPx();
+c12.mcparts()->getPy();
+c12.mcparts()->getPz();
+c12.mcparts()->getVx();
+c12.mcparts()->getVy();
+c12.mcparts()->getVz();
+c12.mcparts()->getMass();
+//////////////////////////////////////////////////////////////////////////////////////
+//BANKS NOT ASSOCIATED WITH PARTICLE TRACKS
+/////////////////////////////////////////////////////////////////////////////////////
+//REC::Event (HIPO4)
+c12.event()->getCategory();
+c12.event()->getTopology();
+c12.event()->getBeamCharge();
+c12.event()->getHelicity();
+c12.event()->getHelicityRaw();
+c12.event()->getStartTime();
+c12.event()->getRFTime();
+c12.event()->getProcTime();
+c12.event()->getLiveTime();
+/////////////////////////////////////////////////////////////////////////////////////
+//RECFT::Event
+c12.event()->getFTBStartTime();
+////////////////////////////////////////////////////////////////////////////////////
+//RUN::config
+c12.runconfig()->getRun();
+c12.runconfig()->getEvent();
+c12.runconfig()->getUnixTime();
+c12.runconfig()->getTrigger();
+c12.runconfig()->getTimeStamp();
+c12.runconfig()->getType();
+c12.runconfig()->getMode();
+c12.runconfig()->getTorus();
+c12.runconfig()->getSolenoid();

@@ -1,0 +1,8 @@
+cp $HIPO/hipo4/*.h hipo4/.
+cp $HIPO/hipo4/*.cpp hipo4/.
+mkdir build
+cd build
+cmake ../
+make
+cmake ../
+make install
