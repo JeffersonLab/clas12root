@@ -20,6 +20,7 @@ namespace clas12 {
     _vx_order  = sch.getEntryOrder("vx");
     _vy_order  = sch.getEntryOrder("vy");
     _vz_order  = sch.getEntryOrder("vz");
+    _vt_order  = sch.getEntryOrder("vt");
     _ch_order  = sch.getEntryOrder("charge");
     _st_order  = sch.getEntryOrder("status");
     _beta_order  = sch.getEntryOrder("beta");
@@ -37,6 +38,7 @@ namespace clas12 {
     _vx_order  = sch.getEntryOrder("vx");
     _vy_order  = sch.getEntryOrder("vy");
     _vz_order  = sch.getEntryOrder("vz");
+    _vt_order  = sch.getEntryOrder("vt");
     _ch_order  = sch.getEntryOrder("charge");
     _st_order  = sch.getEntryOrder("status");
     _beta_order  = sch.getEntryOrder("beta");
