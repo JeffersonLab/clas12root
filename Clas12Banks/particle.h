@@ -34,6 +34,7 @@ namespace clas12 {
     int _vx_order;
     int _vy_order;
     int _vz_order;
+    int _vt_order;
     int _beta_order;
     int _ch_order;
     int _st_order;
@@ -59,6 +60,7 @@ namespace clas12 {
     float  getVx(int index)  { return getFloat(_vx_order,index);}
     float  getVy(int index)  { return getFloat(_vy_order,index);}
     float  getVz(int index)  { return getFloat(_vz_order,index);}
+    float  getVt(int index)  { return getFloat(_vt_order,index);}
     float  getBeta(int index)  { return getFloat(_beta_order,index);}
     float  getChi2Pid(int index)  { return getFloat(_chi2pid_order,index);}
     int    getCharge(int index)  { return getByte(_ch_order,index);}
@@ -71,12 +73,14 @@ namespace clas12 {
     float  getVx()  { return getFloat(_vx_order,_entry);}
     float  getVy()  { return getFloat(_vy_order,_entry);}
     float  getVz()  { return getFloat(_vz_order,_entry);}
+    float  getVt()  { return getFloat(_vt_order,_entry);}
     float  getBeta()  { return getFloat(_beta_order,_entry);}
     float  getChi2Pid()  { return getFloat(_chi2pid_order,_entry);}
     int    getCharge()  { return getByte(_ch_order,_entry);}
     int    getStatus()  { return getShort(_st_order,_entry);}
 
     int    getFTBPid() { return _ftbpar->getPid();}
+    float  getFTBVt()  { return _ftbpar->getVt();}
     float  getFTBBeta()  { return _ftbpar->getBeta();}
     float  getFTBChi2Pid()  { return _ftbpar->getChi2Pid();}
     int    getFTBStatus()  { return _ftbpar->getStatus();}

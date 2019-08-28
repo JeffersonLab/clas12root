@@ -15,6 +15,7 @@ namespace clas12 {
     auto sch=getSchema();
     _pid_order = sch.getEntryOrder("pid");
     _st_order  = sch.getEntryOrder("status");
+    _vt_order  = sch.getEntryOrder("vt");
     _beta_order  = sch.getEntryOrder("beta");
     _chi2pid_order  = sch.getEntryOrder("chi2pid");
     
@@ -26,6 +27,7 @@ namespace clas12 {
     _pid_order = sch.getEntryOrder("pid");
     _st_order  = sch.getEntryOrder("status");
     _beta_order  = sch.getEntryOrder("beta");
+    _vt_order  = sch.getEntryOrder("vt");
     _chi2pid_order  = sch.getEntryOrder("chi2pid");
      
   }

@@ -25,6 +25,7 @@ namespace clas12 {
   private:
 
     int _pid_order;
+    int _vt_order;
     int _beta_order;
     int _st_order;
     int _chi2pid_order;
@@ -44,11 +45,13 @@ namespace clas12 {
     
     //    void   init(const char *bankName, hipo::reader &r);
     int    getPid(int index) { return getInt(_pid_order,index);}
+    float  getVt(int index)  { return getFloat(_vt_order,index);}
     float  getBeta(int index)  { return getFloat(_beta_order,index);}
     float  getChi2Pid(int index)  { return getFloat(_chi2pid_order,index);}
     int    getStatus(int index)  { return getShort(_st_order,index);}
 
     int    getPid() { return getInt(_pid_order,_entry);}
+    float  getVt()  { return getFloat(_vt_order,_entry);}
     float  getBeta()  { return getFloat(_beta_order,_entry);}
     float  getChi2Pid()  { return getFloat(_chi2pid_order,_entry);}
     int    getStatus()  { return getShort(_st_order,_entry);}
