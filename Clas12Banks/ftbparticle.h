@@ -59,6 +59,7 @@ namespace clas12 {
  
     
     void setEntry(short i){ _entry=i;}
+    void setBankEntry(short i){ _entry=i;} //faster for BankHist
     short getEntry() const {return _entry;}
     /**
     * This is virtual method from hipo::bank it will be called
