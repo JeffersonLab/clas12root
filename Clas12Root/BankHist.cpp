@@ -10,7 +10,7 @@ namespace clas12root {
 
     _mapOfParts["BANK"]="bank.";
     _mapOfParts["REC::Particle"]="particle";
-    _mapOfParts["RECFT::Particle"]="particle";
+    _mapOfParts["RECFT::Particle"]="ftbparticle";
     _mapOfParts["REC::Calorimeter"]="calorimeter";
     _mapOfParts["REC::Scintillator"]="scintillator";
     _mapOfParts["REC::Cherenkov"]="cherenkov";
