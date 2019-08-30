@@ -61,7 +61,9 @@ namespace clas12 {
        return true;
     }
 
-    int getPid(){_parts->setEntry(_pentry);return _parts->getPid();}
+    int getPid(){_parts->setEntry(_pentry);
+      return _useFTBPid*_ftbparts->getRows()?_ftbparts->getPid():_parts->getPid();
+    }
     
     virtual double getTime()=0;
     virtual double getPath()=0;
@@ -90,6 +92,8 @@ namespace clas12 {
     float getCalcMass();
     float getBeta();
     float getGamma();
+
+    void useFTBPid(){if(_ftbparts.get())_useFTBPid=1;}
     
   protected:
 
@@ -109,7 +113,7 @@ namespace clas12 {
     short _pentry=-1;
     short _pcmat=-1;
     short _region=-1;
-  
+    short _useFTBPid=0;
   };
   //pointer "typedef"
   using region_part_ptr=std::shared_ptr<clas12::region_particle>;

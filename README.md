@@ -10,7 +10,8 @@ Examples are given for running in interactive ROOT sessions and ROOT-Jupyter not
 
 NEW We now use an external hipo4 repository. This must be pointed at with the variable HIPO when installing. The files from hipo/hipo4 will be copied here to Hipo4.
 
-The Hipo c++ reader library can be used independent of specific banks and ROOT, but depends on Hipo.
+For Hipo library see https://github.com/gavalian/hipo 
+
 
 The Clas12Banks implementation can be used independent of ROOT, although currently ROOT dictionaries are created for the classes via cmake (this could be removed). This defines the specific CLAS12 DST banks and provides an interface to the data.
 

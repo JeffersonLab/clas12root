@@ -202,13 +202,7 @@ namespace clas12 {
 	continue;
       }
     }
-    // //If additional particle sources, add those particles to detParticles
-    // if(_additionalParticleSource.size()){
-    //   for(auto &psource : _additionalParticleSource)
-    // 	while(auto& particle=psource.nextParticle()){
-    // 	  _detParticles.push_back(particle);
-    // 	}
-    // }
+ 
  
   }
   bool clas12reader::passPidSelect(){
