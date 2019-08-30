@@ -69,16 +69,19 @@ namespace clas12 {
       //Forward detector needs particles, calorimeter, scintillator,
       //track, cherenkov
       _rfdets.push_back(std::make_shared<region_fdet>(_bparts,_bftbparts,_bcovmat,_bcal,_bscint,_btrck,_btraj,_bcher,_bft,_bevent));
+      if(_useFTBased)_rfdets.back()->useFTBPid();
     }
      void addARegionCDet(){
       //Forward detector needs particles, calorimeter, scintillator,
       //track, cherenkov
        _rcdets.push_back(std::make_shared<region_cdet>(_bparts,_bftbparts,_bcovmat,_bcal,_bscint,_btrck,_btraj,_bcher,_bft,_bevent));
+       if(_useFTBased)_rcdets.back()->useFTBPid();
     }
     void addARegionFT(){
       //Forward tagger needs particles and forward tagger
       _rfts.push_back(std::make_shared<region_ft>(_bparts,_bftbparts,_bcovmat,_bcal,_bscint,_btrck,_btraj,_bcher,_bft,_bevent));
-    }
+      if(_useFTBased)_rfts.back()->useFTBPid();
+     }
 
 
     const helonline_ptr helonline() const{return _bhelonline;};
