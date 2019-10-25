@@ -51,23 +51,19 @@ namespace clas12 {
     _n_rfts=0;
     
     _detParticles.clear();
-    _detParticles.reserve(_nparts);
     _pids.clear();
-    _pids.reserve(_nparts);
-
+ 
+    _isRead=false;
   }
-  bool clas12reader::readEvent(){
-    _reader.read(_event);
 
-    //Special banks
-    if(_brunconfig.get())_event.getStructure(*_brunconfig.get());
-
-    //Comment in next 3 lines for helicity analysis
-    //if(_bhelflip.get())_event.getStructure(*_bhelflip.get());
-    //if(_bhelonline.get())_event.getStructure(*_bhelonline.get());
-    //if(_bhelflip.get()->getRows()>0) _bhelflip->helicityAnalysis();
-
+  ///////////////////////////////////////////////////////////////
+  ///This function may be called before readEvent to allow checking
+  ///of Pids by external routines
+   const std::vector<short>& clas12reader::preCheckPids(){
     //regular particle bank
+     if(_isRead) return _pids; //already read return current pids
+     hipoRead();
+ 
     _event.getStructure(*_bparts.get());
     if(_bftbparts.get())_event.getStructure(*_bftbparts.get());//FT based PID particle bank
     
@@ -75,7 +71,7 @@ namespace clas12 {
     _nparts=_bparts->getRows();
     _pids.clear();
     _pids.reserve(_nparts);
-
+ 
     
     //Loop over particles and find their Pid
     for(ushort i=0;i<_nparts;i++){
@@ -89,8 +85,20 @@ namespace clas12 {
       }
 	
     }
+    return _pids;
+  }
+  bool clas12reader::readEvent(){
+ 
+    //get pid of tracks and save in _pids
+    preCheckPids();
+    
      //check if event is of the right type
-    if(!passPidSelect()) return false;
+    if(!passPidSelect()){
+      _pids.clear(); //reset so read next event in preChekPids
+      return false;
+    }
+    //Special run banks
+    if(_brunconfig.get())_event.getStructure(*_brunconfig.get());
 
     //now getthe data for the rest of the banks
     if(_bmcparts.get())_event.getStructure(*_bmcparts.get());
@@ -111,10 +119,10 @@ namespace clas12 {
   ///initialise next event from the reader
   bool clas12reader::next(){
 
-    clearEvent();
     //keep going until we get an event that passes
     bool validEvent=false;
     while(_reader.next()){
+      clearEvent();
       validEvent=true;
       if(readEvent()) //got one
 	break;
@@ -129,10 +137,10 @@ namespace clas12 {
   ///initialise next event from the reader
   bool clas12reader::nextInRecord(){
      
-    clearEvent();
     //keep going until we get an event that passes
     bool validEvent=false;
     while(_reader.nextInRecord()){
+      clearEvent();
       validEvent=true;
       if(readEvent()) //got one
 	break;
@@ -149,8 +157,8 @@ namespace clas12 {
   /// Add appropriate region_partcle to event particle vector
   void clas12reader::sort(){
 
-    
-    // _nparts=_bparts->getRows();
+    if(_nparts==0) return;
+   
     _n_rfdets=0;
     _n_rcdets=0;
     _n_rfts=0;
@@ -158,8 +166,7 @@ namespace clas12 {
     _detParticles.clear();
     _detParticles.reserve(_nparts);
 
-    if(_nparts==0) return;
-    
+     
     //Loop over particles and find their region
     for(ushort i=0;i<_nparts;i++){ 
       _bparts->setEntry(i);

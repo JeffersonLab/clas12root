@@ -55,7 +55,7 @@ namespace clas12 {
 
     clas12reader()=default;
     clas12reader(std::string filename,std::vector<long> tags=std::vector<long>());
-    ~clas12reader()=default;
+    virtual ~clas12reader()=default;
 
     hipo::reader& getReader(){return _reader;}
     
@@ -100,6 +100,8 @@ namespace clas12 {
     std::vector<region_part_ptr> getByRegion(int ir);
     std::vector<region_part_ptr> getByCharge(int ch);
     
+    const std::vector<short>& preCheckPids();
+
     short getNPid(short pid){return std::count(_pids.begin(),_pids.end(), pid);};
     void addAtLeastPid(short pid,short n){
       _pidSelect[pid]=n;
@@ -119,7 +121,12 @@ namespace clas12 {
     const std::vector<short> &getPids() const {return _pids;}
     
   private:
-
+    
+    void hipoRead(){
+      _reader.read(_event);
+      _isRead=true;
+    }
+    
     //reader
     hipo::reader     _reader;
     hipo::event      _event;
@@ -162,7 +169,7 @@ namespace clas12 {
     ushort _n_rfts=0;
     bool _zeroOfRestPid=false;
     bool _useFTBased=false;
-
+    bool _isRead=false;
   };
   //helper functions
   
