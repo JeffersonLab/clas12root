@@ -30,8 +30,8 @@ namespace clas12 {
     ftbevent(hipo::schema __schema);
     virtual ~ftbevent() = default;
  
-    long    getCategory(){ return getLong(_cat_order,0); }
-    float  getStartTime(){ return getFloat(_st_order,0); }
+    long    getCategory() const  noexcept{ return getLong(_cat_order,0); }
+    float  getStartTime() const  noexcept{ return getFloat(_st_order,0); }
     void setEntry(int ind){}
     void setBankEntry(int ind){}
 
@@ -46,8 +46,8 @@ namespace clas12 {
 
   private :
 
-    int _st_order;
-    int _cat_order;
+    int _st_order{-1};
+    int _cat_order{-1};
  
     
   };

@@ -32,23 +32,23 @@ namespace clas12 {
     virtual ~mcparticle() = default;
 
 
-    int    getPid(int index) { return getInt(pid_order,index);}
-    float  getPx(int index)  { return getFloat(px_order,index);}
-    float  getPy(int index)  { return getFloat(py_order,index);}
-    float  getPz(int index)  { return getFloat(pz_order,index);}
-    float  getVx(int index)  { return getFloat(vx_order,index);}
-    float  getVy(int index)  { return getFloat(vy_order,index);}
-    float  getVz(int index)  { return getFloat(vz_order,index);}
-    float  getMass(int index)  { return getFloat(mass_order,index);}
+    int    getPid(int index) const noexcept { return getInt(pid_order,index);}
+    float  getPx(int index) const noexcept  { return getFloat(px_order,index);}
+    float  getPy(int index) const noexcept  { return getFloat(py_order,index);}
+    float  getPz(int index) const noexcept  { return getFloat(pz_order,index);}
+    float  getVx(int index) const noexcept  { return getFloat(vx_order,index);}
+    float  getVy(int index) const noexcept  { return getFloat(vy_order,index);}
+    float  getVz(int index) const noexcept  { return getFloat(vz_order,index);}
+    float  getMass(int index) const noexcept  { return getFloat(mass_order,index);}
 
-    int    getPid() { return getInt(pid_order,_entry);}
-    float  getPx()  { return getFloat(px_order,_entry);}
-    float  getPy()  { return getFloat(py_order,_entry);}
-    float  getPz()  { return getFloat(pz_order,_entry);}
-    float  getVx()  { return getFloat(vx_order,_entry);}
-    float  getVy()  { return getFloat(vy_order,_entry);}
-    float  getVz()  { return getFloat(vz_order,_entry);}
-    float  getMass()  { return getFloat(mass_order,_entry);}
+    int    getPid() const noexcept { return getInt(pid_order,_entry);}
+    float  getPx()  const noexcept { return getFloat(px_order,_entry);}
+    float  getPy() const noexcept  { return getFloat(py_order,_entry);}
+    float  getPz() const noexcept  { return getFloat(pz_order,_entry);}
+    float  getVx() const noexcept  { return getFloat(vx_order,_entry);}
+    float  getVy() const noexcept  { return getFloat(vy_order,_entry);}
+    float  getVz() const noexcept  { return getFloat(vz_order,_entry);}
+    float  getMass() const noexcept  { return getFloat(mass_order,_entry);}
  
     /* void  getVector3(int index, vector3 &vect){ */
     /*   vect.setXYZ(getFloat(px_order,index),getFloat(py_order,index), */
@@ -60,7 +60,7 @@ namespace clas12 {
     /*         getFloat(pz_order,index),getFloat(mass_order,index)); */
     /* } */
 
-    float getP(){
+    float getP() const noexcept{
       auto x= getFloat(px_order,_entry);
       auto y= getFloat(py_order,_entry);
       auto z= getFloat(pz_order,_entry);
@@ -68,7 +68,7 @@ namespace clas12 {
     }
     
     void setEntry(short i){ _entry=i;}
-    short getEntry() const {return _entry;}
+    short getEntry() const  noexcept{return _entry;}
     /**
     * This is virtual method from hipo::bank it will be called
     * every time a bank is read in the reader. Can be used to sort
@@ -81,14 +81,14 @@ namespace clas12 {
 
   private:
 
-    int pid_order;
-    int px_order;
-    int py_order;
-    int pz_order;
-    int vx_order;
-    int vy_order;
-    int vz_order;
-    int mass_order;
+    int pid_order{-1};
+    int px_order{-1};
+    int py_order{-1};
+    int pz_order{-1};
+    int vx_order{-1};
+    int vy_order{-1};
+    int vz_order{-1};
+    int mass_order{-1};
     
     short _entry=0;
 

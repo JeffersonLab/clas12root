@@ -19,7 +19,7 @@ namespace clas12 {
   }
   ///////////////////////////////////////////////////////////////////////
   /// load items to be used
-  void particle_detector::readItems(std::string items){
+  void particle_detector::readItems(const std::string& items){
     std::stringstream ss(items);
     std::string sitem;
     while(std::getline(ss, sitem, ':'))
@@ -27,7 +27,7 @@ namespace clas12 {
   }
   ///////////////////////////////////////////////////////////////////////
   ///check if item should be used
-  bool particle_detector::useItem(std::string item){
+  bool particle_detector::useItem(const std::string& item){
     if(!(_sitems.size())) return true;
     if(std::find(_sitems.begin(),_sitems.end(),"c")!=_sitems.end())
       return true;
@@ -77,7 +77,6 @@ namespace clas12 {
 
 
   int particle_detector::getIndex(int pindex, int detector, int layer){
- 
     std::vector<int>::iterator it;
      int key = (detector<<16)|(layer<<8)|pindex;
      if((it=std::find(_rvec.begin(),_rvec.end(),key))!=_rvec.end()){

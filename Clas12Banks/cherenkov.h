@@ -29,46 +29,46 @@ namespace clas12 {
 
     cherenkov(hipo::schema __schema);
     
-    virtual ~cherenkov()=default;
+    ~cherenkov() override=default;
     
     //getter funtions for items in cherenkov bank
-    double getTime(){ 
+    double getTime() const noexcept{ 
       if(_index>-1)return getFloat(_time_order,_index);
       return 0;
     }
-    float getNphe(){ 
+    float getNphe() const noexcept{ 
       if(_index>-1)return getFloat(_nphe_order,_index);
       return 0;
     }
-    double getPath(){ 
+    double getPath() const noexcept{ 
       if(_index>-1)return getFloat(_path_order,_index);
       return 0;
     }
-    int getSector(){ 
+    int getSector() const noexcept{ 
       if(_index>-1)return getInt(_sector_order,_index);
       return 0;
     }
-    double getX(){ 
+    double getX() const noexcept{ 
       if(_index>-1)return getFloat(_x_order,_index);
       return 0;
     }
-    double getY(){ 
+    double getY() const noexcept{ 
       if(_index>-1)return getFloat(_y_order,_index);
       return 0;
     }
-    double getZ(){ 
+    double getZ() const noexcept{ 
       if(_index>-1)return getFloat(_z_order,_index);
       return 0;
     }
-    double getDtheta(){ 
+    double getDtheta() const noexcept{ 
       if(_index>-1)return getFloat(_dtheta_order,_index);
       return 0;
     }
-    double getDPhi(){ 
+    double getDPhi() const noexcept{ 
       if(_index>-1)return getFloat(_dphi_order,_index);
       return 0;
     }
-    int getStatus(){ 
+    int getStatus() const noexcept{ 
       if(_index>-1)return getInt(_status_order,_index);
       return 0;
     }

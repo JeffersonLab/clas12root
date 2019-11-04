@@ -102,7 +102,7 @@ namespace clas12 {
     
     const std::vector<short>& preCheckPids();
 
-    short getNPid(short pid){return std::count(_pids.begin(),_pids.end(), pid);};
+    short getNPid(short pid)const noexcept{return std::count(_pids.begin(),_pids.end(), pid);};
     void addAtLeastPid(short pid,short n){
       _pidSelect[pid]=n;
       _givenPids.push_back(pid);
@@ -117,8 +117,8 @@ namespace clas12 {
 
     void useFTBased(){_useFTBased=true;}
     
-    int getNParticles() const {return _detParticles.size();}
-    const std::vector<short> &getPids() const {return _pids;}
+    int getNParticles() const  noexcept{return _detParticles.size();}
+    const std::vector<short> &getPids() const  noexcept{return _pids;}
     
   private:
     

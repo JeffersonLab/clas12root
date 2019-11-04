@@ -30,106 +30,106 @@ namespace clas12 {
 
    calorimeter(hipo::schema __schema);
  
-    virtual ~calorimeter()=default;
+    ~calorimeter() override=default;
     
-    int getLayer(int index) override{
+    int getLayer(int index)  const noexcept override{
       if(index>-1)return getInt(_layer_order,index);
       return 0;
     }
    //getter funtions for items in calorimeter bank
-    double getTime(){
+    double getTime() const noexcept{
       if(_index>-1)return getFloat(_time_order,_index);
       return 0;
     }
-    double getEnergy(){
+    double getEnergy() const noexcept{
       if(_index>-1)return getFloat(_energy_order,_index);
       return 0;
     }
-    double getPath(){
+    double getPath() const noexcept{
       if(_index>-1)return getFloat(_path_order,_index);
       return 0;
     }
-    int getLayer() override{
+    int getLayer()  const noexcept override{
       if(_index>-1)return getByte(_layer_order,_index);
       return 0;
     }
-   int getSector(){
+   int getSector() const noexcept{
       if(_index>-1)return getByte(_sector_order,_index);
       return 0;
     }
-    double getX(){
+    double getX() const noexcept{
       if(_index>-1)return getFloat(_x_order,_index);
       return 0;
     }
-    double getY(){
+    double getY() const noexcept{
       if(_index>-1)return getFloat(_y_order,_index);
       return 0;
     }
-    double getZ(){
+    double getZ() const noexcept{
       if(_index>-1)return getFloat(_z_order,_index);
       return 0;
     }
-    double getDu(){
+    double getDu() const noexcept{
       if(_index>-1)return getFloat(_du_order,_index);
       return 0;
     }
-    double getDv(){
+    double getDv() const noexcept{
       if(_index>-1)return getFloat(_dv_order,_index);
       return 0;
     }
-    double getDw(){
+    double getDw() const noexcept{
       if(_index>-1)return getFloat(_dw_order,_index);
       return 0;
     }
-    double getHx(){
+    double getHx() const noexcept{
       if(_index>-1)return getFloat(_hx_order,_index);
       return 0;
     }
-    double getHy(){
+    double getHy() const noexcept{
       if(_index>-1)return getFloat(_hy_order,_index);
       return 0;
     }
-    double getHz(){
+    double getHz() const noexcept{
       if(_index>-1)return getFloat(_hz_order,_index);
       return 0;
     }
-    double getLu(){
+    double getLu() const noexcept{
       if(_index>-1)return getFloat(_lu_order,_index);
       return 0;
     }
-    double getLv(){
+    double getLv() const noexcept{
       if(_index>-1)return getFloat(_lv_order,_index);
       return 0;
     }
-    double getLw(){
+    double getLw() const noexcept{
       if(_index>-1)return getFloat(_lw_order,_index);
       return 0;
     }
-    double getM2u(){
+    double getM2u() const noexcept{
       if(_index>-1)return getFloat(_m2u_order,_index);
       return 0;
     }
-    double getM2v(){
+    double getM2v() const noexcept{
       if(_index>-1)return getFloat(_m2v_order,_index);
       return 0;
     }
-    double getM2w(){
+    double getM2w() const noexcept{
       if(_index>-1)return getFloat(_m2w_order,_index);
       return 0;
     }
-    double getM3u(){
+    double getM3u() const noexcept{
       if(_index>-1)return getFloat(_m3u_order,_index);
       return 0;
     }
-    double getM3v(){
+    double getM3v() const noexcept{
       if(_index>-1)return getFloat(_m3v_order,_index);
       return 0;
     }
-    double getM3w(){
+    double getM3w() const noexcept{
       if(_index>-1)return getFloat(_m3w_order,_index);
       return 0;
     }
-    int getStatus(){
+    int getStatus() const noexcept{
       if(_index>-1)return getShort(_status_order,_index);
       return 0;
     }

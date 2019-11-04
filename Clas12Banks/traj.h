@@ -29,38 +29,38 @@ namespace clas12 {
 
     traj(hipo::schema __schema);
  
-    virtual ~traj()=default;
+    ~traj() override =default;
     
     //getter funtions for items in traj bank
-   int getLayer(int index) override{
+   int getLayer(int index)   const noexcept override{
      if(index>-1)return getByte(_layer_order,index);
       return 0;
     }
-    int getLayer() override{
+    int getLayer()  const noexcept override{
       if(_index>-1)return getByte(_layer_order,_index);
       return 0;
     }
-    double getCx(){ 
+    double getCx()  const noexcept{ 
       if(_index>-1)return getFloat(_cx_order,_index);
       return 0;
     }
-    double getCy(){ 
+    double getCy()  const noexcept{ 
       if(_index>-1)return getFloat(_cy_order,_index);
       return 0;
     }
-    double getCz(){ 
+    double getCz()  const noexcept{ 
       if(_index>-1)return getFloat(_cz_order,_index);
       return 0;
     }
-    double getX(){ 
+    double getX()  const noexcept{ 
       if(_index>-1)return getFloat(_cx_order,_index);
       return 0;
     }
-    double getY(){ 
+    double getY()  const noexcept{ 
       if(_index>-1)return getFloat(_cy_order,_index);
       return 0;
     }
-    double getZ(){ 
+    double getZ()  const noexcept{ 
       if(_index>-1)return getFloat(_cz_order,_index);
       return 0;
     }
@@ -76,7 +76,7 @@ namespace clas12 {
    /*    if(_index>-1)return getShort(_pindex_order,_index); */
    /*    return 0; */
    /*  } */
-   double getPath(){ 
+   double getPath()  const noexcept{ 
      if(_index>-1)return getFloat(_path_order,_index);
      return 0;
    }

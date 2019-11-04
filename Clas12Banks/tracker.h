@@ -29,30 +29,30 @@ namespace clas12 {
 
     tracker(hipo::schema __schema);
  
-    virtual ~tracker()=default;
+    ~tracker() override=default;
     
     //getter funtions for items in tracker bank
-    int getNDF(){ 
+    int getNDF() const noexcept { 
       if(_index>-1)return getShort(_NDF_order,_index);
       return 0;
     }
-      int getSector(){ 
+      int getSector() const noexcept { 
       if(_index>-1)return getByte(_sector_order,_index);
       return 0;
     }
-    int getStatus(){ 
+    int getStatus() const noexcept { 
       if(_index>-1)return getShort(_status_order,_index);
       return 0;
     }
-    int getCharge(){ 
+    int getCharge() const noexcept { 
       if(_index>-1)return getByte(_q_order,_index);
       return 0;
     }
-   double getChi2(){ 
+   double getChi2() const noexcept { 
      if(_index>-1)return getFloat(_chi2_order,_index);
      return 0;
    }
-   double getChi2N(){
+   double getChi2N() const noexcept {
      auto N=getNDF();
      if(N)return getChi2()/N;
      return 0;

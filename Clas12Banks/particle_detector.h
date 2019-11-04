@@ -35,26 +35,26 @@ namespace clas12 {
 
     particle_detector(hipo::schema __schema);
 
-    virtual ~particle_detector()=default;
+    ~particle_detector() override=default;
 
     ///////////////////////////////////////////////////////////////
     //utiltiy functions, same for derived classes
     void   scanIndex();
     std::vector<short >  scanForParticle(short iparticle);
-    void readItems(std::string items);
-    bool useItem(std::string item);
+    void readItems(const std::string& items);
+    bool useItem(const std::string& item);
     
     ///////////////////////////////////////////////////////////////
     //getter functions, same for derived classes
     //get detector id
-    int getDetector(int index) { return getInt(_detector_id_order,index);}
-    int getDetector() { return getInt(_detector_id_order,_index);}
+    int getDetector(int index)   const noexcept{ return getInt(_detector_id_order,index);}
+    int getDetector()   const noexcept{ return getInt(_detector_id_order,_index);}
     //get the pindex = corresponding particle index
-    int getPindex(int index) { return getInt(_pindex_order,index);}
-    int getPindex() { return getInt(_pindex_order,_index);}
+    int getPindex(int index)   const noexcept{ return getInt(_pindex_order,index);}
+    int getPindex()   const noexcept{ return getInt(_pindex_order,_index);}
 
     //given a detector (layer if exists)  and pindex find the position in this bank
-    int getIndex() {return _index;}
+    int getIndex()   const noexcept{return _index;}
     int getIndex(int pindex, int detector, int layer=0);
    
    /* int getIndex(int pindex, int detector, int layer=0) { */
@@ -72,8 +72,8 @@ namespace clas12 {
     
     ////////////////////////////////////////////////////////////////
     //virtual functions can be overridden in derived class
-    virtual int getLayer(int index=0){return 0;}
-    virtual int getLayer(){return 0;}
+    virtual int getLayer(int index=0)  const noexcept{return 0;}
+    virtual int getLayer()  const noexcept{return 0;}
     virtual void print();
 
     ////////////////////////////////////////////////////////////////
@@ -92,8 +92,8 @@ namespace clas12 {
     int _index=-1;
     
     // std::map<int,int> _rmap;
-    std::vector<int> _rvec;
-    std::vector<std::string > _sitems;
+    std::vector<int> _rvec{};
+    std::vector<std::string > _sitems{};
 
     
   };

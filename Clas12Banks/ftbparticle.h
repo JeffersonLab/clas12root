@@ -24,13 +24,13 @@ namespace clas12 {
 
   private:
 
-    int _pid_order;
-    int _vt_order;
-    int _beta_order;
-    int _st_order;
-    int _chi2pid_order;
+    int _pid_order{-1};
+    int _vt_order{-1};
+    int _beta_order{-1};
+    int _st_order{-1};
+    int _chi2pid_order{-1};
     
-    short _entry=0;
+    short _entry{0};
     
   public:
 
@@ -40,27 +40,27 @@ namespace clas12 {
     ftbparticle(hipo::dictionary __factory);
     ftbparticle(hipo::schema __schema);
     
-    virtual ~ftbparticle() = default;
+    ~ftbparticle() override = default;
     
     
     //    void   init(const char *bankName, hipo::reader &r);
-    int    getPid(int index) { return getInt(_pid_order,index);}
-    float  getVt(int index)  { return getFloat(_vt_order,index);}
-    float  getBeta(int index)  { return getFloat(_beta_order,index);}
-    float  getChi2Pid(int index)  { return getFloat(_chi2pid_order,index);}
-    int    getStatus(int index)  { return getShort(_st_order,index);}
+    int    getPid(int index)   const noexcept{ return getInt(_pid_order,index);}
+    float  getVt(int index)    const noexcept{ return getFloat(_vt_order,index);}
+    float  getBeta(int index)    const noexcept{ return getFloat(_beta_order,index);}
+    float  getChi2Pid(int index)    const noexcept{ return getFloat(_chi2pid_order,index);}
+    int    getStatus(int index)    const noexcept{ return getShort(_st_order,index);}
 
-    int    getPid() { return getInt(_pid_order,_entry);}
-    float  getVt()  { return getFloat(_vt_order,_entry);}
-    float  getBeta()  { return getFloat(_beta_order,_entry);}
-    float  getChi2Pid()  { return getFloat(_chi2pid_order,_entry);}
-    int    getStatus()  { return getShort(_st_order,_entry);}
+    int    getPid()   const noexcept{ return getInt(_pid_order,_entry);}
+    float  getVt()    const noexcept{ return getFloat(_vt_order,_entry);}
+    float  getBeta()    const noexcept{ return getFloat(_beta_order,_entry);}
+    float  getChi2Pid()    const noexcept{ return getFloat(_chi2pid_order,_entry);}
+    int    getStatus()    const noexcept{ return getShort(_st_order,_entry);}
 
  
     
     void setEntry(short i){ _entry=i;}
     void setBankEntry(short i){ _entry=i;} //faster for BankHist
-    short getEntry() const {return _entry;}
+    short getEntry() const  noexcept{return _entry;}
     /**
     * This is virtual method from hipo::bank it will be called
     * every time a bank is read in the reader. Can be used to sort
