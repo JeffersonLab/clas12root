@@ -37,9 +37,9 @@ namespace clas12 {
     _ptof=_scint->getIndex(_pentry,clas12::CTOF);
     
     //prefer cnd layer 1,2, 3
-    _pcnd1=_scint->getIndex(_pentry,clas12::CND,clas12::CND1);
-    _pcnd2=_scint->getIndex(_pentry,clas12::CND,clas12::CND2);
-    _pcnd3=_scint->getIndex(_pentry,clas12::CND,clas12::CND3);
+    _pcnd1=_scint->getIndex(_pentry,clas12::CND,clas12::CND1-clas12::CNDOFF);
+    _pcnd2=_scint->getIndex(_pentry,clas12::CND,clas12::CND2-clas12::CNDOFF);
+    _pcnd3=_scint->getIndex(_pentry,clas12::CND,clas12::CND3-clas12::CNDOFF);
     if(_pcnd1!=-1) _pcnd=_pcnd1;
     else if(_pcnd2!=-1) _pcnd=_pcnd2;
     else if(_pcnd3!=-1) _pcnd=_pcnd3;
