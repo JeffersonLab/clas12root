@@ -62,6 +62,7 @@ namespace clas12 {
     }
 
     int getPid(){_parts->setEntry(_pentry);
+      //  std::cout<<"getPid "<<_useFTBPid<<" "<<_ftbparts->getRows()<<" "<<_ftbparts->getPid()<<" "<<_parts->getPid()<<std::endl;
       return _useFTBPid*_ftbparts->getRows()?_ftbparts->getPid():_parts->getPid();
     }
     

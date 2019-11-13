@@ -35,12 +35,7 @@ namespace clas12 {
     //if(factory.hasSchema("RAW::vtp"))_bvtp    = std::make_shared<clas12::vtp>(factory.getSchema("RAW::vtp"));
     //if(factory.hasSchema("RAW::scaler"))_bscal = std::make_shared<clas12::scaler>(factory.getSchema("RAW::scaler"));
 
- 
-    //add some detector regions to their vectors
-    addARegionFDet();
-    addARegionCDet();
-    addARegionFT();
-  
+   
   }
   ///////////////////////////////////////////////////////
   ///read the data
@@ -78,17 +73,24 @@ namespace clas12 {
 
     
     //Loop over particles and find their Pid
+   //Loop over particles and find their Pid
     for(ushort i=0;i<_nparts;i++){
       if(!_useFTBased){
 	_bparts->setEntry(i);
 	_pids.emplace_back(_bparts->getPid());
       }
       else{
-	_bftbparts->setEntry(i);
-	_pids.emplace_back(_bftbparts->getPid());
+	if(_bftbparts->getRows()){
+	  _bftbparts->setEntry(i);
+	  _pids.emplace_back(_bftbparts->getPid());
+	}
+	else{//if not ftbased use FD based
+	  _bparts->setEntry(i);
+	  _pids.emplace_back(_bparts->getPid());
+	}
       }
 	
-    }
+    } 
      //check if event is of the right type
     if(!passPidSelect()) return false;
 
@@ -161,6 +163,7 @@ namespace clas12 {
     if(_nparts==0) return;
     
     //Loop over particles and find their region
+    if(_rfdets.empty()) addARegionFDet();
     for(ushort i=0;i<_nparts;i++){ 
       _bparts->setEntry(i);
       
@@ -178,6 +181,7 @@ namespace clas12 {
       }
       
      //Check if CDet particle
+      if(_rcdets.empty()) addARegionCDet();
       if(_rcdets[_n_rcdets]->sort()){
 	//	add a FDet particle to the event list
 	_detParticles.emplace_back(_rcdets[_n_rcdets]);
@@ -190,6 +194,7 @@ namespace clas12 {
 	continue;
       }
        //Check if FT particle
+      if(_rfts.empty())addARegionFT();
       if(_rfts[_n_rfts]->sort()){
 	//add a FDet particle to the event list
 	_detParticles.emplace_back(_rfts[_n_rfts]);
@@ -227,7 +232,7 @@ namespace clas12 {
       }
     }
  
-      //check for requested exact matches
+    //check for requested exact matches
     for(auto const& select : _pidSelectExact){
        if(!(select.second==getNPid(select.first)))
 	return false;
