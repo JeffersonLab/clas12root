@@ -29,17 +29,11 @@
   
     //loop over all events in the file
     while(c12.next()==true){
-      // cout<<"next event"<<endl;
-      
+       
       if(c12.getDetParticles().empty())
 	continue;
       auto parts=c12.getDetParticles();
-      // cout<<"Check parts ";
-      // for(auto pp:parts)
-      // 	cout<<" ( "<<pp->getPid()<<" "<<pp->par()->getPid()<<" "<<pp->ftbpar()->getPid()<<") ";
-      // cout<<endl;
-      // cout<<c12.getByID(11).size()<<" "<<c12.getByID(22).size()<<" "<<c12.getByID(2212).size()<<" "<<c12.getByID(211).size()<<" "<<c12.getByID(-211).size()<<" "<<endl;
-  
+      
        auto electron=c12.getByID(11)[0];
        auto gamma1=c12.getByID(22)[0];
        auto gamma2=c12.getByID(22)[1];
@@ -51,9 +45,9 @@
        p4_gamma2.SetXYZM(gamma2->par()->getPx(),gamma2->par()->getPy(),gamma2->par()->getPz(),0);
 
        auto pi0 = p4_gamma1 + p4_gamma2;
-       // cout<<"Fill hists"<<endl;
+     
        //Fill histograms if gammas are in FD
-       if(gamma1->getRegion()==FD && gamma1->getRegion()==FD){
+       if(gamma1->getRegion()==FD && gamma2->getRegion()==FD){
 	 hmass.Fill(pi0.M());
 	 htime.Fill(gamma1->getTime() - gamma2->getTime() );
        }
