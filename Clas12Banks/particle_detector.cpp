@@ -51,7 +51,7 @@ namespace clas12 {
   ///function to find the current entries associated
   ///with pindex = iparticle
   std::vector<short >  particle_detector::scanForParticle(short iparticle){
-    const int size = getSize();
+    const int size = getRows();
     std::vector<short > pindices(0);
     for(short i = 0; i < size; i++){
       int pindex   = getPindex(i);
@@ -68,7 +68,7 @@ namespace clas12 {
 
  
   void particle_detector::print(){
-    const int size=getSize();
+    const int size=getRows();
     std::cout<<"Print detector with "<<size<< "entries \n";
     for(int i=0;i<size;i++)
       std::cout<<getDetector(i)<<" "<<getPindex(i)<<"\n";

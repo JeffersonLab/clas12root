@@ -78,6 +78,7 @@ namespace clas12 {
       if(!_useFTBased){
 	_bparts->setEntry(i);
 	_pids.emplace_back(_bparts->getPid());
+
       }
       else{
 	if(_bftbparts->getRows()){
@@ -90,7 +91,8 @@ namespace clas12 {
 	}
       }
 	
-    } 
+    }
+  
      //check if event is of the right type
     if(!passPidSelect()) return false;
 
@@ -117,9 +119,11 @@ namespace clas12 {
     //keep going until we get an event that passes
     bool validEvent=false;
     while(_reader.next()){
-      validEvent=true;
-      if(readEvent()) //got one
+      _nevent++;
+      if(readEvent()){ //got one
+	validEvent=true;
 	break;
+      }
     }
     if(!validEvent) return false;//no more events in reader
     //can proceed with valid event
@@ -206,9 +210,9 @@ namespace clas12 {
 	  addARegionFT();
 	continue;
       }
+    
     }
- 
- 
+  
   }
   bool clas12reader::passPidSelect(){
     //if no selections take event
@@ -231,11 +235,12 @@ namespace clas12 {
 	  return false;
       }
     }
- 
+    
     //check for requested exact matches
     for(auto const& select : _pidSelectExact){
-       if(!(select.second==getNPid(select.first)))
+      if(!(select.second==getNPid(select.first))){
 	return false;
+      }
     }
  
     //check for requeseted at least  matches
@@ -243,6 +248,7 @@ namespace clas12 {
       if((select.second>getNPid(select.first)))
 	return false;
     }
+
     return true;
   }
   

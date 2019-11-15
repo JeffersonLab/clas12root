@@ -1,10 +1,9 @@
 {
 
   HipoChain chain;
-  // chain.Add("/WHERE/IS/MY/HIPO/file.hipo");
+  chain.Add("skim.hipo");
+  //  chain.Add("/where/is/myHipo.hipo");
 
-
-  chain.Add("/work/jlab/clas12data/v16/skim9_5038.hipo");
 
   //create particles before looping to be more efficient
   TLorentzVector p4_gamma1;
@@ -25,15 +24,17 @@
     c12.addExactPid(22,2);    //exactly 2 gamma
     
     /////////c12.addZeroOfRestPid();  //nothing else
-    c12.useFTBased(); //and use the Pids from RECFT
+    ///////// c12.useFTBased(); //and use the Pids from RECFT
   
     //loop over all events in the file
     while(c12.next()==true){
        
       if(c12.getDetParticles().empty())
 	continue;
-      auto parts=c12.getDetParticles();
+
       
+      auto parts=c12.getDetParticles();
+       
        auto electron=c12.getByID(11)[0];
        auto gamma1=c12.getByID(22)[0];
        auto gamma2=c12.getByID(22)[1];

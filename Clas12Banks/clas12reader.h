@@ -156,6 +156,7 @@ namespace clas12 {
     std::map<short,short> _pidSelect;
     std::map<short,short> _pidSelectExact;
 
+    long _nevent=0;
     ushort _nparts=0;
     ushort _n_rfdets=0;
     ushort _n_rcdets=0;
