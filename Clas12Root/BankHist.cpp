@@ -27,7 +27,9 @@ namespace clas12root {
     _mapOfParts["RUN::config"]="runconfig";
     _mapOfParts["HEL::online"]="helonline";
     _mapOfParts["HEL::flip"]="helflip";
-  
+    _mapOfParts["MC::Particle"]="mcparticle";
+    _mapOfParts["MC::Lund"]="mcparticle";
+
 
   }
   BankHist::~BankHist(){
