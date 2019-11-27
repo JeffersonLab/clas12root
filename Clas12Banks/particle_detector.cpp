@@ -34,24 +34,11 @@ namespace clas12 {
     return false;
   }
   
-  //  function to map the detector entry to particle index
-  // void   particle_detector::scanIndex(){
-  //   _rmap.clear();
-    
-  //   const int size = getSize();
-  //   for(int i = 0; i < size; i++){
-  //     int detector = getDetector(i);
-  //     int layer= getLayer(i);
-  //     int pindex   = getPindex(i);
-  //     int key = (detector<<16)|(layer<<8)|pindex;
-  //      _rmap[key] = i;
-  //   }
-  // }
   ////////////////////////////////////////////////////////////////////////
   ///function to find the current entries associated
   ///with pindex = iparticle
   std::vector<short >  particle_detector::scanForParticle(short iparticle){
-    const int size = getSize();
+    const int size = getRows();
     std::vector<short > pindices(0);
     for(short i = 0; i < size; i++){
       int pindex   = getPindex(i);
@@ -68,10 +55,10 @@ namespace clas12 {
 
  
   void particle_detector::print(){
-    const int size=getSize();
+    const int size=getRows();
     std::cout<<"Print detector with "<<size<< "entries \n";
     for(int i=0;i<size;i++)
-      std::cout<<getDetector(i)<<" "<<getPindex(i)<<"\n";
+      std::cout<<getDetector(i)<<" "<<getPindex(i)<<" "<<getFloat(7,i)<<"\n";
     std::cout<<"\n";
   }
 

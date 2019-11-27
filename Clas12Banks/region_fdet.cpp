@@ -25,15 +25,28 @@ namespace clas12 {
     _ptof=-1;
     _pcal=-1;
     _ptrck=-1;
-  
+    //_scint->print();
+    
     //prefer tof layer 1,0,2
     _ptof3=_scint->getIndex(_pentry,clas12::FTOF,clas12::FTOF2);
     _ptof1=_scint->getIndex(_pentry,clas12::FTOF,clas12::FTOF1A);
     _ptof2=_scint->getIndex(_pentry,clas12::FTOF,clas12::FTOF1B);
+    
     if(_ptof2!=-1) _ptof=_ptof2;
     else if(_ptof1!=-1) _ptof=_ptof1;
     else if(_ptof3!=-1) _ptof=_ptof3;
-		    
+
+    // if(_ptof!=-1){
+    //   std::cout<<"XXX "<<_ptof<<" "<<_pentry<<std::endl;
+    //   _scint->setIndex(_ptof);
+    //   //if(_scint->getTime()==0){
+    // 	std::cout<<"Broken Time "<<_ptof<<" "<<_pentry<<std::endl;
+    // 	if(_ptof1!=-1)std::cout<<"PTOF1 "<<_ptof1<<" "<< sci(clas12::FTOF1A)->getTime()<<" "<< sci(_ptof1)->getFloat(7,_ptof1)<<std::endl;
+    // 	if(_ptof2!=-1)std::cout<<"PTOF2 "<<_ptof2<<" "<< sci(clas12::FTOF1B)->getTime()<<" "<< sci(_ptof1)->getFloat(7,_ptof2)<<std::endl;
+    // 	if(_ptof3!=-1)std::cout<<"PTOF3 "<<_ptof3<<" "<< sci(clas12::FTOF2)->getTime()<<" "<< sci(_ptof1)->getFloat(7,_ptof3)<<std::endl;
+    // 	_scint->print();
+    // 	//}
+    // }
     //prefer pcal,inner, outer
     _pcal=_pin=_cal->getIndex( _pentry,clas12::EC, clas12::ECIN);
     _pcal=_pout=_cal->getIndex( _pentry,clas12::EC, clas12::ECOUT);
@@ -83,6 +96,7 @@ namespace clas12 {
     case clas12::FTOF2 :
       _scint->setIndex(_ptof3);return _scint;
     }
+    std::cout<<"missed "<<lay<<" "<<std::endl;
     _scint->setIndex(-1);return _scint;
  }
  

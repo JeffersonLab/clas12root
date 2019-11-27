@@ -34,13 +34,7 @@ namespace clas12 {
     if(factory.hasSchema("HEL::flip"))_bhelflip  = std::make_shared<clas12::helflip>(factory.getSchema("HEL::flip"),_brunconfig);
     //if(factory.hasSchema("RAW::vtp"))_bvtp    = std::make_shared<clas12::vtp>(factory.getSchema("RAW::vtp"));
     //if(factory.hasSchema("RAW::scaler"))_bscal = std::make_shared<clas12::scaler>(factory.getSchema("RAW::scaler"));
-
  
-    //add some detector regions to their vectors
-    addARegionFDet();
-    addARegionCDet();
-    addARegionFT();
-  
   }
   ///////////////////////////////////////////////////////
   ///read the data
@@ -63,10 +57,9 @@ namespace clas12 {
     //regular particle bank
      if(_isRead) return _pids; //already read return current pids
      hipoRead();
- 
     _event.getStructure(*_bparts.get());
     if(_bftbparts.get())_event.getStructure(*_bftbparts.get());//FT based PID particle bank
-    
+   
     //First check if event passes criteria
     _nparts=_bparts->getRows();
     _pids.clear();
@@ -80,8 +73,14 @@ namespace clas12 {
 	_pids.emplace_back(_bparts->getPid());
       }
       else{
-	_bftbparts->setEntry(i);
-	_pids.emplace_back(_bftbparts->getPid());
+	if(_bftbparts->getRows()){
+	  _bftbparts->setEntry(i);
+	  _pids.emplace_back(_bftbparts->getPid());
+	}
+	else{//if not ftbased use FD based
+	  _bparts->setEntry(i);
+	  _pids.emplace_back(_bparts->getPid());
+	}
       }
 	
     }
@@ -123,9 +122,11 @@ namespace clas12 {
     bool validEvent=false;
     while(_reader.next()){
       clearEvent();
-      validEvent=true;
-      if(readEvent()) //got one
+      _nevent++;
+      if(readEvent()){ //got one
+	validEvent=true;
 	break;
+      }
     }
     if(!validEvent) return false;//no more events in reader
     //can proceed with valid event
@@ -141,9 +142,11 @@ namespace clas12 {
     bool validEvent=false;
     while(_reader.nextInRecord()){
       clearEvent();
-      validEvent=true;
-      if(readEvent()) //got one
+      _nevent++;
+      if(readEvent()){ //got one
+	validEvent=true;
 	break;
+      }
     }
     if(!validEvent) return false;//no more events in record
 
@@ -172,6 +175,7 @@ namespace clas12 {
       _bparts->setEntry(i);
       
       //Check if FDet particle
+      if(_rfdets.empty()) addARegionFDet();
       if(_rfdets[_n_rfdets]->sort()){
 	//	add a FDet particle to the event list
 	_detParticles.emplace_back(_rfdets[_n_rfdets]);
@@ -184,7 +188,8 @@ namespace clas12 {
 	continue;
       }
       
-     //Check if CDet particle
+      //Check if CDet particle
+      if(_rcdets.empty()) addARegionCDet();
       if(_rcdets[_n_rcdets]->sort()){
 	//	add a FDet particle to the event list
 	_detParticles.emplace_back(_rcdets[_n_rcdets]);
@@ -196,7 +201,9 @@ namespace clas12 {
 	  addARegionCDet();
 	continue;
       }
+	 
        //Check if FT particle
+      if(_rfts.empty())addARegionFT();
       if(_rfts[_n_rfts]->sort()){
 	//add a FDet particle to the event list
 	_detParticles.emplace_back(_rfts[_n_rfts]);
@@ -233,13 +240,13 @@ namespace clas12 {
 	  return false;
       }
     }
- 
-      //check for requested exact matches
+  
+    //check for requested exact matches
     for(auto const& select : _pidSelectExact){
-       if(!(select.second==getNPid(select.first)))
+      if(!(select.second==getNPid(select.first)))
 	return false;
     }
- 
+    
     //check for requeseted at least  matches
     for(auto const& select : _pidSelect){
       if((select.second>getNPid(select.first)))

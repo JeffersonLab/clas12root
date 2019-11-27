@@ -61,7 +61,8 @@ namespace clas12 {
       return true;
     }
 
-    int getPid(){_parts->setEntry(_pentry);
+    int getPid(){
+      _parts->setEntry(_pentry);
       return _useFTBPid*_ftbparts->getRows()?_ftbparts->getPid():_parts->getPid();
     }
     
