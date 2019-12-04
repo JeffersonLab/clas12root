@@ -96,7 +96,6 @@ namespace clas12 {
     case clas12::FTOF2 :
       _scint->setIndex(_ptof3);return _scint;
     }
-    std::cout<<"missed "<<lay<<" "<<std::endl;
     _scint->setIndex(-1);return _scint;
  }
  
