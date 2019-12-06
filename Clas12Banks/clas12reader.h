@@ -36,6 +36,7 @@
 #include "region_fdet.h"
 #include "region_cdet.h"
 #include "region_ft.h"
+#include "dictionary.h"
 
 #include <algorithm>
 #include <vector>
@@ -92,7 +93,19 @@ namespace clas12 {
     const vtp_ptr vtp() const{return _bvtp;};
     const scaler_ptr scaler() const{return _bscal;};
     const mcpar_ptr mcparts() const{return _bmcparts;};
-    
+
+
+    //support for generic non-DST banks
+    uint addBank(std::string name){
+      _addBanks.push_back(std::make_shared<hipo::bank>(_factory.getSchema(name.data())));
+      return _addBanks.size()-1;
+    }
+
+    hipo::bank* getBank(uint index) const {return  _addBanks.at(index).get();}
+    int getBankOrder(int ibank,std::string itemname ) const{
+      return getBank(ibank)->getSchema().getEntryOrder(itemname.data());
+    }
+    /////////////////////////////////
     
     std::vector<region_part_ptr>& getDetParticles(){return _detParticles;}
     std::vector<region_part_ptr>* getDetParticlesPtr(){return &_detParticles;}
@@ -130,6 +143,7 @@ namespace clas12 {
     //reader
     hipo::reader     _reader;
     hipo::event      _event;
+    hipo::dictionary  _factory;
 
     //DST banks
     helonline_ptr  _bhelonline;
@@ -150,6 +164,8 @@ namespace clas12 {
     vtp_ptr _bvtp;
     scaler_ptr _bscal;
 
+    std::vector<std::shared_ptr<hipo::bank> > _addBanks;
+    
     //Detector region vectors,
     //each particle in an event will have
     //one associated
