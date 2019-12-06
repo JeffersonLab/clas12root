@@ -52,7 +52,7 @@ namespace clas12 {
      
 
     double getTime() final{
-      if(_ptof){
+      if(_ptof>-1){
 	_scint->setIndex(_ptof);
 	return _scint->getTime();
       }
@@ -60,7 +60,7 @@ namespace clas12 {
       return _cal->getTime();
     }
     double getPath() final{
-      if(_ptof){
+      if(_ptof>-1){
 	_scint->setIndex(_ptof);
 	return _scint->getPath();
       }
@@ -84,11 +84,11 @@ namespace clas12 {
     }
 
     short getSector() final{
-      if(_ptrck){
+      if(_ptrck>-1){
 	_trck->setIndex(_ptrck);
 	return _trck->getSector();
       }
-      if(_ptof){
+      if(_ptof>-1){
 	_scint->setIndex(_ptof);
 	return _scint->getSector();
       }

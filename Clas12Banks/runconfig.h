@@ -6,7 +6,7 @@
 
 /*
  * File:   runconfig.h
- * Author: gavalian
+ * Author: dglazier
  *
  * Created on April 27, 2017, 10:01 AM
  */
@@ -30,15 +30,15 @@ namespace clas12 {
     runconfig(hipo::schema __schema);
     virtual ~runconfig() = default;
  
-   int    getRun(){ return getInt(_run_order,0); }
-   int    getEvent(){ return getInt(_ev_order,0); }
-   int    getUnixTime(){ return getInt(_ut_order,0); }
-   long   getTrigger(){ return getLong(_tr_order,0); }
-   long   getTimeStamp(){ return getLong(_ts_order,0); }
-   int    getType(){ return getByte(_ty_order,0); }
-   int    getMode(){ return getByte(_mo_order,0); }
-   float  getTorus(){ return getFloat(_to_order,0); }
-   float  getSolenoid(){ return getFloat(_so_order,0); }
+   int    getRun() const noexcept{ return getInt(_run_order,0); }
+   int    getEvent() const noexcept{ return getInt(_ev_order,0); }
+   int    getUnixTime() const noexcept{ return getInt(_ut_order,0); }
+   long   getTrigger() const noexcept{ return getLong(_tr_order,0); }
+   long   getTimeStamp() const noexcept{ return getLong(_ts_order,0); }
+   int    getType() const noexcept{ return getByte(_ty_order,0); }
+   int    getMode() const noexcept{ return getByte(_mo_order,0); }
+   float  getTorus() const noexcept{ return getFloat(_to_order,0); }
+   float  getSolenoid() const noexcept{ return getFloat(_so_order,0); }
 
 
     /**
@@ -55,15 +55,15 @@ namespace clas12 {
   private :
 
     
-    int _run_order;
-    int _ev_order;
-    int _ut_order;
-    int _tr_order;
-    int _ts_order;
-    int _ty_order;
-    int _mo_order;
-    int _to_order;
-    int _so_order;
+    int _run_order{-1};
+    int _ev_order{-1};
+    int _ut_order{-1};
+    int _tr_order{-1};
+    int _ts_order{-1};
+    int _ty_order{-1};
+    int _mo_order{-1};
+    int _to_order{-1};
+    int _so_order{-1};
    
     
   };

@@ -38,16 +38,18 @@ namespace clas12{
   //CDET scint layers same as detectors
   //static const short CND  = 3;
   //static const short CTOF = 4;
-  static const short CND1  = 1;
-  static const short CND2  = 2;
-  static const short CND3  = 3;
+ 
+  static const short CNDOFF = 150; //CND1-CNDOFF == actual layer number, stil stops conflict with FTOF scintillator
+  static const short CND1  = 151;
+  static const short CND2  = 152;
+  static const short CND3  = 153;
  
   static const short PCAL   = 1;
   static const short ECIN   = 4;
   static const short ECOUT  = 7;
 
   //additional TRAJECTORY layers
-   static const short DC1  = 6;
+  static const short DC1  = 6;
   static const short DC2  = 12;
   static const short DC3  = 18;
   static const short DC4  = 24;

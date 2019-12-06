@@ -45,21 +45,21 @@ namespace clas12 {
     void setBankEntry(int ind){_index=ind;}
 
     const  CovMatrix* matrix();
-    float getC11(){ return getFloat(_morder[0][0],_index);}
-    float getC12(){ return getFloat(_morder[0][1],_index);}
-    float getC13(){ return getFloat(_morder[0][2],_index);}
-    float getC14(){ return getFloat(_morder[0][3],_index);}
-    float getC15(){ return getFloat(_morder[0][4],_index);}
-    float getC22(){ return getFloat(_morder[1][1],_index);}
-    float getC23(){ return getFloat(_morder[1][2],_index);}
-    float getC24(){ return getFloat(_morder[1][3],_index);}
-    float getC25(){ return getFloat(_morder[1][4],_index);}
-    float getC33(){ return getFloat(_morder[2][2],_index);}
-    float getC34(){ return getFloat(_morder[2][3],_index);}
-    float getC35(){ return getFloat(_morder[2][4],_index);}
-    float getC44(){ return getFloat(_morder[3][3],_index);}
-    float getC45(){ return getFloat(_morder[3][4],_index);}
-    float getC55(){ return getFloat(_morder[4][4],_index);}
+    float getC11()  const noexcept{ return getFloat(_morder[0][0],_index);}
+    float getC12()  const noexcept{ return getFloat(_morder[0][1],_index);}
+    float getC13()  const noexcept{ return getFloat(_morder[0][2],_index);}
+    float getC14()  const noexcept{ return getFloat(_morder[0][3],_index);}
+    float getC15()  const noexcept{ return getFloat(_morder[0][4],_index);}
+    float getC22()  const noexcept{ return getFloat(_morder[1][1],_index);}
+    float getC23()  const noexcept{ return getFloat(_morder[1][2],_index);}
+    float getC24()  const noexcept{ return getFloat(_morder[1][3],_index);}
+    float getC25()  const noexcept{ return getFloat(_morder[1][4],_index);}
+    float getC33()  const noexcept{ return getFloat(_morder[2][2],_index);}
+    float getC34()  const noexcept{ return getFloat(_morder[2][3],_index);}
+    float getC35()  const noexcept{ return getFloat(_morder[2][4],_index);}
+    float getC44()  const noexcept{ return getFloat(_morder[3][3],_index);}
+    float getC45()  const noexcept{ return getFloat(_morder[3][4],_index);}
+    float getC55()  const noexcept{ return getFloat(_morder[4][4],_index);}
 
     /**
     * This is virtual method from hipo::bank it will be called

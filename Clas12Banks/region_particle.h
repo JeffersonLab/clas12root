@@ -33,7 +33,7 @@ namespace clas12 {
 
   public:
 
-    region_particle(){};
+    region_particle()=default;
     
     region_particle(par_ptr pars,covmat_ptr cm);
     //For region_ft
@@ -49,7 +49,7 @@ namespace clas12 {
 		    scint_ptr scp, trck_ptr trp, traj_ptr trj,
 		    cher_ptr chp, ft_ptr ftp,event_ptr event);
 
-    virtual ~region_particle()=default;
+    virtual ~region_particle() =default;
 
     ////////////////////////////////////////////////////////////
     /// derived classes must define their own sort
@@ -58,10 +58,11 @@ namespace clas12 {
       _pentry=_parts->getEntry();
       //check for covarince matrix
       if(_covmat.get())_pcmat=_covmat->getIndex(_pentry);
-       return true;
+      return true;
     }
 
-    int getPid(){_parts->setEntry(_pentry);
+    int getPid(){
+      _parts->setEntry(_pentry);
       return _useFTBPid*_ftbparts->getRows()?_ftbparts->getPid():_parts->getPid();
     }
     

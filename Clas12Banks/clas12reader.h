@@ -55,7 +55,7 @@ namespace clas12 {
 
     clas12reader()=default;
     clas12reader(std::string filename,std::vector<long> tags=std::vector<long>());
-    ~clas12reader()=default;
+    virtual ~clas12reader()=default;
 
     hipo::reader& getReader(){return _reader;}
     
@@ -100,7 +100,9 @@ namespace clas12 {
     std::vector<region_part_ptr> getByRegion(int ir);
     std::vector<region_part_ptr> getByCharge(int ch);
     
-    short getNPid(short pid){return std::count(_pids.begin(),_pids.end(), pid);};
+    const std::vector<short>& preCheckPids();
+
+    short getNPid(short pid)const noexcept{return std::count(_pids.begin(),_pids.end(), pid);};
     void addAtLeastPid(short pid,short n){
       _pidSelect[pid]=n;
       _givenPids.push_back(pid);
@@ -115,11 +117,16 @@ namespace clas12 {
 
     void useFTBased(){_useFTBased=true;}
     
-    int getNParticles() const {return _detParticles.size();}
-    const std::vector<short> &getPids() const {return _pids;}
+    int getNParticles() const  noexcept{return _detParticles.size();}
+    const std::vector<short> &getPids() const  noexcept{return _pids;}
     
   private:
-
+    
+    void hipoRead(){
+      _reader.read(_event);
+      _isRead=true;
+    }
+    
     //reader
     hipo::reader     _reader;
     hipo::event      _event;
@@ -156,13 +163,14 @@ namespace clas12 {
     std::map<short,short> _pidSelect;
     std::map<short,short> _pidSelectExact;
 
+    long _nevent=0;
     ushort _nparts=0;
     ushort _n_rfdets=0;
     ushort _n_rcdets=0;
     ushort _n_rfts=0;
     bool _zeroOfRestPid=false;
     bool _useFTBased=false;
-
+    bool _isRead=false;
   };
   //helper functions
   

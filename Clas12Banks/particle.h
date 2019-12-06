@@ -27,18 +27,18 @@ namespace clas12 {
   private:
     ftbpar_ptr _ftbpar; //FT based bank
     
-    int _pid_order;
-    int _px_order;
-    int _py_order;
-    int _pz_order;
-    int _vx_order;
-    int _vy_order;
-    int _vz_order;
-    int _vt_order;
-    int _beta_order;
-    int _ch_order;
-    int _st_order;
-    int _chi2pid_order;
+    int _pid_order{-1};
+    int _px_order{-1};
+    int _py_order{-1};
+    int _pz_order{-1};
+    int _vx_order{-1};
+    int _vy_order{-1};
+    int _vz_order{-1};
+    int _vt_order{-1};
+    int _beta_order{-1};
+    int _ch_order{-1};
+    int _st_order{-1};
+    int _chi2pid_order{-1};
     
     short _entry=0;
     
@@ -50,42 +50,42 @@ namespace clas12 {
     particle(hipo::schema __schema);
     particle(hipo::schema __schema,ftbpar_ptr ftbpar);
     
-    virtual ~particle() = default;
+    ~particle() override = default;
     
     
-    int    getPid(int index) { return getInt(_pid_order,index);}
-    float  getPx(int index)  { return getFloat(_px_order,index);}
-    float  getPy(int index)  { return getFloat(_py_order,index);}
-    float  getPz(int index)  { return getFloat(_pz_order,index);}
-    float  getVx(int index)  { return getFloat(_vx_order,index);}
-    float  getVy(int index)  { return getFloat(_vy_order,index);}
-    float  getVz(int index)  { return getFloat(_vz_order,index);}
-    float  getVt(int index)  { return getFloat(_vt_order,index);}
-    float  getBeta(int index)  { return getFloat(_beta_order,index);}
-    float  getChi2Pid(int index)  { return getFloat(_chi2pid_order,index);}
-    int    getCharge(int index)  { return getByte(_ch_order,index);}
-    int    getStatus(int index)  { return getShort(_st_order,index);}
+    int    getPid(int index)  const noexcept{ return getInt(_pid_order,index);}
+    float  getPx(int index)   const noexcept{ return getFloat(_px_order,index);}
+    float  getPy(int index)   const noexcept{ return getFloat(_py_order,index);}
+    float  getPz(int index)   const noexcept{ return getFloat(_pz_order,index);}
+    float  getVx(int index)   const noexcept{ return getFloat(_vx_order,index);}
+    float  getVy(int index)   const noexcept{ return getFloat(_vy_order,index);}
+    float  getVz(int index)   const noexcept{ return getFloat(_vz_order,index);}
+    float  getVt(int index)   const noexcept{ return getFloat(_vt_order,index);}
+    float  getBeta(int index)   const noexcept{ return getFloat(_beta_order,index);}
+    float  getChi2Pid(int index)   const noexcept{ return getFloat(_chi2pid_order,index);}
+    int    getCharge(int index)   const noexcept{ return getByte(_ch_order,index);}
+    int    getStatus(int index)   const noexcept{ return getShort(_st_order,index);}
 
-    int    getPid() { return getInt(_pid_order,_entry);}
-    float  getPx()  { return getFloat(_px_order,_entry);}
-    float  getPy()  { return getFloat(_py_order,_entry);}
-    float  getPz()  { return getFloat(_pz_order,_entry);}
-    float  getVx()  { return getFloat(_vx_order,_entry);}
-    float  getVy()  { return getFloat(_vy_order,_entry);}
-    float  getVz()  { return getFloat(_vz_order,_entry);}
-    float  getVt()  { return getFloat(_vt_order,_entry);}
-    float  getBeta()  { return getFloat(_beta_order,_entry);}
-    float  getChi2Pid()  { return getFloat(_chi2pid_order,_entry);}
-    int    getCharge()  { return getByte(_ch_order,_entry);}
-    int    getStatus()  { return getShort(_st_order,_entry);}
+    int    getPid()  const noexcept{ return getInt(_pid_order,_entry);}
+    float  getPx()   const noexcept{ return getFloat(_px_order,_entry);}
+    float  getPy()   const noexcept{ return getFloat(_py_order,_entry);}
+    float  getPz()   const noexcept{ return getFloat(_pz_order,_entry);}
+    float  getVx()   const noexcept{ return getFloat(_vx_order,_entry);}
+    float  getVy()   const noexcept{ return getFloat(_vy_order,_entry);}
+    float  getVz()   const noexcept{ return getFloat(_vz_order,_entry);}
+    float  getVt()   const noexcept{ return getFloat(_vt_order,_entry);}
+    float  getBeta()   const noexcept{ return getFloat(_beta_order,_entry);}
+    float  getChi2Pid()   const noexcept{ return getFloat(_chi2pid_order,_entry);}
+    int    getCharge()   const noexcept{ return getByte(_ch_order,_entry);}
+    int    getStatus()   const noexcept{ return getShort(_st_order,_entry);}
 
-    int    getFTBPid() { return _ftbpar->getPid();}
-    float  getFTBVt()  { return _ftbpar->getVt();}
-    float  getFTBBeta()  { return _ftbpar->getBeta();}
-    float  getFTBChi2Pid()  { return _ftbpar->getChi2Pid();}
-    int    getFTBStatus()  { return _ftbpar->getStatus();}
+    int    getFTBPid()   const noexcept{ return _ftbpar->getPid();}
+    float  getFTBVt()    const noexcept{ return _ftbpar->getVt();}
+    float  getFTBBeta()    const noexcept{ return _ftbpar->getBeta();}
+    float  getFTBChi2Pid()    const noexcept{ return _ftbpar->getChi2Pid();}
+    int    getFTBStatus()    const noexcept{ return _ftbpar->getStatus();}
 
-    float getP(){
+    float getP() const noexcept{
       auto x= getFloat(_px_order,_entry);
       auto y= getFloat(_py_order,_entry);
       auto z= getFloat(_pz_order,_entry);
@@ -94,7 +94,7 @@ namespace clas12 {
     
     void setEntry(short i){ _entry=i;if(_ftbpar.get())_ftbpar->setEntry(i);}
     void setBankEntry(short i){ _entry=i;} //faster for BankHist
-    short getEntry() const {return _entry;}
+    short getEntry() const noexcept{return _entry;}
     /**
     * This is virtual method from hipo::bank it will be called
     * every time a bank is read in the reader. Can be used to sort

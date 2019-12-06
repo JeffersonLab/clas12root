@@ -47,7 +47,7 @@ namespace clas12 {
      
     
     double getTime() final{
-      if(_ptof){
+      if(_ptof>-1){
 	_scint->setIndex(_ptof);
 	return _scint->getTime();
       }
@@ -56,7 +56,7 @@ namespace clas12 {
       
     }
     double getPath() final{
-      if(_ptof){
+      if(_ptof>-1){
 	_scint->setIndex(_ptof);
 	return _scint->getPath();
       }

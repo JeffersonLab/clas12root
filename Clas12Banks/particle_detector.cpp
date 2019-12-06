@@ -19,7 +19,7 @@ namespace clas12 {
   }
   ///////////////////////////////////////////////////////////////////////
   /// load items to be used
-  void particle_detector::readItems(std::string items){
+  void particle_detector::readItems(const std::string& items){
     std::stringstream ss(items);
     std::string sitem;
     while(std::getline(ss, sitem, ':'))
@@ -27,31 +27,18 @@ namespace clas12 {
   }
   ///////////////////////////////////////////////////////////////////////
   ///check if item should be used
-  bool particle_detector::useItem(std::string item){
+  bool particle_detector::useItem(const std::string& item){
     if(!(_sitems.size())) return true;
     if(std::find(_sitems.begin(),_sitems.end(),"c")!=_sitems.end())
       return true;
     return false;
   }
   
-  //  function to map the detector entry to particle index
-  // void   particle_detector::scanIndex(){
-  //   _rmap.clear();
-    
-  //   const int size = getSize();
-  //   for(int i = 0; i < size; i++){
-  //     int detector = getDetector(i);
-  //     int layer= getLayer(i);
-  //     int pindex   = getPindex(i);
-  //     int key = (detector<<16)|(layer<<8)|pindex;
-  //      _rmap[key] = i;
-  //   }
-  // }
   ////////////////////////////////////////////////////////////////////////
   ///function to find the current entries associated
   ///with pindex = iparticle
   std::vector<short >  particle_detector::scanForParticle(short iparticle){
-    const int size = getSize();
+    const int size = getRows();
     std::vector<short > pindices(0);
     for(short i = 0; i < size; i++){
       int pindex   = getPindex(i);
@@ -68,16 +55,15 @@ namespace clas12 {
 
  
   void particle_detector::print(){
-    const int size=getSize();
+    const int size=getRows();
     std::cout<<"Print detector with "<<size<< "entries \n";
     for(int i=0;i<size;i++)
-      std::cout<<getDetector(i)<<" "<<getPindex(i)<<"\n";
+      std::cout<<getDetector(i)<<" "<<getPindex(i)<<" "<<getFloat(7,i)<<"\n";
     std::cout<<"\n";
   }
 
 
   int particle_detector::getIndex(int pindex, int detector, int layer){
- 
     std::vector<int>::iterator it;
      int key = (detector<<16)|(layer<<8)|pindex;
      if((it=std::find(_rvec.begin(),_rvec.end(),key))!=_rvec.end()){

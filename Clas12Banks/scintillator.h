@@ -29,66 +29,66 @@ namespace clas12 {
 
     scintillator(hipo::schema __schema);
 
-    virtual ~scintillator()=default;
+    ~scintillator() override=default;
     
-   int getLayer(int index) override{ 
+   int getLayer(int index) const noexcept override{ 
       if(index>-1)return getByte(_layer_order,index);
       return 0;
     }
     //getter funtions for items in scintillator bank
-    int getComponent(){ 
+    int getComponent() const noexcept{ 
       if(_index>-1)return getShort(_component_order,_index);
       return 0;
     }
-    double getTime(){ 
+    double getTime() const noexcept{ 
       if(_index>-1)return getFloat(_time_order,_index);
       return 0;
     }
-    double getEnergy(){ 
+    double getEnergy() const noexcept{ 
       if(_index>-1)return getFloat(_energy_order,_index);
       return 0;
     }
-    double getPath(){ 
+    double getPath() const noexcept{ 
       if(_index>-1)return getFloat(_path_order,_index);
       return 0;
     }
-    int getSector(){ 
+    int getSector() const noexcept{ 
       if(_index>-1)return getByte(_sector_order,_index);
       return 0;
     }
-    int getStatus(){ 
+    int getStatus() const noexcept{ 
       if(_index>-1)return getShort(_status_order,_index);
       return 0;
     }
-    int getLayer() override{ 
+    int getLayer()  const noexcept override{ 
       if(_index>-1)return getByte(_layer_order,_index);
       return 0;
     }
-   double getX(){ 
+   double getX() const noexcept{ 
       if(_index>-1)return getFloat(_x_order,_index);
       return 0;
     }
-    double getY(){ 
+    double getY() const noexcept{ 
       if(_index>-1)return getFloat(_y_order,_index);
       return 0;
     }
-    double getZ(){ 
+    double getZ() const noexcept{ 
       if(_index>-1)return getFloat(_z_order,_index);
       return 0;
     }
-  double getHX(){ 
+  double getHX() const noexcept{ 
       if(_index>-1)return getFloat(_hx_order,_index);
       return 0;
     }
-    double getHY(){ 
+    double getHY() const noexcept{ 
       if(_index>-1)return getFloat(_hy_order,_index);
       return 0;
     }
-    double getHZ(){ 
+    double getHZ() const noexcept{ 
       if(_index>-1)return getFloat(_hz_order,_index);
       return 0;
     }
-      double getChi2(){ 
+      double getChi2() const noexcept{ 
       if(_index>-1)return getFloat(_chi2_order,_index);
       return 0;
     }

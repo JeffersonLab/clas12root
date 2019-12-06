@@ -34,13 +34,7 @@ namespace clas12 {
     if(factory.hasSchema("HEL::flip"))_bhelflip  = std::make_shared<clas12::helflip>(factory.getSchema("HEL::flip"),_brunconfig);
     //if(factory.hasSchema("RAW::vtp"))_bvtp    = std::make_shared<clas12::vtp>(factory.getSchema("RAW::vtp"));
     //if(factory.hasSchema("RAW::scaler"))_bscal = std::make_shared<clas12::scaler>(factory.getSchema("RAW::scaler"));
-
  
-    //add some detector regions to their vectors
-    addARegionFDet();
-    addARegionCDet();
-    addARegionFT();
-  
   }
   ///////////////////////////////////////////////////////
   ///read the data
@@ -51,31 +45,26 @@ namespace clas12 {
     _n_rfts=0;
     
     _detParticles.clear();
-    _detParticles.reserve(_nparts);
     _pids.clear();
-    _pids.reserve(_nparts);
-
+ 
+    _isRead=false;
   }
-  bool clas12reader::readEvent(){
-    _reader.read(_event);
 
-    //Special banks
-    if(_brunconfig.get())_event.getStructure(*_brunconfig.get());
-
-    //Comment in next 3 lines for helicity analysis
-    //if(_bhelflip.get())_event.getStructure(*_bhelflip.get());
-    //if(_bhelonline.get())_event.getStructure(*_bhelonline.get());
-    //if(_bhelflip.get()->getRows()>0) _bhelflip->helicityAnalysis();
-
+  ///////////////////////////////////////////////////////////////
+  ///This function may be called before readEvent to allow checking
+  ///of Pids by external routines
+   const std::vector<short>& clas12reader::preCheckPids(){
     //regular particle bank
+     if(_isRead) return _pids; //already read return current pids
+     hipoRead();
     _event.getStructure(*_bparts.get());
     if(_bftbparts.get())_event.getStructure(*_bftbparts.get());//FT based PID particle bank
-    
+   
     //First check if event passes criteria
     _nparts=_bparts->getRows();
     _pids.clear();
     _pids.reserve(_nparts);
-
+ 
     
     //Loop over particles and find their Pid
     for(ushort i=0;i<_nparts;i++){
@@ -84,13 +73,31 @@ namespace clas12 {
 	_pids.emplace_back(_bparts->getPid());
       }
       else{
-	_bftbparts->setEntry(i);
-	_pids.emplace_back(_bftbparts->getPid());
+	if(_bftbparts->getRows()){
+	  _bftbparts->setEntry(i);
+	  _pids.emplace_back(_bftbparts->getPid());
+	}
+	else{//if not ftbased use FD based
+	  _bparts->setEntry(i);
+	  _pids.emplace_back(_bparts->getPid());
+	}
       }
 	
     }
+    return _pids;
+  }
+  bool clas12reader::readEvent(){
+ 
+    //get pid of tracks and save in _pids
+    preCheckPids();
+    
      //check if event is of the right type
-    if(!passPidSelect()) return false;
+    if(!passPidSelect()){
+      _pids.clear(); //reset so read next event in preChekPids
+      return false;
+    }
+    //Special run banks
+    if(_brunconfig.get())_event.getStructure(*_brunconfig.get());
 
     //now getthe data for the rest of the banks
     if(_bmcparts.get())_event.getStructure(*_bmcparts.get());
@@ -111,13 +118,15 @@ namespace clas12 {
   ///initialise next event from the reader
   bool clas12reader::next(){
 
-    clearEvent();
     //keep going until we get an event that passes
     bool validEvent=false;
     while(_reader.next()){
-      validEvent=true;
-      if(readEvent()) //got one
+      clearEvent();
+      _nevent++;
+      if(readEvent()){ //got one
+	validEvent=true;
 	break;
+      }
     }
     if(!validEvent) return false;//no more events in reader
     //can proceed with valid event
@@ -129,13 +138,15 @@ namespace clas12 {
   ///initialise next event from the reader
   bool clas12reader::nextInRecord(){
      
-    clearEvent();
     //keep going until we get an event that passes
     bool validEvent=false;
     while(_reader.nextInRecord()){
-      validEvent=true;
-      if(readEvent()) //got one
+      clearEvent();
+      _nevent++;
+      if(readEvent()){ //got one
+	validEvent=true;
 	break;
+      }
     }
     if(!validEvent) return false;//no more events in record
 
@@ -149,8 +160,8 @@ namespace clas12 {
   /// Add appropriate region_partcle to event particle vector
   void clas12reader::sort(){
 
-    
-    // _nparts=_bparts->getRows();
+    if(_nparts==0) return;
+   
     _n_rfdets=0;
     _n_rcdets=0;
     _n_rfts=0;
@@ -158,13 +169,13 @@ namespace clas12 {
     _detParticles.clear();
     _detParticles.reserve(_nparts);
 
-    if(_nparts==0) return;
-    
+     
     //Loop over particles and find their region
     for(ushort i=0;i<_nparts;i++){ 
       _bparts->setEntry(i);
       
       //Check if FDet particle
+      if(_rfdets.empty()) addARegionFDet();
       if(_rfdets[_n_rfdets]->sort()){
 	//	add a FDet particle to the event list
 	_detParticles.emplace_back(_rfdets[_n_rfdets]);
@@ -177,7 +188,8 @@ namespace clas12 {
 	continue;
       }
       
-     //Check if CDet particle
+      //Check if CDet particle
+      if(_rcdets.empty()) addARegionCDet();
       if(_rcdets[_n_rcdets]->sort()){
 	//	add a FDet particle to the event list
 	_detParticles.emplace_back(_rcdets[_n_rcdets]);
@@ -189,7 +201,9 @@ namespace clas12 {
 	  addARegionCDet();
 	continue;
       }
+	 
        //Check if FT particle
+      if(_rfts.empty())addARegionFT();
       if(_rfts[_n_rfts]->sort()){
 	//add a FDet particle to the event list
 	_detParticles.emplace_back(_rfts[_n_rfts]);
@@ -226,13 +240,13 @@ namespace clas12 {
 	  return false;
       }
     }
- 
-      //check for requested exact matches
+  
+    //check for requested exact matches
     for(auto const& select : _pidSelectExact){
-       if(!(select.second==getNPid(select.first)))
+      if(!(select.second==getNPid(select.first)))
 	return false;
     }
- 
+    
     //check for requeseted at least  matches
     for(auto const& select : _pidSelect){
       if((select.second>getNPid(select.first)))
