@@ -76,7 +76,7 @@ namespace clas12 {
       _cal->setIndex(_pout);
       energy+=_cal->getEnergy();
       return energy;
-  }
+    }
  
     double getDeltaEnergy() final{
       _scint->setIndex(_ptof);

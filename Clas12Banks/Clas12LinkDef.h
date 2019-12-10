@@ -28,5 +28,6 @@
 #pragma link C++ class clas12::region_ft+;
 #pragma link C++ class clas12::region_fdet+;
 #pragma link C++ class clas12::region_cdet+;
+#pragma link C++ class clas12::clas12writer+;
 #pragma link C++ class clas12::clas12reader+;
 #endif

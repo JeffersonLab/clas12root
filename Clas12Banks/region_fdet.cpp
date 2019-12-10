@@ -28,9 +28,9 @@ namespace clas12 {
     //_scint->print();
     
     //prefer tof layer 1,0,2
-    _ptof3=_scint->getIndex(_pentry,clas12::FTOF,clas12::FTOF2);
-    _ptof1=_scint->getIndex(_pentry,clas12::FTOF,clas12::FTOF1A);
-    _ptof2=_scint->getIndex(_pentry,clas12::FTOF,clas12::FTOF1B);
+    if(_scint.get())_ptof3=_scint->getIndex(_pentry,clas12::FTOF,clas12::FTOF2);
+    if(_scint.get())_ptof1=_scint->getIndex(_pentry,clas12::FTOF,clas12::FTOF1A);
+    if(_scint.get())_ptof2=_scint->getIndex(_pentry,clas12::FTOF,clas12::FTOF1B);
     
     if(_ptof2!=-1) _ptof=_ptof2;
     else if(_ptof1!=-1) _ptof=_ptof1;
@@ -48,18 +48,18 @@ namespace clas12 {
     // 	//}
     // }
     //prefer pcal,inner, outer
-    _pcal=_pin=_cal->getIndex( _pentry,clas12::EC, clas12::ECIN);
-    _pcal=_pout=_cal->getIndex( _pentry,clas12::EC, clas12::ECOUT);
-    _pcal=_ppre=_cal->getIndex( _pentry,clas12::EC, clas12::PCAL);
+    if(_cal.get())_pcal=_pin=_cal->getIndex( _pentry,clas12::EC, clas12::ECIN);
+    if(_cal.get())_pcal=_pout=_cal->getIndex( _pentry,clas12::EC, clas12::ECOUT);
+    if(_cal.get())_pcal=_ppre=_cal->getIndex( _pentry,clas12::EC, clas12::PCAL);
     if(_ppre!=-1) _pcal=_ppre;
     else if(_pout!=-1) _pcal=_pout;
     else if(_pin!=-1) _pcal=_pin;
       
     //should be 1 track per particle
-    _ptrck=_trck->getIndex(_pentry,clas12::DC);
+    if(_trck.get())_ptrck=_trck->getIndex(_pentry,clas12::DC);
    
-    _phtcc=_cher->getIndex( _pentry,clas12::HTCC);
-    _pltcc=_cher->getIndex( _pentry,clas12::LTCC);
+    if(_cher.get())_phtcc=_cher->getIndex( _pentry,clas12::HTCC);
+    if(_cher.get())_pltcc=_cher->getIndex( _pentry,clas12::LTCC);
 
     //was fdet involved ?
     if((_ptof+_pcal+_ptrck) == -3)return false;
@@ -121,7 +121,7 @@ namespace clas12 {
   ///      p->traj(FTOF,FTOF1A)->getX(); //detector with layer
   const traj_ptr region_fdet::traj(ushort det,ushort layer) const {
     _traj->getIndex(_pentry,det,layer);
-   return _traj;
+    return _traj;
   }
   
 
