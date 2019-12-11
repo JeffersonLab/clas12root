@@ -53,15 +53,15 @@ namespace clas12 {
       return 0;
     }
     double getX()  const noexcept{ 
-      if(_index>-1)return getFloat(_cx_order,_index);
+      if(_index>-1)return getFloat(_x_order,_index);
       return 0;
     }
     double getY()  const noexcept{ 
-      if(_index>-1)return getFloat(_cy_order,_index);
+      if(_index>-1)return getFloat(_y_order,_index);
       return 0;
     }
     double getZ()  const noexcept{ 
-      if(_index>-1)return getFloat(_cz_order,_index);
+      if(_index>-1)return getFloat(_z_order,_index);
       return 0;
     }
     /* short getDetID(){  */
