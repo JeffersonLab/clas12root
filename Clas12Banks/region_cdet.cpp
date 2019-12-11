@@ -34,18 +34,18 @@ namespace clas12 {
     _pcnd=-1;
     
     //tof 1 layer
-    _ptof=_scint->getIndex(_pentry,clas12::CTOF);
+    if(_scint.get())_ptof=_scint->getIndex(_pentry,clas12::CTOF);
     
     //prefer cnd layer 1,2, 3
-    _pcnd1=_scint->getIndex(_pentry,clas12::CND,clas12::CND1-clas12::CNDOFF);
-    _pcnd2=_scint->getIndex(_pentry,clas12::CND,clas12::CND2-clas12::CNDOFF);
-    _pcnd3=_scint->getIndex(_pentry,clas12::CND,clas12::CND3-clas12::CNDOFF);
+    if(_scint.get())_pcnd1=_scint->getIndex(_pentry,clas12::CND,clas12::CND1-clas12::CNDOFF);
+    if(_scint.get())_pcnd2=_scint->getIndex(_pentry,clas12::CND,clas12::CND2-clas12::CNDOFF);
+    if(_scint.get())_pcnd3=_scint->getIndex(_pentry,clas12::CND,clas12::CND3-clas12::CNDOFF);
     if(_pcnd1!=-1) _pcnd=_pcnd1;
     else if(_pcnd2!=-1) _pcnd=_pcnd2;
     else if(_pcnd3!=-1) _pcnd=_pcnd3;
     
     //should be 1 track per particle
-    _ptrck=_trck->getIndex(_pentry,clas12::CVT);
+    if(_trck.get())_ptrck=_trck->getIndex(_pentry,clas12::CVT);
 
     //was cdet involved ?
     if((_ptof+_pcnd+_ptrck) == -3)return false;

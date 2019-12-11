@@ -22,7 +22,7 @@ namespace clas12 {
   /// Temporary until FT banks updated
   double region_ft::getPath(){
     if(_pcal>=0){ //currently no FT path reported
-      _ft->setIndex(_pcal); 	
+      if(_ft.get())_ft->setIndex(_pcal); 	
       double ftx=_ft->getX();
       double fty=_ft->getY();
       double ftz=_ft->getZ();
@@ -35,9 +35,9 @@ namespace clas12 {
   ///current particle and store the detector indices
   bool region_ft::sort(){
     region_particle::sort();
-    _pcal=_ft->getIndex(_pentry,clas12::FTCAL);
+    if(_ft.get())_pcal=_ft->getIndex(_pentry,clas12::FTCAL);
     
-    _phod=_ft->getIndex(_pentry,clas12::FTHODO);
+    if(_ft.get())_phod=_ft->getIndex(_pentry,clas12::FTHODO);
     //check if FT assocciated, must be a FTCAL
     if(_pcal!=-1)
       return true;

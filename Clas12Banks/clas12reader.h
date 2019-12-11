@@ -65,6 +65,10 @@ namespace clas12 {
     void sort();
     bool readEvent();
     void clearEvent();
+    void makeListBanks();
+    
+    std::vector<std::shared_ptr<hipo::bank> > getAllBanksPtrs(){return _allBanks;}
+    hipo::dictionary& getDictionary(){return _factory;}
     
     void addARegionFDet(){
       //Forward detector needs particles, calorimeter, scintillator,
@@ -165,6 +169,7 @@ namespace clas12 {
     scaler_ptr _bscal;
 
     std::vector<std::shared_ptr<hipo::bank> > _addBanks;
+    std::vector<std::shared_ptr<hipo::bank> > _allBanks; 
     
     //Detector region vectors,
     //each particle in an event will have

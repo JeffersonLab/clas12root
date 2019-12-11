@@ -35,6 +35,7 @@ namespace clas12 {
     //if(_factory.hasSchema("RAW::vtp"))_bvtp    = std::make_shared<clas12::vtp>(_factory.getSchema("RAW::vtp"));
     //if(_factory.hasSchema("RAW::scaler"))_bscal = std::make_shared<clas12::scaler>(_factory.getSchema("RAW::scaler"));
  
+    makeListBanks();
   }
   ///////////////////////////////////////////////////////
   ///read the data
@@ -115,7 +116,8 @@ namespace clas12 {
     for(auto ibank:_addBanks){//if any additional banks requested get those
       _event.getStructure(*ibank.get());
     }
-    
+   
+
     return true;
   }
   ////////////////////////////////////////////////////////
@@ -272,6 +274,30 @@ namespace clas12 {
   std::vector<region_part_ptr> clas12reader::getByCharge(int ch){
     return container_filter(_detParticles, [ch](region_part_ptr dr)
 			    {return dr->par()->getCharge()==ch;});
+  }
+
+  /////////////////////////////////////////////////////////
+  ///make a list of banks
+  void clas12reader::makeListBanks(){
+    _allBanks.clear();
+    _allBanks=_addBanks;
+    if(_brunconfig.get())_allBanks.push_back(_brunconfig);
+    if(_bparts.get())_allBanks.push_back(_bparts);
+    if(_bftbparts.get())_allBanks.push_back(_bftbparts);
+    if(_bmcparts.get())_allBanks.push_back(_bmcparts);
+    if(_bcovmat.get())_allBanks.push_back(_bcovmat);
+    if(_bevent.get())_allBanks.push_back(_bevent);
+    if(_bftbevent.get())_allBanks.push_back(_bftbevent);
+    if(_bcal.get())_allBanks.push_back(_bcal);
+    if(_bscint.get())_allBanks.push_back(_bscint);
+    if(_btrck.get())_allBanks.push_back(_btrck);
+    if(_btraj.get())_allBanks.push_back(_btraj);
+    if(_bcher.get())_allBanks.push_back(_bcher);
+    if(_bft.get())_allBanks.push_back(_bft);
+
+    //Comment in next 2 lines for helicity analysis
+    //if(_bhelonline.get())_allBanks.push_back(*_bhelonline.get());
+    //if(_bhelflip.get())_allBanks.push_back(*_bhelflip.get());
   }
 
 }
