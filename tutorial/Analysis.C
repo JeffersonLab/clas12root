@@ -20,6 +20,11 @@
     auto idx_ECALClust= c12.addBank("FTOF::hits");
     auto idx_RECPart= c12.addBank("REC::Particle");
     auto iPid= c12.getBankOrder(idx_RECPart,"pid");
+
+    //get track based hits id and layers
+    auto idx_TRCKHits= c12.addBank("TimeBasedTrkg::TBHits");
+    auto iTrckId =  c12.getBankOrder(idx_TRCKHits,"id");
+    auto iTrckLayer =  c12.getBankOrder(idx_TRCKHits,"layer");
     
     c12.addExactPid(11,1);    //exactly 1 electron
     c12.addExactPid(211,1);    //exactly 1 pi+
@@ -38,6 +43,11 @@
 
       cout<< idx_ECALClust<<" "<<c12.getBank(idx_ECALClust)->getRows()<<" "<< idx_RECPart<<" "<<c12.getBank(idx_RECPart)->getRows()<<" "<<c12.getBank(idx_RECPart)->getInt(iPid,0)<<endl;
 
+
+      //Loop over track based hits
+      for(auto itr=0;itr<c12.getBank(idx_TRCKHits)->getRows();itr++){
+	cout<<"track "<<itr<<" id "<<c12.getBank(idx_TRCKHits)->getInt(iTrckId,itr)<<" layer "<<c12.getBank(idx_TRCKHits)->getInt(iTrckLayer,itr)<<endl;
+      }
       
       auto parts=c12.getDetParticles();
        
