@@ -8,10 +8,15 @@
 
 namespace clas12 {
 
-  mxtrig::mxtrig(clas12reader& c12){
-    int superlayer_sector_thres = 5;
-    auto idx_TBHits = c12.addBank("TimeBasedTrkg::TBHits");
-    auto TBHits = c12.getBank(idx_TBHits);	
+  mesonex_trigger::mesonex_trigger(clas12reader& c12){
+    _superlayer_sector_thres = 5;
+    _idx_TBHits = c12.addBank("TimeBasedTrkg::TBHits");
+    _TBHits = c12.getBank(_idx_TBHits);	
+
+    //time based hits
+    _id_tbhit_superlayer = c12.getBankOrder(_idx_TBHits,"superlayer");
+    _id_tbhit_sector     = c12.getBankOrder(_idx_TBHits,"sector");
+
   }
   
   /**
@@ -19,19 +24,15 @@ namespace clas12 {
    *
    * @return true if all trigger conditions are met
    */
-  bool mxtrig::fire(){
+  bool mesonex_trigger::fire(){
     //initialise values
     std::vector< std::set<int> > superlayer_hits(7);
-    auto nTBHits = TBHits->getRows();
-
-    //time based hits
-    auto id_tbhit_superlayer = c12.getBankOrder(idx_TBHits,"superlayer");
-    auto id_tbhit_sector     = c12.getBankOrder(idx_TBHits,"sector");
+    auto nTBHits = _TBHits->getRows();
     
     //loop over TBHits to get super layers for each hit
     for(int i=0;i<nTBHits;i++){   
-      int superlayer = TBHits->getByte(id_tbhit_superlayer, i);
-      int sector     = TBHits->getByte(id_tbhit_sector, i);
+      auto superlayer = _TBHits->getByte(_id_tbhit_superlayer, i);
+      auto sector     = _TBHits->getByte(_id_tbhit_sector, i);
       superlayer_hits[sector].insert(superlayer);
     }
     
@@ -39,10 +40,10 @@ namespace clas12 {
     int sectors_pass = 0;
     for(int i=1;i<7;i++) {
       int superlayers_hit = superlayer_hits[i].size();
-      if(superlayers_hit>=superlayer_sector_thres){
+      if(superlayers_hit >= _superlayer_sector_thres){
 	sectors_pass+=1;
       }
     }
-    return sectors_pass>0: //true if any sectors have n superlayers hit above threshold
+    return sectors_pass>0; //true if any sectors have n superlayers hit above threshold
   }
 }
