@@ -25,6 +25,12 @@ namespace clas12 {
    * @return true if all trigger conditions are met
    */
   bool mesonex_trigger::fire(){
+    return superlayer_sectors();
+  }
+
+  bool mesonex_trigger::superlayer_sectors(){
+    //Sector superlayer hits condition
+    
     //initialise values
     std::vector< std::set<int> > superlayer_hits(7);
     auto nTBHits = _TBHits->getRows();

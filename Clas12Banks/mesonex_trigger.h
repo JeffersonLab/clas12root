@@ -21,6 +21,7 @@ namespace clas12 {
     
     mesonex_trigger(clas12reader& c12);
     bool fire();
+    bool superlayer_sectors();
     
   private:
     
