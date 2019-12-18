@@ -22,15 +22,23 @@ namespace clas12 {
     mesonex_trigger(clas12reader& c12);
     bool fire();
     bool superlayer_sectors();
+    bool pcal_cluster_energy();
+    bool ftof_pcal_coincidence();
     
   private:
     
+    int _superlayer_sector_thres=0;
+    int _ftof_pcal_distance=0;
     hipo::bank* _TBHits{};
+    hipo::bank* _FTOF{};
+    hipo::bank* _PCAL{};
     int _id_tbhit_superlayer{};
     int _id_tbhit_sector{};
-    
-    int _superlayer_sector_thres=0;
-    int _idx_TBHits=0;
+    int _idx_TBHits{};
+    int _idx_FTOFHits{};
+    int _idx_PCALClusters{};
+    int _id_FTOF{};
+    int _id_PCAL{};
   };
   
   using mesonex_trigger_ptr=std::shared_ptr<clas12::mesonex_trigger>;

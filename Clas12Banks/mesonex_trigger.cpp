@@ -10,6 +10,7 @@ namespace clas12 {
 
   mesonex_trigger::mesonex_trigger(clas12reader& c12){
     _superlayer_sector_thres = 5;
+    _ftof_pcal_distance = 4;
     _idx_TBHits = c12.addBank("TimeBasedTrkg::TBHits");
     _TBHits = c12.getBank(_idx_TBHits);	
 
@@ -17,6 +18,13 @@ namespace clas12 {
     _id_tbhit_superlayer = c12.getBankOrder(_idx_TBHits,"superlayer");
     _id_tbhit_sector     = c12.getBankOrder(_idx_TBHits,"sector");
 
+    //tof and pcal coincidence
+    _idx_FTOFHits = c12.addBank("FTOF::hits");
+    _idx_PCALClusters = c12.addBank("ECAL::clusters");
+    _id_FTOF = c12.getBankOrder(_idx_FTOFHits,"id"); //FTOF1b? where to check for this?
+    _id_PCAL = c12.getBankOrder(_idx_PCALClusters,"idU");
+    _FTOF = c12.getBank(_idx_FTOFHits);
+    _PCAL = c12.getBank(_idx_PCALClusters);
   }
   
   /**
@@ -52,4 +60,36 @@ namespace clas12 {
     }
     return sectors_pass>0; //true if any sectors have n superlayers hit above threshold
   }
+
+  bool mesonex_trigger::pcal_cluster_energy(){
+    //PCAL cluster must have energy above threshold
+    return 0;
+  }
+
+  bool mesonex_trigger::ftof_pcal_coincidence(){
+    //one hit in FTOF1B matched to one hit in a PCAL-U bar, with a certain matching geometry
+    int mapping[] = {
+      0, 1, 1, 2, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9, 9, 10, 
+      11, 11, 12, 13, 13, 14, 15, 15, 16, 16, 17, 17, 
+      18, 19, 19, 20, 21, 21, 22, 23, 23, 24, 24, 25, 
+      26, 26, 27, 28, 28, 29, 30, 30, 31, 32, 32, 33, 
+      34, 35, 37, 38, 39, 41, 42, 44, 45, 46, 48, 49, 
+      50, 52, 53, 54 };
+    
+    auto nrowsFTOF = _FTOF->getRows();
+    auto nrowsPCAL = _PCAL->getRows();      
+    
+    for(int i=0;i<nrowsFTOF;++i){
+      for(int j=0;j<nrowsPCAL;++j){
+	int FTOF_id = _FTOF->getInt(_id_FTOF,i);
+	int PCAL_id = _PCAL->getInt(_id_PCAL,j);
+	int FTOF_exp_id = mapping[PCAL_id-1] + 1;
+	auto diff = abs(FTOF_id-FTOF_exp_id);
+	if (diff<=_ftof_pcal_distance){
+	  return true;
+	}
+      }
+    }
+    return false;
+  } 
 }
