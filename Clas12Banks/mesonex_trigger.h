@@ -29,11 +29,18 @@ namespace clas12 {
     
     int _superlayer_sector_thres=0;
     int _ftof_pcal_distance=0;
+    int _pcal_cluster_energy_threshold=0;
+
     hipo::bank* _TBHits{};
     hipo::bank* _FTOF{};
     hipo::bank* _PCAL{};
+
     int _id_tbhit_superlayer{};
     int _id_tbhit_sector{};
+    int _id_ECAL_id{};
+    int _id_ECAL_layer{};
+    int _id_ECAL_energy{};
+
     int _idx_TBHits{};
     int _idx_FTOFHits{};
     int _idx_PCALClusters{};
