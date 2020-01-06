@@ -267,3 +267,25 @@ Start a ROOT note book :
 Click on the notebook CreateHipoSelector.ipynb and follow instructions. This creates the selector you wish to run.
 
 Once this is complete you should open the notebook HipoProof.ipynb and process the selector with PROOF
+
+## Ex 5  Writing out specific events to a hipo file
+
+The clas12writer class allows you to write out specific events to a new hipo file. The idea behind this is to avoid repeating the same event selection everytime you want to access information about a specific set of events. The writer is assigned a clas12reader from which it gets the event information, and is initialised with the desired location for the outputted hipo file. You can also choose not to write out certain banks to speed the process up.
+
+You can insepct the code [$CLAS12ROOT/RunRoot/Ex5_CLAS12Writer.C](https://github.com/jeffersonlab/clas12root/blob/master/RunRoot/Ex1_CLAS12Writer.C) for more guidance on how to use it.
+
+To run:
+
+       clas12root $CLAS12ROOT/RunRoot/Ex5_CLAS12Writer.C+
+
+Note the use of the + sign after the macro name. This compiles the script meaning it will run much faster. The script will then ask you for the locations of an input hipo file and an output file. The script is similar to Ex1_CLAS12Writer.C so you can compare the two.
+
+### Jupyter
+
+Go to directory containing notebooks e.g. $CLAS12ROOT/RunRoot/jupy
+
+Start a ROOT note book :
+
+      	root --notebook
+
+Click on the notebook CLAS12Writer3Pi.ipynb and follow the tutorial
