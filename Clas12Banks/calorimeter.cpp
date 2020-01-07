@@ -33,6 +33,7 @@ namespace clas12 {
     if(useItem("hz"))_hz_order  = sch.getEntryOrder("hz");
     if(useItem("lu"))_lu_order  = sch.getEntryOrder("lu");
     if(useItem("lv"))_lv_order  = sch.getEntryOrder("lv");
+    if(useItem("lw"))_lw_order  = sch.getEntryOrder("lw");
     if(useItem("m2u"))_m2u_order  = sch.getEntryOrder("m2u");
     if(useItem("m2v"))_m2v_order  = sch.getEntryOrder("m2v");
     if(useItem("m2w"))_m2w_order  = sch.getEntryOrder("m2w");
