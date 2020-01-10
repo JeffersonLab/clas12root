@@ -22,7 +22,7 @@ namespace clas12 {
   /// Temporary until FT banks updated
   double region_ft::getPath(){
     if(_pcal>=0){ //currently no FT path reported
-      if(_ft.get())_ft->setIndex(_pcal); 	
+      if(_ft)_ft->setIndex(_pcal); 	
       double ftx=_ft->getX();
       double fty=_ft->getY();
       double ftz=_ft->getZ();
@@ -35,9 +35,9 @@ namespace clas12 {
   ///current particle and store the detector indices
   bool region_ft::sort(){
     region_particle::sort();
-    if(_ft.get())_pcal=_ft->getIndex(_pentry,clas12::FTCAL);
+    if(_ft)_pcal=_ft->getIndex(_pentry,clas12::FTCAL);
     
-    if(_ft.get())_phod=_ft->getIndex(_pentry,clas12::FTHODO);
+    if(_ft)_phod=_ft->getIndex(_pentry,clas12::FTHODO);
     //check if FT assocciated, must be a FTCAL
     if(_pcal!=-1)
       return true;
@@ -49,7 +49,7 @@ namespace clas12 {
   /// This should be used directly to acess data
   /// e.g. p->ft(FTCAL)->getEnergy();
   ///      p->ft(FTHODO)->getEnergy();
-  const ft_ptr region_ft::ft(ushort lay) const {
+  ft_ptr region_ft::ft(ushort lay) const {
     switch(lay){ 
     case clas12::FTCAL :
       _ft->setIndex(_pcal);return _ft;
@@ -59,12 +59,12 @@ namespace clas12 {
     _ft->setIndex(-1);return _ft;
   }
   
-///////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////
   /// Get pointer to traj banks for this particle
   /// This should be used directly to acess data
   /// e.g. p->traj(FT,FTCAL)->getCx(); //detector without layer
   ///      p->traj(FT,FTHODO)->getX();
-  const traj_ptr region_ft::traj(ushort det,ushort layer) const {
+  traj_ptr region_ft::traj(ushort det,ushort layer) const {
     _traj->getIndex(_pentry,det,layer);
    return _traj;
   }

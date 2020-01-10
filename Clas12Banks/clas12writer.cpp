@@ -39,7 +39,7 @@ namespace clas12 {
      _outEvent.reset();   
 
     for(auto bank : _banks){
-      _outEvent.addStructure(*bank.get());
+      _outEvent.addStructure(*bank);
     }
     
     _writer.addEvent(_outEvent);

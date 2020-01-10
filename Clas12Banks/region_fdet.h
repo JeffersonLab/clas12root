@@ -40,14 +40,14 @@ namespace clas12 {
     
     bool sort() final;
 
-    const cal_ptr cal(ushort lay) const final;
-    const scint_ptr sci(ushort lay) const final;
-    const traj_ptr traj(ushort det,ushort layer=0) const final;
-    const trck_ptr trk(ushort lay) const final
+    cal_ptr cal(ushort lay) const final;
+    scint_ptr sci(ushort lay) const final;
+    traj_ptr traj(ushort det,ushort layer=0) const final;
+    trck_ptr trk(ushort lay) const final
     {
       _trck->setIndex(_ptrck);return _trck;
     }
-    const cher_ptr che(ushort lay) const final;
+    cher_ptr che(ushort lay) const final;
     
      
 
@@ -123,7 +123,8 @@ namespace clas12 {
     
   };
   
-  using region_fdet_ptr=std::shared_ptr<clas12::region_fdet>;
+  using region_fdet_ptr=clas12::region_fdet*;
+  using region_fdet_uptr=std::unique_ptr<clas12::region_fdet>;
 
 }
 

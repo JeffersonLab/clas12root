@@ -67,42 +67,46 @@ namespace clas12 {
     void clearEvent();
     void makeListBanks();
     
-    std::vector<std::shared_ptr<hipo::bank> > getAllBanksPtrs(){return _allBanks;}
+    std::vector<hipo::bank* > getAllBanksPtrs(){return _allBanks;}
     hipo::dictionary& getDictionary(){return _factory;}
     
     void addARegionFDet(){
       //Forward detector needs particles, calorimeter, scintillator,
       //track, cherenkov
-      _rfdets.push_back(std::make_shared<region_fdet>(_bparts,_bftbparts,_bcovmat,_bcal,_bscint,_btrck,_btraj,_bcher,_bft,_bevent));
-      if(_useFTBased)_rfdets.back()->useFTBPid();
+      region_fdet_uptr  reg{new region_fdet{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get()}};
+      if(_useFTBased)reg->useFTBPid();
+     _rfdets.push_back(std::move(reg));
     }
      void addARegionCDet(){
       //Forward detector needs particles, calorimeter, scintillator,
       //track, cherenkov
-       _rcdets.push_back(std::make_shared<region_cdet>(_bparts,_bftbparts,_bcovmat,_bcal,_bscint,_btrck,_btraj,_bcher,_bft,_bevent));
-       if(_useFTBased)_rcdets.back()->useFTBPid();
+       region_cdet_uptr  reg{new region_cdet{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get()}};
+      if(_useFTBased)reg->useFTBPid();
+      _rcdets.push_back(std::move(reg));
     }
     void addARegionFT(){
       //Forward tagger needs particles and forward tagger
-      _rfts.push_back(std::make_shared<region_ft>(_bparts,_bftbparts,_bcovmat,_bcal,_bscint,_btrck,_btraj,_bcher,_bft,_bevent));
-      if(_useFTBased)_rfts.back()->useFTBPid();
+       region_ft_uptr  reg{new region_ft{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get()}};
+       if(_useFTBased)reg->useFTBPid();
+      _rfts.push_back(std::move(reg));
      }
 
 
-    const helonline_ptr helonline() const{return _bhelonline;};
-    const helflip_ptr helflip() const{return _bhelflip;};
-    const runconfig_ptr runconfig() const{return _brunconfig;};
-    const event_ptr event() const{return _bevent;};
-    const ftbevent_ptr ftbevent() const{return _bftbevent;};
-    const vtp_ptr vtp() const{return _bvtp;};
-    const scaler_ptr scaler() const{return _bscal;};
-    const mcpar_ptr mcparts() const{return _bmcparts;};
+    helonline_ptr helonline() const{return _bhelonline.get();};
+    helflip_ptr helflip() const{return _bhelflip.get();};
+    runconfig_ptr runconfig() const{return _brunconfig.get();};
+    event_ptr event() const{return _bevent.get();};
+    ftbevent_ptr ftbevent() const{return _bftbevent.get();};
+    vtp_ptr vtp() const{return _bvtp.get();};
+    scaler_ptr scaler() const{return _bscal.get();};
+    mcpar_ptr mcparts() const{return _bmcparts.get();};
 
 
     //support for generic non-DST banks
     uint addBank(std::string name){
-      _addBanks.push_back(std::make_shared<hipo::bank>(_factory.getSchema(name.data())));
-      return _addBanks.size()-1;
+      std::unique_ptr<hipo::bank> bnk{new hipo::bank{_factory.getSchema(name.data())}};
+      _addBanks.push_back(std::move(bnk));
+      return _addBanks.size()-1; //return place in vector
     }
 
     hipo::bank* getBank(uint index) const {return  _addBanks.at(index).get();}
@@ -150,33 +154,36 @@ namespace clas12 {
     hipo::dictionary  _factory;
 
     //DST banks
-    helonline_ptr  _bhelonline;
-    helflip_ptr  _bhelflip;
-    runconfig_ptr  _brunconfig;
-    event_ptr  _bevent;
-    ftbevent_ptr  _bftbevent;
-    par_ptr _bparts;
-    ftbpar_ptr _bftbparts;
-    mcpar_ptr _bmcparts;
-    covmat_ptr _bcovmat;
-    cal_ptr  _bcal;
-    scint_ptr _bscint;
-    trck_ptr _btrck;
-    traj_ptr _btraj;
-    cher_ptr _bcher;
-    ft_ptr _bft;
-    vtp_ptr _bvtp;
-    scaler_ptr _bscal;
+    helonline_uptr  _bhelonline;
+    helflip_uptr  _bhelflip;
+    runconfig_uptr  _brunconfig;
+    event_uptr  _bevent;
+    ftbevent_uptr  _bftbevent;
+    par_uptr _bparts;
+    //    std::unique_ptr<clas12::particle> _ownbparts;
+    ftbpar_uptr _bftbparts;
+    mcpar_uptr _bmcparts;
+    covmat_uptr _bcovmat;
+    cal_uptr  _bcal;
+    scint_uptr _bscint;
+    trck_uptr _btrck;
+    traj_uptr _btraj;
+    cher_uptr _bcher;
+    ft_uptr _bft;
+    vtp_uptr _bvtp;
+    scaler_uptr _bscal;
 
-    std::vector<std::shared_ptr<hipo::bank> > _addBanks;
-    std::vector<std::shared_ptr<hipo::bank> > _allBanks; 
+    std::vector<std::unique_ptr<hipo::bank> > _addBanks; //owns additional banks
+    std::vector<hipo::bank* > _allBanks; 
     
     //Detector region vectors,
     //each particle in an event will have
-    //one associated
-    std::vector<region_fdet_ptr> _rfdets;
-    std::vector<region_cdet_ptr> _rcdets;
-    std::vector<region_ft_ptr> _rfts;
+    //one associated, these vectors own the ptrs
+    std::vector<region_fdet_uptr> _rfdets;
+    std::vector<region_cdet_uptr> _rcdets;
+    std::vector<region_ft_uptr> _rfts;
+
+    //this vector links to raw ptrs, does not own
     std::vector<region_part_ptr> _detParticles;
 
     std::vector<short> _pids;

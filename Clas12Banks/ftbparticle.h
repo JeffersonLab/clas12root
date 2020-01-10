@@ -72,7 +72,8 @@ namespace clas12 {
     }
   };
   
-  using ftbpar_ptr=std::shared_ptr<clas12::ftbparticle>;
+  using ftbpar_ptr=clas12::ftbparticle*;
+  using ftbpar_uptr=std::unique_ptr<clas12::ftbparticle>;
 
 }
 

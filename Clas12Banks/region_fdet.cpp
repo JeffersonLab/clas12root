@@ -28,9 +28,9 @@ namespace clas12 {
     //_scint->print();
     
     //prefer tof layer 1,0,2
-    if(_scint.get())_ptof3=_scint->getIndex(_pentry,clas12::FTOF,clas12::FTOF2);
-    if(_scint.get())_ptof1=_scint->getIndex(_pentry,clas12::FTOF,clas12::FTOF1A);
-    if(_scint.get())_ptof2=_scint->getIndex(_pentry,clas12::FTOF,clas12::FTOF1B);
+    if(_scint)_ptof3=_scint->getIndex(_pentry,clas12::FTOF,clas12::FTOF2);
+    if(_scint)_ptof1=_scint->getIndex(_pentry,clas12::FTOF,clas12::FTOF1A);
+    if(_scint)_ptof2=_scint->getIndex(_pentry,clas12::FTOF,clas12::FTOF1B);
     
     if(_ptof2!=-1) _ptof=_ptof2;
     else if(_ptof1!=-1) _ptof=_ptof1;
@@ -48,18 +48,18 @@ namespace clas12 {
     // 	//}
     // }
     //prefer pcal,inner, outer
-    if(_cal.get())_pcal=_pin=_cal->getIndex( _pentry,clas12::EC, clas12::ECIN);
-    if(_cal.get())_pcal=_pout=_cal->getIndex( _pentry,clas12::EC, clas12::ECOUT);
-    if(_cal.get())_pcal=_ppre=_cal->getIndex( _pentry,clas12::EC, clas12::PCAL);
+    if(_cal)_pcal=_pin=_cal->getIndex( _pentry,clas12::EC, clas12::ECIN);
+    if(_cal)_pcal=_pout=_cal->getIndex( _pentry,clas12::EC, clas12::ECOUT);
+    if(_cal)_pcal=_ppre=_cal->getIndex( _pentry,clas12::EC, clas12::PCAL);
     if(_ppre!=-1) _pcal=_ppre;
     else if(_pout!=-1) _pcal=_pout;
     else if(_pin!=-1) _pcal=_pin;
       
     //should be 1 track per particle
-    if(_trck.get())_ptrck=_trck->getIndex(_pentry,clas12::DC);
+    if(_trck)_ptrck=_trck->getIndex(_pentry,clas12::DC);
    
-    if(_cher.get())_phtcc=_cher->getIndex( _pentry,clas12::HTCC);
-    if(_cher.get())_pltcc=_cher->getIndex( _pentry,clas12::LTCC);
+    if(_cher)_phtcc=_cher->getIndex( _pentry,clas12::HTCC);
+    if(_cher)_pltcc=_cher->getIndex( _pentry,clas12::LTCC);
 
     //was fdet involved ?
     if((_ptof+_pcal+_ptrck) == -3)return false;
@@ -70,7 +70,7 @@ namespace clas12 {
   /// This should be used directly to acess data
   /// e.g. p->cal(ECIN)->getEnergy();
   ///      p->cal(PCAL)->getTime();
-  const cal_ptr region_fdet::cal(ushort lay) const {
+  cal_ptr region_fdet::cal(ushort lay) const {
     switch(lay){ 
     case clas12::PCAL :
       _cal->setIndex(_ppre);return _cal;
@@ -87,7 +87,7 @@ namespace clas12 {
   /// This should be used directly to acess data
   /// e.g. p->scint(FTOF1A)->getEnergy();
   ///      p->scint(FTOF2)->getTime();
-  const scint_ptr region_fdet::sci(ushort lay) const {
+  scint_ptr region_fdet::sci(ushort lay) const {
     switch(lay){ 
     case clas12::FTOF1A :
       _scint->setIndex(_ptof1);return _scint;
@@ -104,7 +104,7 @@ namespace clas12 {
   /// This should be used directly to acess data
   /// e.g. p->che(HTCC)->getNphe();
   ///      p->che(LTCC)->getNphe();
-  const cher_ptr region_fdet::che(ushort lay) const {
+  cher_ptr region_fdet::che(ushort lay) const {
     switch(lay){ 
     case clas12::HTCC :
       _cher->setIndex(_phtcc);return _cher;
@@ -119,7 +119,7 @@ namespace clas12 {
   /// This should be used directly to acess data
   /// e.g. p->traj(HTCC)->getCx(); //detector without layer
   ///      p->traj(FTOF,FTOF1A)->getX(); //detector with layer
-  const traj_ptr region_fdet::traj(ushort det,ushort layer) const {
+  traj_ptr region_fdet::traj(ushort det,ushort layer) const {
     _traj->getIndex(_pentry,det,layer);
     return _traj;
   }

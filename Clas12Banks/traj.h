@@ -98,7 +98,7 @@ namespace clas12 {
  
    }; //class traj
 
-   using traj_ptr=std::shared_ptr<clas12::traj>;
+   using traj_ptr=clas12::traj*;
    using traj_uptr=std::unique_ptr<clas12::traj>;
 
 }//namespace clas12

@@ -65,7 +65,7 @@ namespace clas12 {
     hipo::event      _outEvent;
     std::vector<std::string> _bankNamesToSkip;
     std::string _filename;
-    std::vector<std::shared_ptr<hipo::bank> > _banks;
+    std::vector<hipo::bank* > _banks;
   }; 
 
 }

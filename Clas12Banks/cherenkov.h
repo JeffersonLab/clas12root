@@ -92,7 +92,8 @@ namespace clas12 {
  
    }; //class cherenkov
 
-   using cher_ptr=std::shared_ptr<clas12::cherenkov>;
+   using cher_ptr=clas12::cherenkov*;
+   using cher_uptr=std::unique_ptr<clas12::cherenkov>;
 
 }//namespace clas12
 

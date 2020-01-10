@@ -95,7 +95,8 @@ namespace clas12 {
 
   };
   
-  using mcpar_ptr=std::shared_ptr<clas12::mcparticle>;
+  using mcpar_ptr=clas12::mcparticle*;
+  using mcpar_uptr=std::unique_ptr<clas12::mcparticle>;
 
 }
 

@@ -48,7 +48,8 @@ namespace clas12 {
     int _id_PCAL{};
   };
   
-  using mesonex_trigger_ptr=std::shared_ptr<clas12::mesonex_trigger>;
+  using mesonex_trigger_ptr=clas12::mesonex_trigger*;
+  using mesonex_trigger_uptr=std::unique_ptr<clas12::mesonex_trigger>;
   
 }//namespace clas12
 

@@ -11,8 +11,8 @@
  * Created on April 27, 2017, 10:01 AM
  */
 
-#ifndef RUNCONFIG_RUNCONFIG_H
-#define RUNCONFIG_RUNCONFIG_H
+#ifndef RUNCONFIG_H
+#define RUNCONFIG_H
 
 #include <iostream>
 #include <vector>
@@ -29,16 +29,16 @@ namespace clas12 {
  
     runconfig(hipo::schema __schema);
     virtual ~runconfig() = default;
- 
-   int    getRun() const noexcept{ return getInt(_run_order,0); }
-   int    getEvent() const noexcept{ return getInt(_ev_order,0); }
-   int    getUnixTime() const noexcept{ return getInt(_ut_order,0); }
-   long   getTrigger() const noexcept{ return getLong(_tr_order,0); }
-   long   getTimeStamp() const noexcept{ return getLong(_ts_order,0); }
-   int    getType() const noexcept{ return getByte(_ty_order,0); }
-   int    getMode() const noexcept{ return getByte(_mo_order,0); }
-   float  getTorus() const noexcept{ return getFloat(_to_order,0); }
-   float  getSolenoid() const noexcept{ return getFloat(_so_order,0); }
+    
+    int    getRun() const noexcept{ return getInt(_run_order,0); }
+    int    getEvent() const noexcept{ return getInt(_ev_order,0); }
+    int    getUnixTime() const noexcept{ return getInt(_ut_order,0); }
+    long   getTrigger() const noexcept{ return getLong(_tr_order,0); }
+    long   getTimeStamp() const noexcept{ return getLong(_ts_order,0); }
+    int    getType() const noexcept{ return getByte(_ty_order,0); }
+    int    getMode() const noexcept{ return getByte(_mo_order,0); }
+    float  getTorus() const noexcept{ return getFloat(_to_order,0); }
+    float  getSolenoid() const noexcept{ return getFloat(_so_order,0); }
 
 
     /**
@@ -68,7 +68,8 @@ namespace clas12 {
     
   };
 
-  using runconfig_ptr=std::shared_ptr<clas12::runconfig>;
+  using runconfig_ptr=clas12::runconfig*;
+  using runconfig_uptr=std::unique_ptr<clas12::runconfig>;
 
 }
 
