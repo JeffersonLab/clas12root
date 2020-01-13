@@ -51,7 +51,7 @@ namespace clas12 {
     void assignReader(clas12reader& c12reader);
 
     //////////////////////////////////////////////////////////////////////////////////////////
-    ///removes a bank from the list of banks to write out
+    ///adds a bank name to the list of banks to skip
     void skipBank(std::string bankName){
       if(!savedBankName(bankName)){
 	_bankNamesToSkip.push_back(bankName);
