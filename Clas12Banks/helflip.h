@@ -68,7 +68,8 @@ namespace clas12 {
     
   };
 
-  using helflip_ptr=std::shared_ptr<clas12::helflip>;
+  using helflip_ptr=clas12::helflip*;
+  using helflip_uptr=std::unique_ptr<clas12::helflip>;
 
 }
 

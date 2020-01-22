@@ -8,10 +8,14 @@ Examples are given for running in interactive ROOT sessions and ROOT-Jupyter not
 
 ## Clas12Banks -> Clas12Root
 
-NEW We now use an external hipo4 repository. This must be pointed at with the variable HIPO when installing. The files from hipo/hipo4 will be copied here to Hipo4.
+We now use an external hipo4 repository. This must be pointed at with the variable HIPO when installing. The files from hipo/hipo4 will be copied here to Hipo4.
+
+###NEW
+
+A default hipo implementation is now packed with clas12root. If you prefer to use this do not set the enviroment variable HIPO. If you would like to use a different version of the hipo library set HIPO. You may get the most up to data hipo library from
+
 
 For Hipo library see https://github.com/gavalian/hipo 
-
 
 The Clas12Banks implementation can be used independent of ROOT, although currently ROOT dictionaries are created for the classes via cmake (this could be removed). This defines the specific CLAS12 DST banks and provides an interface to the data.
 
@@ -72,7 +76,14 @@ This is faster than the particle draw as it only requires the reading of 1 bank.
 
          BankHist bankDraw("/WHERE/IS/MY/HIPO/file.hipo");
          bankDraw.Hist1D("REC::Particle::Pz",100,0,10,"")->Draw()
+
+Note you can only work with 1 bank at a time, so you cannot then run
+
          bankDraw.Hist1D("REC::Scintillator::Time",1000,0,200,"")->Draw()
+
+but can do
+
+         bankDraw.Hist1D("REC::Particle::Px",100,-10,10,"")->Draw()
 
 You can group histograms together for lazy execution if they all come from the same bank.
 
@@ -138,7 +149,7 @@ Remember at the end you can save all the histograms to file :
 
 Instead of drawing histograms interactively at the prompt you may give predefined histograms via a script e.g. :
 
-	particleDraw /WHERE/IS/MY/HIPO/file.hipo Ex2_HipoDraw.C
+	particleDraw /WHERE/IS/MY/HIPO/file.hipo $CLAS12ROOT/RunRoot/Ex2_HipoDraw.C
 
 See $CLAS12ROOT/RunRoot/Ex2_HipoDraw.C for details.
 
@@ -267,3 +278,25 @@ Start a ROOT note book :
 Click on the notebook CreateHipoSelector.ipynb and follow instructions. This creates the selector you wish to run.
 
 Once this is complete you should open the notebook HipoProof.ipynb and process the selector with PROOF
+
+## Ex 5  Writing out specific events to a hipo file
+
+The clas12writer class allows you to write out specific events to a new hipo file. The idea behind this is to avoid repeating the same event selection everytime you want to access information about a specific set of events. The writer is assigned a clas12reader from which it gets the event information, and is initialised with the desired location for the outputted hipo file. You can also choose not to write out certain banks to speed the process up.
+
+You can insepct the code [$CLAS12ROOT/RunRoot/Ex5_CLAS12Writer.C](https://github.com/jeffersonlab/clas12root/blob/master/RunRoot/Ex1_CLAS12Writer.C) for more guidance on how to use it.
+
+To run:
+
+       clas12root $CLAS12ROOT/RunRoot/Ex5_CLAS12Writer.C+
+
+Note the use of the + sign after the macro name. This compiles the script meaning it will run much faster. The script will then ask you for the locations of an input hipo file and an output file. The script is similar to Ex1_CLAS12Writer.C so you can compare the two.
+
+### Jupyter
+
+Go to directory containing notebooks e.g. $CLAS12ROOT/RunRoot/jupy
+
+Start a ROOT note book :
+
+      	root --notebook
+
+Click on the notebook CLAS12Writer3Pi.ipynb and follow the tutorial

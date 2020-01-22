@@ -71,7 +71,8 @@ namespace clas12 {
     
   };
 
-  using event_ptr=std::shared_ptr<clas12::event>;
+  using event_ptr=clas12::event*;
+  using event_uptr=std::unique_ptr<clas12::event>;
 
 }
 

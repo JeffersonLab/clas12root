@@ -14,7 +14,7 @@ namespace clas12root {
 
   public :
     HipoChain();
-    virtual ~HipoChain();
+    virtual ~HipoChain()=default;
 
 
     void Add(TString name);
@@ -35,7 +35,7 @@ namespace clas12root {
   private :
     TChain _tchain;
 
-    TObjArray* _ListOfFiles=nullptr;
+    TObjArray* _ListOfFiles=nullptr; //owned by _tchain
 
     Long64_t _Nrecords=-1;
     std::vector<Int_t> _fileRecords;

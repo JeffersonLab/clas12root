@@ -48,7 +48,8 @@ namespace clas12 {
     std::bitset<32> _VTPBitSet;
   };
 
-  using vtp_ptr=std::shared_ptr<clas12::vtp>;
+  using vtp_ptr=clas12::vtp*;
+  using vtp_uptr=std::unique_ptr<clas12::vtp>;
 
 }
 

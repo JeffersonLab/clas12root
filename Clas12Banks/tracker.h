@@ -70,7 +70,8 @@ namespace clas12 {
  
    }; //class tracker
 
-   using trck_ptr=std::shared_ptr<clas12::tracker>;
+   using trck_ptr=clas12::tracker*;
+   using trck_uptr=std::unique_ptr<clas12::tracker>;
 
 }//namespace clas12
 
