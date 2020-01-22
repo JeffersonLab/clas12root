@@ -34,8 +34,8 @@ namespace clas12 {
     
     bool sort() override;
     
-    const ft_ptr ft(ushort lay) const final;
-    const traj_ptr traj(ushort det,ushort layer=0) const final;
+    ft_ptr ft(ushort lay) const final;
+    traj_ptr traj(ushort det,ushort layer=0) const final;
  
 
     double getTime() final{
@@ -63,7 +63,8 @@ namespace clas12 {
     short _pcal=-1;
     short _phod=-1;
   };
-  using region_ft_ptr=std::shared_ptr<clas12::region_ft>;
+  using region_ft_ptr=clas12::region_ft*;
+  using region_ft_uptr=std::unique_ptr<clas12::region_ft>;
 
 }
 

@@ -53,7 +53,8 @@ namespace clas12 {
     
   };
 
-  using helonline_ptr=std::shared_ptr<clas12::helonline>;
+  using helonline_ptr=clas12::helonline*;
+  using helonline_uptr=std::unique_ptr<clas12::helonline>;
 
 }
 

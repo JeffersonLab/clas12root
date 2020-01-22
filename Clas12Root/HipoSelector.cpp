@@ -78,7 +78,7 @@ namespace clas12root{
     if( _iRecord>=_NcurrRecords ){
       _iFile=_chain->GetFileFromRecord(entry);
       _NfileRecords=_chain->GetRecordsToHere(_iFile); //Add records from previous file to give offset
-       
+   
       _c12.reset(new clas12::clas12reader(_chain->GetFileName(_iFile).Data()));
       _NcurrRecords= _c12->getReader().getNRecords(); //records in this file
       _iRecord=entry-_NfileRecords; //get first record in this file to process

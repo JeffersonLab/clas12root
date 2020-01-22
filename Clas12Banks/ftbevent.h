@@ -11,8 +11,8 @@
  * Created on April 27, 2017, 10:01 AM
  */
 
-#ifndef FTBEVENT_FTBEVENT_H
-#define FTBEVENT_FTBEVENT_H
+#ifndef FTBEVENT_H
+#define FTBEVENT_H
 
 #include <iostream>
 #include <vector>
@@ -52,7 +52,8 @@ namespace clas12 {
     
   };
 
-  using ftbevent_ptr=std::shared_ptr<clas12::ftbevent>;
+  using ftbevent_ptr=clas12::ftbevent*;
+  using ftbevent_uptr=std::unique_ptr<clas12::ftbevent>;
 
 }
 

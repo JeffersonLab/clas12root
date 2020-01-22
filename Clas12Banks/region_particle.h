@@ -57,7 +57,7 @@ namespace clas12 {
     virtual bool sort(){
       _pentry=_parts->getEntry();
       //check for covarince matrix
-      if(_covmat.get())_pcmat=_covmat->getIndex(_pentry);
+      if(_covmat)_pcmat=_covmat->getIndex(_pentry);
       return true;
     }
 
@@ -72,16 +72,16 @@ namespace clas12 {
     virtual double getDeltaEnergy()=0;
     virtual short getSector() =0;
 
-    const event_ptr event() const{return _event;};
-    const par_ptr par() const{_parts->setEntry(_pentry);return _parts;};
-    const ftbpar_ptr ftbpar() const{_ftbparts->setEntry(_pentry);return _ftbparts;};
-    const covmat_ptr covmat() const{_covmat->setIndex(_pcmat);return _covmat;};
-    virtual const cal_ptr cal(ushort lay) const{_cal->setIndex(-1);return _cal;};
-    virtual const scint_ptr sci(ushort lay) const{_scint->setIndex(-1);return _scint;};
-    virtual const trck_ptr trk(ushort lay) const{_trck->setIndex(-1);return _trck;};
-    virtual const traj_ptr traj(ushort det,ushort layer=0) const{_traj->setIndex(-1);return _traj;};
-    virtual const cher_ptr che(ushort lay) const{_cher->setIndex(-1);return _cher;};
-    virtual const ft_ptr ft(ushort lay) const{_ft->setIndex(-1);return _ft;};
+    event_ptr event() const{return _event;};
+    par_ptr par() const{_parts->setEntry(_pentry);return _parts;};
+    ftbpar_ptr ftbpar() const{_ftbparts->setEntry(_pentry);return _ftbparts;};
+    covmat_ptr covmat() const{_covmat->setIndex(_pcmat);return _covmat;};
+    virtual  cal_ptr cal(ushort lay) const{_cal->setIndex(-1);return _cal;};
+    virtual  scint_ptr sci(ushort lay) const{_scint->setIndex(-1);return _scint;};
+    virtual  trck_ptr trk(ushort lay) const{_trck->setIndex(-1);return _trck;};
+    virtual  traj_ptr traj(ushort det,ushort layer=0) const{_traj->setIndex(-1);return _traj;};
+    virtual  cher_ptr che(ushort lay) const{_cher->setIndex(-1);return _cher;};
+    virtual  ft_ptr ft(ushort lay) const{_ft->setIndex(-1);return _ft;};
 
     const CovMatrix* cmat() const{_covmat->setIndex(_pcmat);return _covmat->matrix();};
  
@@ -94,7 +94,7 @@ namespace clas12 {
     float getBeta();
     float getGamma();
 
-    void useFTBPid(){if(_ftbparts.get())_useFTBPid=1;}
+    void useFTBPid(){if(_ftbparts)_useFTBPid=1;}
     
   protected:
 
@@ -117,7 +117,8 @@ namespace clas12 {
     short _useFTBPid=0;
   };
   //pointer "typedef"
-  using region_part_ptr=std::shared_ptr<clas12::region_particle>;
+  using region_part_ptr=clas12::region_particle*;
+  using region_part_uptr=std::unique_ptr<clas12::region_particle>;
 
  
 }

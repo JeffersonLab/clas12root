@@ -92,7 +92,7 @@ namespace clas12 {
       return sqrt(x*x+y*y+z*z);
     }
     
-    void setEntry(short i){ _entry=i;if(_ftbpar.get())_ftbpar->setEntry(i);}
+    void setEntry(short i){ _entry=i;if(_ftbpar)_ftbpar->setEntry(i);}
     void setBankEntry(short i){ _entry=i;} //faster for BankHist
     short getEntry() const noexcept{return _entry;}
     /**
@@ -106,7 +106,8 @@ namespace clas12 {
     }
   };
   
-  using par_ptr=std::shared_ptr<clas12::particle>;
+  using par_ptr=clas12::particle*;
+  using par_uptr=std::unique_ptr<clas12::particle>;
 
 }
 

@@ -166,7 +166,8 @@ namespace clas12 {
 
    }; //class calorimeter
 
-   using cal_ptr=std::shared_ptr<clas12::calorimeter>;
+   using cal_ptr=clas12::calorimeter*;
+   using cal_uptr=std::unique_ptr<clas12::calorimeter>;
  
 }//namespace clas12
 

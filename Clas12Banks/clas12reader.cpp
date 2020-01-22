@@ -13,28 +13,38 @@ namespace clas12 {
     _reader.setTags(tags);
     _reader.open(filename.data()); //keep a pointer to the reader
 
-    hipo::dictionary  factory;
-    _reader.readDictionary(factory);
+    // hipo::dictionary  factory;
+    _reader.readDictionary(_factory);
 
     //initialise banks pointers
-    if(factory.hasSchema("RECFT::Particle"))_bftbparts = std::make_shared<ftbparticle>(factory.getSchema("RECFT::Particle"));
-    if(factory.hasSchema("REC::Particle"))_bparts = std::make_shared<particle>(factory.getSchema("REC::Particle"),_bftbparts);
-    if(factory.hasSchema("MC::Lund"))_bmcparts = std::make_shared<mcparticle>(factory.getSchema("MC::Lund"));
-    if(factory.hasSchema("REC::CovMat"))_bcovmat= std::make_shared<covmatrix>(factory.getSchema("REC::CovMat"));
-    if(factory.hasSchema("RECFT::Event"))_bftbevent  = std::make_shared<clas12::ftbevent>(factory.getSchema("RECFT::Event"));
-    if(factory.hasSchema("RUN::config"))_brunconfig  = std::make_shared<clas12::runconfig>(factory.getSchema("RUN::config"));
-    if(factory.hasSchema("REC::Event"))_bevent  = std::make_shared<clas12::event>(factory.getSchema("REC::Event"),_bftbevent);
-    if(factory.hasSchema("REC::Calorimeter"))_bcal   = std::make_shared<calorimeter>(factory.getSchema("REC::Calorimeter"));
-    if(factory.hasSchema("REC::Scintillator"))_bscint = std::make_shared<scintillator>(factory.getSchema("REC::Scintillator"));
-    if(factory.hasSchema("REC::Track"))_btrck  = std::make_shared<tracker>(factory.getSchema("REC::Track"));
-    if(factory.hasSchema("REC::Traj"))_btraj  = std::make_shared<traj>(factory.getSchema("REC::Traj"));
-    if(factory.hasSchema("REC::Cherenkov"))_bcher  = std::make_shared<cherenkov>(factory.getSchema("REC::Cherenkov"));
-    if(factory.hasSchema("REC::ForwardTagger"))_bft    = std::make_shared<forwardtagger>(factory.getSchema("REC::ForwardTagger"));
-    if(factory.hasSchema("HEL::online"))_bhelonline  = std::make_shared<clas12::helonline>(factory.getSchema("HEL::online"));
-    if(factory.hasSchema("HEL::flip"))_bhelflip  = std::make_shared<clas12::helflip>(factory.getSchema("HEL::flip"),_brunconfig);
-    //if(factory.hasSchema("RAW::vtp"))_bvtp    = std::make_shared<clas12::vtp>(factory.getSchema("RAW::vtp"));
-    //if(factory.hasSchema("RAW::scaler"))_bscal = std::make_shared<clas12::scaler>(factory.getSchema("RAW::scaler"));
+    if(_factory.hasSchema("RECFT::Particle"))
+      _bftbparts.reset(new ftbparticle{_factory.getSchema("RECFT::Particle")});
+    if(_factory.hasSchema("REC::Particle"))
+      _bparts.reset(new particle{_factory.getSchema("REC::Particle"),_bftbparts.get()});
+    if(_factory.hasSchema("MC::Lund"))
+      _bmcparts.reset( new mcparticle{_factory.getSchema("MC::Lund")});
+    if(_factory.hasSchema("REC::CovMat"))
+      _bcovmat.reset(new covmatrix{_factory.getSchema("REC::CovMat")});
+    if(_factory.hasSchema("RECFT::Event"))
+      _bftbevent.reset(new clas12::ftbevent{_factory.getSchema("RECFT::Event")});
+    if(_factory.hasSchema("RUN::config"))
+      _brunconfig.reset(new clas12::runconfig{_factory.getSchema("RUN::config")});
+    if(_factory.hasSchema("REC::Event"))
+      _bevent.reset(new clas12::event{_factory.getSchema("REC::Event"),_bftbevent.get()});
+    if(_factory.hasSchema("REC::Calorimeter"))
+      _bcal.reset(new calorimeter{_factory.getSchema("REC::Calorimeter")});
+    if(_factory.hasSchema("REC::Scintillator"))
+      _bscint.reset(new scintillator{_factory.getSchema("REC::Scintillator")});
+    if(_factory.hasSchema("REC::Track"))
+      _btrck.reset(new tracker{_factory.getSchema("REC::Track")});
+    if(_factory.hasSchema("REC::Traj"))
+      _btraj.reset(new traj{_factory.getSchema("REC::Traj")});
+    if(_factory.hasSchema("REC::Cherenkov"))
+      _bcher.reset(new cherenkov{_factory.getSchema("REC::Cherenkov")});
+    if(_factory.hasSchema("REC::ForwardTagger"))
+      _bft.reset(new forwardtagger{_factory.getSchema("REC::ForwardTagger")});
  
+    makeListBanks();
   }
   ///////////////////////////////////////////////////////
   ///read the data
@@ -57,7 +67,8 @@ namespace clas12 {
     //regular particle bank
      if(_isRead) return _pids; //already read return current pids
      hipoRead();
-    _event.getStructure(*_bparts.get());
+  
+     _event.getStructure(*_bparts.get());
     if(_bftbparts.get())_event.getStructure(*_bftbparts.get());//FT based PID particle bank
    
     //First check if event passes criteria
@@ -87,10 +98,9 @@ namespace clas12 {
     return _pids;
   }
   bool clas12reader::readEvent(){
- 
     //get pid of tracks and save in _pids
     preCheckPids();
-    
+   
      //check if event is of the right type
     if(!passPidSelect()){
       _pids.clear(); //reset so read next event in preChekPids
@@ -98,7 +108,7 @@ namespace clas12 {
     }
     //Special run banks
     if(_brunconfig.get())_event.getStructure(*_brunconfig.get());
-
+   
     //now getthe data for the rest of the banks
     if(_bmcparts.get())_event.getStructure(*_bmcparts.get());
     if(_bcovmat.get())_event.getStructure(*_bcovmat.get());
@@ -112,6 +122,12 @@ namespace clas12 {
     if(_bft.get())_event.getStructure(*_bft.get());
     //if(_bvtp.get())_event.getStructure(*_bvtp.get());
     //if(_bscal.get())_event.getStructure(*_bscal.get());
+
+    for(auto& ibank:_addBanks){//if any additional banks requested get those
+      _event.getStructure(*ibank.get());
+    }
+   
+
     return true;
   }
   ////////////////////////////////////////////////////////
@@ -178,7 +194,7 @@ namespace clas12 {
       if(_rfdets.empty()) addARegionFDet();
       if(_rfdets[_n_rfdets]->sort()){
 	//	add a FDet particle to the event list
-	_detParticles.emplace_back(_rfdets[_n_rfdets]);
+	_detParticles.emplace_back(_rfdets[_n_rfdets].get());
 	_n_rfdets++;
 	//check if need more vector entries
 	//only required of previous events have
@@ -192,7 +208,7 @@ namespace clas12 {
       if(_rcdets.empty()) addARegionCDet();
       if(_rcdets[_n_rcdets]->sort()){
 	//	add a FDet particle to the event list
-	_detParticles.emplace_back(_rcdets[_n_rcdets]);
+	_detParticles.emplace_back(_rcdets[_n_rcdets].get());
 	_n_rcdets++;
 	//check if need more vector entries
 	//only required of previous events have
@@ -206,7 +222,7 @@ namespace clas12 {
       if(_rfts.empty())addARegionFT();
       if(_rfts[_n_rfts]->sort()){
 	//add a FDet particle to the event list
-	_detParticles.emplace_back(_rfts[_n_rfts]);
+	_detParticles.emplace_back(_rfts[_n_rfts].get());
 	_n_rfts++;
 	//check if need more vector entries
 	//only required of previous events have
@@ -268,6 +284,31 @@ namespace clas12 {
   std::vector<region_part_ptr> clas12reader::getByCharge(int ch){
     return container_filter(_detParticles, [ch](region_part_ptr dr)
 			    {return dr->par()->getCharge()==ch;});
+  }
+
+  /////////////////////////////////////////////////////////
+  ///make a list of banks
+  void clas12reader::makeListBanks(){
+    _allBanks.clear();
+   
+    for(auto& bnk:_addBanks) _allBanks.push_back(bnk.get());
+    if(_brunconfig.get())_allBanks.push_back(_brunconfig.get());
+    if(_bparts.get())_allBanks.push_back(_bparts.get());
+    if(_bftbparts.get())_allBanks.push_back(_bftbparts.get());
+    if(_bmcparts.get())_allBanks.push_back(_bmcparts.get());
+    if(_bcovmat.get())_allBanks.push_back(_bcovmat.get());
+    if(_bevent.get())_allBanks.push_back(_bevent.get());
+    if(_bftbevent.get())_allBanks.push_back(_bftbevent.get());
+    if(_bcal.get())_allBanks.push_back(_bcal.get());
+    if(_bscint.get())_allBanks.push_back(_bscint.get());
+    if(_btrck.get())_allBanks.push_back(_btrck.get());
+    if(_btraj.get())_allBanks.push_back(_btraj.get());
+    if(_bcher.get())_allBanks.push_back(_bcher.get());
+    if(_bft.get())_allBanks.push_back(_bft.get());
+
+    //Comment in next 2 lines for helicity analysis
+    //if(_bhelonline.get())_allBanks.push_back(*_bhelonline.get());
+    //if(_bhelflip.get())_allBanks.push_back(*_bhelflip.get());
   }
 
 }

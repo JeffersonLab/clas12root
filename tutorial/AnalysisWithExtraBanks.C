@@ -17,34 +17,41 @@
   for(int ifile=0;ifile<chain.GetNFiles();++ifile){
     clas12reader c12{chain.GetFileName(ifile).Data()};
 
-    auto idx_ECALClust= c12.addBank("FTOF::hits");
+    //Add extra bank for reading and get its ID
     auto idx_RECPart= c12.addBank("REC::Particle");
+    //Add an item in the bank for reading and get its ID
     auto iPid= c12.getBankOrder(idx_RECPart,"pid");
 
     //get track based hits id and layers
+    //Add extra bank for reading and get its ID
     auto idx_TRCKHits= c12.addBank("TimeBasedTrkg::TBHits");
+    //Add an item in the bank for reading and get its ID
     auto iTrckId =  c12.getBankOrder(idx_TRCKHits,"id");
     auto iTrckLayer =  c12.getBankOrder(idx_TRCKHits,"layer");
     
-    c12.addExactPid(11,1);    //exactly 1 electron
-    c12.addExactPid(211,1);    //exactly 1 pi+
-    c12.addExactPid(-211,1);    //exactly 1 pi-
-    c12.addExactPid(2212,1);    //exactly 1 proton
-    c12.addExactPid(22,2);    //exactly 2 gamma
+   c12.addExactPid(11,1);    //exactly 1 electron
+   c12.addExactPid(211,1);    //exactly 1 pi+
+   c12.addExactPid(-211,1);    //exactly 1 pi-
+   c12.addExactPid(2212,1);    //exactly 1 proton
+   c12.addExactPid(22,2);    //exactly 2 gamma
     
     /////////c12.addZeroOfRestPid();  //nothing else
     // c12.useFTBased(); //and use the Pids from RECFT
-  
     //loop over all events in the file
+
+    cout<<"START EVENT LOOP "<<endl;
     while(c12.next()==true){
        
-      //if(c12.getDetParticles().empty())
-      //	continue;
+      if(c12.getDetParticles().empty())
+      	continue;
 
-      cout<< idx_ECALClust<<" "<<c12.getBank(idx_ECALClust)->getRows()<<" "<< idx_RECPart<<" "<<c12.getBank(idx_RECPart)->getRows()<<" "<<c12.getBank(idx_RECPart)->getInt(iPid,0)<<endl;
-
-
-      //Loop over track based hits
+      //Loop over entries in the bank for this event using its ID = idx_RECPart
+      //get the value of its PID from its id = iPid
+      for(auto ipa=0;ipa<c12.getBank(idx_RECPart)->getRows();ipa++){
+	cout<<"particle "<<ipa<<" pid "<<c12.getBank(idx_RECPart)->getInt(iPid,ipa)<<endl;
+      }
+      
+       //Loop over track based hits
       for(auto itr=0;itr<c12.getBank(idx_TRCKHits)->getRows();itr++){
 	cout<<"track "<<itr<<" id "<<c12.getBank(idx_TRCKHits)->getInt(iTrckId,itr)<<" layer "<<c12.getBank(idx_TRCKHits)->getInt(iTrckLayer,itr)<<endl;
       }

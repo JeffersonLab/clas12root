@@ -84,7 +84,8 @@ namespace clas12 {
     std::vector<int> _rvec;
   };
 
-  using covmat_ptr=std::shared_ptr<clas12::covmatrix>;
+  using covmat_ptr=clas12::covmatrix*;
+  using covmat_uptr=std::unique_ptr<clas12::covmatrix>;
 }
 
 #endif /* UTILS_H */
