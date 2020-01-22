@@ -44,7 +44,7 @@ namespace clas12root{
  
     private:
 
-      HipoChain* _chain=nullptr;
+      HipoChain* _chain{nullptr};
 
       Int_t _NcurrRecords=0;
       Int_t _iRecord=0;

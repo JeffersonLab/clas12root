@@ -72,7 +72,14 @@ This is faster than the particle draw as it only requires the reading of 1 bank.
 
          BankHist bankDraw("/WHERE/IS/MY/HIPO/file.hipo");
          bankDraw.Hist1D("REC::Particle::Pz",100,0,10,"")->Draw()
+
+Note you can only work with 1 bank at a time, so you cannot then run
+
          bankDraw.Hist1D("REC::Scintillator::Time",1000,0,200,"")->Draw()
+
+but can do
+
+         bankDraw.Hist1D("REC::Particle::Px",100,-10,10,"")->Draw()
 
 You can group histograms together for lazy execution if they all come from the same bank.
 
@@ -138,7 +145,7 @@ Remember at the end you can save all the histograms to file :
 
 Instead of drawing histograms interactively at the prompt you may give predefined histograms via a script e.g. :
 
-	particleDraw /WHERE/IS/MY/HIPO/file.hipo Ex2_HipoDraw.C
+	particleDraw /WHERE/IS/MY/HIPO/file.hipo $CLAS12ROOT/RunRoot/Ex2_HipoDraw.C
 
 See $CLAS12ROOT/RunRoot/Ex2_HipoDraw.C for details.
 

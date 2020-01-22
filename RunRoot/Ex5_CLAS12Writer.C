@@ -34,15 +34,12 @@ void Ex5_CLAS12Writer(){
   std::string outputFile;
 
 
-  std::cout<<"*** please type in an output file name"<<std::endl;
+  std::cout<<"*** please type in an input file name"<<std::endl;
   getline (cin, inFile);
   if(inFile.find(".hipo")==std::string::npos){
     std::cout<<" *** the input file must be a hipo file..."<<std::endl;
     exit(0);
-  } else{
-    inputFile = inFile;
   }
-
   std::cout<<"*** please type in an output file name"<<std::endl;
   getline (cin, outputFile);
   if(outputFile.find(".hipo")==std::string::npos){

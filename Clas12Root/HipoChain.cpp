@@ -8,8 +8,8 @@ namespace clas12root {
     _ListOfFiles=_tchain.GetListOfFiles();
   }
   
-  HipoChain::~HipoChain(){
-  }
+  // HipoChain::~HipoChain(){
+  // }
 
   
   void HipoChain::Add(TString name){
