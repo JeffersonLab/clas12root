@@ -8,10 +8,14 @@ Examples are given for running in interactive ROOT sessions and ROOT-Jupyter not
 
 ## Clas12Banks -> Clas12Root
 
-NEW We now use an external hipo4 repository. This must be pointed at with the variable HIPO when installing. The files from hipo/hipo4 will be copied here to Hipo4.
+We now use an external hipo4 repository. This must be pointed at with the variable HIPO when installing. The files from hipo/hipo4 will be copied here to Hipo4.
+
+###NEW
+
+A default hipo implementation is now packed with clas12root. If you prefer to use this do not set the enviroment variable HIPO. If you would like to use a different version of the hipo library set HIPO. You may get the most up to data hipo library from
+
 
 For Hipo library see https://github.com/gavalian/hipo 
-
 
 The Clas12Banks implementation can be used independent of ROOT, although currently ROOT dictionaries are created for the classes via cmake (this could be removed). This defines the specific CLAS12 DST banks and provides an interface to the data.
 
