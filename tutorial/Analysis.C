@@ -1,8 +1,7 @@
 {
 
   HipoChain chain;
-  chain.Add("/home/dglazier/clas12/clas12root/tutorial/skim.hipo");
-  //chain.Add("/where/is/myHipo.hipo");
+  chain.Add("/where/is/myHipo.hipo");
 
 
   //create particles before looping to be more efficient
@@ -17,15 +16,6 @@
   for(int ifile=0;ifile<chain.GetNFiles();++ifile){
     clas12reader c12{chain.GetFileName(ifile).Data()};
 
-    auto idx_ECALClust= c12.addBank("FTOF::hits");
-    auto idx_RECPart= c12.addBank("REC::Particle");
-    auto iPid= c12.getBankOrder(idx_RECPart,"pid");
-
-    //get track based hits id and layers
-    auto idx_TRCKHits= c12.addBank("TimeBasedTrkg::TBHits");
-    auto iTrckId =  c12.getBankOrder(idx_TRCKHits,"id");
-    auto iTrckLayer =  c12.getBankOrder(idx_TRCKHits,"layer");
-    
     c12.addExactPid(11,1);    //exactly 1 electron
     c12.addExactPid(211,1);    //exactly 1 pi+
     c12.addExactPid(-211,1);    //exactly 1 pi-
@@ -38,38 +28,30 @@
     //loop over all events in the file
     while(c12.next()==true){
        
-      //if(c12.getDetParticles().empty())
-      //	continue;
-
-      cout<< idx_ECALClust<<" "<<c12.getBank(idx_ECALClust)->getRows()<<" "<< idx_RECPart<<" "<<c12.getBank(idx_RECPart)->getRows()<<" "<<c12.getBank(idx_RECPart)->getInt(iPid,0)<<endl;
-
-
-      //Loop over track based hits
-      for(auto itr=0;itr<c12.getBank(idx_TRCKHits)->getRows();itr++){
-	cout<<"track "<<itr<<" id "<<c12.getBank(idx_TRCKHits)->getInt(iTrckId,itr)<<" layer "<<c12.getBank(idx_TRCKHits)->getInt(iTrckLayer,itr)<<endl;
-      }
+      if(c12.getDetParticles().empty())
+      	continue;
       
       auto parts=c12.getDetParticles();
-       
-       auto electron=c12.getByID(11)[0];
-       auto gamma1=c12.getByID(22)[0];
-       auto gamma2=c12.getByID(22)[1];
-       auto proton=c12.getByID(2212)[0];
-       auto pip=c12.getByID(211)[0];
-       auto pim=c12.getByID(-211)[0];
- 								 
-       p4_gamma1.SetXYZM(gamma1->par()->getPx(),gamma1->par()->getPy(),gamma1->par()->getPz(),0);
-       p4_gamma2.SetXYZM(gamma2->par()->getPx(),gamma2->par()->getPy(),gamma2->par()->getPz(),0);
-
-       auto pi0 = p4_gamma1 + p4_gamma2;
-     
+      
+      auto electron=c12.getByID(11)[0];
+      auto gamma1=c12.getByID(22)[0];
+      auto gamma2=c12.getByID(22)[1];
+      auto proton=c12.getByID(2212)[0];
+      auto pip=c12.getByID(211)[0];
+      auto pim=c12.getByID(-211)[0];
+      
+      p4_gamma1.SetXYZM(gamma1->par()->getPx(),gamma1->par()->getPy(),gamma1->par()->getPz(),0);
+      p4_gamma2.SetXYZM(gamma2->par()->getPx(),gamma2->par()->getPy(),gamma2->par()->getPz(),0);
+      
+      auto pi0 = p4_gamma1 + p4_gamma2;
+      
        //Fill histograms if gammas are in FD
-       if(gamma1->getRegion()==FD && gamma2->getRegion()==FD){
-	 hmass.Fill(pi0.M());
-	 htime.Fill(gamma1->getTime() - gamma2->getTime() );
-       }
-     }
-  
+      if(gamma1->getRegion()==FD && gamma2->getRegion()==FD){
+	hmass.Fill(pi0.M());
+	htime.Fill(gamma1->getTime() - gamma2->getTime() );
+      }
+    }
+    
   }
 
   TCanvas can;
