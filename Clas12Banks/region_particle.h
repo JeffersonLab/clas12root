@@ -93,6 +93,9 @@ namespace clas12 {
     float getCalcMass();
     float getBeta();
     float getGamma();
+    float getDeltaTime();
+    float getBetaFromP();
+    float getPdgMass();
 
     void useFTBPid(){if(_ftbparts)_useFTBPid=1;}
     

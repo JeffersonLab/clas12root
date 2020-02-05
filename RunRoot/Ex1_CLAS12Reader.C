@@ -98,6 +98,10 @@ void Ex1_CLAS12Reader(){
 	 p->getDetEnergy();
 	 p->getDeltaEnergy();
 
+	 //check trigger bits
+	 //	 if(c12.checkTriggerBit(25)) cout<<"MesonExTrigger"<<endl;
+	 //	 else cout<<"NOT"<<endl;
+
 	 // get any detector information (if exists for this particle)
 	 // there should be a get function for any entry in the bank
 	 switch(p->getRegion()) {

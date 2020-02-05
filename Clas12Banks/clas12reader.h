@@ -141,6 +141,11 @@ namespace clas12 {
     int getNParticles() const  noexcept{return _detParticles.size();}
     const std::vector<short> &getPids() const  noexcept{return _pids;}
     
+    bool checkTriggerBit(uint k){
+      long pattern = _brunconfig->getTrigger();
+      return ( pattern & (1<<k)) != 0;
+    }
+
   private:
     
     void hipoRead(){

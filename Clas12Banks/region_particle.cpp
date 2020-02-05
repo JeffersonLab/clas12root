@@ -70,7 +70,7 @@ namespace clas12 {
     float y=_parts->getPy();
     return atan2(y,x);
   }
-  float region_particle::getCalcMass() {
+   float region_particle::getCalcMass() {
     float p=getP();
     float t=getTime()-_event->getStartTime();
     float d=getPath()/100;
@@ -78,9 +78,10 @@ namespace clas12 {
       return 0;
     if(p==0)
       return 0;
-    float mass= d/t/p/2.9979246e+08*1E9;
+    float mass= p/getBeta()/getGamma();
     return mass;
   }
+
   float region_particle::getBeta() {
     float t=getTime()-_event->getStartTime();
     float d=getPath()/100;
@@ -94,5 +95,43 @@ namespace clas12 {
     float gamma= sqrt(1/(1-beta*beta));
     return gamma;
   }
+  float region_particle::getDeltaTime() {
+    _parts->setEntry(_pentry);
+    float t=getTime()-_parts->getVt();
+    float d=getPath()/100;
+    return t-d/getBetaFromP()/2.99792e+08*1E9;
+  }
+  float region_particle::getBetaFromP() {
+    float pp=getP();
+    auto mass=getPdgMass();
+    return pp/sqrt(pp*pp+mass*mass);
+  }
+  float region_particle::getPdgMass() {
 
+    switch (getPid()) {
+
+    case 22 :
+      return 0.;
+    case 11 :
+      return 0.00051099891;
+    case 211:
+      return 0.13957000;
+    case -211:
+      return 0.13957000;
+    case 2212:
+      return 0.93827200;
+    case 2112:
+      return 0.93956500;
+    case 321:
+      return 0.49367700;
+    case -321:
+      return 0.49367700;
+     case -11 :
+      return 0.00051099891;
+    case -2212:
+      return 0.93827200;
+    default :
+      return 0;
+    }
+  }
 }
