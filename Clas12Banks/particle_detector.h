@@ -57,22 +57,13 @@ namespace clas12 {
     int getIndex()   const noexcept{return _index;}
     int getIndex(int pindex, int detector, int layer=0);
    
-   /* int getIndex(int pindex, int detector, int layer=0) { */
-   /*    //This function seems to be a bottle neck! */
-   /*    int key = (detector<<16)|(layer<<8)|pindex; */
-   /*    if(_rmap.count(key)>0) { */
-   /*  	_index = _rmap[key]; */
-   /*  	return _index; */
-   /*    } */
-   /*    return _index=-1; */
-   /*  } */
     void setIndex(int ind){_index=ind;}
     void setBankEntry(short i){ _index=i;} //faster for BankHist
     void setEntry(int ind){_index=ind;}
     
     ////////////////////////////////////////////////////////////////
     //virtual functions can be overridden in derived class
-    virtual int getLayer(int index=0)  const noexcept{return 0;}
+    virtual int getLayer(int index)  const noexcept{return 0;}
     virtual int getLayer()  const noexcept{return 0;}
     virtual void print();
 
