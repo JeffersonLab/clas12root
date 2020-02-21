@@ -5,6 +5,7 @@
 #include "event.h"
 #include "scaler.h"
 #include <string>
+#include <float.h>
 
 namespace clas12 {
 
@@ -13,7 +14,7 @@ namespace clas12 {
   public:
     scaler_reader(std::string filename);
 
-    double getBeamCharge() const noexcept{return _maxCup;}
+    double getBeamCharge() const noexcept{return _maxCup-_minCup;}
     
   private:
     //reader
@@ -23,6 +24,7 @@ namespace clas12 {
 
     scaler_uptr _bscal;
     double _maxCup{0};
+    double _minCup{DBL_MAX};
 
   };
 

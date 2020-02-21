@@ -92,7 +92,7 @@ void Ex1_CLAS12Reader(){
      
       while(c12.next()==true){
 	//can get an estimate of the beam current to this event
-	//c12.getCurrApproxCharge()
+	//c12.getCurrApproxCharge();
 	
         //c12.event()->getStartTime();
 

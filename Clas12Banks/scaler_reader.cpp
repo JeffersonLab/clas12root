@@ -14,6 +14,7 @@ namespace clas12{
       _event.getStructure(*_bscal.get());
       auto cup=_bscal->getFCupGated();
       if(cup>_maxCup) _maxCup=cup;
+      if(cup<_minCup) _minCup=cup;
     }
   }
 
