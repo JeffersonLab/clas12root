@@ -11,12 +11,10 @@ namespace clas12 {
 
   scaler::scaler(hipo::schema __schema): hipo::bank(__schema) {
  
-    auto sch=getSchema();
-    ch_order = sch.getEntryOrder("channel");
-    sl_order = sch.getEntryOrder("slot");
-    val_order = sch.getEntryOrder("value");
-    hel_order = sch.getEntryOrder("helicity");
- 
+    _fcupgated_order = __schema.getEntryOrder("fcupgated");
+    _fcup_order = __schema.getEntryOrder("fcup");
+    _livetime_order = __schema.getEntryOrder("livetime");
+    
   }
  
 }

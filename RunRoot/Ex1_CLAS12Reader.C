@@ -86,10 +86,17 @@ void Ex1_CLAS12Reader(){
       //c12.addExactPid(22,2);    //exactly 2 gamma
       //////c12.addZeroOfRestPid();  //nothing else
       //////c12.useFTBased(); //and use the Pids from RECFT
-      
+
+     //can also access the integrated current at this point
+     //c12.getRunBeamCharge();
+     
       while(c12.next()==true){
-       // c12.event()->getStartTime(); //hipo4
-       // c12.head()->getStartTime(); //hipo3
+	//can get an estimate of the beam current to this event
+	//c12.getCurrApproxCharge()
+	
+        //c12.event()->getStartTime();
+
+	
         //Loop over all particles to see how to access detector info.
     
  	for(auto& p : c12.getDetParticles()){
@@ -164,6 +171,7 @@ void Ex1_CLAS12Reader(){
        
        counter++;
      }
+
    }
    gBenchmark->Stop("timer");
    gBenchmark->Print("timer");

@@ -5,6 +5,7 @@
  */
 
 #include "clas12reader.h"
+#include "scaler_reader.h"
 
 namespace clas12 {
 
@@ -45,6 +46,10 @@ namespace clas12 {
       _bft.reset(new forwardtagger{_factory.getSchema("REC::ForwardTagger")});
  
     makeListBanks();
+
+    scaler_reader sr(filename);
+    _runBeamCharge = sr.getBeamCharge();
+    
   }
   ///////////////////////////////////////////////////////
   ///read the data

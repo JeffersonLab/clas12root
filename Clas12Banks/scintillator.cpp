@@ -25,7 +25,7 @@ namespace clas12 {
     if(useItem("hy"))_hy_order  = __schema.getEntryOrder("hy");
     if(useItem("hz"))_hz_order  = __schema.getEntryOrder("hz");
     if(useItem("chi2"))_chi2_order  = __schema.getEntryOrder("chi2");
-
+    if(useItem("component"))_component_order  = __schema.getEntryOrder("component");
     
   }
 

@@ -98,7 +98,7 @@ namespace clas12 {
     event_ptr event() const{return _bevent.get();};
     ftbevent_ptr ftbevent() const{return _bftbevent.get();};
     vtp_ptr vtp() const{return _bvtp.get();};
-    scaler_ptr scaler() const{return _bscal.get();};
+    //scaler_ptr scaler() const{return _bscal.get();};
     mcpar_ptr mcparts() const{return _bmcparts.get();};
 
 
@@ -146,6 +146,9 @@ namespace clas12 {
       return ( pattern & (1<<k)) != 0;
     }
 
+    double getRunBeamCharge() const noexcept{ return _runBeamCharge;}
+    double getCurrApproxCharge(){return _runBeamCharge*_nevent/_reader.getEntries();}
+    
   private:
     
     void hipoRead(){
@@ -176,7 +179,6 @@ namespace clas12 {
     cher_uptr _bcher;
     ft_uptr _bft;
     vtp_uptr _bvtp;
-    scaler_uptr _bscal;
 
     std::vector<std::unique_ptr<hipo::bank> > _addBanks; //owns additional banks
     std::vector<hipo::bank* > _allBanks; 
@@ -196,14 +198,15 @@ namespace clas12 {
     std::map<short,short> _pidSelect;
     std::map<short,short> _pidSelectExact;
 
-    long _nevent=0;
-    ushort _nparts=0;
-    ushort _n_rfdets=0;
-    ushort _n_rcdets=0;
-    ushort _n_rfts=0;
-    bool _zeroOfRestPid=false;
-    bool _useFTBased=false;
-    bool _isRead=false;
+    double _runBeamCharge{0};
+    long _nevent{0};
+    ushort _nparts{0};
+    ushort _n_rfdets{0};
+    ushort _n_rcdets{0};
+    ushort _n_rfts{0};
+    bool _zeroOfRestPid{false};
+    bool _useFTBased{false};
+    bool _isRead{false};
   };
   //helper functions
   
