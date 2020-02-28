@@ -74,7 +74,7 @@ void Ex1_CLAS12Reader(){
    
    for(Int_t i=0;i<files->GetEntries();i++){
      //create the event reader
-     clas12reader c12(files->At(i)->GetTitle());
+     clas12reader c12(files->At(i)->GetTitle(),{0});
      //  clas12reader c12(files->At(i)->GetTitle(),{0});//add tags {tag1,tag2,tag3,...}
       
       //Add some event Pid based selections
@@ -88,11 +88,12 @@ void Ex1_CLAS12Reader(){
       //////c12.useFTBased(); //and use the Pids from RECFT
 
      //can also access the integrated current at this point
+     //c12.scalerReader();//must call this first
      //c12.getRunBeamCharge();
      
       while(c12.next()==true){
 	//can get an estimate of the beam current to this event
-	//c12.getCurrApproxCharge();
+	//c12.getCurrApproxCharge();//if called c12.scalerReader();
 	
         //c12.event()->getStartTime();
 
