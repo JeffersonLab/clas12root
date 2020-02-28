@@ -8,10 +8,35 @@
 
 namespace clas12 {
 
-  clas12reader::clas12reader(std::string filename,std::vector<long> tags){
+  clas12reader::clas12reader(std::string filename,std::vector<long> tags):_filename(filename){
     cout<<" clas12reader::clas12reader reading "<<filename.data()<<endl;
     _reader.setTags(tags);
-    _reader.open(filename.data()); //keep a pointer to the reader
+ 
+    if(_filename.empty()==false)initReader();
+  }
+  ///////////////////////////////////////////////////
+  ///copy constructor
+  ///opens a new reader
+  ///Can give alternative filename
+  clas12reader::clas12reader(const clas12reader &other,std::string filename,std::vector<long> tags):_filename(filename){
+    cout<<" clas12reader::clas12reader reading "<<filename.data()<<endl;
+
+    //if default filename take same file as original
+    if(_filename.empty())_filename=other._filename;
+    if(other._scalReader.get()) scalerReader();
+ 
+    _reader.setTags(tags);
+    initReader();
+
+     _givenPids=other._givenPids;
+    _pidSelect=other._pidSelect;
+    _pidSelectExact=other._pidSelectExact;
+    _zeroOfRestPid=other._zeroOfRestPid;
+    _useFTBased=other._useFTBased;;
+
+  }
+  void clas12reader::initReader(){
+   _reader.open(_filename.data()); //keep a pointer to the reader
 
     // hipo::dictionary  factory;
     _reader.readDictionary(_factory);
@@ -43,9 +68,11 @@ namespace clas12 {
       _bcher.reset(new cherenkov{_factory.getSchema("REC::Cherenkov")});
     if(_factory.hasSchema("REC::ForwardTagger"))
       _bft.reset(new forwardtagger{_factory.getSchema("REC::ForwardTagger")});
- 
+
     makeListBanks();
+
   }
+
   ///////////////////////////////////////////////////////
   ///read the data
   void clas12reader::clearEvent(){

@@ -26,26 +26,22 @@ namespace clas12 {
 
     scaler(hipo::schema __schema);
 
-    int    getChannel(){ return getInt(ch_order,0); }
-    int    getSlot(){ return getInt(sl_order,0); }
-    int    getValue(){ return getInt(val_order,0); }
-    int    getHelicity(){ return getInt(hel_order,0); }
-    
+    float    getFCupGated(){ return getFloat(_fcupgated_order,0); }
+    float    getFCup(){ return getFloat(_fcup_order,0); }
+    float    getLiveTime(){ return getFloat(_livetime_order,0); }
+     
     /**
     * This is virtual method from hipo::bank it will be called
     * every time a bank is read in the reader. Can be used to sort
     * particles and or map particles by pid or type (i.e. charge)
     */
-    void notify(){
-      //printf("particle class is read again\n");
-    }
+    //    void notify(){}
 
   private :
 
-    int ch_order;
-    int sl_order;
-    int val_order;
-    int hel_order;
+    int _fcupgated_order{-1};
+    int _fcup_order{-1};
+    int _livetime_order{-1};
   
     
   };

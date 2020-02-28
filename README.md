@@ -110,6 +110,30 @@ To run:
 
 Note the use of the + sign after the macro name. This compiles the script meaning it will run much faster.
 
+#### NEW
+
+You can now try running this using HipoChain to process many files. See the example RunRoot/Ex1_CLAS12ReaderChain.C . This should look like,
+
+    	clas12root::HipoChain chain;
+	//Add lots of files
+	chain.Add("/WHERE/IS/MY/HIPO/file1.hipo");
+	auto c12=chain.GetC12Reader();
+	c12->addExactPid(11,1); //if want some filters
+	while (chain.Next()){
+     	      c12=chain.GetC12Reader();
+ 	      auto electrons=c12->getByID(11);
+	      ....
+	}
+
+run with
+
+	clas12root RunRoot/Ex1_CLAS12ReaderChain.C+
+
+
+Also you can check trigger bits directly
+
+     	 c12.checkTriggerBit(24);
+	 
 ### Jupyter
 
 To install rootbooks see https://root.cern.ch/how/how-create-rootbook
@@ -290,6 +314,40 @@ To run:
        clas12root $CLAS12ROOT/RunRoot/Ex5_CLAS12Writer.C+
 
 Note the use of the + sign after the macro name. This compiles the script meaning it will run much faster. The script will then ask you for the locations of an input hipo file and an output file. The script is similar to Ex1_CLAS12Writer.C so you can compare the two.
+
+## Ex 7 Scaler beam charge information
+
+To normalise events you will need the beam charge. This is stored in 2 ways in clas12 DSTs. (1) accumalating in REC::Event::beamCharge (2) accumulating in tag=1 RAW::scaler::fcupgated . The problem with (1) for trains is that the events are not garaunteed to be in correct time order, so the last event in the hipo file may not have the largest beamCharge. And indeed if you have a large event filter you may not include any events with the largest beam cahrge in your train. (2) contains all the scaler reads and therefore the correct total charge, but these events are not in time order and the are not interspersed with the correct hipo events (I think).
+
+To make sure the correct beam charge is accessed and time history rates can be produced for a file there is a scaler_reader class. At file initialisation this will read all the tag=1 events (which is quite fast) and sort all the scaler events by event number. It will return the difference between the highest and lowest beamCharge, so it should work for individual run files as well as files with whole runs. It also allows you to add counters for any monitoring and will increment REC::* information with the correct associated scaler event.
+
+For example,
+
+    clas12reader c12("file.hipo",{0}); //reader for tag 0 events
+
+    //create the scaler reader and make some counters
+    //the counters have an entry for each scaler read
+    //you can increment them for each real event corresponding
+    //to the scaler read in the normal event loop
+    auto scal=c12.scalerReader();
+    auto count_mesonex=scal->addLongCounter();
+    auto count_events=scal->addLongCounter();
+    while(c12.next()==true){
+       auto currEvent=c12.runconfig()->getEvent(); 
+       //check for valid charge events, i.e. RUN::Scaler::BeamCharge!<0
+       if( scal->validCharge(currEvent) ==false ) continue;
+       if( c12.checkTriggerBit(24) ) //check if mesonex trigger fired for this event
+	   scal->incrementLong(count_mesonex,currEvent,1);
+       //counter for all events
+       scal->incrementLong(count_events,currEvent,1);
+
+     }
+
+Be aware that if your events have been filtered this will effect the rates.
+
+To try the example
+
+       clas12root --in=/work/jlab/clas12data/v16/skim9_5038.hipo RunRoot/Ex7_ScalerReader.C+
 
 ### Jupyter
 

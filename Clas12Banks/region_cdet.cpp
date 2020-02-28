@@ -34,8 +34,10 @@ namespace clas12 {
     _pcnd=-1;
     
     //tof 1 layer
-    if(_scint)_ptof=_scint->getIndex(_pentry,clas12::CTOF);
-    
+    if(_scint){
+      _ptof=_scint->getIndex(_pentry,clas12::CTOF,1);//default layer=1
+      if(_ptof==-1)_ptof=_scint->getIndex(_pentry,clas12::CTOF);//to be deprecated
+    }
     //prefer cnd layer 1,2, 3
     if(_scint)_pcnd1=_scint->getIndex(_pentry,clas12::CND,clas12::CND1-clas12::CNDOFF);
     if(_scint)_pcnd2=_scint->getIndex(_pentry,clas12::CND,clas12::CND2-clas12::CNDOFF);

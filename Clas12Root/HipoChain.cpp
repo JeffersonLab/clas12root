@@ -50,4 +50,31 @@ namespace clas12root {
     }
     return n-1;
   }
+  
+  Bool_t HipoChain::Next(){
+    auto more = _c12->next();
+    if(more) return kTRUE;
+    // if(_c12.get()==nullptr)
+    if(_idxFile>0)_totBeamCharge+=_c12->getRunBeamCharge();
+    if(NextFile()==false) return kFALSE;
+    more = _c12->next();
+    if(more) return kTRUE;
+    
+    //no more delete reader
+    _c12.reset();
+    //check if another file
+    return Next();
+    
+  }
+  
+  Bool_t HipoChain::NextFile(){
+    std::cout<<"HipoChain::NextFile() "<<_idxFile<<" out of "<<GetNFiles()<<std::endl;
+   if(_idxFile>=GetNFiles())
+      return kFALSE;//no more files
+    std::cout<<"HipoChain::NextFile() "<<GetFileName(_idxFile)<<std::endl;
+    //open next file
+   _c12.reset(new clas12::clas12reader{*_c12.get(),GetFileName(_idxFile++).Data(),_readerTags});
+    _c12ptr = _c12.get();	
+    return kTRUE;
+  }
 }

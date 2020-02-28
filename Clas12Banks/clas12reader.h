@@ -36,6 +36,8 @@
 #include "region_fdet.h"
 #include "region_cdet.h"
 #include "region_ft.h"
+#include "scaler_reader.h"
+
 #include "dictionary.h"
 
 #include <algorithm>
@@ -56,6 +58,8 @@ namespace clas12 {
 
     clas12reader()=default;
     clas12reader(std::string filename,std::vector<long> tags=std::vector<long>());
+    clas12reader(const clas12reader &other,std::string filename="",std::vector<long> tags=std::vector<long>());
+    
     virtual ~clas12reader()=default;
 
     hipo::reader& getReader(){return _reader;}
@@ -98,7 +102,7 @@ namespace clas12 {
     event_ptr event() const{return _bevent.get();};
     ftbevent_ptr ftbevent() const{return _bftbevent.get();};
     vtp_ptr vtp() const{return _bvtp.get();};
-    scaler_ptr scaler() const{return _bscal.get();};
+    //scaler_ptr scaler() const{return _bscal.get();};
     mcpar_ptr mcparts() const{return _bmcparts.get();};
 
 
@@ -146,12 +150,28 @@ namespace clas12 {
       return ( pattern & (1<<k)) != 0;
     }
 
-  private:
+    scalerreader_ptr scalerReader(){
+      if(_scalReader.get()) return _scalReader.get();
+      _scalReader.reset(new scaler_reader(_filename));
+      _runBeamCharge = _scalReader->getBeamCharge();
+      return _scalReader.get();
+    }
+    double getRunBeamCharge() const noexcept{ return _runBeamCharge;}
+    double getCurrApproxCharge(){return _runBeamCharge*_nevent/_reader.getEntries();}
+
+    protected:
+
+    void initReader();
     
+    
+    private:
+
     void hipoRead(){
       _reader.read(_event);
       _isRead=true;
     }
+
+    std::string _filename;
     
     //reader
     hipo::reader     _reader;
@@ -176,8 +196,9 @@ namespace clas12 {
     cher_uptr _bcher;
     ft_uptr _bft;
     vtp_uptr _bvtp;
-    scaler_uptr _bscal;
 
+
+    
     std::vector<std::unique_ptr<hipo::bank> > _addBanks; //owns additional banks
     std::vector<hipo::bank* > _allBanks; 
     
@@ -191,20 +212,25 @@ namespace clas12 {
     //this vector links to raw ptrs, does not own
     std::vector<region_part_ptr> _detParticles;
 
+
+    double _runBeamCharge{0};
+    long _nevent{0};
+    ushort _nparts{0};
+    ushort _n_rfdets{0};
+    ushort _n_rcdets{0};
+    ushort _n_rfts{0};
+
     std::vector<short> _pids;
+    bool _isRead{false};
+
+    //members that need copied in constructor
+    scalerreader_uptr _scalReader;
     std::vector<short> _givenPids;
     std::map<short,short> _pidSelect;
     std::map<short,short> _pidSelectExact;
-
-    long _nevent=0;
-    ushort _nparts=0;
-    ushort _n_rfdets=0;
-    ushort _n_rcdets=0;
-    ushort _n_rfts=0;
-    bool _zeroOfRestPid=false;
-    bool _useFTBased=false;
-    bool _isRead=false;
-  };
+    bool _zeroOfRestPid{false};
+    bool _useFTBased{false};
+   };
   //helper functions
   
   //filter vectors via a lambda function

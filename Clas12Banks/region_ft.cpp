@@ -35,9 +35,14 @@ namespace clas12 {
   ///current particle and store the detector indices
   bool region_ft::sort(){
     region_particle::sort();
-    if(_ft)_pcal=_ft->getIndex(_pentry,clas12::FTCAL);
-    
-    if(_ft)_phod=_ft->getIndex(_pentry,clas12::FTHODO);
+    if(_ft){
+      _pcal=_ft->getIndex(_pentry,clas12::FTCAL,1); //default layer=1
+      if(_pcal==-1)_pcal=_ft->getIndex(_pentry,clas12::FTCAL);//to be deprecated
+    }
+    if(_ft){
+      _phod=_ft->getIndex(_pentry,clas12::FTHODO,1);
+      if(_phod==-1) _phod=_ft->getIndex(_pentry,clas12::FTHODO);
+    }
     //check if FT assocciated, must be a FTCAL
     if(_pcal!=-1)
       return true;
