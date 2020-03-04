@@ -86,3 +86,5 @@ namespace hipo {
     const std::map<int,int> _typeToPos{{3,0},{2,1},{1,2},{8,3},{4,4},{5,5}};
   };
 }
+//needed to create dictionary in v6.20
+ #pragma link C++ class hipo::data_addrs_to_func ;
