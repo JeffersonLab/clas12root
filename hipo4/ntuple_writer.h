@@ -17,11 +17,12 @@ namespace hipo {
   
   using data_addrs = std::vector<void* >;
   
-  using put_func = void (*)(hipo::bank*,void *,int, int);
-  using put_funcs=std::vector<put_func>;
-  using addrs_to_func = std::pair< put_func, void* >;
-  using addrs_to_func_uptr = std::unique_ptr<addrs_to_func>;
-  using data_addrs_to_func = std::vector<addrs_to_func_uptr >;
+  using put_func = void (*)(hipo::bank*,void *,int, int);//!
+  using put_funcs=std::vector<hipo::put_func>;//!
+  using addrs_to_func = std::pair< hipo::put_func, void* >;//!
+  using addrs_to_func_uptr = std::unique_ptr<hipo::addrs_to_func>;//!
+  //using data_addrs_to_func = std::vector<addrs_to_func_uptr>; //root V6.20 DOES NOT LIKE THIS
+  using data_addrs_to_func = std::vector<std::unique_ptr<std::pair< void (*)(hipo::bank*,void *,int, int), void* >>>;//!
 
   using int_uptr = std::unique_ptr<int32_t>;
   using short_uptr = std::unique_ptr<int16_t>;
@@ -87,4 +88,10 @@ namespace hipo {
   };
 }
 //needed to create dictionary in v6.20
- #pragma link C++ class hipo::data_addrs_to_func ;
+//#pragma link C++ class hipo::data_addrs_to_func;
+//#pragma link C++ class hipo::addrs_to_func_uptr;
+// #pragma link C++ class hipo::addrs_to_func;
+// #pragma link C++ class hipo::put_funcs;
+//#pragma link C++ class hipo::put_func;
+
+#pragma hipo::std::unique_ptr<pair<void(*)(hipo::bank*,void*,int,int),void*>;

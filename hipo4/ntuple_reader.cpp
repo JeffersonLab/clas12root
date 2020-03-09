@@ -8,7 +8,7 @@ namespace hipo{
   ntuple_reader::ntuple_reader(string name){
     _reader.open(name.data());
     _reader.readDictionary(_dict);
-    _dict.show();
+    //_dict.show();
     
     //create getters functions
     _getters[0]=[](hipo::bank* b,void *addr,int item, int index){
