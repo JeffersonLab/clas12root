@@ -1,6 +1,31 @@
+//******************************************************************************
+//*       ██╗  ██╗██╗██████╗  ██████╗     ██╗  ██╗    ██████╗                  *
+//*       ██║  ██║██║██╔══██╗██╔═══██╗    ██║  ██║   ██╔═████╗                 *
+//*       ███████║██║██████╔╝██║   ██║    ███████║   ██║██╔██║                 *
+//*       ██╔══██║██║██╔═══╝ ██║   ██║    ╚════██║   ████╔╝██║                 *
+//*       ██║  ██║██║██║     ╚██████╔╝         ██║██╗╚██████╔╝                 *
+//*       ╚═╝  ╚═╝╚═╝╚═╝      ╚═════╝          ╚═╝╚═╝ ╚═════╝                  *
+//************************ Jefferson National Lab (2017) ***********************
 /*
- * This sowftware was developed at Jefferson National Laboratory.
- * (c) 2017.
+ *   Copyright (c) 2017.  Jefferson Lab (JLab). All rights reserved. Permission
+ *   to use, copy, modify, and distribute  this software and its documentation
+ *   for educational, research, and not-for-profit purposes, without fee and
+ *   without a signed licensing agreement.
+ *
+ *   IN NO EVENT SHALL JLAB BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT, SPECIAL
+ *   INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, ARISING
+ *   OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF JLAB HAS
+ *   BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ *   JLAB SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ *   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ *   PURPOSE. THE HIPO DATA FORMAT SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF
+ *   ANY, PROVIDED HEREUNDER IS PROVIDED "AS IS". JLAB HAS NO OBLIGATION TO
+ *   PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+ *
+ *   This software was developed under the United States Government license.
+ *   For more information contact author at gavalian@jlab.org
+ *   Department of Experimental Nuclear Physics, Jefferson Lab.
  */
 
 #include "writer.h"
@@ -82,6 +107,16 @@ void writer::addDictionary(hipo::dictionary &dict){
    }
  }
 
+void writer::addEvent(std::vector<char> &vec, int size ){
+  int transferSize = size;
+  if(size<0){ transferSize = vec.size(); }
+  bool status = recordBuilder.addEvent(vec,0,transferSize);
+  if(status==false){
+    writeRecord(recordBuilder);
+    recordBuilder.addEvent(vec,0,transferSize);
+  }
+}
+
  void writer::writeRecord(recordbuilder &builder){
    builder.build();
    recordInfo_t  recordInfo;
@@ -146,25 +181,25 @@ void writer::close(){
   outputStream.close();
 }
 
-  /***
-   * Function to change the record builder user word one
-   */
-  void writer::setUserIntegerOne(long userIntOne){
-    recordBuilder.setUserWordOne(userIntOne);
-  }
+/***
+* Function to change the record builder user word one
+*/
+void writer::setUserIntegerOne(long userIntOne){
+  recordBuilder.setUserWordOne(userIntOne);
+}
 
-  /***
-   *Function to change the record builder user word two
-   */
-  void writer::setUserIntegerTwo(long userIntTwo){
-    recordBuilder.setUserWordTwo(userIntTwo);
-  }
+/***
+*Function to change the record builder user word two
+*/
+void writer::setUserIntegerTwo(long userIntTwo){
+  recordBuilder.setUserWordTwo(userIntTwo);
+}
 
-  /***
-   *Function to write buffer.
-   */
-  void writer::flush(){
-    writeRecord(recordBuilder);
-  }
+/***
+*Function to write buffer.
+*/
+void writer::flush(){
+  writeRecord(recordBuilder);
+}
 
 }

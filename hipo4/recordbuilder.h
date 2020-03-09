@@ -40,8 +40,8 @@ namespace hipo {
 
         int                bufferIndexEntries;
         int                bufferEventsPosition;
-	long                bufferUserWordOne = 0;
-	long                bufferUserWordTwo = 0;
+	long               bufferUserWordOne = 0;
+	long               bufferUserWordTwo = 0;
 
         int                compressRecord(int src_size);
         int                getRecordLengthRounding(int bufferSize);
