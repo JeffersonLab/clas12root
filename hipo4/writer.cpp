@@ -181,4 +181,25 @@ void writer::close(){
   outputStream.close();
 }
 
+/***
+* Function to change the record builder user word one
+*/
+void writer::setUserIntegerOne(long userIntOne){
+  recordBuilder.setUserWordOne(userIntOne);
+}
+
+/***
+*Function to change the record builder user word two
+*/
+void writer::setUserIntegerTwo(long userIntTwo){
+  recordBuilder.setUserWordTwo(userIntTwo);
+}
+
+/***
+*Function to write buffer.
+*/
+void writer::flush(){
+  writeRecord(recordBuilder);
+}
+
 }

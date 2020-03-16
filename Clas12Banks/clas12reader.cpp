@@ -332,10 +332,9 @@ namespace clas12 {
     if(_btraj.get())_allBanks.push_back(_btraj.get());
     if(_bcher.get())_allBanks.push_back(_bcher.get());
     if(_bft.get())_allBanks.push_back(_bft.get());
+    if(_bvtp.get())_allBanks.push_back(_bvtp.get());
+    
 
-    //Comment in next 2 lines for helicity analysis
-    //if(_bhelonline.get())_allBanks.push_back(*_bhelonline.get());
-    //if(_bhelflip.get())_allBanks.push_back(*_bhelflip.get());
   }
 
 }

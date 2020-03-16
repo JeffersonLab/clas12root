@@ -73,6 +73,7 @@ namespace clas12 {
     
     std::vector<hipo::bank* > getAllBanksPtrs(){return _allBanks;}
     hipo::dictionary& getDictionary(){return _factory;}
+    std::string getFilename(){return _filename;}
     
     void addARegionFDet(){
       //Forward detector needs particles, calorimeter, scintillator,

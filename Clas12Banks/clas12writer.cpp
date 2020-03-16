@@ -19,6 +19,7 @@ namespace clas12 {
   ///different readers but written into one file.
   void clas12writer::assignReader(clas12reader& c12reader){
     _banks.clear();
+   
     for(auto& bank : c12reader.getAllBanksPtrs()){
       std::string bankName = bank->getSchema().getName();
 	if(!savedBankName(bankName)){
@@ -27,11 +28,56 @@ namespace clas12 {
     }
     
     if(_writer.getDictionary().getSchemaList().empty()){
-      addSchemas(c12reader.getDictionary());
-      openFile();	
+      addSchemas(c12reader.getDictionary());   
+      openFile();
     }
-       
+
+    if(_specialBanksBool){
+      processSpecialBanks(c12reader.getFilename());
+    } 
   }
+
+  ////////////////////////////////////////////////////////////////////
+  ///Write the special banks (tag 1) to the output hipo file.
+  void clas12writer::processSpecialBanks(std::string inputFilename){
+    hipo::event inEvent_;
+    hipo::event outEvent_;
+    hipo::dictionary factory_;
+    hipo::reader reader_;
+    std::vector<hipo::bank> specialBanks;
+    
+    setTag(1);
+    reader_.setTags(1);
+    reader_.open(inputFilename.data());
+    reader_.readDictionary(factory_);
+
+    if(hasSchema("HEL::online")) specialBanks.push_back(factory_.getSchema("HEL::online"));
+    if(hasSchema("HEL::flip")) specialBanks.push_back(factory_.getSchema("HEL::flip"));
+    if(hasSchema("RUN::scaler")) specialBanks.push_back(factory_.getSchema("RUN::scaler"));
+    if(hasSchema("RAW::scaler")) specialBanks.push_back(factory_.getSchema("RAW::scaler"));
+    if(hasSchema("RAW::epics")) specialBanks.push_back(factory_.getSchema("RAW::epics"));
+    
+    while(reader_.next()==true){
+      reader_.read(inEvent_);
+      outEvent_.reset();
+      for(auto bank : specialBanks){
+	inEvent_.getStructure(bank);
+	outEvent_.addStructure(bank);
+      }
+      _writer.addEvent(outEvent_);  
+      _nSpecialEvents++;
+    }     
+    setTag(0);
+    
+  }
+  ////////////////////////////////////////////////////////
+  ///check if the writer contains a given schema
+  bool clas12writer::hasSchema(std::string schemaName){
+    std::vector<std::string> schemaList =  _writer.getDictionary().getSchemaList();
+    return std::find( schemaList.begin(), schemaList.end(), schemaName) != schemaList.end();
+  }
+
+  
 
   //////////////////////////////////////////////////////////////
   ///pass bank information to hipo::writer to write out events
@@ -43,26 +89,32 @@ namespace clas12 {
     }
     
     _writer.addEvent(_outEvent);
+    _nEvents++;
   }
 
   /////////////////////////////////////////////////////////////
   ///closes hipo::writer, writes out events still on buffer
   void clas12writer::closeWriter(){
     _writer.close();
+    std::cout<<"clas12writer closed. Wrote "<<_nEvents<<" events and "<<_nSpecialEvents<<" events from special banks"<<std::endl;
   }
 
   ////////////////////////////////////////////////////////////
   ///add schemas to writer
   void clas12writer::addSchemas(hipo::dictionary& factory){
-    for(auto& name : factory.getSchemaList()){
-      _writer.getDictionary().addSchema(factory.getSchema(name.c_str()));  
+    for(auto& schemaName : factory.getSchemaList()){
+      _writer.getDictionary().addSchema(factory.getSchema(schemaName.c_str()));  
     }       
+  }
+
+  void clas12writer::addSchema(std::string schemaName, hipo::dictionary& factory){
+    _writer.getDictionary().addSchema(factory.getSchema(schemaName.c_str()));  
   }
 
   /////////////////////////////////////////////////////////////////////////
   ///opens file in hipo::writer, only open it once.
   void clas12writer::openFile(){
-    cout<<" clas12writer::clas12writing writing to "<<_filename.data()<<endl;
+    std::cout<<" clas12writer writing to "<<_filename.data()<<std::endl;
     _writer.open(_filename.data()); //keep a pointer to the writer
   }
 
@@ -70,6 +122,14 @@ namespace clas12 {
   ///checks if the name of a bank is kept in memory to be skipped
   bool clas12writer::savedBankName(std::string name){
     return std::find(_bankNamesToSkip.begin(), _bankNamesToSkip.end(), name) != _bankNamesToSkip.end();
+  }
+
+  //////////////////////////////////////////////////////////////////////////////////
+  ///Sets a tag for the events record in the writer.
+  ///For the tag to apply to the correct events need to write record using flush().
+  void clas12writer::setTag(long tag){
+    _writer.flush();
+    _writer.setUserIntegerOne(tag);
   }
 
 }
