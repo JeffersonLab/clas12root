@@ -89,11 +89,18 @@ void Ex7_ScalerReader(){
      auto mesonex_rates = scal->getLongCounter(count_mesonex);
      auto all_rates = scal->getLongCounter(count_events);
      Double_t totCharge=0;
-     // for(UInt_t i=0;i<charges.size();i++){
-     //   if( scal->validChargePos(i))totCharge+=charges[i];
-     //   cout<<charges[i]<<" "<<all_rates[i]<<" "<<mesonex_rates[i]<<endl;
-     // }
+     Double_t totAll=0;
+     Double_t totMesonEx=0;
+     for(UInt_t i=0;i<charges.size();i++){
+       if( scal->validChargePos(i)){
+	 totCharge+=charges[i];
+	 totAll+=all_rates[i];
+	 totMesonEx+=mesonex_rates[i];
+       }
+       //cout<<charges[i]<<" "<<all_rates[i]<<" "<<mesonex_rates[i]<<endl;
+     }
      cout<<"Charge compare "<<totCharge<<" "<<scal->getBeamCharge()<<endl;
+     cout<<"Rates all "<<totAll/totCharge<<" "<<totMesonEx/totCharge<<endl;
    }
    gBenchmark->Stop("timer");
    gBenchmark->Print("timer");
