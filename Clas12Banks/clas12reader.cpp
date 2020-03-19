@@ -73,7 +73,6 @@ namespace clas12 {
     if(_factory.hasSchema("RAW::vtp"))
       _bvtp.reset(new clas12::vtp{_factory.getSchema("RAW::vtp")});
 
-    if(_bvtp.get()) cout<<"MAde VTP trigger "<<endl;
     
     makeListBanks();
     
