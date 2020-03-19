@@ -150,6 +150,10 @@ namespace clas12 {
       long pattern = _brunconfig->getTrigger();
       return ( pattern & (1<<k)) != 0;
     }
+    bool checkVTPTriggerBit(uint k){
+      long pattern = _bvtp->makeVTPTriggers();
+      return ( pattern & (1<<k)) != 0;
+    }
 
     scalerreader_ptr scalerReader(){
       if(_scalReader.get()) return _scalReader.get();

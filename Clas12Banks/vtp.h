@@ -28,6 +28,8 @@ namespace clas12 {
     
     int    getCrate(int index){ return getInt(cr_order,index); }
     int    getWord(int index){ return getInt(wo_order,index); }
+    int    getCrate(){ return getInt(cr_order,_index); }
+    int    getWord(){ return getInt(wo_order,_index); }
      
     /**
     * This is virtual method from hipo::bank it will be called
@@ -40,11 +42,16 @@ namespace clas12 {
     long  makeVTPTriggers();
     void  decodeVTPTrigger(int word1vtp, int word2vtp);
     void  addVTPTriggerToEvent(long pattern);
+
+    void setBankEntry(short i){ _index=i;} //faster for BankHist
+    void setEntry(int ind){_index=ind;}
+ 
   private :
 
-    int cr_order;
-    int wo_order;
-     
+    int cr_order{-1};
+    int wo_order{-1};
+    int _index{0};
+    
     std::bitset<32> _VTPBitSet;
   };
 

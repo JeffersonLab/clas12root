@@ -5,6 +5,7 @@
  */
 
 #include "clas12reader.h"
+#include "vtp.h"
 
 namespace clas12 {
 
@@ -68,11 +69,16 @@ namespace clas12 {
       _bcher.reset(new cherenkov{_factory.getSchema("REC::Cherenkov")});
     if(_factory.hasSchema("REC::ForwardTagger"))
       _bft.reset(new forwardtagger{_factory.getSchema("REC::ForwardTagger")});
+    
+    if(_factory.hasSchema("RAW::vtp"))
+      _bvtp.reset(new clas12::vtp{_factory.getSchema("RAW::vtp")});
 
+    if(_bvtp.get()) cout<<"MAde VTP trigger "<<endl;
+    
     makeListBanks();
-
+    
   }
-
+  
   ///////////////////////////////////////////////////////
   ///read the data
   void clas12reader::clearEvent(){
@@ -147,7 +153,7 @@ namespace clas12 {
     if(_btraj.get())_event.getStructure(*_btraj.get());
     if(_bcher.get())_event.getStructure(*_bcher.get());
     if(_bft.get())_event.getStructure(*_bft.get());
-    //if(_bvtp.get())_event.getStructure(*_bvtp.get());
+    if(_bvtp.get())_event.getStructure(*_bvtp.get());
     //if(_bscal.get())_event.getStructure(*_bscal.get());
 
     for(auto& ibank:_addBanks){//if any additional banks requested get those
