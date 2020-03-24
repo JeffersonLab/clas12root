@@ -10,7 +10,7 @@ set(CMAKE_CXX_FLAGS "-fPIC -O3")
 
 
 ##########For local ROOT cmake files comment in the line below and remove the lines commented ##USEROOTSYS
-#######include("cmake/FindROOT.cmake")
+#####include("cmake/FindROOT.cmake")
 list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS}) ############USEROOTSYS
 
 #---Locate the ROOT package and defines a number of variables (e.g. ROOT_INCLUDE_DIRS)

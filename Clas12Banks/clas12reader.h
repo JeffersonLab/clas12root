@@ -73,6 +73,7 @@ namespace clas12 {
     
     std::vector<hipo::bank* > getAllBanksPtrs(){return _allBanks;}
     hipo::dictionary& getDictionary(){return _factory;}
+    std::string getFilename(){return _filename;}
     
     void addARegionFDet(){
       //Forward detector needs particles, calorimeter, scintillator,
@@ -147,6 +148,10 @@ namespace clas12 {
     
     bool checkTriggerBit(uint k){
       long pattern = _brunconfig->getTrigger();
+      return ( pattern & (1<<k)) != 0;
+    }
+    bool checkVTPTriggerBit(uint k){
+      long pattern = _bvtp->makeVTPTriggers();
       return ( pattern & (1<<k)) != 0;
     }
 

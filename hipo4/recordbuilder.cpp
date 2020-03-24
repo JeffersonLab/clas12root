@@ -101,6 +101,14 @@ namespace hipo {
     return wTwo;
   }
 
+  void recordbuilder::setUserWordOne(long userWordOne){
+    bufferUserWordOne = userWordOne;
+  }
+
+  void recordbuilder::setUserWordTwo(long userWordTwo){
+    bufferUserWordTwo = userWordTwo;
+  } 
+
   void recordbuilder::build(){
       int  indexSize = bufferIndexEntries*4;
       int eventsSize = bufferEventsPosition;
@@ -125,8 +133,8 @@ namespace hipo {
       hipo::utils::writeInt(&bufferRecord[0], 32, eventsSize); // (9) magic word
       int compressionWord = (1<<28)|(0x0FFFFFFF&compressedSizeToWriteWords);
       hipo::utils::writeInt(&bufferRecord[0], 36, compressionWord);
-      hipo::utils::writeLong(&bufferRecord[0], 40, 0);
-      hipo::utils::writeLong(&bufferRecord[0], 48, 0);
+      hipo::utils::writeLong(&bufferRecord[0], 40, bufferUserWordOne);
+      hipo::utils::writeLong(&bufferRecord[0], 48, bufferUserWordTwo);
       //printf("record::build uncompressed size = %8d, compressed size = %8d, rounding = %4d , compressed FULL = %6d, record size = %6d, version = %X, size = %5X\n",
       //      uncompressedSize,compressedSize, rounding,compressedSizeToWrite, recordLength*4,versionWord,compressionWord);
   }

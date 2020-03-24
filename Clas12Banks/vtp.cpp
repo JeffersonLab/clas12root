@@ -14,7 +14,7 @@ namespace clas12 {
     auto sch=getSchema();
     cr_order = sch.getEntryOrder("crate");
     wo_order = sch.getEntryOrder("word");
-   }
+  }
 
   long vtp::makeVTPTriggers() {
 
@@ -28,7 +28,7 @@ namespace clas12 {
     int word1VTP, word2VTP, word3VTP= 0;
     const int trig2VTP=100;
   
-    int Nentries=getSize();
+    int Nentries=getRows();
     int loop1=0;
     while (loop1<Nentries) {
 

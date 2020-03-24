@@ -164,6 +164,9 @@ class writer {
      void showSummary();
      void addDictionary(hipo::dictionary &dict);
      hipo::dictionary &getDictionary(){ return writerDictionary;}
+     void setUserIntegerOne(long userIntOne);
+     void setUserIntegerTwo(long userIntTwo);
+     void flush();
 };
 
 };
