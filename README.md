@@ -21,7 +21,7 @@ The Clas12Banks implementation can be used independent of ROOT, although current
 
 For actual Clas12Banks definitions see [HIPO4 DSTs](https://clasweb.jlab.org/wiki/index.php/CLAS12_DSTs)
 
-An interface to the c++ [Run Conditions DataBase](https://github.com/JeffersonLab/rcdb/wiki/Cpp) requires downloading the relevant code from https://github.com/JeffersonLab/rcdb . This is optional and depends on the existence of an environment variable containing the path to the RCDB code.
+An interface to the c++ [Run Conditions DataBase](https://github.com/JeffersonLab/rcdb/wiki/Cpp) requires downloading the relevant code from https://github.com/JeffersonLab/rcdb . This is optional and depends on the existence of an environment variable containing the path to the RCDB code. The interface also requires having MySQL installed.
 
 ## Also see c++ function for accessing banks "Cheat sheet" AccesssingBankDataInCpp.txt in the top level directory.
 
