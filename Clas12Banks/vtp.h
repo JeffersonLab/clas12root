@@ -36,9 +36,6 @@ namespace clas12 {
     * every time a bank is read in the reader. Can be used to sort
     * particles and or map particles by pid or type (i.e. charge)
     */
-    void notify(){
-      //printf("particle class is read again\n");
-    }
     long  makeVTPTriggers();
     void  decodeVTPTrigger(int word1vtp, int word2vtp);
     void  addVTPTriggerToEvent(long pattern);
