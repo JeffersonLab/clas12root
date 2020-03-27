@@ -30,6 +30,7 @@
 #pragma link C++ class clas12::region_cdet+;
 #pragma link C++ class clas12::clas12writer+;
 #pragma link C++ class clas12::clas12reader+;
+#pragma link C++ class clas12::rcdb_reader+;
 #pragma link C++ class clas12::scaler_reader+;
 #pragma link C++ class clas12::mesonex_trigger+;
 #endif
