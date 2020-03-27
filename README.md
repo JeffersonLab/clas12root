@@ -380,3 +380,8 @@ An interface to the run conditions database is implemented by the class rcdb_rea
 To try the example
 
        clas12root RunRoot/Ex8_RcdbReader.C+
+
+
+Or edit the file name in Ex8b_RcdbReader.C to get the conditions corresponding to a particular run file.
+
+       clas12root RunRoot/Ex8b_RcdbReader.C+
