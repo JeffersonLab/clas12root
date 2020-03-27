@@ -21,6 +21,8 @@ The Clas12Banks implementation can be used independent of ROOT, although current
 
 For actual Clas12Banks definitions see [HIPO4 DSTs](https://clasweb.jlab.org/wiki/index.php/CLAS12_DSTs)
 
+An interface to the c++ [Run Conditions DataBase](https://github.com/JeffersonLab/rcdb/wiki/Cpp) requires downloading the relevant code from https://github.com/JeffersonLab/rcdb . This is optional and depends on the existence of an environment variable containing the path to the RCDB code. The interface also requires having MySQL installed.
+
 ## Also see c++ function for accessing banks "Cheat sheet" AccesssingBankDataInCpp.txt in the top level directory.
 
 The Clas12Root package depends on both Hipo and Clas12Banks. This provides ROOT-like analysis tools for operating on clas12 hipo DSTs.
@@ -35,6 +37,10 @@ git clone --recurse-submodules https://github.com/jeffersonlab/clas12root.git
 
 cd clas12root
 
+#To download the RCDB interface 
+
+git clone --recurse-submodules https://github.com/jeffersonlab/rcdb.git
+
 ## To setup Run ROOT
 
 for cshrc
@@ -45,6 +51,10 @@ setenv PATH "$PATH":"$CLAS12ROOT/bin"
 
 setenv HIPO /Where/Is/hipo
 
+#To use the RCDB interface 
+
+setenv RCDB_HOME /Where/Is/rcdb
+
 or for bash
 
 export CLAS12ROOT=$PWD
@@ -52,6 +62,10 @@ export CLAS12ROOT=$PWD
 export PATH="$PATH":"$CLAS12ROOT/bin"
 
 export HIPO=/Where/Is/hipo
+
+#To use the RCDB interface 
+
+export RCDB_HOME /Where/Is/rcdb
 
 ## To install
 
@@ -358,3 +372,16 @@ Start a ROOT note book :
       	root --notebook
 
 Click on the notebook CLAS12Writer3Pi.ipynb and follow the tutorial
+
+## Ex 8 Reading from the Run Conditions DataBase
+
+An interface to the run conditions database is implemented by the class rcdb_reader. It will open a connection to rcdb@clasdb.jlab.org/rcdb and allow you to retrieve condition values for a given run. This class interfaces to the Run Conditions DataBase c++ code, more information on it can be found at https://github.com/JeffersonLab/rcdb/wiki/Cpp and the database itself can be viewed at https://clasweb.jlab.org/rcdb/. An example on how to use the rcdb_reader interface can be found in RunRoot/Ex8_RcdbReader.C
+
+To try the example
+
+       clas12root RunRoot/Ex8_RcdbReader.C+
+
+
+Or edit the file name in Ex8b_RcdbReader.C to get the conditions corresponding to a particular run file.
+
+       clas12root RunRoot/Ex8b_RcdbReader.C+

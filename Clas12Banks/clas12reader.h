@@ -164,6 +164,13 @@ namespace clas12 {
     double getRunBeamCharge() const noexcept{ return _runBeamCharge;}
     double getCurrApproxCharge(){return _runBeamCharge*_nevent/_reader.getEntries();}
 
+
+    void getStructure(hipo::bank* bank){
+      if(_isRead==false)
+	hipoRead();
+      _event.getStructure(*bank);
+    }
+    
     protected:
 
     void initReader();

@@ -36,6 +36,32 @@ add_definitions(-D__LZ4__)
 #after Lz4 change include to include
 set(CMAKE_INSTALL_INCLUDEDIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+#include rcdb c++ header library
+IF (DEFINED ENV{RCDB_HOME})
+  include_directories($ENV{RCDB_HOME}/cpp/include)
+ENDIF (DEFINED ENV{RCDB_HOME})
+
+#find path to mysql include directory
+FIND_PATH(MYSQL_INCLUDE_DIR mysql.h
+  /usr/local/include/mysql
+  /usr/include/mysql
+  )
+
+#find path to mysql library
+SET(MYSQL_NAMES mysqlclient mysqlclient_r)
+FIND_LIBRARY(MYSQL_LIBRARY
+  NAMES ${MYSQL_NAMES}
+  PATHS /usr/lib /usr/local/lib /usr/lib64 /usr/local/lib64
+  PATH_SUFFIXES mysql
+  )
+
+#include mysql library and directory if they were found
+IF (MYSQL_INCLUDE_DIR AND MYSQL_LIBRARY)
+  include_directories(${MYSQL_INCLUDE_DIR})
+  link_libraries(${MYSQL_LIBRARY})
+  add_definitions(-DRCDB_MYSQL)
+ENDIF (MYSQL_INCLUDE_DIR AND MYSQL_LIBRARY)
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/hipo4)
 add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/hipo4)
 
@@ -44,4 +70,7 @@ add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/Clas12Banks)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Clas12Root)
 add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/Clas12Root)
+
+
+
 

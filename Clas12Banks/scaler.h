@@ -29,14 +29,7 @@ namespace clas12 {
     float    getFCupGated(){ return getFloat(_fcupgated_order,0); }
     float    getFCup(){ return getFloat(_fcup_order,0); }
     float    getLiveTime(){ return getFloat(_livetime_order,0); }
-     
-    /**
-    * This is virtual method from hipo::bank it will be called
-    * every time a bank is read in the reader. Can be used to sort
-    * particles and or map particles by pid or type (i.e. charge)
-    */
-    //    void notify(){}
-
+ 
   private :
 
     int _fcupgated_order{-1};
