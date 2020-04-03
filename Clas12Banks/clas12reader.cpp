@@ -99,6 +99,9 @@ namespace clas12 {
     _conditionNames.push_back("beam_energy");
     _conditionValues.push_back(rcdb.getDoubleValue(runNo, "beam_current"));
     _conditionNames.push_back("beam_current");
+
+    //Close connection to database.
+    rcdb.Close();
     
   }
 

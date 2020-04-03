@@ -28,6 +28,7 @@ namespace clas12 {
     double getDoubleValue(int runNb, std::string value);
     std::string getStringValue(int runNb, std::string value);
     std::chrono::time_point<std::chrono::system_clock> getTimeValue(int runNb, std::string value);
+    void Close(){_connection->Close();};
 
   private:
 
