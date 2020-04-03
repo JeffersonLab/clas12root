@@ -19,15 +19,17 @@ RUN git clone --recurse-submodules --single-branch --branch ${RCDB_VERSION} \
     && rm -rf /usr/local/rcdb/.git
 
 # Setup env for clas12root
-ARG CLAS12ROOT_VERSION=1.4
+ARG CLAS12ROOT_VERSION=development
 ENV CLAS12ROOT /usr/local/clas12root
 ENV PATH $PATH:$CLAS12ROOT/bin
 
+# Copy in the local directory contents into the contsiner
+# Allows for builds on local changes for easier development and ci
+COPY . /usr/local/clas12root
+
 # Build and install clas12root
-RUN git clone --recurse-submodules --single-branch --branch ${CLAS12ROOT_VERSION} \
-    https://github.com/jeffersonlab/clas12root.git ${CLAS12ROOT} \
-    && mkdir -p ${CLAS12ROOT}/build \
-    && cd ${CLAS12ROOT}/build \
+RUN mkdir -p /usr/local/clas12root/build \
+    && cd /usr/local/clas12root/build \
     && cmake .. \
     && make -j$(nproc) \
     && cmake .. \
