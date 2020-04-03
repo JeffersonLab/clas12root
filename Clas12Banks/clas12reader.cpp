@@ -76,6 +76,41 @@ namespace clas12 {
     
     makeListBanks();
     
+    #ifdef RCDB_MYSQL
+    queryRcdb();
+    #endif
+    
+  }
+
+  ///////////////////////////////////////////////////////////////////////
+  ///Function to query RCDB and record most relevant run conditions.
+  ///This is only called once to avoid overloading the database.
+  void clas12reader::queryRcdb(){
+    next();//need to read first event
+    auto runNo=runconfig()->getRun(); //get run number for this file
+    getReader().gotoRecord(0); //reset back to start
+    rcdb_reader rcdb; //initialise rcdb_reader
+
+    //Incomplete list of run conditions.
+    //If you add to this list please add values and names in the same order.
+    _conditionValues.push_back(rcdb.getDoubleValue(runNo, "event_count"));
+    _conditionNames.push_back("event_count");
+    _conditionValues.push_back(rcdb.getDoubleValue(runNo, "beam_energy"));
+    _conditionNames.push_back("beam_energy");
+    _conditionValues.push_back(rcdb.getDoubleValue(runNo, "beam_current"));
+    _conditionNames.push_back("beam_current");
+    
+  }
+
+  /////////////////////////////////////////////////////////////////////////
+  ///Function to return a condition value for a given condition name.
+  double clas12reader::getRunCondition(std::string condition){
+    for (int i=0; i<_conditionNames.size();i++){
+      if(_conditionNames[i] == condition){
+	return _conditionValues[i];
+      }
+    }
+    return 0;
   }
   
   ///////////////////////////////////////////////////////
