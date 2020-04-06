@@ -21,18 +21,19 @@ namespace clas12 {
   public:
 
     rcdb_reader();
-    virtual ~rcdb_reader()=default;
+    virtual ~rcdb_reader();
 
     bool getBoolValue(int runNb, std::string value);
     int getIntValue(int runNb, std::string value);
     double getDoubleValue(int runNb, std::string value);
     std::string getStringValue(int runNb, std::string value);
     std::chrono::time_point<std::chrono::system_clock> getTimeValue(int runNb, std::string value);
-    void Close(){_connection->Close();};
+    void Close(){_connection.Close();};
 
   private:
 
-    rcdb::Connection *_connection = new rcdb::Connection("mysql://rcdb@clasdb.jlab.org/rcdb", true);    
+    //  rcdb::Connection *_connection = new rcdb::Connection("mysql://rcdb@clasdb.jlab.org/rcdb", true);    
+    rcdb::Connection _connection;    
 
   };
 

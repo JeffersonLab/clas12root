@@ -4,8 +4,11 @@ namespace clas12 {
 
   /* Empty constructor needed to link _connection to database.
    */
-  rcdb_reader::rcdb_reader(){}
-
+  rcdb_reader::rcdb_reader():_connection{"mysql://rcdb@clasdb.jlab.org/rcdb", true}{}
+  /* explicit close in destructor.
+   */
+  rcdb_reader::~rcdb_reader(){Close();};
+  
   /* Function to return a bool type value, given the value's name and a run
    * number.
    * Will return false if the condition doesn't exist for this run, or the run
@@ -13,7 +16,7 @@ namespace clas12 {
    * If the value is not of type bool the program will stop.
    */
   bool rcdb_reader::getBoolValue(int runNb, std::string value){
-    auto cnd = _connection->GetCondition(runNb, value);
+    auto cnd = _connection.GetCondition(runNb, value);
     bool val = false;
     if(!cnd){
       cout<<"The condition "<<value<<" does not exist for run "<<runNb<<"."<<endl;
@@ -37,7 +40,7 @@ namespace clas12 {
    * If the value is not of type integer the program will stop.
    */
   int rcdb_reader::getIntValue(int runNb, std::string value){
-    auto cnd = _connection->GetCondition(runNb, value);
+    auto cnd = _connection.GetCondition(runNb, value);
     int val = -1;
     if(!cnd){
       cout<<"The condition "<<value<<" does not exist for run "<<runNb<<"."<<endl;
@@ -61,7 +64,7 @@ namespace clas12 {
    * If the value is not of type double the program will stop.
    */
   double rcdb_reader::getDoubleValue(int runNb, std::string value){
-    auto cnd = _connection->GetCondition(runNb, value);
+    auto cnd = _connection.GetCondition(runNb, value);
     double val = -1;
     if(!cnd){
       cout<<"The condition "<<value<<" does not exist for run "<<runNb<<"."<<endl;
@@ -85,7 +88,7 @@ namespace clas12 {
    * If the value is not of type string the program will stop.
    */
   std::string rcdb_reader::getStringValue(int runNb, std::string value){
-    auto cnd = _connection->GetCondition(runNb, value);
+    auto cnd = _connection.GetCondition(runNb, value);
     std::string val = "Error";
     if(!cnd){
       cout<<"The condition "<<value<<" does not exist for run "<<runNb<<"."<<endl;
@@ -109,7 +112,7 @@ namespace clas12 {
    * If the value is not of type time_point the program will stop.
    */
   std::chrono::time_point<std::chrono::system_clock> rcdb_reader::getTimeValue(int runNb, std::string value){
-    auto cnd = _connection->GetCondition(runNb, value);
+    auto cnd = _connection.GetCondition(runNb, value);
     std::chrono::time_point<std::chrono::system_clock> val = std::chrono::system_clock::now();
     if(!cnd){
       cout<<"The condition "<<value<<" does not exist for run "<<runNb<<"."<<endl;
