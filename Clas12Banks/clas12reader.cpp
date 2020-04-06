@@ -9,7 +9,9 @@
 
 namespace clas12 {
 
-  clas12reader::clas12reader(std::string filename,std::vector<long> tags):_filename(filename){
+  clas12reader::clas12reader(std::string filename,std::vector<long> tags):
+    _filename(filename){
+
     cout<<" clas12reader::clas12reader reading "<<filename.data()<<endl;
     _reader.setTags(tags);
  
@@ -19,7 +21,9 @@ namespace clas12 {
   ///copy constructor
   ///opens a new reader
   ///Can give alternative filename
-  clas12reader::clas12reader(const clas12reader &other,std::string filename,std::vector<long> tags):_filename(filename){
+  clas12reader::clas12reader(const clas12reader &other,std::string filename,
+			     std::vector<long> tags):_filename(filename){
+    
     cout<<" clas12reader::clas12reader reading "<<filename.data()<<endl;
 
     //if default filename take same file as original
@@ -33,16 +37,13 @@ namespace clas12 {
     _pidSelect=other._pidSelect;
     _pidSelectExact=other._pidSelectExact;
     _zeroOfRestPid=other._zeroOfRestPid;
-    _useFTBased=other._useFTBased;;
+    _useFTBased=other._useFTBased;
 
   }
   void clas12reader::initReader(){
     _reader.open(_filename.data()); //keep a pointer to the reader
 
-    //Get general Run info first
-    queryRcdb();
- 
-    // hipo::dictionary  factory;
+      // hipo::dictionary  factory;
     _reader.readDictionary(_factory);
 
     //initialise banks pointers
@@ -79,44 +80,54 @@ namespace clas12 {
     
     makeListBanks();
     
-    
+    //Get general Run info first
+    queryRcdb();
+ 
+
   }
 
+  ///////////////////////////////////////////////////////////////////////
+  ///Basically get the run number!
+  ///will open and close a hipo file
+  void clas12reader::readQuickRunConfig(){
+    hipo::reader     areader;
+    hipo::event      anevent;
+    hipo::dictionary  afactory;
+    
+    areader.setTags(1);
+    areader.open(_filename.data()); //keep a pointer to the reader
+    areader.readDictionary(afactory);
+    
+    clas12::runconfig  arunconf(afactory.getSchema("RUN::config"));
+
+    areader.next();
+    areader.read(anevent);
+    anevent.getStructure(arunconf);
+
+    _runNo=arunconf.getRun();
+  
+    std::cout<<"Found run number : "<<_runNo<<std::endl;
+    
+  }
   ///////////////////////////////////////////////////////////////////////
   ///Function to query RCDB and record most relevant run conditions.
   ///This is only called once to avoid overloading the database.
   void clas12reader::queryRcdb(){
-    next();//need to read first event
-    auto runNo=runconfig()->getRun(); //get run number for this file
-    getReader().gotoRecord(0); //reset back to start
+    if(_rcdbQueried==true) return; //only allowed to call once
+    _rcdbQueried=true;
 
 #ifdef RCDB_MYSQL
-    rcdb_reader rcdb; //initialise rcdb_reader
+    readQuickRunConfig();
+    rcdb_reader rc{_runNo}; //initialise rcdb_reader
     
-    //Incomplete list of run conditions.
-    //If you add to this list please add values and names in the same order.
-    _conditionValues.push_back(rcdb.getDoubleValue(runNo, "event_count"));
-    _conditionNames.push_back("event_count");
-    _conditionValues.push_back(rcdb.getDoubleValue(runNo, "beam_energy"));
-    _conditionNames.push_back("beam_energy");
-    _conditionValues.push_back(rcdb.getDoubleValue(runNo, "beam_current"));
-    _conditionNames.push_back("beam_current");
+    //For full list see https://clasweb.jlab.org/rcdb/conditions/
+    _rcdbVals = rc.readAll();
     
-  
+    
 #endif
-    //rcdb connection closed when rcdb goes out of scope here 
+    //rcdb connection closed when rc goes out of scope here 
   }
 
-  /////////////////////////////////////////////////////////////////////////
-  ///Function to return a condition value for a given condition name.
-  double clas12reader::getRunCondition(std::string condition){
-    for (int i=0; i<_conditionNames.size();i++){
-      if(_conditionNames[i] == condition){
-	return _conditionValues[i];
-      }
-    }
-    return 0;
-  }
   
   ///////////////////////////////////////////////////////
   ///read the data

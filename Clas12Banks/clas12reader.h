@@ -184,11 +184,7 @@ namespace clas12 {
     
     private:
 
-    //rcdb
-    void queryRcdb();
-    std::vector<double> _conditionValues;
-    std::vector<std::string> _conditionNames;
-
+    
     void hipoRead(){
       _reader.read(_event);
       _isRead=true;
@@ -235,7 +231,20 @@ namespace clas12 {
     //this vector links to raw ptrs, does not own
     std::vector<region_part_ptr> _detParticles;
 
+    //rcdb
+    void queryRcdb();
+    void readQuickRunConfig();
+    
+    //  std::vector<double> _conditionValues;
+    //std::vector<std::string> _conditionNames;
+    int _runNo{0};
+    
+#ifdef RCDB_MYSQL
+    rcdb_vals _rcdbVals;
+    const rcdb_vals& getRcdbVals(){return _rcdbVals;}
+#endif
 
+    
     double _runBeamCharge{0};
     long _nevent{0};
     ushort _nparts{0};
@@ -245,7 +254,8 @@ namespace clas12 {
 
     std::vector<short> _pids;
     bool _isRead{false};
-
+    bool _rcdbQueried=false;
+    
     //members that need copied in constructor
     scalerreader_uptr _scalReader;
     std::vector<short> _givenPids;
