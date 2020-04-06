@@ -45,6 +45,9 @@
 #include <string>
 #include <iostream>
 
+#ifdef RCDB_MYSQL
+   #include "rcdb_reader.h"
+#endif
 
 namespace clas12 {
   using std::cout;
@@ -170,6 +173,9 @@ namespace clas12 {
 	hipoRead();
       _event.getStructure(*bank);
     }
+
+    //rcdb
+    double getRunCondition(std::string condition);
     
     protected:
 
@@ -177,6 +183,11 @@ namespace clas12 {
     
     
     private:
+
+    //rcdb
+    void queryRcdb();
+    std::vector<double> _conditionValues;
+    std::vector<std::string> _conditionNames;
 
     void hipoRead(){
       _reader.read(_event);
