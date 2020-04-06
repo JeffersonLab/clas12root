@@ -76,9 +76,7 @@ namespace clas12 {
     
     makeListBanks();
     
-    #ifdef RCDB_MYSQL
     queryRcdb();
-    #endif
     
   }
 
@@ -89,8 +87,10 @@ namespace clas12 {
     next();//need to read first event
     auto runNo=runconfig()->getRun(); //get run number for this file
     getReader().gotoRecord(0); //reset back to start
-    rcdb_reader rcdb; //initialise rcdb_reader
 
+#ifdef RCDB_MYSQL
+    rcdb_reader rcdb; //initialise rcdb_reader
+    
     //Incomplete list of run conditions.
     //If you add to this list please add values and names in the same order.
     _conditionValues.push_back(rcdb.getDoubleValue(runNo, "event_count"));
@@ -99,9 +99,10 @@ namespace clas12 {
     _conditionNames.push_back("beam_energy");
     _conditionValues.push_back(rcdb.getDoubleValue(runNo, "beam_current"));
     _conditionNames.push_back("beam_current");
-
+    
     //Close connection to database.
     rcdb.Close();
+#endif
     
   }
 
