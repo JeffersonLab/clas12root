@@ -10,7 +10,7 @@ Examples are given for running in interactive ROOT sessions and ROOT-Jupyter not
 
 We now use an external hipo4 repository. This must be pointed at with the variable HIPO when installing. The files from hipo/hipo4 will be copied here to Hipo4.
 
-###NEW
+### NEW
 
 A default hipo implementation is now packed with clas12root. If you prefer to use this do not set the enviroment variable HIPO. If you would like to use a different version of the hipo library set HIPO. You may get the most up to data hipo library from
 
@@ -32,52 +32,76 @@ The Clas12Root package depends on both Hipo and Clas12Banks. This provides ROOT-
     HipoProof
 
 ## To Download
-
+```bash
 git clone --recurse-submodules https://github.com/jeffersonlab/clas12root.git
-
 cd clas12root
-
 #To download the RCDB interface 
-
 git clone --recurse-submodules https://github.com/jeffersonlab/rcdb.git
+```
 
 ## To setup Run ROOT
 
 for cshrc
-
+```sh
 setenv CLAS12ROOT $PWD  (the actual path can be added in your bashrc or tchrc)
-
 setenv PATH "$PATH":"$CLAS12ROOT/bin"
-
 setenv HIPO /Where/Is/hipo
-
 #To use the RCDB interface 
-
 setenv RCDB_HOME /Where/Is/rcdb
+```
 
 or for bash
-
+```bash
 export CLAS12ROOT=$PWD
-
 export PATH="$PATH":"$CLAS12ROOT/bin"
-
 export HIPO=/Where/Is/hipo
-
 #To use the RCDB interface 
-
 export RCDB_HOME /Where/Is/rcdb
+```
 
 ## To install
 
-   installC12Root
-
+```bash
+installC12Root
+```
 
 If there are issues with cmake and your ROOTSYS you can try using the local FindROOT file. Edit the CMakeList.txt files removing the lines with comment ##USEROOTSYS and uncomment the line
 
    	 #######include("cmake/FindROOT.cmake")
 
-**Note just to help confuse you the first letter in bank items have been capitilised so where you might expect to use REC::Particle::pz, or particle->getpz(), you will find Pz will work better, similarly Time, Energy...You can check the bank header files e.g. Clas12Banks4/particle.h and look at the get function declarations e.g. getPz() rather than getpz() **
-	 
+**Note just to help confuse you the first letter in bank items have been capitilised so where you might expect to use `REC::Particle::pz`, or `particle->getpz()`, you will find Pz will work better, similarly Time, Energy...You can check the bank header files e.g. Clas12Banks4/particle.h and look at the get function declarations e.g. `getPz()` rather than `getpz()` **
+
+## Running with docker
+
+If you have docker installed you can also build and run clas12root in a container. 
+
+To build the container you can use the same [download](#to-download) procedure and then once in the cals12root folder run.
+
+```bash
+docker build -t clas12root .
+```
+
+Once the container is built you can run the clas12root interactive session with:
+
+```bash
+docker run --rm -it -v $PWD:/work -w /work clas12root
+```
+
+While in the folder you can use this to run some of the examples.
+
+```bash
+docker run --rm -it -v $PWD:/work -w /work clas12root RunRoot/Ex8_RcdbReader.C
+```
+
+You can also run a jupyter server from the dockerfile with. 
+
+```bash
+docker run --rm -it -p 8888:8888 -v $HOME/Data:/data -v $PWD:/work -w /work --entrypoint='jupyter' clas12root notebook --allow-root --ip=0.0.0.0 --port=8888
+```
+
+After you run this copy and paste the url from the terminal into a web browser and start coding.
+
+
 ## interactive root session
 
 To start an interactive session with pre-loaded Clas12Root use clas12root instead of root on the command line.
@@ -112,7 +136,7 @@ You can group histograms together for lazy execution if they all come from the s
 
 The clas12reader class performs the correlation of particle and detector inofmation (aka reverse indexing). When looping over particles you are looping over region_particle (see Clas12Banks for full reference). Each region, FT, FD and CD has its own definition of a region_particle so it will only return meaningful data (i.e. a CD particle will return 0 for FD detector information). In addition the getTime, getPath, getDetEnergy functions have predefined meaning for each region, e.g. for FT getTime returns FTCAL time, for FD it returns FTOF1A if it exists, if not it will try FTOF1B, FTOF2 then PCAL.
 
-  ###NEW you can add hipo file tags to clas12reader e.g.
+  ### NEW you can add hipo file tags to clas12reader e.g.
 
          clas12reader c12("file.hipo",{0,1,6});
 
@@ -152,11 +176,9 @@ Also you can check trigger bits directly
 
 To install rootbooks see https://root.cern.ch/how/how-create-rootbook
 
-mkdir myNotebooks
-
-cp -r $CLAS12ROOT/RunRoot/jupy myNotebooks/.
-
-cd myNotebooks/jupy
+       mkdir myNotebooks
+       cp -r $CLAS12ROOT/RunRoot/jupy myNotebooks/.
+       cd myNotebooks/jupy
 
 Start a ROOT note book :
 
