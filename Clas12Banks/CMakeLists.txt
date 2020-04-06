@@ -1,3 +1,29 @@
+#include rcdb c++ header library
+IF (DEFINED ENV{RCDB_HOME})
+  include_directories($ENV{RCDB_HOME}/cpp/include)
+  #find path to mysql include directory
+  FIND_PATH(MYSQL_INCLUDE_DIR mysql.h
+    /usr/local/include/mysql
+    /usr/include/mysql
+    )
+
+  #find path to mysql library
+  SET(MYSQL_NAMES mysqlclient mysqlclient_r)
+  FIND_LIBRARY(MYSQL_LIBRARY
+    NAMES ${MYSQL_NAMES}
+    PATHS /usr/lib /usr/local/lib /usr/lib64 /usr/local/lib64
+    PATH_SUFFIXES mysql
+    )
+
+  #include mysql library and directory if they were found
+  IF (MYSQL_INCLUDE_DIR AND MYSQL_LIBRARY)
+    include_directories(${MYSQL_INCLUDE_DIR})
+    link_libraries(${MYSQL_LIBRARY})
+    add_definitions(-DRCDB_MYSQL)
+  ENDIF (MYSQL_INCLUDE_DIR AND MYSQL_LIBRARY)
+
+ENDIF (DEFINED ENV{RCDB_HOME})
+
 #Only compile rcdb_reader if the path to RCDB library is set in RCDB_HOME.
 IF (DEFINED ENV{RCDB_HOME})
 
