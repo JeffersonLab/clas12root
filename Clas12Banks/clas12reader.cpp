@@ -80,22 +80,20 @@ namespace clas12 {
     
     makeListBanks();
     
-    //Get general Run info first
-    queryRcdb();
- 
+  
 
   }
 
   ///////////////////////////////////////////////////////////////////////
   ///Basically get the run number!
   ///will open and close a hipo file
-  void clas12reader::readQuickRunConfig(){
+  int  clas12reader::readQuickRunConfig(const std::string& filename) {
     hipo::reader     areader;
     hipo::event      anevent;
     hipo::dictionary  afactory;
     
     areader.setTags(1);
-    areader.open(_filename.data()); //keep a pointer to the reader
+    areader.open(filename.data()); //keep a pointer to the reader
     areader.readDictionary(afactory);
     
     clas12::runconfig  arunconf(afactory.getSchema("RUN::config"));
@@ -104,10 +102,10 @@ namespace clas12 {
     areader.read(anevent);
     anevent.getStructure(arunconf);
 
-    _runNo=arunconf.getRun();
+    int runNo=arunconf.getRun();
   
-    std::cout<<"Found run number : "<<_runNo<<std::endl;
-    
+    std::cout<<"Found run number : "<<runNo<<std::endl;
+    return runNo;
   }
   ///////////////////////////////////////////////////////////////////////
   ///Function to query RCDB and record most relevant run conditions.
@@ -117,13 +115,12 @@ namespace clas12 {
     _rcdbQueried=true;
 
 #ifdef RCDB_MYSQL
-    readQuickRunConfig();
-    rcdb_reader rc{_runNo}; //initialise rcdb_reader
+    _runNo=readQuickRunConfig(_filename);
+    
+    rcdb_reader rc; //initialise rcdb_reader
     
     //For full list see https://clasweb.jlab.org/rcdb/conditions/
-    _rcdbVals = rc.readAll();
-    
-    
+    _rcdbVals = rc.readAll(_runNo,getFilename());
 #endif
     //rcdb connection closed when rc goes out of scope here 
   }

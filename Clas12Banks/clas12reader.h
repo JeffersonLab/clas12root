@@ -37,6 +37,7 @@
 #include "region_cdet.h"
 #include "region_ft.h"
 #include "scaler_reader.h"
+#include "rcdb_vals.h"
 
 #include "dictionary.h"
 
@@ -175,8 +176,9 @@ namespace clas12 {
     }
 
     //rcdb
-    double getRunCondition(std::string condition);
-    
+    static int readQuickRunConfig(const std::string& filename);
+   void queryRcdb();
+ 
     protected:
 
     void initReader();
@@ -231,20 +233,7 @@ namespace clas12 {
     //this vector links to raw ptrs, does not own
     std::vector<region_part_ptr> _detParticles;
 
-    //rcdb
-    void queryRcdb();
-    void readQuickRunConfig();
-    
-    //  std::vector<double> _conditionValues;
-    //std::vector<std::string> _conditionNames;
-    int _runNo{0};
-    
-#ifdef RCDB_MYSQL
-    rcdb_vals _rcdbVals;
-    const rcdb_vals& getRcdbVals(){return _rcdbVals;}
-#endif
-
-    
+     
     double _runBeamCharge{0};
     long _nevent{0};
     ushort _nparts{0};
@@ -263,6 +252,23 @@ namespace clas12 {
     std::map<short,short> _pidSelectExact;
     bool _zeroOfRestPid{false};
     bool _useFTBased{false};
+
+       //rcdb
+    int _runNo{0};
+    
+    ///////////////////////////////RCDB
+   private:
+
+    rcdb_vals _rcdbVals;
+
+  public:
+
+    const rcdb_vals& getRcdbVals(){return _rcdbVals;}
+    void setRcdbVals(const rcdb_vals& vals){_rcdbVals=vals;}
+    
+  private:
+ ///////////////////////////////
+
    };
   //helper functions
   

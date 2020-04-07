@@ -2,11 +2,17 @@
 
 
 #include "clas12reader.h"
+#include "TRcdbVals.h"
 
 #include <TNamed.h>
 #include <TChain.h>
 #include <TObjArray.h>
 #include <TString.h>
+#include <TSystem.h>
+
+#ifdef RCDB_MYSQL
+   #include "rcdb_reader.h"
+#endif
 
 namespace clas12root {
 
@@ -17,6 +23,11 @@ namespace clas12root {
   public :
     HipoChain();
     virtual ~HipoChain()=default;
+    HipoChain(const HipoChain& other) = default; //Copy Constructor
+    HipoChain(HipoChain&& other) = default; //Move Constructor
+      
+    HipoChain& operator=(const HipoChain& other)=default;
+    HipoChain& operator=(HipoChain&& other)=default;
 
 
     void Add(TString name);
@@ -50,6 +61,20 @@ namespace clas12root {
 
     void AddBeamCharge(Double_t bc){_totBeamCharge+=bc;}
     Double_t TotalBeamCharge() const noexcept{return _totBeamCharge;}
+
+
+
+///////////////////////////////RCDB
+    void WriteRcdbData(TString filename);
+    clas12::rcdb_vals FetchRunRcdb(const TString& datafile);
+
+    void SetRcdbFile(const TString& filename ){
+      //needs full path for PROOF
+      if(filename.BeginsWith("/")==kFALSE&&filename.BeginsWith("$")==kFALSE)
+	_rcdbFileName = TString(gSystem->Getenv("PWD"))+"/"+filename;
+      else _rcdbFileName=filename;
+    }
+///////////////////////////////
     
   private :
     TChain _tchain;
@@ -66,7 +91,11 @@ namespace clas12root {
     Int_t _idxFile{0};
 
     Double_t _totBeamCharge{0};
+
+    TString _rcdbFileName;
     
     ClassDef(clas12root::HipoChain,1);
   };
+
+ 
 }

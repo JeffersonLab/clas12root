@@ -33,7 +33,8 @@ namespace clas12root{
       void    Begin(TTree *tree) override;
       void    SlaveBegin(TTree *tree) override;
       Bool_t  Process(Long64_t entry) override;
-     
+      Bool_t  Notify() override;
+      
       virtual Bool_t ProcessEvent() =  0; //loop action to be defined in derived class
 
       virtual void AddFilter(){};
@@ -41,7 +42,9 @@ namespace clas12root{
   protected:
       
       std::unique_ptr<clas12::clas12reader> _c12;//!
- 
+
+      void Rcdb();
+      
     private:
 
       HipoChain* _chain{nullptr};

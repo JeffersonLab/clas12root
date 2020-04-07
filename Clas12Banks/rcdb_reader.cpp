@@ -4,10 +4,10 @@ namespace clas12 {
 
   /* Empty constructor needed to link _connection to database.
    */
-  rcdb_reader::rcdb_reader(int runNb):_connection{"mysql://rcdb@clasdb.jlab.org/rcdb", true},_runNb{runNb}{}
+  rcdb_reader::rcdb_reader():_connection{"mysql://rcdb@clasdb.jlab.org/rcdb", true}{}
    /* explicit close in destructor.
    */
-  rcdb_reader::~rcdb_reader(){Close();};
+  rcdb_reader::~rcdb_reader(){close();};
   
   /* Function to return a bool type value, given the value's name and a run
    * number.
@@ -132,35 +132,36 @@ namespace clas12 {
   /* Function to read all conditions given in https://clasweb.jlab.org/rcdb/conditions/
      returns a copy of all vals
    */
-  rcdb_vals rcdb_reader::readAll(){
+  rcdb_vals rcdb_reader::readAll(int runNb,const string& filename){
     rcdb_vals fetcher;
-    fetcher.beam_current=getDoubleValue(_runNb, "beam_current");
-    fetcher.beam_energy=getDoubleValue(_runNb, "beam_energy");
-    fetcher.events_rate=getDoubleValue(_runNb, "events_rate");
-    fetcher.solenoid_current=getDoubleValue(_runNb, "solenoid_current");
-    fetcher.solenoid_scale=getDoubleValue(_runNb, "solenoid_scale");
-    fetcher.target_position=getDoubleValue(_runNb, "target_position");
-    fetcher.test=getDoubleValue(_runNb, "test");
-    fetcher.torus_current=getDoubleValue(_runNb, "torus_current");
-    fetcher.torus_scale=getDoubleValue(_runNb, "torus_scale");
+    fetcher.run_number=runNb;//additional keep the run number
+    fetcher.beam_current=getDoubleValue(runNb, "beam_current");
+    fetcher.beam_energy=getDoubleValue(runNb, "beam_energy");
+    fetcher.events_rate=getDoubleValue(runNb, "events_rate");
+    fetcher.solenoid_current=getDoubleValue(runNb, "solenoid_current");
+    fetcher.solenoid_scale=getDoubleValue(runNb, "solenoid_scale");
+    fetcher.target_position=getDoubleValue(runNb, "target_position");
+    fetcher.test=getDoubleValue(runNb, "test");
+    fetcher.torus_current=getDoubleValue(runNb, "torus_current");
+    fetcher.torus_scale=getDoubleValue(runNb, "torus_scale");
     
-    fetcher.event_count=getIntValue(_runNb, "event_count");
-    fetcher.evio_files_count=getIntValue(_runNb, "evio_files_count");
-    fetcher.half_wave_plate=getIntValue(_runNb, "half_wave_plate");
-    fetcher.megabyte_count=getIntValue(_runNb, "megabyte_count");
-    fetcher.status=getIntValue(_runNb, "status");
-    fetcher.temperature=getIntValue(_runNb, "temperature");
+    fetcher.event_count=getIntValue(runNb, "event_count");
+    fetcher.evio_files_count=getIntValue(runNb, "evio_files_count");
+    fetcher.half_wave_plate=getIntValue(runNb, "half_wave_plate");
+    fetcher.megabyte_count=getIntValue(runNb, "megabyte_count");
+    fetcher.status=getIntValue(runNb, "status");
+    fetcher.temperature=getIntValue(runNb, "temperature");
 
-    
-    fetcher.beam_current_request=getStringValue(_runNb, "beam_current_request");
-    fetcher.daq_comment=getStringValue(_runNb, "daq_comment");
-    fetcher.daq_config=getStringValue(_runNb, "daq_config");
-    fetcher.daq_setup=getStringValue(_runNb, "daq_setup");
-    fetcher.daq_trigger=getStringValue(_runNb, "daq_trigger");
-    fetcher.operators=getStringValue(_runNb, "operators");
-    fetcher.run_type=getStringValue(_runNb, "run_type");
-    fetcher.target=getStringValue(_runNb, "target");
-    fetcher.user_comment=getStringValue(_runNb, "user_comment");
+    fetcher.file_name=filename;
+    fetcher.beam_current_request=getStringValue(runNb, "beam_current_request");
+    fetcher.daq_comment=getStringValue(runNb, "daq_comment");
+    fetcher.daq_config=getStringValue(runNb, "daq_config");
+    fetcher.daq_setup=getStringValue(runNb, "daq_setup");
+    fetcher.daq_trigger=getStringValue(runNb, "daq_trigger");
+    fetcher.operators=getStringValue(runNb, "operators");
+    fetcher.run_type=getStringValue(runNb, "run_type");
+    fetcher.target=getStringValue(runNb, "target");
+    fetcher.user_comment=getStringValue(runNb, "user_comment");
      
     return fetcher;
   }
