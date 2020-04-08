@@ -92,7 +92,7 @@ namespace clas12 {
     hipo::event      anevent;
     hipo::dictionary  afactory;
     
-    areader.setTags(1);
+    areader.setTags(0);
     areader.open(filename.data()); //keep a pointer to the reader
     areader.readDictionary(afactory);
     
