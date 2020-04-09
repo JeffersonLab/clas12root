@@ -4,8 +4,11 @@ namespace clas12 {
 
   /* Empty constructor needed to link _connection to database.
    */
-  rcdb_reader::rcdb_reader(){}
-
+  rcdb_reader::rcdb_reader():_connection{"mysql://rcdb@clasdb.jlab.org/rcdb", true}{}
+   /* explicit close in destructor.
+   */
+  rcdb_reader::~rcdb_reader(){close();};
+  
   /* Function to return a bool type value, given the value's name and a run
    * number.
    * Will return false if the condition doesn't exist for this run, or the run
@@ -13,7 +16,7 @@ namespace clas12 {
    * If the value is not of type bool the program will stop.
    */
   bool rcdb_reader::getBoolValue(int runNb, std::string value){
-    auto cnd = _connection->GetCondition(runNb, value);
+    auto cnd = _connection.GetCondition(runNb, value);
     bool val = false;
     if(!cnd){
       cout<<"The condition "<<value<<" does not exist for run "<<runNb<<"."<<endl;
@@ -37,7 +40,7 @@ namespace clas12 {
    * If the value is not of type integer the program will stop.
    */
   int rcdb_reader::getIntValue(int runNb, std::string value){
-    auto cnd = _connection->GetCondition(runNb, value);
+    auto cnd = _connection.GetCondition(runNb, value);
     int val = -1;
     if(!cnd){
       cout<<"The condition "<<value<<" does not exist for run "<<runNb<<"."<<endl;
@@ -61,7 +64,7 @@ namespace clas12 {
    * If the value is not of type double the program will stop.
    */
   double rcdb_reader::getDoubleValue(int runNb, std::string value){
-    auto cnd = _connection->GetCondition(runNb, value);
+    auto cnd = _connection.GetCondition(runNb, value);
     double val = -1;
     if(!cnd){
       cout<<"The condition "<<value<<" does not exist for run "<<runNb<<"."<<endl;
@@ -85,7 +88,7 @@ namespace clas12 {
    * If the value is not of type string the program will stop.
    */
   std::string rcdb_reader::getStringValue(int runNb, std::string value){
-    auto cnd = _connection->GetCondition(runNb, value);
+    auto cnd = _connection.GetCondition(runNb, value);
     std::string val = "Error";
     if(!cnd){
       cout<<"The condition "<<value<<" does not exist for run "<<runNb<<"."<<endl;
@@ -109,7 +112,7 @@ namespace clas12 {
    * If the value is not of type time_point the program will stop.
    */
   std::chrono::time_point<std::chrono::system_clock> rcdb_reader::getTimeValue(int runNb, std::string value){
-    auto cnd = _connection->GetCondition(runNb, value);
+    auto cnd = _connection.GetCondition(runNb, value);
     std::chrono::time_point<std::chrono::system_clock> val = std::chrono::system_clock::now();
     if(!cnd){
       cout<<"The condition "<<value<<" does not exist for run "<<runNb<<"."<<endl;
@@ -125,4 +128,43 @@ namespace clas12 {
     }
     return val;
     }
+
+  /* Function to read all conditions given in https://clasweb.jlab.org/rcdb/conditions/
+     returns a copy of all vals
+   */
+  rcdb_vals rcdb_reader::readAll(int runNb,const string& filename){
+    rcdb_vals fetcher;
+    fetcher.run_number=runNb;//additional keep the run number
+    fetcher.beam_current=getDoubleValue(runNb, "beam_current");
+    fetcher.beam_energy=getDoubleValue(runNb, "beam_energy");
+    fetcher.events_rate=getDoubleValue(runNb, "events_rate");
+    fetcher.solenoid_current=getDoubleValue(runNb, "solenoid_current");
+    fetcher.solenoid_scale=getDoubleValue(runNb, "solenoid_scale");
+    fetcher.target_position=getDoubleValue(runNb, "target_position");
+    fetcher.test=getDoubleValue(runNb, "test");
+    fetcher.torus_current=getDoubleValue(runNb, "torus_current");
+    fetcher.torus_scale=getDoubleValue(runNb, "torus_scale");
+    
+    fetcher.event_count=getIntValue(runNb, "event_count");
+    fetcher.evio_files_count=getIntValue(runNb, "evio_files_count");
+    fetcher.half_wave_plate=getIntValue(runNb, "half_wave_plate");
+    fetcher.megabyte_count=getIntValue(runNb, "megabyte_count");
+    fetcher.status=getIntValue(runNb, "status");
+    fetcher.temperature=getIntValue(runNb, "temperature");
+
+    fetcher.file_name=filename;
+    fetcher.beam_current_request=getStringValue(runNb, "beam_current_request");
+    fetcher.daq_comment=getStringValue(runNb, "daq_comment");
+    fetcher.daq_config=getStringValue(runNb, "daq_config");
+    fetcher.daq_setup=getStringValue(runNb, "daq_setup");
+    fetcher.daq_trigger=getStringValue(runNb, "daq_trigger");
+    fetcher.operators=getStringValue(runNb, "operators");
+    fetcher.run_type=getStringValue(runNb, "run_type");
+    fetcher.target=getStringValue(runNb, "target");
+    fetcher.user_comment=getStringValue(runNb, "user_comment");
+     
+    return fetcher;
+  }
+
+  
 }

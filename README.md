@@ -397,13 +397,29 @@ Click on the notebook CLAS12Writer3Pi.ipynb and follow the tutorial
 
 ## Ex 8 Reading from the Run Conditions DataBase
 
-An interface to the run conditions database is implemented by the class rcdb_reader. It will open a connection to rcdb@clasdb.jlab.org/rcdb and allow you to retrieve condition values for a given run. This class interfaces to the Run Conditions DataBase c++ code, more information on it can be found at https://github.com/JeffersonLab/rcdb/wiki/Cpp and the database itself can be viewed at https://clasweb.jlab.org/rcdb/. An example on how to use the rcdb_reader interface can be found in RunRoot/Ex8_RcdbReader.C
+clas12reader can make a connection to the RCDB database and download the relevent information for a run. The downloaded information can be accessed via a rcdb_vals struct,
+
+      clas12reader c12("/a/hipo/file.hipo");
+      c12.queryRcdb(); //only check rcdb values when asked to (and RCDB_HOME was set)
+      auto rcdbData=c12.getRcdbVals();//struct with all relevent rcdb values
+      auto energy = rcdbData.beam_energy;
+      
+An interface to the run conditions database is implemented by the class rcdb_reader. It will open a connection to rcdb@clasdb.jlab.org/rcdb and allow you to retrieve condition values for a given run. This class interfaces to the Run Conditions DataBase c++ code, more information on it can be found at https://github.com/JeffersonLab/rcdb/wiki/Cpp and the database itself can be viewed at https://clasweb.jlab.org/rcdb/. A full list of the relevent variables can be found at https://clasweb.jlab.org/rcdb/conditions/
+
+An example on how to use the raw rcdb_reader interface can be found in RunRoot/Ex8_RcdbReader.C. But users should just use the clas12reader functions rather than handling rcdb_reader directly to limit the number of connections and queries as given in Ex8b_RcdbReader.C.
+
 
 To try the example
 
-       clas12root RunRoot/Ex8_RcdbReader.C+
-
-
-Or edit the file name in Ex8b_RcdbReader.C to get the conditions corresponding to a particular run file.
-
        clas12root RunRoot/Ex8b_RcdbReader.C+
+ 
+In the case where many files are to be analysed use of HipoChain is recommended and this includes some rcdb features. Once a chain of file is created it can be used to access the RCDB and download the info for those files. This information is then saved locally in a root file which can be used directly when processing the HipoChain. Reading of the local rcdb file is then already automated in HipoSelector
+
+      clas12root::HipoChain chain;
+      chain.Add("/dir/files_*.hipo");//To creat rcdb data RCDB_HOME must be set prior to installation
+      chain.WriteRcdbData("rcdb.root"); //Must use this first time to create local copy
+      //Then when we have local copy can just use the following
+      chain.SetRcdbFile("rcdb.root");
+
+
+See also Ex1_CLAS12ReaderChain.C for the relevent lines.

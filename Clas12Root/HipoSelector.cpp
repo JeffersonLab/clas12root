@@ -55,6 +55,7 @@ namespace clas12root{
       cout<<"Sorry no hipofiles given, exiting...."<<endl;
       exit(0);
     }
+
     
     fInput->Add(_chain);//make chain of files avaialbel on slaves
   }
@@ -64,28 +65,38 @@ namespace clas12root{
     // The SlaveBegin() function is called after the Begin() function.
     // When running with PROOF SlaveBegin() is called on each slave server.
     // The tree argument is deprecated (on PROOF 0 is passed).
-    cout<<"HipoSelector::SlaveBegin "<<endl;
     fInput->Print();
     TString option = GetOption();
     _chain=dynamic_cast<HipoChain*>(fInput->FindObject("HIPOFILES"));
   
   }
-
+  Bool_t  HipoSelector::Notify() {
+    // Called at the start of a new file
+    Rcdb(); //set rcdb info if exists
+    AddFilter();
+  }
+  
   Bool_t HipoSelector::Process(Long64_t entry)
   {
     //check if need new file
     _iRecord=entry-_NfileRecords; //get record to analyse,subtract records of previous files
+
+    //Check if we need a new file
     if( _iRecord>=_NcurrRecords ){
       _iFile=_chain->GetFileFromRecord(entry);
       _NfileRecords=_chain->GetRecordsToHere(_iFile); //Add records from previous file to give offset
    
-      _c12.reset(new clas12::clas12reader(_chain->GetFileName(_iFile).Data()));
+      _c12.reset(new clas12::clas12reader{_chain->GetFileName(_iFile).Data()});
       _NcurrRecords= _c12->getReader().getNRecords(); //records in this file
       _iRecord=entry-_NfileRecords; //get first record in this file to process
 
-      if(_c12.get()) AddFilter();
+      if(_c12.get()){
+	Notify();
+      }
+      
      }
 
+    //load a record from the file
     _c12->getReader().loadRecord(_iRecord);
     
     while(_c12->nextInRecord()==true){
@@ -96,6 +107,9 @@ namespace clas12root{
   }
   
  
-
-    
+  void HipoSelector::Rcdb(){
+    ///////////////////////////////RCDB
+    _c12->setRcdbVals(_chain->FetchRunRcdb(_c12->getFilename()));
+  }
+  ///////////////////////////////   
 }

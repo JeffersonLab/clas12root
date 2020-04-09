@@ -15,11 +15,14 @@ void Ex8b_RcdbReader(){
    * This is done to avoid overloading the database.
    */
   clas12reader c12("/a/hipo/file.hipo");
+  c12.queryRcdb(); //only check rcdb values when asked to (and RCDB_HOME was set)
+  
+  auto rcdbData=c12.getRcdbVals();//struct with all relevent rcdb values
   
   //The following run conditions can be returned directly by c12
-  cout<<"Event count: "<<c12.getRunCondition("event_count")<<endl;
-  cout<<"Beam energy: "<<c12.getRunCondition("beam_energy")<<endl;
-  cout<<"Beam current: "<<c12.getRunCondition("beam_current")<<endl;
+  cout<<"Event count: "<<rcdbData.event_count<<endl;
+  cout<<"Beam energy: "<<rcdbData.beam_energy<<endl;
+  cout<<"Beam current: "<<rcdbData.beam_current<<endl;
 
 
 }

@@ -66,6 +66,9 @@ namespace clas12root{
     _c12->addExactPid(-211,1);    //exactly 1 pi-
     _c12->addExactPid(2212,1);    //exactly 1 proton
     _c12->addExactPid(22,2);    //exactly 2 gamma
+
+    //cout<<"Using beam energy for rcdb "<<_c12->getRcdbVals().beam_energy<<endl;
+    // _beam.SetE(_c12->getRcdbVals().beam_energy/1000);
   }
   
   void SetLorentzVector(TLorentzVector &p4,clas12::region_part_ptr rp){
