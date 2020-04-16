@@ -45,11 +45,17 @@ void Ex1_CLAS12ReaderChain(){
    int counter=0;
    
    clas12root::HipoChain chain;
-   chain.Add("/WHERE/IS/MY/HIPO/file1.hipo");
+   chain.Add("/work/jlab/clas12data/pass0/skim3_005424.hipo");
+   // chain.Add("/WHERE/IS/MY/HIPO/file1.hipo");
    // chain.Add("/WHERE/IS/MY/HIPO/file2.hipo");
    // chain.Add("/WHERE/IS/MY/HIPO/file*.hipo");
    
-   
+   //////////////////////////////////////
+  //To creat rcdb data RCDB_HOME must be set prior to installation
+  //chain.WriteRcdbData("rcdb.root"); //Must use this first time to create local copy
+  //Then when we have local copy can just use the following
+  //chain.SetRcdbFile("rcdb.root");
+
    auto c12=chain.GetC12Reader();
    //c12->scalerReader();//if you want integrated charge
    //Add some event Pid based selections
@@ -62,14 +68,13 @@ void Ex1_CLAS12ReaderChain(){
    //////c12->addZeroOfRestPid();  //nothing else
    //////c12->useFTBased(); //and use the Pids from RECFT
 
-   
    while (chain.Next()){
      c12=chain.GetC12Reader();
-      
+     if(counter++>1E5) break;
      
      //c12->event()->getStartTime();
      
-     
+     //  cout<<c12->getRcdbVals().beam_energy<<endl;;
      //Loop over all particles to see how to access detector info.
      
      for(auto& p : c12->getDetParticles()){

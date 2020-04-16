@@ -9,6 +9,9 @@ using namespace clas12;
 using namespace std;
 
 void Ex8_RcdbReader(){
+  //This example shows how to use rcdb_reader class
+  //It is not expected that this will be required for
+  //general user who should just use clas12reader::queryRcdb()
 
   /* Creates the interface to RCDB header library.
    * Immediately opens a connection to rcdb@clasdb.jlab.org/rcdb.
