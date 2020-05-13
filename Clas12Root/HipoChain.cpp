@@ -30,6 +30,7 @@ namespace clas12root {
     //loop over files and get the number of records
     for(auto i=0;i<nfiles;++i){
       hipo::reader hiporeader;
+      hiporeader.setTags(ReaderTags()); //only count records for given tags
       hiporeader.open(GetFileName(i));
       _Nrecords+=hiporeader.getNRecords();
       _fileRecords.push_back(hiporeader.getNRecords());
@@ -115,6 +116,8 @@ namespace clas12root {
   ///from file fname created previously by WriteRcdbData
   //#include ""
   clas12::rcdb_vals HipoChain::FetchRunRcdb(const TString& datafile){
+#ifdef RCDB_MYSQL
+
     //make file and list unique_ptr so deleted when we return
     auto rcdbFile=std::unique_ptr<TFile>{TFile::Open(_rcdbFileName)};
     if(rcdbFile.get()==nullptr){
@@ -131,7 +134,9 @@ namespace clas12root {
       }
     }
     Warning("HipoChain::FetchRunRcdb ",Form("run file %s not found in list in file %s",datafile.Data(),_rcdbFileName.Data()),"");
-    
+
+#endif
+    //no rcdb     
     return clas12::rcdb_vals();
   }
 }
