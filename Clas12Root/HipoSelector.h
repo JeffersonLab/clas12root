@@ -38,7 +38,11 @@ namespace clas12root{
       virtual Bool_t ProcessEvent() =  0; //loop action to be defined in derived class
 
       virtual void AddFilter(){};
- 
+
+      Int_t GetCurrentRecord()const noexcept{return _iRecord;}
+      Int_t GetCurrentFileNum()const noexcept{return _iFile;}
+      Int_t GetCurrentFileRecords()const noexcept{return _NcurrRecords;}
+      
   protected:
       
       std::unique_ptr<clas12::clas12reader> _c12;//!

@@ -50,6 +50,7 @@ namespace clas12root {
     Bool_t Next();
     Bool_t NextFile();
     void SetReaderTags(std::vector<long> tags){_readerTags=tags;}
+    std::vector<long> ReaderTags()const noexcept{return _readerTags;}
     
     clas12::clas12reader* GetC12Reader() {
       if( (_c12ptr=_c12.get()) )
