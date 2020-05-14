@@ -30,7 +30,6 @@ namespace clas12root {
     //loop over files and get the number of records
     for(auto i=0;i<nfiles;++i){
       hipo::reader hiporeader;
-      hiporeader.setTags(ReaderTags()); //only count records for given tags
       hiporeader.open(GetFileName(i));
       _Nrecords+=hiporeader.getNRecords();
       _fileRecords.push_back(hiporeader.getNRecords());
@@ -71,6 +70,8 @@ namespace clas12root {
   }
   
   Bool_t HipoChain::NextFile(){
+    /////Warning any changes to this function should
+    ////also be considered for  HipoSelector::Process
     std::cout<<"HipoChain::NextFile() "<<_idxFile<<" out of "<<GetNFiles()<<std::endl;
    if(_idxFile>=GetNFiles())
       return kFALSE;//no more files
