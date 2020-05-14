@@ -195,9 +195,9 @@ namespace clas12 {
     std::string _filename;
     
     //reader
-    hipo::reader     _reader;
-    hipo::event      _event;
-    hipo::dictionary  _factory;
+    hipo::reader     _reader;//!
+    hipo::event      _event;//!
+    hipo::dictionary  _factory;//!
 
     //DST banks
     helonline_uptr  _bhelonline;
@@ -226,12 +226,12 @@ namespace clas12 {
     //Detector region vectors,
     //each particle in an event will have
     //one associated, these vectors own the ptrs
-    std::vector<region_fdet_uptr> _rfdets;
-    std::vector<region_cdet_uptr> _rcdets;
-    std::vector<region_ft_uptr> _rfts;
+    std::vector<region_fdet_uptr> _rfdets;//!
+    std::vector<region_cdet_uptr> _rcdets;//!
+    std::vector<region_ft_uptr> _rfts;//!
 
     //this vector links to raw ptrs, does not own
-    std::vector<region_part_ptr> _detParticles;
+    std::vector<region_part_ptr> _detParticles;//!
 
      
     double _runBeamCharge{0};
