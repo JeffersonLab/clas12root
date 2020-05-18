@@ -156,7 +156,6 @@ namespace clas12 {
     _pids.clear();
     _pids.reserve(_nparts);
  
-    
     //Loop over particles and find their Pid
     for(ushort i=0;i<_nparts;i++){
       if(!_useFTBased){

@@ -30,6 +30,7 @@ namespace clas12root {
     //loop over files and get the number of records
     for(auto i=0;i<nfiles;++i){
       hipo::reader hiporeader;
+      hiporeader.setTags(_readerTags);
       hiporeader.open(GetFileName(i));
       _Nrecords+=hiporeader.getNRecords();
       _fileRecords.push_back(hiporeader.getNRecords());

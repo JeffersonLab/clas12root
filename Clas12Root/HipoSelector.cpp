@@ -90,7 +90,9 @@ namespace clas12root{
       //warning these lines should match  HipoChain::NextFile()
       _c12.reset(new clas12::clas12reader{*_chain->GetC12Reader(),_chain->GetFileName(_iFile).Data(),_chain->ReaderTags()});
       _c12->setRcdbVals(_chain->FetchRunRcdb(_c12->getFilename()));
-   
+
+      //_c12.reset(new clas12::clas12reader{_chain->GetFileName(_iFile).Data(),_chain->ReaderTags()});
+    
       _NcurrRecords= _c12->getReader().getNRecords(); //records in this file
       _iRecord=entry-_NfileRecords; //get first record in this file to process
 
