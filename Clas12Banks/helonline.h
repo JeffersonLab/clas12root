@@ -47,8 +47,8 @@ namespace clas12 {
 
   private :
     
-    int _hel_order;
-    int _helr_order;
+   int _hel_order{-1};
+   int _helr_order{-1};
  
     
   };

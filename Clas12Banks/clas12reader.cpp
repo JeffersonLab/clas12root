@@ -76,6 +76,9 @@ namespace clas12 {
     
     if(_factory.hasSchema("RAW::vtp"))
       _bvtp.reset(new clas12::vtp{_factory.getSchema("RAW::vtp")});
+    
+    if(_factory.hasSchema("HEL::online"))
+      _bhelonline.reset(new clas12::helonline{_factory.getSchema("HEL::online")});
 
     
     makeListBanks();
