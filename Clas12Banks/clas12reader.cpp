@@ -203,6 +203,7 @@ namespace clas12 {
     if(_bcher.get())_event.getStructure(*_bcher.get());
     if(_bft.get())_event.getStructure(*_bft.get());
     if(_bvtp.get())_event.getStructure(*_bvtp.get());
+    if(_bhelonline.get())_event.getStructure(*_bhelonline.get());
     //if(_bscal.get())_event.getStructure(*_bscal.get());
 
     for(auto& ibank:_addBanks){//if any additional banks requested get those
