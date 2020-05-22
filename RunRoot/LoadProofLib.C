@@ -12,7 +12,7 @@ void LoadProofLib(Int_t Nworkers=1){
   
   TProof *proof =nullptr;
   if(!gProof) 
-    proof = TProof::Open("://lite");
+    proof = TProof::Open("://lite",Form("workers=%d",Nworkers));
   else
     proof=gProof;
   

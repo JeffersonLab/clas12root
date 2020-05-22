@@ -27,7 +27,8 @@ namespace clas12root{
     HipoSelector(TTree * /*tree*/ =0);
       HipoSelector(TString filename) ;
       HipoSelector(HipoChain *chain) ;
-      virtual ~HipoSelector() { }
+      virtual ~HipoSelector() =default;
+      
       Int_t   Version() const final{ return 2; }
       
       void    Begin(TTree *tree) override;
@@ -51,7 +52,7 @@ namespace clas12root{
       
     private:
 
-      HipoChain* _chain{nullptr};
+      HipoChain* _chain{nullptr};//!
 
       Int_t _NcurrRecords=0;
       Int_t _iRecord=0;
