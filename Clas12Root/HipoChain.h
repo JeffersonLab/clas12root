@@ -80,10 +80,10 @@ namespace clas12root {
   private :
     TChain _tchain;
 
-    TObjArray* _ListOfFiles{nullptr}; //owned by _tchain
+    TObjArray* _ListOfFiles{nullptr}; //!owned by _tchain
 
-    std::unique_ptr<clas12::clas12reader> _c12;
-    clas12::clas12reader* _c12ptr{nullptr};
+    std::unique_ptr<clas12::clas12reader> _c12;//!
+    clas12::clas12reader* _c12ptr{nullptr};//!
     
     Long64_t _Nrecords{-1};
     std::vector<Int_t> _fileRecords;
