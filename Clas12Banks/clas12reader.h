@@ -177,7 +177,7 @@ namespace clas12 {
 
     //rcdb
     static int readQuickRunConfig(const std::string& filename);
-   void queryRcdb();
+    void queryRcdb();
  
     protected:
 
@@ -278,7 +278,7 @@ namespace clas12 {
     Cont container_filter(const Cont &container, Pred predicate){
     Cont result;
     std::copy_if(container.begin(),container.end(),std::back_inserter(result), predicate);
-    return std::move(result);
+    return result;
   }
 
 }
