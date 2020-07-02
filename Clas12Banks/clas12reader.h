@@ -195,43 +195,43 @@ namespace clas12 {
     std::string _filename;
     
     //reader
-    hipo::reader     _reader;
-    hipo::event      _event;
-    hipo::dictionary  _factory;
+    hipo::reader     _reader;//!
+    hipo::event      _event;//!
+    hipo::dictionary  _factory;//!
 
     //DST banks
-    helonline_uptr  _bhelonline;
-    helflip_uptr  _bhelflip;
-    runconfig_uptr  _brunconfig;
-    event_uptr  _bevent;
-    ftbevent_uptr  _bftbevent;
-    par_uptr _bparts;
+    helonline_uptr  _bhelonline;//!
+    helflip_uptr  _bhelflip;//!
+    runconfig_uptr  _brunconfig;//!
+    event_uptr  _bevent;//!
+    ftbevent_uptr  _bftbevent;//!
+    par_uptr _bparts;//!
     //    std::unique_ptr<clas12::particle> _ownbparts;
-    ftbpar_uptr _bftbparts;
-    mcpar_uptr _bmcparts;
-    covmat_uptr _bcovmat;
-    cal_uptr  _bcal;
-    scint_uptr _bscint;
-    trck_uptr _btrck;
-    traj_uptr _btraj;
-    cher_uptr _bcher;
-    ft_uptr _bft;
-    vtp_uptr _bvtp;
+    ftbpar_uptr _bftbparts;//!
+    mcpar_uptr _bmcparts;//!
+    covmat_uptr _bcovmat;//!
+    cal_uptr  _bcal;//!
+    scint_uptr _bscint;//!
+    trck_uptr _btrck;//!
+    traj_uptr _btraj;//!
+    cher_uptr _bcher;//!
+    ft_uptr _bft;//!
+    vtp_uptr _bvtp;//!
 
 
     
-    std::vector<std::unique_ptr<hipo::bank> > _addBanks; //owns additional banks
-    std::vector<hipo::bank* > _allBanks; 
+    std::vector<std::unique_ptr<hipo::bank> > _addBanks; //!owns additional banks
+    std::vector<hipo::bank* > _allBanks; //!
     
     //Detector region vectors,
     //each particle in an event will have
     //one associated, these vectors own the ptrs
-    std::vector<region_fdet_uptr> _rfdets;
-    std::vector<region_cdet_uptr> _rcdets;
-    std::vector<region_ft_uptr> _rfts;
+    std::vector<region_fdet_uptr> _rfdets;//!
+    std::vector<region_cdet_uptr> _rcdets;//!
+    std::vector<region_ft_uptr> _rfts;//!
 
     //this vector links to raw ptrs, does not own
-    std::vector<region_part_ptr> _detParticles;
+    std::vector<region_part_ptr> _detParticles;//!
 
      
     double _runBeamCharge{0};
