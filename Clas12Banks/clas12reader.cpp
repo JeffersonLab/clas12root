@@ -24,7 +24,7 @@ namespace clas12 {
   clas12reader::clas12reader(const clas12reader &other,std::string filename,
 			     std::vector<long> tags):_filename(filename){
     
-    cout<<" clas12reader::clas12reader reading "<<filename.data()<<endl;
+    cout<<" COPY clas12reader::clas12reader reading "<<filename.data()<<endl;
 
     //if default filename take same file as original
     if(_filename.empty())_filename=other._filename;
@@ -38,7 +38,7 @@ namespace clas12 {
     _pidSelectExact=other._pidSelectExact;
     _zeroOfRestPid=other._zeroOfRestPid;
     _useFTBased=other._useFTBased;
-
+ 
   }
   void clas12reader::initReader(){
     _reader.open(_filename.data()); //keep a pointer to the reader

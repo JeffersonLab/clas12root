@@ -82,7 +82,9 @@ namespace clas12root {
 
     TObjArray* _ListOfFiles{nullptr}; //!owned by _tchain
 
-    std::unique_ptr<clas12::clas12reader> _c12;//!
+
+    std::unique_ptr<clas12::clas12reader> _c12;
+
     clas12::clas12reader* _c12ptr{nullptr};//!
     
     Long64_t _Nrecords{-1};

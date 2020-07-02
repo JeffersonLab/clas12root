@@ -200,28 +200,28 @@ namespace clas12 {
     hipo::dictionary  _factory;//!
 
     //DST banks
-    helonline_uptr  _bhelonline;
-    helflip_uptr  _bhelflip;
-    runconfig_uptr  _brunconfig;
-    event_uptr  _bevent;
-    ftbevent_uptr  _bftbevent;
-    par_uptr _bparts;
+    helonline_uptr  _bhelonline;//!
+    helflip_uptr  _bhelflip;//!
+    runconfig_uptr  _brunconfig;//!
+    event_uptr  _bevent;//!
+    ftbevent_uptr  _bftbevent;//!
+    par_uptr _bparts;//!
     //    std::unique_ptr<clas12::particle> _ownbparts;
-    ftbpar_uptr _bftbparts;
-    mcpar_uptr _bmcparts;
-    covmat_uptr _bcovmat;
-    cal_uptr  _bcal;
-    scint_uptr _bscint;
-    trck_uptr _btrck;
-    traj_uptr _btraj;
-    cher_uptr _bcher;
-    ft_uptr _bft;
-    vtp_uptr _bvtp;
+    ftbpar_uptr _bftbparts;//!
+    mcpar_uptr _bmcparts;//!
+    covmat_uptr _bcovmat;//!
+    cal_uptr  _bcal;//!
+    scint_uptr _bscint;//!
+    trck_uptr _btrck;//!
+    traj_uptr _btraj;//!
+    cher_uptr _bcher;//!
+    ft_uptr _bft;//!
+    vtp_uptr _bvtp;//!
 
 
     
-    std::vector<std::unique_ptr<hipo::bank> > _addBanks; //owns additional banks
-    std::vector<hipo::bank* > _allBanks; 
+    std::vector<std::unique_ptr<hipo::bank> > _addBanks; //!owns additional banks
+    std::vector<hipo::bank* > _allBanks; //!
     
     //Detector region vectors,
     //each particle in an event will have
