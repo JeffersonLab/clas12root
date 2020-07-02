@@ -76,6 +76,9 @@ namespace clas12 {
     
     if(_factory.hasSchema("RAW::vtp"))
       _bvtp.reset(new clas12::vtp{_factory.getSchema("RAW::vtp")});
+    
+    if(_factory.hasSchema("HEL::online"))
+      _bhelonline.reset(new clas12::helonline{_factory.getSchema("HEL::online")});
 
     
     makeListBanks();
@@ -156,7 +159,6 @@ namespace clas12 {
     _pids.clear();
     _pids.reserve(_nparts);
  
-    
     //Loop over particles and find their Pid
     for(ushort i=0;i<_nparts;i++){
       if(!_useFTBased){
@@ -201,6 +203,7 @@ namespace clas12 {
     if(_bcher.get())_event.getStructure(*_bcher.get());
     if(_bft.get())_event.getStructure(*_bft.get());
     if(_bvtp.get())_event.getStructure(*_bvtp.get());
+    if(_bhelonline.get())_event.getStructure(*_bhelonline.get());
     //if(_bscal.get())_event.getStructure(*_bscal.get());
 
     for(auto& ibank:_addBanks){//if any additional banks requested get those
