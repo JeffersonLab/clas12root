@@ -7,6 +7,7 @@ namespace clas12{
   static const short FT = 1000;
   static const short FD = 2000;
   static const short CD = 3000;
+  static const short BD = 4000;
 
   
   //detectors
@@ -68,6 +69,15 @@ namespace clas12{
   static const short CVT10  = 10;
   static const short CVT11  = 11;
   static const short CVT12  = 12;
+
+  static const short BANDOFF = 250;
+  static const short BTOF1 = 251;
+  static const short BTOF2 = 252;
+  static const short BTOF3 = 253;
+  static const short BTOF4 = 254;
+  static const short BTOF5 = 255;
+  static const short BVETO = 256;
+
    // using indices =vector<short>;
   
   /* std::map<TString,vector<TString>> */

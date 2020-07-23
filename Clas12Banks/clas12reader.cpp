@@ -136,6 +136,7 @@ namespace clas12 {
     _n_rfdets=0;
     _n_rcdets=0;
     _n_rfts=0;
+    _n_rbands=0;
     
     _detParticles.clear();
     _pids.clear();
@@ -264,6 +265,7 @@ namespace clas12 {
     _n_rfdets=0;
     _n_rcdets=0;
     _n_rfts=0;
+    _n_rbands=0;
 
     _detParticles.clear();
     _detParticles.reserve(_nparts);
@@ -312,6 +314,19 @@ namespace clas12 {
 	//less particles than this
 	if(_n_rfts==_rfts.size())
 	  addARegionFT();
+	continue;
+      }
+      //Check if BAND particle
+      if(_rbands.empty())addARegionBAND();
+      if(_rbands[_n_rbands]->sort()){
+	//add a FDet particle to the event list
+	_detParticles.emplace_back(_rbands[_n_rbands].get());
+	_n_rbands++;
+	//check if need more vector entries
+	//only required of previous events have
+	//less particles than this
+	if(_n_rbands==_rbands.size())
+	  addARegionBAND();
 	continue;
       }
     }

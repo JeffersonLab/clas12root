@@ -36,6 +36,7 @@
 #include "region_fdet.h"
 #include "region_cdet.h"
 #include "region_ft.h"
+#include "region_band.h"
 #include "scaler_reader.h"
 #include "rcdb_vals.h"
 
@@ -98,6 +99,12 @@ namespace clas12 {
        region_ft_uptr  reg{new region_ft{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get()}};
        if(_useFTBased)reg->useFTBPid();
       _rfts.push_back(std::move(reg));
+     }
+  void addARegionBAND(){
+      //Forward tagger needs particles and forward tagger
+       region_band_uptr  reg{new region_band{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get()}};
+       if(_useFTBased)reg->useFTBPid();
+      _rbands.push_back(std::move(reg));
      }
 
 
@@ -229,6 +236,7 @@ namespace clas12 {
     std::vector<region_fdet_uptr> _rfdets;//!
     std::vector<region_cdet_uptr> _rcdets;//!
     std::vector<region_ft_uptr> _rfts;//!
+    std::vector<region_band_uptr> _rbands;//!
 
     //this vector links to raw ptrs, does not own
     std::vector<region_part_ptr> _detParticles;//!
@@ -240,6 +248,7 @@ namespace clas12 {
     ushort _n_rfdets{0};
     ushort _n_rcdets{0};
     ushort _n_rfts{0};
+    ushort _n_rbands{0};
 
     std::vector<short> _pids;
     bool _isRead{false};
