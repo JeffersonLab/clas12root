@@ -50,6 +50,7 @@ namespace clas12root {
     Bool_t Next();
     Bool_t NextFile();
     void SetReaderTags(std::vector<long> tags){_readerTags=tags;}
+    std::vector<long> ReaderTags()const noexcept{return _readerTags;}
     
     clas12::clas12reader* GetC12Reader() {
       if( (_c12ptr=_c12.get()) )
@@ -79,10 +80,12 @@ namespace clas12root {
   private :
     TChain _tchain;
 
-    TObjArray* _ListOfFiles{nullptr}; //owned by _tchain
+    TObjArray* _ListOfFiles{nullptr}; //!owned by _tchain
+
 
     std::unique_ptr<clas12::clas12reader> _c12;
-    clas12::clas12reader* _c12ptr{nullptr};
+
+    clas12::clas12reader* _c12ptr{nullptr};//!
     
     Long64_t _Nrecords{-1};
     std::vector<Int_t> _fileRecords;

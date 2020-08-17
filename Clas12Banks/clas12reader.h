@@ -36,6 +36,7 @@
 #include "region_fdet.h"
 #include "region_cdet.h"
 #include "region_ft.h"
+#include "region_band.h"
 #include "scaler_reader.h"
 #include "rcdb_vals.h"
 
@@ -98,6 +99,12 @@ namespace clas12 {
        region_ft_uptr  reg{new region_ft{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get()}};
        if(_useFTBased)reg->useFTBPid();
       _rfts.push_back(std::move(reg));
+     }
+  void addARegionBAND(){
+      //Forward tagger needs particles and forward tagger
+       region_band_uptr  reg{new region_band{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get()}};
+       if(_useFTBased)reg->useFTBPid();
+      _rbands.push_back(std::move(reg));
      }
 
 
@@ -177,7 +184,7 @@ namespace clas12 {
 
     //rcdb
     static int readQuickRunConfig(const std::string& filename);
-   void queryRcdb();
+    void queryRcdb();
  
     protected:
 
@@ -195,43 +202,44 @@ namespace clas12 {
     std::string _filename;
     
     //reader
-    hipo::reader     _reader;
-    hipo::event      _event;
-    hipo::dictionary  _factory;
+    hipo::reader     _reader;//!
+    hipo::event      _event;//!
+    hipo::dictionary  _factory;//!
 
     //DST banks
-    helonline_uptr  _bhelonline;
-    helflip_uptr  _bhelflip;
-    runconfig_uptr  _brunconfig;
-    event_uptr  _bevent;
-    ftbevent_uptr  _bftbevent;
-    par_uptr _bparts;
+    helonline_uptr  _bhelonline;//!
+    helflip_uptr  _bhelflip;//!
+    runconfig_uptr  _brunconfig;//!
+    event_uptr  _bevent;//!
+    ftbevent_uptr  _bftbevent;//!
+    par_uptr _bparts;//!
     //    std::unique_ptr<clas12::particle> _ownbparts;
-    ftbpar_uptr _bftbparts;
-    mcpar_uptr _bmcparts;
-    covmat_uptr _bcovmat;
-    cal_uptr  _bcal;
-    scint_uptr _bscint;
-    trck_uptr _btrck;
-    traj_uptr _btraj;
-    cher_uptr _bcher;
-    ft_uptr _bft;
-    vtp_uptr _bvtp;
+    ftbpar_uptr _bftbparts;//!
+    mcpar_uptr _bmcparts;//!
+    covmat_uptr _bcovmat;//!
+    cal_uptr  _bcal;//!
+    scint_uptr _bscint;//!
+    trck_uptr _btrck;//!
+    traj_uptr _btraj;//!
+    cher_uptr _bcher;//!
+    ft_uptr _bft;//!
+    vtp_uptr _bvtp;//!
 
 
     
-    std::vector<std::unique_ptr<hipo::bank> > _addBanks; //owns additional banks
-    std::vector<hipo::bank* > _allBanks; 
+    std::vector<std::unique_ptr<hipo::bank> > _addBanks; //!owns additional banks
+    std::vector<hipo::bank* > _allBanks; //!
     
     //Detector region vectors,
     //each particle in an event will have
     //one associated, these vectors own the ptrs
-    std::vector<region_fdet_uptr> _rfdets;
-    std::vector<region_cdet_uptr> _rcdets;
-    std::vector<region_ft_uptr> _rfts;
+    std::vector<region_fdet_uptr> _rfdets;//!
+    std::vector<region_cdet_uptr> _rcdets;//!
+    std::vector<region_ft_uptr> _rfts;//!
+    std::vector<region_band_uptr> _rbands;//!
 
     //this vector links to raw ptrs, does not own
-    std::vector<region_part_ptr> _detParticles;
+    std::vector<region_part_ptr> _detParticles;//!
 
      
     double _runBeamCharge{0};
@@ -240,6 +248,7 @@ namespace clas12 {
     ushort _n_rfdets{0};
     ushort _n_rcdets{0};
     ushort _n_rfts{0};
+    ushort _n_rbands{0};
 
     std::vector<short> _pids;
     bool _isRead{false};
@@ -278,7 +287,7 @@ namespace clas12 {
     Cont container_filter(const Cont &container, Pred predicate){
     Cont result;
     std::copy_if(container.begin(),container.end(),std::back_inserter(result), predicate);
-    return std::move(result);
+    return result;
   }
 
 }

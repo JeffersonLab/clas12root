@@ -24,7 +24,7 @@ namespace clas12 {
   clas12reader::clas12reader(const clas12reader &other,std::string filename,
 			     std::vector<long> tags):_filename(filename){
     
-    cout<<" clas12reader::clas12reader reading "<<filename.data()<<endl;
+    cout<<" COPY clas12reader::clas12reader reading "<<filename.data()<<endl;
 
     //if default filename take same file as original
     if(_filename.empty())_filename=other._filename;
@@ -38,7 +38,7 @@ namespace clas12 {
     _pidSelectExact=other._pidSelectExact;
     _zeroOfRestPid=other._zeroOfRestPid;
     _useFTBased=other._useFTBased;
-
+ 
   }
   void clas12reader::initReader(){
     _reader.open(_filename.data()); //keep a pointer to the reader
@@ -76,6 +76,9 @@ namespace clas12 {
     
     if(_factory.hasSchema("RAW::vtp"))
       _bvtp.reset(new clas12::vtp{_factory.getSchema("RAW::vtp")});
+    
+    if(_factory.hasSchema("HEL::online"))
+      _bhelonline.reset(new clas12::helonline{_factory.getSchema("HEL::online")});
 
     
     makeListBanks();
@@ -133,6 +136,7 @@ namespace clas12 {
     _n_rfdets=0;
     _n_rcdets=0;
     _n_rfts=0;
+    _n_rbands=0;
     
     _detParticles.clear();
     _pids.clear();
@@ -156,7 +160,6 @@ namespace clas12 {
     _pids.clear();
     _pids.reserve(_nparts);
  
-    
     //Loop over particles and find their Pid
     for(ushort i=0;i<_nparts;i++){
       if(!_useFTBased){
@@ -201,6 +204,7 @@ namespace clas12 {
     if(_bcher.get())_event.getStructure(*_bcher.get());
     if(_bft.get())_event.getStructure(*_bft.get());
     if(_bvtp.get())_event.getStructure(*_bvtp.get());
+    if(_bhelonline.get())_event.getStructure(*_bhelonline.get());
     //if(_bscal.get())_event.getStructure(*_bscal.get());
 
     for(auto& ibank:_addBanks){//if any additional banks requested get those
@@ -261,6 +265,7 @@ namespace clas12 {
     _n_rfdets=0;
     _n_rcdets=0;
     _n_rfts=0;
+    _n_rbands=0;
 
     _detParticles.clear();
     _detParticles.reserve(_nparts);
@@ -309,6 +314,19 @@ namespace clas12 {
 	//less particles than this
 	if(_n_rfts==_rfts.size())
 	  addARegionFT();
+	continue;
+      }
+      //Check if BAND particle
+      if(_rbands.empty())addARegionBAND();
+      if(_rbands[_n_rbands]->sort()){
+	//add a FDet particle to the event list
+	_detParticles.emplace_back(_rbands[_n_rbands].get());
+	_n_rbands++;
+	//check if need more vector entries
+	//only required of previous events have
+	//less particles than this
+	if(_n_rbands==_rbands.size())
+	  addARegionBAND();
 	continue;
       }
     }

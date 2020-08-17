@@ -29,8 +29,8 @@ namespace clas12 {
     helonline(hipo::schema __schema);
     virtual ~helonline() = default;
  
-    int    getHelicity(){ return getByte(_hel_order,0); }
-    int    getHelicityRaw(){ return getByte(_helr_order,0); }
+    int    getHelicity() const noexcept{ return getByte(_hel_order,0); }
+    int    getHelicityRaw() const noexcept{ return getByte(_helr_order,0); }
     
     int getCurrHelicity(){ return 1;}
     
@@ -47,8 +47,8 @@ namespace clas12 {
 
   private :
     
-    int _hel_order;
-    int _helr_order;
+   int _hel_order{-1};
+   int _helr_order{-1};
  
     
   };

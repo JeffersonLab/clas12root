@@ -74,6 +74,7 @@ namespace clas12root{
     // Called at the start of a new file
     Rcdb(); //set rcdb info if exists
     AddFilter();
+    return kTRUE;
   }
   
   Bool_t HipoSelector::Process(Long64_t entry)
@@ -86,7 +87,8 @@ namespace clas12root{
       _iFile=_chain->GetFileFromRecord(entry);
       _NfileRecords=_chain->GetRecordsToHere(_iFile); //Add records from previous file to give offset
    
-      _c12.reset(new clas12::clas12reader{_chain->GetFileName(_iFile).Data()});
+      _c12.reset(new clas12::clas12reader{*_chain->GetC12Reader(),_chain->GetFileName(_iFile).Data(),_chain->ReaderTags()});
+
       _NcurrRecords= _c12->getReader().getNRecords(); //records in this file
       _iRecord=entry-_NfileRecords; //get first record in this file to process
 
