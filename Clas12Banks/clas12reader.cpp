@@ -101,12 +101,15 @@ namespace clas12 {
     
     clas12::runconfig  arunconf(afactory.getSchema("RUN::config"));
 
-    areader.next();
-    areader.read(anevent);
-    anevent.getStructure(arunconf);
+    int runNo=0;
+    while(runNo==0){
+      if(areader.next()==false) break;
+      areader.read(anevent);
+      anevent.getStructure(arunconf);
 
-    int runNo=arunconf.getRun();
-  
+      runNo=arunconf.getRun();
+    }
+
     std::cout<<"Found run number : "<<runNo<<std::endl;
     return runNo;
   }
