@@ -64,8 +64,8 @@ export RCDB_HOME /Where/Is/rcdb
 Note on ifarm depending on which version on ROOT and gcc you are using you may have to set the CC and CXX variables or else you will get library linking errors. To do this you will need something like,
 
 ```sh
-set CC = `which gcc`
-set CXX = `which g++`
+setenv CC  `which gcc`
+setenv CXX  `which g++`
 ```
 Or just set the paths to CC and CXX directly.
 
