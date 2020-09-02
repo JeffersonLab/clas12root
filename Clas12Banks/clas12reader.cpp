@@ -228,10 +228,14 @@ namespace clas12 {
       _nevent++;
       if(readEvent()){ //got one
 	validEvent=true;
+	_nselected++;
 	break;
       }
     }
-    if(!validEvent) return false;//no more events in reader
+    if(!validEvent){
+      summary();
+      return false;//no more events in reader
+    }
     //can proceed with valid event
     sort();
   
