@@ -175,7 +175,10 @@ namespace clas12 {
     double getRunBeamCharge() const noexcept{ return _runBeamCharge;}
     double getCurrApproxCharge(){return _runBeamCharge*_nevent/_reader.getEntries();}
 
-
+    void summary(){
+      std::cout<<"for file "<<_filename<<"\n   read "<<_nevent<<" events from which "<<_nselected<< " passed filtering conditions."<<" The beam charge to this point in the file was "<<getCurrApproxCharge()<<std::endl;
+    }
+    
     void getStructure(hipo::bank* bank){
       if(_isRead==false)
 	hipoRead();
@@ -244,6 +247,7 @@ namespace clas12 {
      
     double _runBeamCharge{0};
     long _nevent{0};
+    long _nselected{0};
     ushort _nparts{0};
     ushort _n_rfdets{0};
     ushort _n_rcdets{0};

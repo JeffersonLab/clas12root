@@ -10,9 +10,6 @@ namespace clas12root {
     _ListOfFiles=_tchain.GetListOfFiles();
   }
   
-  // HipoChain::~HipoChain(){
-  // }
-
   
   void HipoChain::Add(TString name){
 
@@ -55,16 +52,20 @@ namespace clas12root {
   }
   
   Bool_t HipoChain::Next(){
-    auto more = _c12->next();
+
+    bool more = kFALSE;
+
+    if( _c12.get() )  more = _c12->next();
     if(more) return kTRUE;
-    // if(_c12.get()==nullptr)
-    if(_idxFile>0)_totBeamCharge+=_c12->getRunBeamCharge();
+   //When file opened add beam charge _c12.get()==nullptr when files are finished
+    if(_idxFile>0&&_c12.get())_totBeamCharge+=_c12->getRunBeamCharge();
     if(NextFile()==false) return kFALSE;
     more = _c12->next();
     if(more) return kTRUE;
     
     //no more delete reader
     _c12.reset();
+    _c12ptr=nullptr;
     //check if another file
     return Next();
     
