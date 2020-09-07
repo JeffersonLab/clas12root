@@ -36,7 +36,13 @@ add_definitions(-D__LZ4__)
 #after Lz4 change include to include
 set(CMAKE_INSTALL_INCLUDEDIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+#include clasqaDB c++ library and rapidjson library
+IF (DEFINED ENV{CLASQADB_HOME})
 
+  include_directories($ENV{CLASQADB_HOME}/srcC/rapidjson/include)
+  include_directories($ENV{CLASQADB_HOME}/srcC/include)
+
+ENDIF (DEFINED ENV{CLASQADB_HOME})
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/hipo4)
 add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/hipo4)
@@ -46,7 +52,5 @@ add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/Clas12Banks)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Clas12Root)
 add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/Clas12Root)
-
-
 
 
