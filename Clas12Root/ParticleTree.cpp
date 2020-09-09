@@ -3,6 +3,7 @@
 #include "clas12reader.h"
 #include <TObjArray.h>
 #include <TMacro.h>
+#include <TObjString.h>
 
 namespace clas12root {
 
