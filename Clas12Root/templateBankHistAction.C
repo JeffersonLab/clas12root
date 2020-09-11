@@ -27,8 +27,10 @@ namespace clas12root{
 
       clas12::BBBB bank(factory.getSchema(bhist->GetBankName().Data()));
       hipo::event      event;
- 
+
+      Long64_t nevents=0;
       while(reader.next()==true){
+	if(++nevents==NENTRIESTOPROCESS) break;
 	reader.read(event); //read event
 	event.getStructure(bank); //get particle data
 

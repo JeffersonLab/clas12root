@@ -90,7 +90,8 @@ void Ex1_CLAS12Reader(){
      //can also access the integrated current at this point
      //c12.scalerReader();//must call this first
      //c12.getRunBeamCharge();
-     
+
+     //c12.setEntries(1E3); //only process 1E3 events per file
       while(c12.next()==true){
 	//can get an estimate of the beam current to this event
 	//c12.getCurrApproxCharge();//if called c12.scalerReader();

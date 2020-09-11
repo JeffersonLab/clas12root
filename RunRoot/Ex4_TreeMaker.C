@@ -1,5 +1,6 @@
 //particleTree /dir/file.hipo out.root Ex4_TreeMaker.C
 {
+  //treemaker.SetEntries(1E5);//only process given number of events
   //add event header branch, includes start time
   //treemaker.UseEventData();
   
