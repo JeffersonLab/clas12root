@@ -19,6 +19,7 @@ namespace clas12root{
 
       auto hists=phist->Hists();
       clas12::clas12reader c12(phist->NextFile().Data());
+      c12.setEntries(NENTRIESTOPROCESS);
       std::vector<region_part_ptr>* particles=c12.getDetParticlesPtr();
 
       while(c12.next()==true){

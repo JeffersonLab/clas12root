@@ -188,7 +188,9 @@ namespace clas12 {
     //rcdb
     static int readQuickRunConfig(const std::string& filename);
     void queryRcdb();
- 
+
+    void setEntries(long n){_nToProcess = n;}
+    
     protected:
 
     void initReader();
@@ -248,6 +250,7 @@ namespace clas12 {
     double _runBeamCharge{0};
     long _nevent{0};
     long _nselected{0};
+    long _nToProcess{-1};
     ushort _nparts{0};
     ushort _n_rfdets{0};
     ushort _n_rcdets{0};

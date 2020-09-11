@@ -45,7 +45,7 @@ namespace clas12root {
     TString AddParenthesis(TString varExp0);
     vector<TString> RemoveArithmetic(TString& expr);
 
-
+    void SetEntries(Long64_t n){_nEntriesToProcess=n;}
   protected :
     
     TString _tempActionName;
@@ -63,6 +63,7 @@ namespace clas12root {
     Int_t _Nruns=0;
     TChain _chain;
     Int_t _iHipoFile=0;
+    Long64_t _nEntriesToProcess=-1;
     
   };//class HipoROOTOut
   
