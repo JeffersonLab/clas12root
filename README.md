@@ -139,12 +139,17 @@ You can group histograms together for lazy execution if they all come from the s
 	       bankDraw.Hist1D("REC::CovMat::C44",100,0,1,"")	
 	       bankDraw.Hist1D("REC::CovMat::C55",100,0,1,"")->Draw("(3x2)")
 
+### NEW
+
+  You can set the number of events to process :
+
+           bankDraw.SetEntries(1E6);
 
 ## Ex 1  Looping over events and getting particle information
 
 The clas12reader class performs the correlation of particle and detector inofmation (aka reverse indexing). When looping over particles you are looping over region_particle (see Clas12Banks for full reference). Each region, FT, FD and CD has its own definition of a region_particle so it will only return meaningful data (i.e. a CD particle will return 0 for FD detector information). In addition the getTime, getPath, getDetEnergy functions have predefined meaning for each region, e.g. for FT getTime returns FTCAL time, for FD it returns FTOF1A if it exists, if not it will try FTOF1B, FTOF2 then PCAL.
 
-  ### NEW you can add hipo file tags to clas12reader e.g.
+You can add hipo file tags to clas12reader e.g.
 
          clas12reader c12("file.hipo",{0,1,6});
 
@@ -156,7 +161,7 @@ To run:
 
 Note the use of the + sign after the macro name. This compiles the script meaning it will run much faster.
 
-#### NEW
+
 
 You can now try running this using HipoChain to process many files. See the example RunRoot/Ex1_CLAS12ReaderChain.C . This should look like,
 
@@ -248,6 +253,14 @@ For REC::EVNT use (adding FTB for RECFT::EVNT banks)
 For Run::config
 
        e.g. RUN.Trigger
+
+
+### NEW
+
+  You can set the number of events to process :
+
+    ParticleHist [0] hists.SetEntries(1E6);
+
 
 ### Jupyter
 

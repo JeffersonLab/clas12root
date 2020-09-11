@@ -52,12 +52,17 @@ namespace clas12root{
       }
       cout<<"CURR MACRO "<<_curMacro<<endl;
 
-	
+      
       TString strline=macro.GetLineWith("NNNN")->GetString();
       _actionClassName=_tempActionName+Form("%d",_Nruns);
       strline.ReplaceAll("NNNNN",_actionClassName);
       macro.GetLineWith("NNNNN")->SetString(strline);
 
+      strline=macro.GetLineWith("NENTRIESTOPROCESS")->GetString();
+      strline.ReplaceAll("NENTRIESTOPROCESS",Form("%lld",_nEntriesToProcess));
+      macro.GetLineWith("NENTRIESTOPROCESS")->SetString(strline);
+
+      
       _Nruns++;
       macro.SaveSource(_curMacro);
     }
@@ -73,7 +78,7 @@ namespace clas12root{
     TObject* obj=macro.GetLineWith("XXXX");
     lines->AddAfter(obj,new TObjString(strline.Data()));
 
- 
+     
     macro.SaveSource(_curMacro);
  
   }

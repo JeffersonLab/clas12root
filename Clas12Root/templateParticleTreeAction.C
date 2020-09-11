@@ -59,6 +59,7 @@ namespace clas12root{
 	
      }
       clas12::clas12reader c12(ptree->NextFile().Data());
+      c12.setEntries(NENTRIESTOPROCESS);
       std::vector<region_part_ptr>* particles=c12.getDetParticlesPtr();
       //EVENTDATABANKS
 

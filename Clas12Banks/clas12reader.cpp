@@ -38,6 +38,7 @@ namespace clas12 {
     _pidSelectExact=other._pidSelectExact;
     _zeroOfRestPid=other._zeroOfRestPid;
     _useFTBased=other._useFTBased;
+    _nToProcess=other._nToProcess;
  
   }
   void clas12reader::initReader(){
@@ -224,6 +225,11 @@ namespace clas12 {
     //keep going until we get an event that passes
     bool validEvent=false;
     while(_reader.next()){
+      if(_nevent==_nToProcess){
+	summary();
+	return false; //reached supplied event limit
+      }
+      
       clearEvent();
       _nevent++;
       if(readEvent()){ //got one
