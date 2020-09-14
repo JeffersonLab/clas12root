@@ -5,8 +5,8 @@
 void ExMC(){
 
    clas12root::HipoChain chain;
-   chain.Add("/work/jlab/clas12data/adamtsim/EptoXto2pi_54.hipo");
-   chain.Add("/work/jlab/clas12data/adamtsim/EptoXto2pi_54.hipo");
+   chain.Add("/my/gemc/file.hipo");
+   auto c12=chain.GetC12Reader(); //this line is only in for backward compatability with older versions of clas12root
 
    TLorentzVector p4;
    
