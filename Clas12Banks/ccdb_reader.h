@@ -2,9 +2,9 @@
 #define CCDB_READER_H
 
 #include "ccdb_vals.h"
+#include "CCDB/CalibrationGenerator.h"
 
 #include <iostream>
-
 #include <chrono>
 #include <string>
 
