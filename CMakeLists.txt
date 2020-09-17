@@ -41,6 +41,9 @@ IF (DEFINED ENV{CLASQADB_HOME})
 
   include_directories($ENV{CLASQADB_HOME}/srcC/rapidjson/include)
   include_directories($ENV{CLASQADB_HOME}/srcC/include)
+  #clasqaDB header contains function definitions which are not inlined
+  #including this header causes multiple definitions of these functions
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}  -Wl,--allow-multiple-definition")
 
 ENDIF (DEFINED ENV{CLASQADB_HOME})
 
