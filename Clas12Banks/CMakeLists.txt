@@ -1,6 +1,8 @@
 #include rcdb c++ header library
 IF (DEFINED ENV{RCDB_HOME})
   include_directories($ENV{RCDB_HOME}/cpp/include)
+  include_directories($ENV{CCDB_HOME}/include)
+
   #find path to mysql include directory
   FIND_PATH(MYSQL_INCLUDE_DIR mysql.h
     /usr/local/include/mysql
