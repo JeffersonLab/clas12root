@@ -19,7 +19,7 @@ RUN git clone --recurse-submodules --single-branch --branch ${RCDB_VERSION} \
     && rm -rf /usr/local/rcdb/.git
 
 # Setup env for CCDB
-ARG CCDB_VERSION=scon-python-fix
+ARG CCDB_VERSION=py3
 ENV CCDB_HOME /usr/local/ccdb
 ENV LD_LIBRARY_PATH $CCDB_HOME/lib:$LD_LIBRARY_PATH
 ENV PYTHONPATH $CCDB_HOME/python:$PYTHONPATH
@@ -31,11 +31,12 @@ RUN cd /usr/local/scons \
     && python setup.py install
 
 # Clone CCDB (version defined above)
-RUN git clone --depth 1 --branch ${CCDB_VERSION} \ 
-    https://github.com/ademus4/ccdb.git /usr/local/ccdb 
+#RUN git clone --depth 1 --branch ${CCDB_VERSION} \ 
+#    https://github.com/JeffersonLab/ccdb.git /usr/local/ccdb 
+COPY ccdb/ /usr/local/ccdb
 
 RUN cd $CCDB_HOME \
-    && scons with-mysql=false
+    && scons
 
 # Setup env for clas12root
 ARG CLAS12ROOT_VERSION=development
