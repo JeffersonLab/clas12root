@@ -195,8 +195,8 @@ namespace clas12 {
 
     //clasqaDB
     void applyQA(std::string jsonFilePath){
-      _jsonFilePath=jsonFilePath;
       _applyQA=true;
+      _qa = new qadb_reader(jsonFilePath);
     };
     void addQARequirement(std::string req){_reqsQA.push_back(req);};
     void requireOkForAsymmetry(bool ok){_reqOKAsymmetry=ok;};
@@ -284,10 +284,10 @@ namespace clas12 {
 
     //clasqaDB
     bool _applyQA{false};
-    std::string _jsonFilePath;
     vector<std::string> _reqsQA;
     bool _reqOKAsymmetry{false};
     bool passQAReqs();
+    qadb_reader * _qa;
     
     ///////////////////////////////RCDB
    private:

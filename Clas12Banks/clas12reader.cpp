@@ -409,31 +409,35 @@ namespace clas12 {
       _runNo=readQuickRunConfig(_filename);
     }
     int evNo = _brunconfig->getEvent();
-    qadb_reader qa(_jsonFilePath);
 
-    //isOkForAsymmetry already queries _QA, want to avoid doing it twice
-    bool passAsymReq=true;
-    if(_reqOKAsymmetry){
-      passAsymReq = qa.isOkForAsymmetry(_runNo,evNo);
-    } else {
-      qa.query(_runNo,evNo);
-    }
+    //First event always has index 0 which doesn't exist in qaDB
+    if(evNo!=0){
+      //isOkForAsymmetry already queries _QA, want to avoid doing it twice
+      bool passAsymReq=true;
+      bool queried=false;
+      if(_reqOKAsymmetry){
+	passAsymReq = _qa->isOkForAsymmetry(_runNo,evNo);
+	queried=true;
+      } else {
+	queried = _qa->query(_runNo,evNo);
+      }
     
-    //An event may be ok for asymmetry but have other defects
-    if(passAsymReq){
-      //loop over all requirements asked by user
-      for(std::string req: _reqsQA){
-	//Allow users to require only golden events
-	if(req=="Golden"){
-	  if(!qa.isGolden()){
+      //An event may be ok for asymmetry but have other defects
+      if(passAsymReq && queried){
+	//loop over all requirements asked by user
+	for(std::string req: _reqsQA){
+	  //Allow users to require only golden events
+	  if(req=="Golden"){
+	    if(!_qa->isGolden()){
+	      return false;
+	    }
+	  }else if (_qa->hasDefect(req.c_str())){
 	    return false;
 	  }
-	}else if (qa.hasDefect(req.c_str())){
-	  return false;
 	}
+      } else{
+	return false;
       }
-    } else{
-      return false;
     }
     //Event passes all requirements
     return true;
