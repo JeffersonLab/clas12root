@@ -40,6 +40,8 @@
 #include "scaler_reader.h"
 #include "rcdb_vals.h"
 
+#include "qadb_reader.h"
+
 #include "dictionary.h"
 
 #include <algorithm>
@@ -190,6 +192,14 @@ namespace clas12 {
     void queryRcdb();
 
     void setEntries(long n){_nToProcess = n;}
+
+    //clasqaDB
+    void applyQA(std::string jsonFilePath){
+      _jsonFilePath=jsonFilePath;
+      _applyQA=true;
+    };
+    void addQARequirement(std::string req){_reqsQA.push_back(req);};
+    void requireOkForAsymmetry(bool ok){_reqOKAsymmetry=ok;};
     
     protected:
 
@@ -271,6 +281,13 @@ namespace clas12 {
 
        //rcdb
     int _runNo{0};
+
+    //clasqaDB
+    bool _applyQA{false};
+    std::string _jsonFilePath;
+    vector<std::string> _reqsQA;
+    bool _reqOKAsymmetry{false};
+    bool passQAReqs();
     
     ///////////////////////////////RCDB
    private:

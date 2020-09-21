@@ -81,10 +81,7 @@ namespace clas12 {
     if(_factory.hasSchema("HEL::online"))
       _bhelonline.reset(new clas12::helonline{_factory.getSchema("HEL::online")});
 
-    
     makeListBanks();
-    
-  
 
   }
 
@@ -122,7 +119,9 @@ namespace clas12 {
     _rcdbQueried=true;
 
 #ifdef RCDB_MYSQL
-    _runNo=readQuickRunConfig(_filename);
+    if(_runNo==0){
+      _runNo=readQuickRunConfig(_filename);
+    }
     
     rcdb_reader rc; //initialise rcdb_reader
     
@@ -196,6 +195,11 @@ namespace clas12 {
     //Special run banks
     if(_brunconfig.get())_event.getStructure(*_brunconfig.get());
    
+    //check if event has QA requirements and those were met
+    if(_applyQA && !passQAReqs()){
+      return false;
+    }
+
     //now getthe data for the rest of the banks
     if(_bmcparts.get())_event.getStructure(*_bmcparts.get());
     if(_bcovmat.get())_event.getStructure(*_bcovmat.get());
@@ -395,6 +399,44 @@ namespace clas12 {
   std::vector<region_part_ptr> clas12reader::getByCharge(int ch){
     return container_filter(_detParticles, [ch](region_part_ptr dr)
 			    {return dr->par()->getCharge()==ch;});
+  }
+
+  ///////////////////////////////////////////////////////
+  ///Checks if an event passes all the QA requirements
+  bool clas12reader::passQAReqs(){
+    //_runNo may already have been found
+    if(_runNo==0){
+      _runNo=readQuickRunConfig(_filename);
+    }
+    int evNo = _brunconfig->getEvent();
+    qadb_reader qa(_jsonFilePath);
+
+    //isOkForAsymmetry already queries _QA, want to avoid doing it twice
+    bool passAsymReq=true;
+    if(_reqOKAsymmetry){
+      passAsymReq = qa.isOkForAsymmetry(_runNo,evNo);
+    } else {
+      qa.query(_runNo,evNo);
+    }
+    
+    //An event may be ok for asymmetry but have other defects
+    if(passAsymReq){
+      //loop over all requirements asked by user
+      for(std::string req: _reqsQA){
+	//Allow users to require only golden events
+	if(req=="Golden"){
+	  if(!qa.isGolden()){
+	    return false;
+	  }
+	}else if (qa.hasDefect(req.c_str())){
+	  return false;
+	}
+      }
+    } else{
+      return false;
+    }
+    //Event passes all requirements
+    return true;
   }
 
   /////////////////////////////////////////////////////////
