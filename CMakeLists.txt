@@ -44,7 +44,7 @@ IF (DEFINED ENV{CLASQADB_HOME})
   #clasqaDB header contains function definitions which are not inlined
   #including this header causes multiple definitions of these functions
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}  -Wl,--allow-multiple-definition")
-
+  add_definitions(-DCLAS_QADB)
 ENDIF (DEFINED ENV{CLASQADB_HOME})
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/hipo4)

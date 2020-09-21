@@ -401,15 +401,25 @@ namespace clas12 {
 			    {return dr->par()->getCharge()==ch;});
   }
 
+  ////////////////////////////////////////////////////////////////
+  ///Enable QA skimming.
+  void clas12reader::applyQA(std::string jsonFilePath){
+      _applyQA=true;
+#ifdef CLAS_QADB
+      _qa = new qadb_reader(jsonFilePath);
+#endif
+    };
+
+
   ///////////////////////////////////////////////////////
   ///Checks if an event passes all the QA requirements
   bool clas12reader::passQAReqs(){
+#ifdef CLAS_QADB
     //_runNo may already have been found
     if(_runNo==0){
       _runNo=readQuickRunConfig(_filename);
     }
     int evNo = _brunconfig->getEvent();
-
     //First event always has index 0 which doesn't exist in qaDB
     if(evNo!=0){
       //isOkForAsymmetry already queries _QA, want to avoid doing it twice
@@ -439,6 +449,7 @@ namespace clas12 {
 	return false;
       }
     }
+#endif
     //Event passes all requirements
     return true;
   }
