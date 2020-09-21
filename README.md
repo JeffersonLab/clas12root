@@ -37,8 +37,10 @@ The Clas12Root package depends on both Hipo and Clas12Banks. This provides ROOT-
 ```bash
 git clone --recurse-submodules https://github.com/jeffersonlab/clas12root.git
 cd clas12root
-#To download the RCDB interface 
+#To download the RCDB repository
 git clone --recurse-submodules https://github.com/jeffersonlab/rcdb.git
+#To download the clasqaDB repository 
+git clone --recurse-submodules https://github.com/c-dilks/clasqaDB.git
 ```
 
 ## To setup Run ROOT
@@ -452,7 +454,7 @@ In the case where many files are to be analysed use of HipoChain is recommended 
 See also Ex1_CLAS12ReaderChain.C for the relevent lines.
 
 ## Ex 9 Skimming Based on Data Quality Assurance
-clas12root can use the Quality Assurance database .json files found at https://github.com/c-dilks/clasqaDB/tree/master to reject events that have been identified as failing to meet certain requirements. This can implemented in an analysis using the clas12reader with the functions
+clas12root can use the Quality Assurance database .json files found at https://github.com/c-dilks/clasqaDB/tree/master to reject events that have been identified as failing to meet certain requirements. This is implemented in an analysis using the clas12reader with the functions
 
       c12.applyQA("/absolute/path/to/qaDB.json");
       c12.requireOkForAsymmetry(true);
@@ -468,7 +470,7 @@ where applyQA takes as argument a .json file containing the QA database, require
     LowLiveTime: live time < 0.9
     Misc: miscellaneous defect
 
-The QA database is contained in several .json files that can be found on the clasqaDB github [repository](https://github.com/c-dilks/clasqaDB/tree/master). These can merged within clas12root using the jsonFileMerger class with the functions:
+The QA database is contained in several .json files that can be found on the clasqaDB github [repository](https://github.com/c-dilks/clasqaDB/tree/master). These can be merged within clas12root using the jsonFileMerger class with the functions:
 
     jsonFileMerger merger("/absolute/path/for/output.json");
     merger.addFile("/absolute/path/for/input1.json");
