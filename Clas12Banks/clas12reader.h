@@ -196,8 +196,7 @@ namespace clas12 {
 
     //clasqaDB   
     void applyQA(std::string jsonFilePath);
-    void addQARequirement(std::string req){_reqsQA.push_back(req);};
-    void requireOkForAsymmetry(bool ok){_reqOKAsymmetry=ok;};
+    qadb_reader * getQAReader();
     
     protected:
 
@@ -279,15 +278,9 @@ namespace clas12 {
 
        //rcdb
     int _runNo{0};
-
-    //clasqaDB
     
-    bool _applyQA{false};
-    std::vector<std::string> _reqsQA;
-    bool _reqOKAsymmetry{false};
-    bool passQAReqs();
 #ifdef CLAS_QADB
-    qadb_reader * _qa;
+    std::unique_ptr<qadb_reader> _qa={nullptr};
 #endif
     
     ///////////////////////////////RCDB

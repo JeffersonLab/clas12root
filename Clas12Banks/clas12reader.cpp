@@ -196,8 +196,10 @@ namespace clas12 {
     if(_brunconfig.get())_event.getStructure(*_brunconfig.get());
    
     //check if event has QA requirements and those were met
-    if(_applyQA && !passQAReqs()){
-      return false;
+    if(_qa.get()){
+      if(!_qa->passQAReqs(_brunconfig->getEvent())){
+	return false;
+      }
     }
 
     //now getthe data for the rest of the banks
@@ -404,54 +406,19 @@ namespace clas12 {
   ////////////////////////////////////////////////////////////////
   ///Enable QA skimming.
   void clas12reader::applyQA(std::string jsonFilePath){
-      _applyQA=true;
-#ifdef CLAS_QADB
-      _qa = new qadb_reader(jsonFilePath);
-#endif
-    };
-
-
-  ///////////////////////////////////////////////////////
-  ///Checks if an event passes all the QA requirements
-  bool clas12reader::passQAReqs(){
 #ifdef CLAS_QADB
     //_runNo may already have been found
     if(_runNo==0){
       _runNo=readQuickRunConfig(_filename);
     }
-    int evNo = _brunconfig->getEvent();
-    //First event always has index 0 which doesn't exist in qaDB
-    if(evNo!=0){
-      //isOkForAsymmetry already queries _QA, want to avoid doing it twice
-      bool passAsymReq=true;
-      bool queried=false;
-      if(_reqOKAsymmetry){
-	passAsymReq = _qa->isOkForAsymmetry(_runNo,evNo);
-	queried=true;
-      } else {
-	queried = _qa->query(_runNo,evNo);
-      }
-    
-      //An event may be ok for asymmetry but have other defects
-      if(passAsymReq && queried){
-	//loop over all requirements asked by user
-	for(std::string req: _reqsQA){
-	  //Allow users to require only golden events
-	  if(req=="Golden"){
-	    if(!_qa->isGolden()){
-	      return false;
-	    }
-	  }else if (_qa->hasDefect(req.c_str())){
-	    return false;
-	  }
-	}
-      } else{
-	return false;
-      }
-    }
+    _qa.reset(new qadb_reader(jsonFilePath, _runNo));
 #endif
-    //Event passes all requirements
-    return true;
+    }
+
+  //////////////////////////////////////////////////////////////
+  ///Returns qadb_reader once declared
+  qadb_reader * clas12reader::getQAReader(){
+    return _qa.get();
   }
 
   /////////////////////////////////////////////////////////

@@ -457,12 +457,12 @@ See also Ex1_CLAS12ReaderChain.C for the relevent lines.
 clas12root can use the Quality Assurance database .json files found at https://github.com/c-dilks/clasqaDB/tree/master to reject events that have been identified as failing to meet certain requirements. This is implemented in an analysis using the clas12reader with the functions
 
       c12.applyQA("/absolute/path/to/qaDB.json");
-      c12.requireOkForAsymmetry(true);
-      c12.addQARequirement("MarginalOutlier");	
+      c12.getQAReader()->requireOkForAsymmetry(true);
+      c12.getQAReader()->requireGolden(true);
+      c12.getQAReader()->addQARequirement("MarginalOutlier");	
 
-where applyQA takes as argument a .json file containing the QA database, requireOkForAsymmetry(true) requires only events that were identified as suitable for asymmetry calculations, and addQARequirement("Requirement") allows to reject events that fail to meet the specified requirement. These can be:
+where applyQA takes as argument a .json file containing the QA database. requireOkForAsymmetry(true) requires only events that were identified as suitable for asymmetry calculations, and requireGolden(true) requires only events without any defects. addQARequirement("Requirement") allows to reject events that fail to meet the specified requirement. These can be:
 
-    Golden: if no defect bits are assigned in any sector
     TotalOutlier: outlier N/F, but not terminal, marginal, or sector loss
     TerminalOutlier: outlier N/F of first or last file of run
     MarginalOutlier: marginal outlier N/F, within one stddev of cut line

@@ -49,10 +49,10 @@ void Ex9_QualityAssurance(){
    * See RGA analysis note and clasqaDB github repository for
    * additional information.
    */
-  c12.requireOkForAsymmetry(true);
-  c12.addQARequirement("MarginalOutlier");
-  c12.addQARequirement("TotalOutlier");
-  c12.addQARequirement("Golden");
+  c12.getQAReader()->requireOkForAsymmetry(true);
+  c12.getQAReader()->requireGolden(true);
+  c12.getQAReader()->addQARequirement("MarginalOutlier");
+  c12.getQAReader()->addQARequirement("TotalOutlier");
 
   //The analysis can then proceed as usual.
   while(c12.next()) {

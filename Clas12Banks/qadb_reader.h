@@ -4,6 +4,7 @@
 #include "QADB.h"
 #include <iostream>
 #include <string>
+#include <vector>
 
 namespace clas12 {
   using std::string;
@@ -12,7 +13,7 @@ namespace clas12 {
 
   public:
 
-    qadb_reader(string jsonFilePath);
+    qadb_reader(string jsonFilePath, int runNo);
     virtual ~qadb_reader()=default;  
 
     bool query(int runNb, int evNb){return _qa.Query(runNb,evNb);};
@@ -28,9 +29,18 @@ namespace clas12 {
 
     bool isOkForAsymmetry(int runNb, int evNb){return _qa.OkForAsymmetry(runNb,evNb);};
 
+    void addQARequirement(string req){_reqsQA.push_back(req);};
+    void requireOkForAsymmetry(bool ok){_reqOKAsymmetry=ok;};
+    void requireGolden(bool ok){_reqGolden=ok;};
+    bool passQAReqs(int evNo);
+
   private: 
 
-    QADB _qa;   
+    QADB _qa;  
+    std::vector<string> _reqsQA;
+    bool _reqOKAsymmetry{false};
+    bool _reqGolden{false};
+    int _runNo{0};
     
   };
 
