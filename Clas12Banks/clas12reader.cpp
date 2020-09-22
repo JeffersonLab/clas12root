@@ -39,8 +39,11 @@ namespace clas12 {
     _zeroOfRestPid=other._zeroOfRestPid;
     _useFTBased=other._useFTBased;
     _nToProcess=other._nToProcess;
+
+    if(other._qa.get()) _qa.reset(other._qa.get());
  
   }
+
   void clas12reader::initReader(){
     _reader.open(_filename.data()); //keep a pointer to the reader
 
