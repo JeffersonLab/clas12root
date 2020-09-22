@@ -196,8 +196,9 @@ namespace clas12 {
 
     //clasqaDB   
     void applyQA(std::string jsonFilePath);
+#ifdef CLAS_QADB
     qadb_reader * getQAReader();
-    
+#endif    
     protected:
 
     void initReader();
