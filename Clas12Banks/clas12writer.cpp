@@ -51,6 +51,7 @@ namespace clas12 {
     reader_.open(inputFilename.data());
     reader_.readDictionary(factory_);
 
+    if(hasSchema("RUN::config")) specialBanks.push_back(factory_.getSchema("RUN::config"));
     if(hasSchema("HEL::online")) specialBanks.push_back(factory_.getSchema("HEL::online"));
     if(hasSchema("HEL::flip")) specialBanks.push_back(factory_.getSchema("HEL::flip"));
     if(hasSchema("RUN::scaler")) specialBanks.push_back(factory_.getSchema("RUN::scaler"));
