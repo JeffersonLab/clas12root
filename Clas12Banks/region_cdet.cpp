@@ -47,8 +47,11 @@ namespace clas12 {
     else if(_pcnd3!=-1) _pcnd=_pcnd3;
     
     //should be 1 track per particle
-    if(_trck)_ptrck=_trck->getIndex(_pentry,clas12::CVT);
-
+    if(_trck){
+      _ptrck=_trck->getIndex(_pentry,clas12::CVT);
+      //alternative CD tracker RTPC
+      if(_ptrck==-1)_trck->getIndex(_pentry,clas12::RTPC);
+    }
     //was cdet involved ?
     if((_ptof+_pcnd+_ptrck) == -3)return false;
     return  true;
