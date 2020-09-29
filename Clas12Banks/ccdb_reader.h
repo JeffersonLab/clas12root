@@ -26,8 +26,7 @@ namespace clas12 {
     bool check();
     void close();
 
-    int getIntValue(std::string value);
-    vector<vector<double>> getVecVecValue(std::string);
+    vector<vector<double>> getTableDoubles(std::string);
 
   private:
 

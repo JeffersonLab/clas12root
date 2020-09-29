@@ -8,18 +8,17 @@
 using namespace clas12;
 using namespace std;
 
-void Ex9_ccdbReader(){
+void Ex10_ccdbReader(){
   //An example of how to use the ccdb reader to get values from
   //the calibration database
 
-  ccdb_reader ccdb;
+  ccdb_reader c;
 
   //connect to ccdb with a specific run number
   int runNb = 5051;
-  clas12::ccdb_reader  ccdb.connect(runNb);
+  c.connect(runNb);
 
-  auto val1 = ccdb.getVecVecValue("/calibration/eb/electron_sf");
-
-  cout<<val1[0][0]<<endl;
+  //this causes a seg fault
+  auto val1 = c.getTableDoubles("/calibration/eb/electron_sf");
 
 }
