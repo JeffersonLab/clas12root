@@ -23,6 +23,7 @@ namespace clas12 {
     virtual ~ccdb_reader();
 
     void connect(int runNb);
+    void connect_local(std::string path, int runNb);
     bool check();
     void close();
 
@@ -31,7 +32,6 @@ namespace clas12 {
   private:
 
     ccdb::CalibrationGenerator _gen;
-    //ccdb::Calibration* _calib; 
     std::unique_ptr<ccdb::Calibration> _calib ={nullptr};
 
   };

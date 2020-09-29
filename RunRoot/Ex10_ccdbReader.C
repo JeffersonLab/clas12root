@@ -16,7 +16,12 @@ void Ex10_ccdbReader(){
 
   //connect to ccdb with a specific run number
   int runNb = 5051;
-  c.connect(runNb);
+
+  //local connection to sqlite db
+  c.connect_local("/work/RunRoot/ccdb_2020-09-13.sqlite", runNb);
+
+  //or alternatively using the online mysql version
+  //c.connect(runNb);
 
   //test the connection
   cout<<c.check()<<endl;
