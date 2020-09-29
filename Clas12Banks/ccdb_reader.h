@@ -31,7 +31,8 @@ namespace clas12 {
   private:
 
     ccdb::CalibrationGenerator _gen;
-    ccdb::Calibration* _calib; 
+    //ccdb::Calibration* _calib; 
+    std::unique_ptr<ccdb::Calibration> _calib ={nullptr};
 
   };
 

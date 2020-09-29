@@ -18,7 +18,17 @@ void Ex10_ccdbReader(){
   int runNb = 5051;
   c.connect(runNb);
 
+  //test the connection
+  cout<<c.check()<<endl;
+
   //this causes a seg fault
   auto val1 = c.getTableDoubles("/calibration/eb/electron_sf");
 
+  //checking againt ccdb online for this run number
+  //https://clasweb.jlab.org/cgi-bin/ccdb/objects
+  cout<< val1[0][5]<<endl; //-0.036 
+  cout<< val1[1][5]<<endl; // 0.139
+
+  //close the connection at end
+  c.close();
 }

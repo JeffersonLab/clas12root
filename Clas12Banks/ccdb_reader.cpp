@@ -7,8 +7,9 @@ namespace clas12 {
   //}
 
   void ccdb_reader::connect(int runNb){
-    auto _calib = _gen.MakeCalibration(
-      "mysql://clas12reader@clasdb.jlab.org/clas12", runNb, "default", 0);
+    _calib.reset( _gen.MakeCalibration(
+      "mysql://clas12reader@clasdb.jlab.org/clas12", runNb, "default", 0)
+    );
   }
   
   void ccdb_reader::close(){_calib->Disconnect();}
