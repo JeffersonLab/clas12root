@@ -19,11 +19,8 @@ namespace clas12 {
 
   public:
 
-    ccdb_reader();
-    virtual ~ccdb_reader();
-
-    void connect(int runNb);
-    void connect_local(std::string path, int runNb);
+    ccdb_reader(int runNb);
+    ccdb_reader(std::string path, int runNb);
     bool check();
     void close();
 
@@ -31,6 +28,7 @@ namespace clas12 {
 
   private:
 
+    ccdb_reader()=default;
     ccdb::CalibrationGenerator _gen;
     std::unique_ptr<ccdb::Calibration> _calib ={nullptr};
 

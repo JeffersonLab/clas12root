@@ -1,23 +1,19 @@
 #include "ccdb_reader.h"
 
 namespace clas12 {
-  ccdb_reader::ccdb_reader(){}
-  ccdb_reader::~ccdb_reader(){}
-    //if (check()){close();}
-  //}
 
-  void ccdb_reader::connect(int runNb){
+  ccdb_reader::ccdb_reader(int runNb){
     /* 
-    Function to connect to mysql database online
+    Constructor to connect to mysql database online
     */
     _calib.reset( _gen.MakeCalibration(
       "mysql://clas12reader@clasdb.jlab.org/clas12", runNb, "default", 0)
     );
   }
   
-  void ccdb_reader::connect_local(std::string path, int runNb){
+  ccdb_reader::ccdb_reader(std::string path, int runNb){
     /* 
-    Function to connect to local sqlite database
+    Constructor to connect to local sqlite database
     */
     std::string prefix = "sqlite://";
     std::string full_path = prefix + path;

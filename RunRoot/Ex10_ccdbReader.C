@@ -12,16 +12,12 @@ void Ex10_ccdbReader(){
   //An example of how to use the ccdb reader to get values from
   //the calibration database
 
-  ccdb_reader c;
-
-  //connect to ccdb with a specific run number
+  //connect to a local copy of ccdb with a specific run number
   int runNb = 5051;
-
-  //local connection to sqlite db
-  c.connect_local("/work/RunRoot/ccdb_2020-09-13.sqlite", runNb);
+  ccdb_reader c("/work/RunRoot/ccdb_2020-09-13.sqlite", runNb);
 
   //or alternatively using the online mysql version
-  //c.connect(runNb);
+  //ccdb_reader c(runNb);
 
   //test the connection
   cout<<c.check()<<endl;
