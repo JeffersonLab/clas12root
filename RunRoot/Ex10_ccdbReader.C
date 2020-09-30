@@ -13,7 +13,10 @@ void Ex10_ccdbReader(){
   //the calibration database
 
   //connect to a local copy of ccdb with a specific run number
-  int runNb = 5051;
+  //get the run number from a hipo file
+  clas12reader c12;
+  int runNb = c12.readQuickRunConfig("/work/RunRoot/skim3_005032.hipo");
+  //int runNb = 5032; //set it manually
   ccdb_reader c("/work/RunRoot/ccdb_2020-09-13.sqlite", runNb);
 
   //or alternatively using the online mysql version
