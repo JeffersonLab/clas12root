@@ -36,7 +36,16 @@ add_definitions(-D__LZ4__)
 #after Lz4 change include to include
 set(CMAKE_INSTALL_INCLUDEDIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+#include clasqaDB c++ library and rapidjson library
+IF (DEFINED ENV{CLASQADB_HOME})
 
+  include_directories($ENV{CLASQADB_HOME}/srcC/rapidjson/include)
+  include_directories($ENV{CLASQADB_HOME}/srcC/include)
+  #clasqaDB header contains function definitions which are not inlined
+  #including this header causes multiple definitions of these functions
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}  -Wl,--allow-multiple-definition")
+  add_definitions(-DCLAS_QADB)
+ENDIF (DEFINED ENV{CLASQADB_HOME})
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/hipo4)
 add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/hipo4)
@@ -46,7 +55,5 @@ add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/Clas12Banks)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Clas12Root)
 add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/Clas12Root)
-
-
 
 

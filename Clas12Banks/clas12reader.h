@@ -39,7 +39,6 @@
 #include "region_band.h"
 #include "scaler_reader.h"
 #include "rcdb_vals.h"
-
 #include "dictionary.h"
 
 #include <algorithm>
@@ -49,6 +48,10 @@
 
 #ifdef RCDB_MYSQL
    #include "rcdb_reader.h"
+#endif
+
+#ifdef CLAS_QADB
+   #include "qadb_reader.h"
 #endif
 
 namespace clas12 {
@@ -190,7 +193,12 @@ namespace clas12 {
     void queryRcdb();
 
     void setEntries(long n){_nToProcess = n;}
-    
+
+    //clasqaDB   
+    void applyQA(std::string jsonFilePath);
+#ifdef CLAS_QADB
+    qadb_reader * getQAReader();
+#endif    
     protected:
 
     void initReader();
@@ -271,6 +279,10 @@ namespace clas12 {
 
        //rcdb
     int _runNo{0};
+    
+#ifdef CLAS_QADB
+    std::unique_ptr<qadb_reader> _qa={nullptr};
+#endif
     
     ///////////////////////////////RCDB
    private:
