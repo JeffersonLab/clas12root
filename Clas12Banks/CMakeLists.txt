@@ -1,6 +1,18 @@
+set(CLASS_LIST_CPP helflip.cpp helonline.cpp runconfig.cpp event.cpp ftbevent.cpp particle.cpp ftbparticle.cpp mcparticle.cpp scaler.cpp vtp.cpp particle_detector.cpp scintillator.cpp tracker.cpp traj.cpp forwardtagger.cpp cherenkov.cpp calorimeter.cpp covmatrix.cpp region_particle.cpp region_ft.cpp region_fdet.cpp region_cdet.cpp region_band.cpp clas12writer.cpp clas12reader.cpp mesonex_trigger.cpp scaler_reader.cpp)
+
+set(CLASS_LIST_H helflip.h  helonline.h runconfig.h event.h ftbevent.h particle.h ftbparticle.h mcparticle.h scaler.h vtp.h particle_detector.h scintillator.h tracker.h traj.h forwardtagger.h cherenkov.h calorimeter.h covmatrix.h region_particle.h region_ft.h region_fdet.h region_cdet.h region_band.h clas12writer.h clas12reader.h mesonex_trigger.h  scaler_reader.h)
+
+IF (DEFINED ENV{CLASQADB_HOME})
+  set(CLASS_LIST_CPP ${CLASS_LIST_CPP} jsonFileMerger.cpp qadb_reader.cpp)
+  set(CLASS_LIST_H ${CLASS_LIST_H} jsonFileMerger.h qadb_reader.h)
+ENDIF (DEFINED ENV{CLASQADB_HOME})
+
 #include rcdb c++ header library
 IF (DEFINED ENV{RCDB_HOME})
   include_directories($ENV{RCDB_HOME}/cpp/include)
+  set(CLASS_LIST_CPP ${CLASS_LIST_CPP} rcdb_reader.cpp)
+  set(CLASS_LIST_H ${CLASS_LIST_H} rcdb_reader.h)
+
   #find path to mysql include directory
   FIND_PATH(MYSQL_INCLUDE_DIR mysql.h
     /usr/local/include/mysql
@@ -24,22 +36,10 @@ IF (DEFINED ENV{RCDB_HOME})
 
 ENDIF (DEFINED ENV{RCDB_HOME})
 
-#Only compile rcdb_reader if the path to RCDB library is set in RCDB_HOME.
-IF (DEFINED ENV{RCDB_HOME})
-
-   ROOT_GENERATE_DICTIONARY(G__Clas12Banks   helflip.h  helonline.h runconfig.h event.h ftbevent.h particle.h ftbparticle.h mcparticle.h scaler.h vtp.h particle_detector.h scintillator.h tracker.h traj.h forwardtagger.h cherenkov.h calorimeter.h covmatrix.h region_particle.h region_ft.h region_fdet.h region_cdet.h region_band.h clas12writer.h clas12reader.h rcdb_reader.h mesonex_trigger.h  scaler_reader.h  LINKDEF Clas12LinkDef.h)
-   add_library(Clas12Banks SHARED  helflip.cpp helonline.cpp runconfig.cpp event.cpp ftbevent.cpp particle.cpp ftbparticle.cpp mcparticle.cpp scaler.cpp vtp.cpp particle_detector.cpp scintillator.cpp tracker.cpp traj.cpp forwardtagger.cpp cherenkov.cpp calorimeter.cpp covmatrix.cpp region_particle.cpp region_ft.cpp region_fdet.cpp region_cdet.cpp region_band.cpp clas12writer.cpp clas12reader.cpp rcdb_reader.cpp mesonex_trigger.cpp scaler_reader.cpp  G__Clas12Banks.cxx)
-
-ELSE (DEFINED ENV{RCDB_HOME})
-     ROOT_GENERATE_DICTIONARY(G__Clas12Banks   helflip.h  helonline.h runconfig.h event.h ftbevent.h particle.h ftbparticle.h mcparticle.h scaler.h vtp.h particle_detector.h scintillator.h tracker.h traj.h forwardtagger.h cherenkov.h calorimeter.h covmatrix.h region_particle.h region_ft.h region_fdet.h region_cdet.h region_band.h clas12writer.h clas12reader.h mesonex_trigger.h  scaler_reader.h  LINKDEF Clas12LinkDef.h)
-     add_library(Clas12Banks SHARED  helflip.cpp helonline.cpp runconfig.cpp event.cpp ftbevent.cpp particle.cpp ftbparticle.cpp mcparticle.cpp scaler.cpp vtp.cpp particle_detector.cpp scintillator.cpp tracker.cpp traj.cpp forwardtagger.cpp cherenkov.cpp calorimeter.cpp covmatrix.cpp region_particle.cpp region_ft.cpp region_fdet.cpp region_cdet.cpp region_band.cpp clas12writer.cpp clas12reader.cpp mesonex_trigger.cpp scaler_reader.cpp  G__Clas12Banks.cxx)
-
-ENDIF (DEFINED ENV{RCDB_HOME})
-
-
+ROOT_GENERATE_DICTIONARY(G__Clas12Banks ${CLASS_LIST_H} LINKDEF Clas12LinkDef.h)
+add_library(Clas12Banks SHARED ${CLASS_LIST_CPP} G__Clas12Banks.cxx)
 
 target_link_libraries(Clas12Banks ${ROOT_LIBRARIES} Hipo4)
-
 
 install(TARGETS Clas12Banks
   LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}")

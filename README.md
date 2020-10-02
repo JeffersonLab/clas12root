@@ -23,6 +23,8 @@ For actual Clas12Banks definitions see [HIPO4 DSTs](https://clasweb.jlab.org/wik
 
 An interface to the c++ [Run Conditions DataBase](https://github.com/JeffersonLab/rcdb/wiki/Cpp) requires downloading the relevant code from https://github.com/JeffersonLab/rcdb . This is optional and depends on the existence of an environment variable containing the path to the RCDB code. The interface also requires having MySQL installed.
 
+clas12root provides an interface to the clasqaDB c++ code to allow skimming of events based on the Data Quality Assurance. This is optional and depends on the existence of an environment variable containing the path to the clasqaDB code, which must be downloaded from https://github.com/c-dilks/clasqaDB/tree/master.
+
 ## Also see c++ function for accessing banks "Cheat sheet" AccesssingBankDataInCpp.txt in the top level directory.
 
 The Clas12Root package depends on both Hipo and Clas12Banks. This provides ROOT-like analysis tools for operating on clas12 hipo DSTs.
@@ -35,8 +37,10 @@ The Clas12Root package depends on both Hipo and Clas12Banks. This provides ROOT-
 ```bash
 git clone --recurse-submodules https://github.com/jeffersonlab/clas12root.git
 cd clas12root
-#To download the RCDB interface 
+#To download the RCDB repository
 git clone --recurse-submodules https://github.com/jeffersonlab/rcdb.git
+#To download the clasqaDB repository 
+git clone --recurse-submodules https://github.com/c-dilks/clasqaDB.git
 ```
 
 ## To setup Run ROOT
@@ -48,6 +52,8 @@ setenv PATH "$PATH":"$CLAS12ROOT/bin"
 setenv HIPO /Where/Is/hipo
 #To use the RCDB interface 
 setenv RCDB_HOME /Where/Is/rcdb
+#To use clasqaDB interface
+setenv CLASQADB_HOME /Where/Is/clasqaDB
 ```
 
 or for bash
@@ -57,6 +63,8 @@ export PATH="$PATH":"$CLAS12ROOT/bin"
 export HIPO=/Where/Is/hipo
 #To use the RCDB interface 
 export RCDB_HOME /Where/Is/rcdb
+#To use clasqaDB interface
+export CLASQADB_HOME /Where/Is/clasqaDB
 ```
 
 ## To install
@@ -444,3 +452,29 @@ In the case where many files are to be analysed use of HipoChain is recommended 
 
 
 See also Ex1_CLAS12ReaderChain.C for the relevent lines.
+
+## Ex 9 Skimming Based on Data Quality Assurance
+clas12root can use the Quality Assurance database .json files found at https://github.com/c-dilks/clasqaDB/tree/master to reject events that have been identified as failing to meet certain requirements. This is implemented in an analysis using the clas12reader with the functions
+
+      c12.applyQA("/absolute/path/to/qaDB.json");
+      c12.getQAReader()->requireOkForAsymmetry(true);
+      c12.getQAReader()->requireGolden(true);
+      c12.getQAReader()->addQARequirement("MarginalOutlier");	
+
+where applyQA takes as argument a .json file containing the QA database. requireOkForAsymmetry(true) requires only events that were identified as suitable for asymmetry calculations, and requireGolden(true) requires only events without any defects. addQARequirement("Requirement") allows to reject events that fail to meet the specified requirement. These can be:
+
+    TotalOutlier: outlier N/F, but not terminal, marginal, or sector loss
+    TerminalOutlier: outlier N/F of first or last file of run
+    MarginalOutlier: marginal outlier N/F, within one stddev of cut line
+    SectorLoss: N/F diminished within a sector for several consecutive files
+    LowLiveTime: live time < 0.9
+    Misc: miscellaneous defect
+
+The QA database is contained in several .json files that can be found on the clasqaDB github [repository](https://github.com/c-dilks/clasqaDB/tree/master). These can be merged within clas12root using the jsonFileMerger class with the functions:
+
+    jsonFileMerger merger("/absolute/path/for/output.json");
+    merger.addFile("/absolute/path/for/input1.json");
+    merger.addFile("/absolute/path/for/input2.json");
+    merger.mergeAllFiles();
+
+Example usage can be found at RunRoot/Ex9_QualityAssurance.C. More information on the Quality Assurance process can be found in the RGA analysis note.
