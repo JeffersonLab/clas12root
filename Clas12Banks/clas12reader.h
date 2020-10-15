@@ -1,10 +1,4 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
  * File:   clas12reader.h
  * Author: dglazier
  *
@@ -14,6 +8,7 @@
 #define CLAS12READER_H
 
 #include "clas12defs.h"
+#include "clas12databases.h"
 #include "reader.h"
 #include "particle.h"
 #include "ftbparticle.h"
@@ -50,9 +45,9 @@
    #include "rcdb_reader.h"
 #endif
 
-#ifdef CLAS_QADB
+//#ifdef CLAS_QADB
    #include "qadb_reader.h"
-#endif
+//#endif
 
 namespace clas12 {
   using std::cout;
@@ -194,12 +189,7 @@ namespace clas12 {
 
     void setEntries(long n){_nToProcess = n;}
 
-    //clasqaDB   
-    void applyQA(std::string jsonFilePath);
-#ifdef CLAS_QADB
-    qadb_reader * getQAReader();
-#endif    
-    protected:
+  protected:
 
     void initReader();
     
@@ -267,7 +257,7 @@ namespace clas12 {
 
     std::vector<short> _pids;
     bool _isRead{false};
-    bool _rcdbQueried=false;
+    //bool _rcdbQueried=false;
     
     //members that need copied in constructor
     scalerreader_uptr _scalReader;
@@ -277,22 +267,42 @@ namespace clas12 {
     bool _zeroOfRestPid{false};
     bool _useFTBased{false};
 
-       //rcdb
+     
+    ///////////////////////////////DB
+  private:
     int _runNo{0};
-    
-#ifdef CLAS_QADB
-    std::unique_ptr<qadb_reader> _qa={nullptr};
-#endif
-    
-    ///////////////////////////////RCDB
-   private:
+    clas12databases *_db={nullptr}; //
 
-    rcdb_vals _rcdbVals;
-
+    bool _applyQA=false;
+    bool _connectDB=false;
+    
   public:
 
-    const rcdb_vals& getRcdbVals(){return _rcdbVals;}
-    void setRcdbVals(const rcdb_vals& vals){_rcdbVals=vals;}
+    //Database stuff
+    void connectDataBases(clas12databases *db);
+    //void connectDataBases();
+
+    ccdb_reader* ccdb()const {return _db->cc();}
+    rcdb_reader* rcdb()const {return _db->rc();}
+    qadb_reader* qadb()const {return _db->qa();}
+
+    clas12databases& db(){return *_db;};
+    
+    //clasqaDB   
+    void applyQA() {
+      // if(_db)
+	if( _db->qa() )
+	  _applyQA=true;
+
+      if( _applyQA==false){
+	std::cout<<"Warning, clas12reader  applyQA() not valid"<<std::endl;
+      }
+    }
+   
+  
+    //  const rcdb_vals& getRcdbVals(){return _rcdbVals;}
+    //void setRcdbVals(const rcdb_vals& vals){_rcdbVals=vals;}
+
     
   private:
  ///////////////////////////////

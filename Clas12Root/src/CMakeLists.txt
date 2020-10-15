@@ -1,5 +1,7 @@
+set(CLAS12ROOT Clas12Root)
+
 add_executable (clas12root clas12root.cpp)
-target_link_libraries(clas12root ${ROOT_LIBRARIES})
+target_link_libraries(clas12root  ${ROOT_LIBRARIES})
 
 add_executable (clas12proof clas12proof.cpp)
 target_link_libraries(clas12proof ${ROOT_LIBRARIES})

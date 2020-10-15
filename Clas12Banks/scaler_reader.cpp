@@ -24,6 +24,7 @@ namespace clas12{
 
       _nScalReads++;
       auto cup=_bscal->getFCupGated();
+      //beam charge is going to be taken as max-min of accumalted charge
       if(cup>_maxCup) _maxCup=cup;
       if(cup<_minCup) _minCup=cup;
         _beamCharges.push_back(std::make_pair(_brun->getEvent(),cup));

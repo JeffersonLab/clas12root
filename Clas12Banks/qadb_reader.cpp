@@ -2,10 +2,14 @@
 
 namespace clas12 {
 
+#ifdef CLAS_QADB
+  
   qadb_reader::qadb_reader(string jsonFilePath, int runNo):_qa{jsonFilePath.c_str()}{_runNo=runNo;};
 
-    ///////////////////////////////////////////////////////
+
+  ///////////////////////////////////////////////////////
   ///Checks if an event passes all the QA requirements
+
   bool qadb_reader::passQAReqs(int evNo){
     //First event always has index 0 which doesn't exist in qaDB
     if(evNo!=0){
@@ -40,5 +44,24 @@ namespace clas12 {
     return true;
   }
 
+#else
+  qadb_reader::qadb_reader(string jsonFilePath, int runNo){
+    _runNo=runNo;
+  }
+
+
+  ///////////////////////////////////////////////////////
+  ///Checks if an event passes all the QA requirements
+
+  bool qadb_reader::passQAReqs(int evNo){
+    return true;
+  }
+  
+#endif
+  void qadb_reader::copySettings(const qadb_reader& other){
+    _reqsQA=other._reqsQA;
+    _reqOKAsymmetry=other._reqOKAsymmetry;
+    _reqGolden=other._reqGolden;
+  }
 
 }

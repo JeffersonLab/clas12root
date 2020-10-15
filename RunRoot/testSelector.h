@@ -25,7 +25,7 @@ namespace clas12root{
       void    Terminate() final;
 
       void AddFilter() override;
-      
+      Bool_t Notify() override;
   private:
 
       TLorentzVector _beam{0,0,10.6,10.6};
@@ -41,6 +41,8 @@ namespace clas12root{
       TH1F *hm2g=nullptr;
       TH1F *hm2gCut=nullptr;
       
+      clas12::CCDBTable _sampleFrac;
+
       ClassDefOverride(clas12root::testSelector,0);
 
     };

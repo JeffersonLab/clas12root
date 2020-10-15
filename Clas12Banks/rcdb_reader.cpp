@@ -1,13 +1,20 @@
 #include "rcdb_reader.h"
+#include <TRcdbVals.h>
+#include <TFile.h>
 
 namespace clas12 {
 
   /* Empty constructor needed to link _connection to database.
    */
-  rcdb_reader::rcdb_reader():_connection{"mysql://rcdb@clasdb.jlab.org/rcdb", true}{}
+#ifdef CLAS_RCDB  
+  rcdb_reader::rcdb_reader(string connect_path):
+    _connection{new rcdb::Connection{connect_path.data(), true} }
+  {
+
+  }
    /* explicit close in destructor.
    */
-  rcdb_reader::~rcdb_reader(){close();};
+  rcdb_reader::~rcdb_reader(){close();_connection.reset();};
   
   /* Function to return a bool type value, given the value's name and a run
    * number.
@@ -16,7 +23,7 @@ namespace clas12 {
    * If the value is not of type bool the program will stop.
    */
   bool rcdb_reader::getBoolValue(int runNb, std::string value){
-    auto cnd = _connection.GetCondition(runNb, value);
+    auto cnd = _connection->GetCondition(runNb, value);
     bool val = false;
     if(!cnd){
       cout<<"The condition "<<value<<" does not exist for run "<<runNb<<"."<<endl;
@@ -40,7 +47,7 @@ namespace clas12 {
    * If the value is not of type integer the program will stop.
    */
   int rcdb_reader::getIntValue(int runNb, std::string value){
-    auto cnd = _connection.GetCondition(runNb, value);
+    auto cnd = _connection->GetCondition(runNb, value);
     int val = -1;
     if(!cnd){
       cout<<"The condition "<<value<<" does not exist for run "<<runNb<<"."<<endl;
@@ -64,7 +71,7 @@ namespace clas12 {
    * If the value is not of type double the program will stop.
    */
   double rcdb_reader::getDoubleValue(int runNb, std::string value){
-    auto cnd = _connection.GetCondition(runNb, value);
+    auto cnd = _connection->GetCondition(runNb, value);
     double val = -1;
     if(!cnd){
       cout<<"The condition "<<value<<" does not exist for run "<<runNb<<"."<<endl;
@@ -88,7 +95,7 @@ namespace clas12 {
    * If the value is not of type string the program will stop.
    */
   std::string rcdb_reader::getStringValue(int runNb, std::string value){
-    auto cnd = _connection.GetCondition(runNb, value);
+    auto cnd = _connection->GetCondition(runNb, value);
     std::string val = "Error";
     if(!cnd){
       cout<<"The condition "<<value<<" does not exist for run "<<runNb<<"."<<endl;
@@ -112,7 +119,7 @@ namespace clas12 {
    * If the value is not of type time_point the program will stop.
    */
   std::chrono::time_point<std::chrono::system_clock> rcdb_reader::getTimeValue(int runNb, std::string value){
-    auto cnd = _connection.GetCondition(runNb, value);
+    auto cnd = _connection->GetCondition(runNb, value);
     std::chrono::time_point<std::chrono::system_clock> val = std::chrono::system_clock::now();
     if(!cnd){
       cout<<"The condition "<<value<<" does not exist for run "<<runNb<<"."<<endl;
@@ -127,14 +134,37 @@ namespace clas12 {
 	}
     }
     return val;
-    }
+  }
 
+  void rcdb_reader::close(){if(_connection)_connection->Close();}
+  void rcdb_reader::open(){if(_connection)_connection->Connect();}
+
+ 
+#else
+  rcdb_reader::rcdb_reader(string connect_path)
+  {
+
+  }
+   /* explicit close in destructor.
+   */
+  rcdb_reader::~rcdb_reader(){close();};
+
+  void rcdb_reader::close(){}
+  void rcdb_reader::open(){}
+
+#endif
+  
   /* Function to read all conditions given in https://clasweb.jlab.org/rcdb/conditions/
      returns a copy of all vals
    */
+  void rcdb_reader::readRun(int runNb){
+    setCurrentVals(readAll(runNb,""));
+  }
   rcdb_vals rcdb_reader::readAll(int runNb,const string& filename){
+
     rcdb_vals fetcher;
     fetcher.run_number=runNb;//additional keep the run number
+#ifdef CLAS_RCDB  
     fetcher.beam_current=getDoubleValue(runNb, "beam_current");
     fetcher.beam_energy=getDoubleValue(runNb, "beam_energy");
     fetcher.events_rate=getDoubleValue(runNb, "events_rate");
@@ -152,6 +182,7 @@ namespace clas12 {
     fetcher.status=getIntValue(runNb, "status");
     fetcher.temperature=getIntValue(runNb, "temperature");
 
+   
     fetcher.file_name=filename;
     fetcher.beam_current_request=getStringValue(runNb, "beam_current_request");
     fetcher.daq_comment=getStringValue(runNb, "daq_comment");
@@ -162,9 +193,45 @@ namespace clas12 {
     fetcher.run_type=getStringValue(runNb, "run_type");
     fetcher.target=getStringValue(runNb, "target");
     fetcher.user_comment=getStringValue(runNb, "user_comment");
-     
+#endif
     return fetcher;
   }
+  //////////////////////////////////////////////////////////////////
+  rcdb_root::rcdb_root(string connect_path):
+    _rootFile{connect_path.data()}
+  {
+    
+  }
 
-  
+  void rcdb_root::readRun(int runNb){
+
+
+    //make file and list unique_ptr so deleted when we return
+    auto rcdbFile=std::unique_ptr<TFile>{TFile::Open(_rootFile.data())};
+    if(rcdbFile.get()==nullptr){
+      std::cout<<"rcdb_root::readRun "<<Form("No rcdb root file provided to the chain :  %s",_rootFile.data())<<std::endl;
+      setCurrentVals(rcdb_vals());
+      return;
+    }
+    auto keys= rcdbFile->GetListOfKeys();
+    for(const auto& key:*keys){
+      //the rcdb_vals Title is mapped to the data file name
+      auto runName=Form("%d",runNb);
+      if(TString(key->GetTitle())==TString(runName)){
+	auto vals=std::unique_ptr<clas12root::TRcdbVals>{dynamic_cast<clas12root::TRcdbVals*>(rcdbFile->Get(key->GetName()))};
+	if(vals.get()){
+	  cout<<"RECDB Root "<<vals.get()->_data.beam_energy<<endl;;
+	  setCurrentVals(vals.get()->_data);
+	  return;
+	}
+      }
+    }
+    std::cout<<"rcdb_root::readRun "<<Form("run file %d not found in list in file %s",runNb,_rootFile.data())<<std::endl;
+    std::cout<<" You should run PrepareDatabases.C editing/including all the files you are running on to HipoChain."<<endl;
+    exit(0);
+    //no rcdb     
+    setCurrentVals(rcdb_vals());
+
+    
+  }
 }

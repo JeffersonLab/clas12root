@@ -14,7 +14,8 @@ namespace clas12 {
 
     cout<<" clas12reader::clas12reader reading "<<filename.data()<<endl;
     _reader.setTags(tags);
- 
+    
+     
     if(_filename.empty()==false)initReader();
   }
   ///////////////////////////////////////////////////
@@ -22,7 +23,10 @@ namespace clas12 {
   ///opens a new reader
   ///Can give alternative filename
   clas12reader::clas12reader(const clas12reader &other,std::string filename,
-			     std::vector<long> tags):_filename(filename){
+			     std::vector<long> tags):
+    _filename(filename)
+    //_db{other._db}
+  {
     
     cout<<" COPY clas12reader::clas12reader reading "<<filename.data()<<endl;
 
@@ -40,9 +44,8 @@ namespace clas12 {
     _useFTBased=other._useFTBased;
     _nToProcess=other._nToProcess;
 
-#ifdef CLAS_QADB   
-    if(other._qa.get()) _qa.reset(other._qa.get());
- #endif
+    //if(other._connectDB)connectDataBases(other._db); //give databases the run number
+    _applyQA=other._applyQA;
   }
 
   void clas12reader::initReader(){
@@ -93,6 +96,8 @@ namespace clas12 {
   ///Basically get the run number!
   ///will open and close a hipo file
   int  clas12reader::readQuickRunConfig(const std::string& filename) {
+    if(filename.empty()==true) return 0;
+    
     hipo::reader     areader;
     hipo::event      anevent;
     hipo::dictionary  afactory;
@@ -118,7 +123,7 @@ namespace clas12 {
   ///////////////////////////////////////////////////////////////////////
   ///Function to query RCDB and record most relevant run conditions.
   ///This is only called once to avoid overloading the database.
-  void clas12reader::queryRcdb(){
+  /*void clas12reader::queryRcdb(){
     if(_rcdbQueried==true) return; //only allowed to call once
     _rcdbQueried=true;
 
@@ -127,14 +132,14 @@ namespace clas12 {
       _runNo=readQuickRunConfig(_filename);
     }
     
-    rcdb_reader rc; //initialise rcdb_reader
+    rcdb_reader rc("mysql://rcdb@clasdb.jlab.org/rcdb"); //initialise rcdb_reader
     
     //For full list see https://clasweb.jlab.org/rcdb/conditions/
     _rcdbVals = rc.readAll(_runNo,getFilename());
-#endif
+ #endif
     //rcdb connection closed when rc goes out of scope here 
   }
-
+  */
   
   ///////////////////////////////////////////////////////
   ///read the data
@@ -198,14 +203,13 @@ namespace clas12 {
     }
     //Special run banks
     if(_brunconfig.get())_event.getStructure(*_brunconfig.get());
-#ifdef CLAS_QADB   
     //check if event has QA requirements and those were met
-    if(_qa.get()){
-      if(!_qa->passQAReqs(_brunconfig->getEvent())){
-	return false;
+    if(_applyQA&&_db->qa()!=nullptr){
+      if(!_db->qa()->passQAReqs(_brunconfig->getEvent())){
+  	return false;
       }
     }
-#endif
+
     //now getthe data for the rest of the banks
     if(_bmcparts.get())_event.getStructure(*_bmcparts.get());
     if(_bcovmat.get())_event.getStructure(*_bcovmat.get());
@@ -409,7 +413,7 @@ namespace clas12 {
 
   ////////////////////////////////////////////////////////////////
   ///Enable QA skimming.
-  void clas12reader::applyQA(std::string jsonFilePath){
+  /*void clas12reader::applyQA(std::string jsonFilePath){
 #ifdef CLAS_QADB
     //_runNo may already have been found
     if(_runNo==0){
@@ -417,15 +421,30 @@ namespace clas12 {
     }
     _qa.reset(new qadb_reader(jsonFilePath, _runNo));
 #endif
-    }
+}*/
 
   //////////////////////////////////////////////////////////////
   ///Returns qadb_reader once declared
-#ifdef CLAS_QADB
+  /*#ifdef CLAS_QADB
   qadb_reader * clas12reader::getQAReader(){
     return _qa.get();
   }
 #endif
+  */
+  ////////////////////////////////////////////////////////////
+  ///connect to the data bases
+  void clas12reader::connectDataBases(clas12databases* db){
+    _db=db;
+    //void clas12reader::connectDataBases(){
+
+    _connectDB=true;
+    
+    // if(_runNo==0){
+    _runNo=readQuickRunConfig(_filename);
+    //}
+    std::cout<<"Connecting databases to run "<<_runNo<<std::endl;
+     if(_runNo!=0)_db->notifyRun(_runNo);
+  }
   /////////////////////////////////////////////////////////
   ///make a list of banks
   void clas12reader::makeListBanks(){

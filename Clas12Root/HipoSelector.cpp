@@ -68,11 +68,13 @@ namespace clas12root{
     fInput->Print();
     TString option = GetOption();
     _chain=dynamic_cast<HipoChain*>(fInput->FindObject("HIPOFILES"));
-  
+    std::cout<<"CHAIN OPEN "<<_chain->db()->ccdbPath()<<endl;
+    _chain->db()->initDBs();
   }
   Bool_t  HipoSelector::Notify() {
     // Called at the start of a new file
-    Rcdb(); //set rcdb info if exists
+    //Rcdb(); //set rcdb info if exists
+    //_chain->ConnectDataBases();
     AddFilter();
     return kTRUE;
   }
@@ -88,7 +90,7 @@ namespace clas12root{
       _NfileRecords=_chain->GetRecordsToHere(_iFile); //Add records from previous file to give offset
    
       _c12.reset(new clas12::clas12reader{*_chain->GetC12Reader(),_chain->GetFileName(_iFile).Data(),_chain->ReaderTags()});
-
+      _c12->connectDataBases(_chain->db());
       _NcurrRecords= _c12->getReader().getNRecords(); //records in this file
       _iRecord=entry-_NfileRecords; //get first record in this file to process
 
@@ -97,7 +99,7 @@ namespace clas12root{
       }
       
      }
-
+ 
     //load a record from the file
     _c12->getReader().loadRecord(_iRecord);
     
@@ -109,9 +111,4 @@ namespace clas12root{
   }
   
  
-  void HipoSelector::Rcdb(){
-    ///////////////////////////////RCDB
-    _c12->setRcdbVals(_chain->FetchRunRcdb(_c12->getFilename()));
-  }
-  ///////////////////////////////   
 }
