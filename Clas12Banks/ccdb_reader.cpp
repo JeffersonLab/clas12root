@@ -51,8 +51,6 @@ namespace clas12 {
     Get a table from the database, will reconnect to database automatically
     Store in localTable and return reference so values will update when new run
     */
-   std::cout<<"ccdb_reader::requestTableDoubles "<<_runNb<<std::endl;
-
     
     uint entry=_localTable.size();
     _localTable.resize(entry+1);
@@ -64,24 +62,17 @@ namespace clas12 {
   
     if(_runNb)_calib->GetCalib(tableEntry.second, nameWithRun(tableName) );
     
-    // cout<<&_localTable[entry].second<<" "<<_localTable[entry].second.size()<<endl;
-     //   return tableEntry.second; //reference to the TableOfDoubles
 #endif
 
     return _localTable[entry].second; //reference to the TableOfDoubles
   }
   
   void   ccdb_reader::updateTables(){
-    std::cout<<"ccdb_reader::updateTables() START "<<_localTable.size()<<std::endl;
-#ifdef CLAS_CCDB
+  #ifdef CLAS_CCDB
     for(auto& tableEntry: _localTable){
-      std::cout<<"ccdb_reader::updateTables() "<<tableEntry.first<<std::endl;
-      std::cout<<&tableEntry.second<<" "<<tableEntry.second.size()<<std::endl;
-     //tableEntry : name, values
-     tableEntry.second.clear(); //empty the vector (required for GetCalib)
-     _calib->GetCalib(tableEntry.second, nameWithRun(tableEntry.first) );
-     
-     std::cout<<&tableEntry.second<<" "<<tableEntry.second.size()<<std::endl;
+      //tableEntry : name, values
+      tableEntry.second.clear(); //empty the vector (required for GetCalib)
+      _calib->GetCalib(tableEntry.second, nameWithRun(tableEntry.first) );
     }
 #endif
     

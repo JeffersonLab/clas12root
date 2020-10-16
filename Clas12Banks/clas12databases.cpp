@@ -100,7 +100,7 @@ namespace clas12 {
     open();
 
 
-    std::cout<<"clas12databases::notifyRun "<<runNb<<" "<<_ccdb.get()<<" "<<_qadb.get()<<" "<<_rcdb.get()<<std::endl;
+    std::cout<<"clas12databases::notifyRun "<<runNb<<" ccdb = "<<(_ccdb.get()!=nullptr) <<" rcdb = "<<(_qadb.get()!=nullptr)<<" qadb = "<<(_rcdb.get()!=nullptr)<<std::endl;
     if(_ccdb.get()!=nullptr){
       _ccdb->setRun(runNb);
       _ccdb->updateTables();

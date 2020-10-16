@@ -333,33 +333,33 @@ namespace hipo {
       return 0;
     }
   inline void    bank::putInt(int item, int index, int32_t value){
-      int type = bankSchema.getEntryType(item);
+    //int type = bankSchema.getEntryType(item);
       int offset = bankSchema.getOffset(item, index, bankRows);
       putIntAt(offset,value);
     }
     inline void    bank::putShort(int item, int index, int16_t value){
-      int type = bankSchema.getEntryType(item);
+      //int type = bankSchema.getEntryType(item);
       int offset = bankSchema.getOffset(item, index, bankRows);
       putShortAt(offset,value);
     }
     inline void    bank::putByte(int item, int index, int8_t value){
-      int type = bankSchema.getEntryType(item);
+      //int type = bankSchema.getEntryType(item);
       int offset = bankSchema.getOffset(item, index, bankRows);
       putByteAt(offset,value);
     }
     inline  void    bank::putFloat(int item, int index, float value){
-      int type = bankSchema.getEntryType(item);
+      //int type = bankSchema.getEntryType(item);
       int offset = bankSchema.getOffset(item, index, bankRows);
       //printf("---- put float %f at position = %d\n",value,offset);
       putFloatAt(offset,value);
     }
     inline void    bank::putDouble(int item, int index, double value){
-      int type = bankSchema.getEntryType(item);
+      //int type = bankSchema.getEntryType(item);
       int offset = bankSchema.getOffset(item, index, bankRows);
       putDoubleAt(offset,value);
     }
     inline void    bank::putLong(int item, int index, int64_t value){
-      int type = bankSchema.getEntryType(item);
+      //int type = bankSchema.getEntryType(item);
       int offset = bankSchema.getOffset(item, index, bankRows);
       putLongAt(offset,value);
     }

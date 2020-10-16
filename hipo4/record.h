@@ -53,29 +53,29 @@ namespace hipo {
 
     typedef struct {
       int signatureString{}; // 1) identifier string is HREC (int = 0x43455248
-        int recordLength{}; // 2) TOTAL Length of the RECORD, includes INDEX array
-        int recordDataLength{}; // 3) Length of the DATA uncompressed
-        int recordDataLengthCompressed{}; // 4) compressed length of the DATA buffer
-        int numberOfEvents{}; // 5) number of event, data buckets in DATA buffer
-        int headerLength{}; // 6) Length of the buffer represengin HEADER for the record
-        int indexDataLength{}; // 7) Length of the index buffer (in bytes)
-        int userHeaderLength{}; // user header length in bytes
-        int userHeaderLengthPadding{}; // the padding added to user header Length
-        int bitInfo{};
-        int compressionType{};
-        int compressedLengthPadding{};
-        int dataEndianness{};
+      int recordLength{}; // 2) TOTAL Length of the RECORD, includes INDEX array
+      int recordDataLength{}; // 3) Length of the DATA uncompressed
+      int recordDataLengthCompressed{}; // 4) compressed length of the DATA buffer
+      int numberOfEvents{} ; // 5) number of event, data buckets in DATA buffer
+      int headerLength{} ; // 6) Length of the buffer represengin HEADER for the record
+      int indexDataLength{} ; // 7) Length of the index buffer (in bytes)
+      int userHeaderLength{}; // user header length in bytes
+      int userHeaderLengthPadding{}; // the padding added to user header Length
+      int bitInfo{};
+      int compressionType{};
+      int compressedLengthPadding{};
+      int dataEndianness{};
     } recordHeader_t;
 
     class data {
       private:
-        const char  *data_ptr{nullptr};
-        int          data_size{0};
-        int          data_endianness{};
-        int          data_offset{};
+      const char  *data_ptr{};
+      int          data_size{};
+      int          data_endianness{};
+      int          data_offset{};
 
       public:
-        data()=default;
+        data(){ data_ptr = nullptr; data_size = 0;}
         ~data()= default;
 
         void setDataPtr(const char *__ptr){ data_ptr = __ptr;}
