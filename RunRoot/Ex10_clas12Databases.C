@@ -17,11 +17,9 @@ void Ex10_clas12Databases(){
   //It is recommended to download a local copy to reduce connections
   //It is recommended to edit and run the scrpit PrepareDatabases.C
   //for this purpose
-  clas12databases::SetCCDBLocalConnection("ccdb.sqlite");
-  //clas12databases::SetCCDBRemoteConnection(); //not recommended
-  clas12databases::SetQADBConnection("qaDB.json");
-  clas12databases::SetRCDBRootConnection("rcdb.root");
-  //clas12databases::SetRCDBRemoteConnection() //not recommended
+  //clas12databases::SetCCDBLocalConnection("ccdb.sqlite");
+  //clas12databases::SetQADBConnection("qaDB.json");
+  //clas12databases::SetRCDBRootConnection("rcdb.root");
   
 
   //create clas12reader with just tag 0 events

@@ -220,7 +220,6 @@ namespace clas12 {
       if(TString(key->GetTitle())==TString(runName)){
 	auto vals=std::unique_ptr<clas12root::TRcdbVals>{dynamic_cast<clas12root::TRcdbVals*>(rcdbFile->Get(key->GetName()))};
 	if(vals.get()){
-	  cout<<"RECDB Root "<<vals.get()->_data.beam_energy<<endl;;
 	  setCurrentVals(vals.get()->_data);
 	  return;
 	}
