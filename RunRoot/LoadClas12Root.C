@@ -16,7 +16,6 @@ void LoadClas12Root(){
   gSystem->Load(LIB+"libHipo4");
   gSystem->Load(LIB+"libClas12Banks");
   gSystem->Load(LIB+"libClas12Root");
-  gSystem->AddIncludePath("$CLAS12ROOT/Clas12Banks");
  
   gROOT->SetMacroPath(Form("%s:%s/RunRoot/",gROOT->GetMacroPath(),CLAS12ROOT.Data()));
 
@@ -32,9 +31,8 @@ void LoadClas12Root(){
   }
   TString RCDB=gSystem->Getenv("RCDB_HOME");
   if(RCDB.Length()!=0){ //For #ifdef CLAS_CCDB in header files
-    gSystem->AddIncludePath("-DCLAS_RCDB");
+     gSystem->AddIncludePath("-DCLAS_RCDB");
     gSystem->AddIncludePath("-DRCDB_MYSQL");
-    //gSystem->AddIncludePath("-DRCDB_SQLITE");
     gROOT->ProcessLine("#define CLAS_RCDB"); //For cling interpreter
     gROOT->ProcessLine("#define RCDB_MYSQ"); //For cling interpreter
     //gROOT->ProcessLine("#define RCDB_SQLITE"); //For cling interpreter

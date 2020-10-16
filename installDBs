@@ -6,9 +6,9 @@ setenv RCDB_HOME $PWD/rcdb
 
 git clone --recurse-submodules https://github.com/JeffersonLab/ccdb.git
 
-source ccdb/environment.csh
 
-cd $CCDB_HOME
+cd ccdb
+source environment.csh
 
 scons
 
