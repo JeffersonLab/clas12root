@@ -10,7 +10,6 @@ Examples are given for running in interactive ROOT sessions and ROOT-Jupyter not
 
 We now use an external hipo4 repository. This must be pointed at with the variable HIPO when installing. The files from hipo/hipo4 will be copied here to Hipo4.
 
-### NEW
 
 A default hipo implementation is now packed with clas12root. If you prefer to use this do not set the enviroment variable HIPO. If you would like to use a different version of the hipo library set HIPO. You may get the most up to data hipo library from
 
@@ -40,8 +39,6 @@ cd clas12root
 
 Note you can try the install script for the DBs once CLAS12ROOT is set. But you may already have these installed on your system. You will also need to make sure you meet the installation requirements for these, (check the github pages, you may need to install mysql, scons,...)
 
-      setenv CLAS12ROOT $PWD
-      ./installDBs
 
 To individually install just the DBs you want to use,
 
@@ -51,10 +48,8 @@ git clone --recurse-submodules https://github.com/jeffersonlab/rcdb.git
 ##To download the CCDB repository
 git clone --recurse-submodules https://github.com/JeffersonLab/ccdb.git
 
-source ccdb/environment.csh
-
-cd $CCDB_HOME
-
+cd ccdb
+source environment.csh
 scons
 
 You may also want to download the latest CCDB sqlite database so you do not need remote connections. See  https://clasweb.jlab.org/wiki/index.php/CLAS12_Software_Center#tab=Reconstruction for details. Alternativly this is done in the PrepareDatabases.C script.
@@ -73,6 +68,8 @@ setenv PATH "$PATH":"$CLAS12ROOT/bin"
 setenv HIPO /Where/Is/hipo
 #To use the RCDB interface 
 setenv RCDB_HOME /Where/Is/rcdb
+#To use the CCDB interface 
+setenv CCDB_HOME /Where/Is/ccdb
 #To use clasqaDB interface
 setenv CLASQADB_HOME /Where/Is/clasqaDB
 ```
@@ -456,7 +453,7 @@ To use any database you must set the corresponding environment variables
 
 setenv RCDB_HOME /where/is/rcdb
 setenv CCDB_HOME /where/is/ccdb
-setenv CLASQA_HOME /where/is/clasqaDB
+setenv CLASQADB_HOME /where/is/clasqaDB
 
 ands pecify the location of the database before you create your clas12root object
 
