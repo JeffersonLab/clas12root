@@ -42,7 +42,7 @@ namespace clas12 {
   void ccdb_reader::close(){}
 
   //check if connection is valid
-  bool ccdb_reader::check(){}
+  bool ccdb_reader::check(){return true;}
 
 #endif
 
