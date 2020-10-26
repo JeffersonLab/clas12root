@@ -446,7 +446,7 @@ Start a ROOT note book :
 Click on the notebook CLAS12Writer3Pi.ipynb and follow the tutorial
 
 
-#Clas12Databases
+## Clas12Databases
 
 Currently there are 3 database pacakges integrated with clas12root, RCDB, CCDB and QADB, where the latter provides event quality information based on clas12monitoring.
 To use any database you must set the corresponding environment variables
@@ -503,7 +503,7 @@ An interface to the run conditions database is implemented by the class rcdb_rea
 Where ccdbElSF is a std::vector<std::vector<double>> and so you can access the elements like ccdbElSF[0][2];... When using HipoChain these values will update when you change file as the auto& => a reference to the table values rather than a fixed value. 
 
 
-## Skimming Based on Data Quality Assurance
+### Skimming Based on Data Quality Assurance
 
 clas12root can use the Quality Assurance database .json files found at https://github.com/c-dilks/clasqaDB/tree/master to reject events that have been identified as failing to meet certain requirements. This is implemented in an analysis using the clas12reader with the functions
 
@@ -526,7 +526,7 @@ Or in case you use HipoChain (also for when running PROOF/HipoSelector)
 
  
     
-where applyQA takes as argument a .json file containing the QA database. requireOkForAsymmetry(true) requires only events that were identified as suitable for asymmetry calculations, and requireGolden(true) requires only events without any defects. addQARequirement("Requirement") allows to reject events that fail to meet the specified requirement. These can be:
+where requireOkForAsymmetry(true) requires only events that were identified as suitable for asymmetry calculations, and requireGolden(true) requires only events without any defects. addQARequirement("Requirement") allows to reject events that fail to meet the specified requirement. These can be:
 
     TotalOutlier: outlier N/F, but not terminal, marginal, or sector loss
     TerminalOutlier: outlier N/F of first or last file of run
@@ -545,7 +545,7 @@ The QA database is contained in several .json files that can be found on the cla
 This step can be performed with the RunRoot PrepareDatabases.C script,
 You should copy this locally and edit the HipoChain files if you are using RCDB.
  
-Example usage can be found at RunRoot/Ex9_QualityAssurance.C. More information on the Quality Assurance process can be found in the RGA analysis note.
+More information on the Quality Assurance process can be found in the RGA analysis note.
 
 ### Using databases with HipoSelector
 
