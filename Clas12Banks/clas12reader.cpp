@@ -96,13 +96,24 @@ namespace clas12 {
   ///Basically get the run number!
   ///will open and close a hipo file
   int  clas12reader::readQuickRunConfig(const std::string& filename) {
-    if(filename.empty()==true) return 0;
+
+
+    //There are some inconsistencies on which the RunConfig tag is...
+    //So just in case...
+    int rnb=tryTaggRunConfig( filename,1);
+    if(rnb==0) return tryTaggRunConfig( filename,0);
+    else return rnb;
+
+  }
+     
+  int  clas12reader::tryTaggRunConfig(const std::string& filename, int tag) {
+   if(filename.empty()==true) return 0;
     
     hipo::reader     areader;
     hipo::event      anevent;
     hipo::dictionary  afactory;
     
-    areader.setTags(0);
+    areader.setTags(tag);
     areader.open(filename.data()); //keep a pointer to the reader
     areader.readDictionary(afactory);
     
@@ -116,8 +127,7 @@ namespace clas12 {
 
       runNo=arunconf.getRun();
     }
-
-    std::cout<<"Found run number : "<<runNo<<std::endl;
+    std::cout<<"Found run number : "<<runNo<<"  in tag "<<tag<<std::endl;
     return runNo;
   }
   ///////////////////////////////////////////////////////////////////////

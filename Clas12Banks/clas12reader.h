@@ -185,8 +185,9 @@ namespace clas12 {
 
     //rcdb
     static int readQuickRunConfig(const std::string& filename);
-    void queryRcdb();
-
+    static int tryTaggRunConfig(const std::string& filename, int tag);
+    
+  
     void setEntries(long n){_nToProcess = n;}
 
   protected:
