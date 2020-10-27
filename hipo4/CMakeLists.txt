@@ -1,7 +1,7 @@
 
-ROOT_GENERATE_DICTIONARY(G__Hipo4  reader.h bank.h writer.h  ntuple_writer.h ntuple_reader.h LINKDEF HipoLinkDef.h)
+#ROOT_GENERATE_DICTIONARY(G__Hipo4  reader.h bank.h writer.h  ntuple_writer.h ntuple_reader.h LINKDEF HipoLinkDef.h) #cant' generate dictionary for ntuple_writer with ROOT 6.22.02 see https://sft.its.cern.ch/jira/browse/ROOT-11013
 
-#ROOT_GENERATE_DICTIONARY(G__Hipo4  reader.h bank.h writer.h LINKDEF HipoLinkDef.h)
+ROOT_GENERATE_DICTIONARY(G__Hipo4  reader.h bank.h writer.h LINKDEF HipoLinkDef.h)
 
 add_library(Hipo4 SHARED utils.cpp dictionary.cpp  event.cpp record.cpp recordbuilder.cpp reader.cpp bank.cpp writer.cpp ntuple_writer.cpp ntuple_reader.cpp  G__Hipo4.cxx)
 
