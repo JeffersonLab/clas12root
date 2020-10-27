@@ -10,9 +10,10 @@
 #include <TString.h>
 #include <TSystem.h>
 
-#ifdef RCDB_MYSQL
-   #include "rcdb_reader.h"
-#endif
+//#ifdef CLAS_RCDB
+//   #include "rcdb_reader.h"
+//#endif
+
 
 namespace clas12root {
 
@@ -34,12 +35,12 @@ namespace clas12root {
     Int_t GetNFiles() const {return _ListOfFiles->GetEntries();}
     Long64_t GetNRecords();
 
-    TString GetFileName(Int_t i){
+    TString GetFileName(Int_t i)const{
       if(i>=GetNFiles()) return TString();
       return _ListOfFiles->At(i)->GetTitle();
     }
 
-    Int_t GetFileRecords(Int_t i){
+    Int_t GetFileRecords(Int_t i)const{
       if(i<GetNFiles()) return _fileRecords[i];
       return 0 ;
     };
@@ -52,29 +53,24 @@ namespace clas12root {
     void SetReaderTags(std::vector<long> tags){_readerTags=tags;}
     std::vector<long> ReaderTags()const noexcept{return _readerTags;}
     
-    clas12::clas12reader* GetC12Reader() {
-      if( (_c12ptr=_c12.get()) )
-	return _c12ptr;
-      _c12.reset(new clas12::clas12reader{""});
-      _c12ptr = _c12.get();
-      return  _c12ptr;
-    }
+    clas12::clas12reader* GetC12Reader();
 
     void AddBeamCharge(Double_t bc){_totBeamCharge+=bc;}
     Double_t TotalBeamCharge() const noexcept{return _totBeamCharge;}
 
-
-
+    clas12::clas12databases* db() {return &_db;}
+    void ConnectDataBases(){_c12->connectDataBases(&_db);}
+    
 ///////////////////////////////RCDB
     void WriteRcdbData(TString filename);
-    clas12::rcdb_vals FetchRunRcdb(const TString& datafile);
+    // clas12::rcdb_vals FetchRunRcdb(const TString& datafile);
 
-    void SetRcdbFile(const TString& filename ){
+    /*    void SetRcdbFile(const TString& filename ){
       //needs full path for PROOF
       if(filename.BeginsWith("/")==kFALSE&&filename.BeginsWith("$")==kFALSE)
 	_rcdbFileName = TString(gSystem->Getenv("PWD"))+"/"+filename;
       else _rcdbFileName=filename;
-    }
+      }*/
 ///////////////////////////////
     
   private :
@@ -86,6 +82,8 @@ namespace clas12root {
     std::unique_ptr<clas12::clas12reader> _c12;
 
     clas12::clas12reader* _c12ptr{nullptr};//!
+
+    clas12::clas12databases _db;
     
     Long64_t _Nrecords{-1};
     std::vector<Int_t> _fileRecords;

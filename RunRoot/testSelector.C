@@ -20,6 +20,7 @@
 
 
 #include "testSelector.h"
+#include "ccdb_reader.h"
 #include <TH2.h>
 #include <TSystem.h>
 #include <TCanvas.h>
@@ -55,11 +56,22 @@ namespace clas12root{
     fOutput->Add(hm2g);
     fOutput->Add(hm2gCut);
     
- 
     HipoSelector::SlaveBegin(0); //Do not remove this line!
-    
-  }
 
+    //get links to items in CCDB table
+    _sampleFrac = requestCCDBTable("/calibration/eb/electron_sf");
+  }
+  Bool_t testSelector::Notify(){
+    HipoSelector::Notify();
+    
+    if(_c12->rcdb()){
+      cout<<"Using beam energy for rcdb "<< _c12->rcdb()->current().beam_energy<<endl;
+      _beam.SetE( _c12->rcdb()->current().beam_energy/1000);
+    }
+
+    
+    return kTRUE;
+  }
   void testSelector::AddFilter(){
     _c12->addExactPid(11,1);    //exactly 1 electron
     _c12->addExactPid(211,1);    //exactly 1 pi+
@@ -67,8 +79,6 @@ namespace clas12root{
     _c12->addExactPid(2212,1);    //exactly 1 proton
     _c12->addExactPid(22,2);    //exactly 2 gamma
 
-    //cout<<"Using beam energy for rcdb "<<_c12->getRcdbVals().beam_energy<<endl;
-    // _beam.SetE(_c12->getRcdbVals().beam_energy/1000);
   }
   
   void SetLorentzVector(TLorentzVector &p4,clas12::region_part_ptr rp){
@@ -81,7 +91,8 @@ namespace clas12root{
     //Equivalent to TSelector Process
     //Fill in what you would like to do with
     //the data for each event....
-  
+    // cout<<"ProcessEvent "<< _c12->rcdb()->current().beam_energy<< " "<< RcdbVals().beam_energy<<" "<< _sampleFrac->size()<<" "<<(*_sampleFrac)[0][5]<<endl;
+
     auto electrons=_c12->getByID(11);
     auto gammas=_c12->getByID(22);
     auto protons=_c12->getByID(2212);

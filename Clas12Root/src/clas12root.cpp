@@ -1,7 +1,7 @@
 #include <iostream>
 #include <TRint.h>
 #include <TString.h>
-
+#include <TSystem.h>
 
 int main(int argc, char **argv) {
 
@@ -10,6 +10,7 @@ int main(int argc, char **argv) {
   app->SetPrompt("clas12root [%d] ");
 
   app->ProcessLine(".x $CLAS12ROOT/RunRoot/LoadClas12Root.C");
+
 
   app->Run();
 

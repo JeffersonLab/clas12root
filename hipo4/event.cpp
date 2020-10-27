@@ -41,7 +41,7 @@ namespace hipo {
 
     event::event(){
         #if __cplusplus > 199711L
-            printf("\n*****>>>>> compiled with c++11 support.\n");
+            //printf("\n*****>>>>> compiled with c++11 support.\n");
         #endif
         // default allocation size for the event is 128 Kb
         dataBuffer.resize(128*1024);

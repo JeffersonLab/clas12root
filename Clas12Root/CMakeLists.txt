@@ -5,6 +5,7 @@ set(HIPO Hipo4)
 #include rcdb c++ header library
 IF (DEFINED ENV{RCDB_HOME})
   include_directories($ENV{RCDB_HOME}/cpp/include)
+  add_definitions(-DCLAS_RCDB)
   #find path to mysql include directory
   FIND_PATH(MYSQL_INCLUDE_DIR mysql.h
     /usr/local/include/mysql
@@ -27,6 +28,13 @@ IF (DEFINED ENV{RCDB_HOME})
   ENDIF (MYSQL_INCLUDE_DIR AND MYSQL_LIBRARY)
 
 ENDIF (DEFINED ENV{RCDB_HOME})
+
+IF (DEFINED ENV{CCDB_HOME})
+  include_directories($ENV{CCDB_HOME}/include)
+ENDIF (DEFINED ENV{CCDB_HOME})
+
+
+include_directories(${CLAS12BANKS_DIR})
 
 ROOT_GENERATE_DICTIONARY(G__${CLAS12ROOT}  BankHist.h HipoHist.h HipoTreeMaker.h HipoChain.h HipoRootAction.h   HipoROOTOut.h ParticleHist.h HipoSelector.h ParticleTree.h LINKDEF Clas12RootLinkDef.h)
 
