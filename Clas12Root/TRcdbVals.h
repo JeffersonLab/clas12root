@@ -17,8 +17,8 @@ namespace clas12root {
 
     ClassDef(clas12root::TRcdbVals,1);
   };
-#pragma link C++ class clas12root::TRcdbVals+;
-#pragma link C++ class clas12::rcdb_vals+;
+  #pragma link C++ class clas12root::TRcdbVals+;
+  //#pragma link C++ class clas12::rcdb_vals+;
 }
 
 ///////////////////////////////   

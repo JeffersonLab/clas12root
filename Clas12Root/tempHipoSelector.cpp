@@ -50,6 +50,15 @@ namespace clas12root{
     HipoSelector::SlaveBegin(0); //Do not remove this line!
     
   }
+  Bool_t tempHipoSelector::Notify(){
+    HipoSelector::Notify();
+    //Add your code here
+    //e.g.
+    //if(_c12->rcdb()){
+    // cout<<"Using beam energy for rcdb "<< _c12->rcdb()->current().beam_energy<<endl;
+    //_beam.SetE( _c12->rcdb()->current().beam_energy/1000);
+    }
+  }
   
   void tempHipoSelector::AddFilter(){
     //   _c12->addExactPid(11,1);    //exactly 1 electron

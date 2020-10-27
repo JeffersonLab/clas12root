@@ -2,9 +2,10 @@
 #include <TFile.h>
 #include "HipoChain.h"
 #include "reader.h"
+#include "clas12reader.h"
 
 namespace clas12root {
-
+  
   HipoChain::HipoChain(): TNamed("HIPOFILES","A chain of hipo files"){
 
     _ListOfFiles=_tchain.GetListOfFiles();
@@ -52,7 +53,6 @@ namespace clas12root {
   }
   
   Bool_t HipoChain::Next(){
-
     bool more = kFALSE;
 
     if( _c12.get() )  more = _c12->next();
@@ -81,31 +81,43 @@ namespace clas12root {
     //open next file
     // _c12.reset(new clas12::clas12reader{*_c12.get(),GetFileName(_idxFile++).Data(),_readerTags});
    _c12.reset(new clas12::clas12reader{*GetC12Reader(),GetFileName(_idxFile++).Data(),_readerTags});
+   ConnectDataBases();
    //if there is a root rcdb file use it
-   if(_rcdbFileName.Length())_c12->setRcdbVals(FetchRunRcdb(_c12->getFilename()));
+   //if(_rcdbFileName.Length())_c12->setRcdbVals(FetchRunRcdb(_c12->getFilename()));
    
     _c12ptr = _c12.get();	
     return kTRUE;
   }
 
 
+  clas12::clas12reader* HipoChain::GetC12Reader() {
+      if( (_c12ptr=_c12.get()) )
+	return _c12ptr;
+      _c12.reset(new clas12::clas12reader{""});
+      ConnectDataBases();
+      _c12ptr = _c12.get();
+      return  _c12ptr;
+    }
+
+
+
   /////////////////////////////////////////////////////
-  /// Get the rcdb info for all the files in the chain
-  
+  /// Get the rcdb info for all the files in the chain 
   void HipoChain::WriteRcdbData(TString filename){
 
     _rcdbFileName=filename;
     
- #ifdef RCDB_MYSQL
-  
+ #ifdef CLAS_RCDB
+    std::cout<<"HipoChain "<<std::endl;
     auto rcdbFile=std::unique_ptr<TFile>{TFile::Open(filename,"recreate")};
-    clas12::rcdb_reader rc; //initialise rcdb_reader
+    clas12::rcdb_reader rc{clas12::clas12databases().rcdbPath()}; //initialise rcdb_reader
   
     auto nfiles=GetNFiles();
     //loop over files and get the rcdb data
     for(auto i=0;i<nfiles;++i){
       auto runNb=clas12::clas12reader::readQuickRunConfig(GetFileName(i).Data());
-      auto vals=std::unique_ptr<clas12root::TRcdbVals>{new clas12root::TRcdbVals(rc.readAll(runNb,GetFileName(i).Data()))};
+      auto runName = Form("%d",runNb);
+      auto vals=std::unique_ptr<clas12root::TRcdbVals>{new clas12root::TRcdbVals(rc.readAll(runNb,runName))};
       //auto vals=new clas12root::TRcdbVals(rc.readAll(runNb,GetFileName(i).Data()));
 
       vals->Write();
@@ -115,12 +127,13 @@ namespace clas12root {
 #endif
     
   }
+  /*
   ////////////////////////////////////////////////////////////
   ///Get a copy of the rcdb values for run number runNb,
   ///from file fname created previously by WriteRcdbData
   //#include ""
   clas12::rcdb_vals HipoChain::FetchRunRcdb(const TString& datafile){
-#ifdef RCDB_MYSQL
+#ifdef CLAS_RCDB
 
     //make file and list unique_ptr so deleted when we return
     auto rcdbFile=std::unique_ptr<TFile>{TFile::Open(_rcdbFileName)};
@@ -143,4 +156,5 @@ namespace clas12root {
     //no rcdb     
     return clas12::rcdb_vals();
   }
+  */
 }

@@ -10,7 +10,6 @@ Examples are given for running in interactive ROOT sessions and ROOT-Jupyter not
 
 We now use an external hipo4 repository. This must be pointed at with the variable HIPO when installing. The files from hipo/hipo4 will be copied here to Hipo4.
 
-### NEW
 
 A default hipo implementation is now packed with clas12root. If you prefer to use this do not set the enviroment variable HIPO. If you would like to use a different version of the hipo library set HIPO. You may get the most up to data hipo library from
 
@@ -22,6 +21,8 @@ The Clas12Banks implementation can be used independent of ROOT, although current
 For actual Clas12Banks definitions see [HIPO4 DSTs](https://clasweb.jlab.org/wiki/index.php/CLAS12_DSTs)
 
 An interface to the c++ [Run Conditions DataBase](https://github.com/JeffersonLab/rcdb/wiki/Cpp) requires downloading the relevant code from https://github.com/JeffersonLab/rcdb . This is optional and depends on the existence of an environment variable containing the path to the RCDB code. The interface also requires having MySQL installed.
+
+clas12root provides an interface to the clasqaDB c++ code to allow skimming of events based on the Data Quality Assurance. This is optional and depends on the existence of an environment variable containing the path to the clasqaDB code, which must be downloaded from https://github.com/c-dilks/clasqaDB/tree/master.
 
 ## Also see c++ function for accessing banks "Cheat sheet" AccesssingBankDataInCpp.txt in the top level directory.
 
@@ -35,8 +36,27 @@ The Clas12Root package depends on both Hipo and Clas12Banks. This provides ROOT-
 ```bash
 git clone --recurse-submodules https://github.com/jeffersonlab/clas12root.git
 cd clas12root
-#To download the RCDB interface 
+
+Note you can try the install script for the DBs once CLAS12ROOT is set. But you may already have these installed on your system. You will also need to make sure you meet the installation requirements for these, (check the github pages, you may need to install mysql, scons,...)
+
+
+To individually install just the DBs you want to use,
+
+##To download the RCDB repository
 git clone --recurse-submodules https://github.com/jeffersonlab/rcdb.git
+
+##To download the CCDB repository
+git clone --recurse-submodules https://github.com/JeffersonLab/ccdb.git
+
+cd ccdb
+source environment.csh
+scons
+
+You may also want to download the latest CCDB sqlite database so you do not need remote connections. See  https://clasweb.jlab.org/wiki/index.php/CLAS12_Software_Center#tab=Reconstruction for details. Alternativly this is done in the PrepareDatabases.C script.
+
+##To download the clasqaDB repository 
+git clone --recurse-submodules https://github.com/c-dilks/clasqaDB.git
+
 ```
 
 ## To setup Run ROOT
@@ -48,6 +68,10 @@ setenv PATH "$PATH":"$CLAS12ROOT/bin"
 setenv HIPO /Where/Is/hipo
 #To use the RCDB interface 
 setenv RCDB_HOME /Where/Is/rcdb
+#To use the CCDB interface 
+setenv CCDB_HOME /Where/Is/ccdb
+#To use clasqaDB interface
+setenv CLASQADB_HOME /Where/Is/clasqaDB
 ```
 
 or for bash
@@ -57,6 +81,8 @@ export PATH="$PATH":"$CLAS12ROOT/bin"
 export HIPO=/Where/Is/hipo
 #To use the RCDB interface 
 export RCDB_HOME /Where/Is/rcdb
+#To use clasqaDB interface
+export CLASQADB_HOME /Where/Is/clasqaDB
 ```
 
 ## To install
@@ -64,8 +90,12 @@ export RCDB_HOME /Where/Is/rcdb
 Note on ifarm depending on which version on ROOT and gcc you are using you may have to set the CC and CXX variables or else you will get library linking errors. To do this you will need something like,
 
 ```sh
-set CC =  `which gcc`
-set CXX = `which g++`
+which gcc
+   gives /myz/gcc
+setenv CC   /xyz/gcc
+which g++
+  gives /myz/c++
+setenv CXX  /myz/c++
 ```
 Or just set the paths to CC and CXX directly.
 
@@ -255,7 +285,6 @@ For Run::config
        e.g. RUN.Trigger
 
 
-### NEW
 
   You can set the number of events to process :
 
@@ -416,31 +445,139 @@ Start a ROOT note book :
 
 Click on the notebook CLAS12Writer3Pi.ipynb and follow the tutorial
 
-## Ex 8 Reading from the Run Conditions DataBase
 
-clas12reader can make a connection to the RCDB database and download the relevent information for a run. The downloaded information can be accessed via a rcdb_vals struct,
+## Clas12Databases
 
-      clas12reader c12("/a/hipo/file.hipo");
-      c12.queryRcdb(); //only check rcdb values when asked to (and RCDB_HOME was set)
-      auto rcdbData=c12.getRcdbVals();//struct with all relevent rcdb values
+Currently there are 3 database pacakges integrated with clas12root, RCDB, CCDB and QADB, where the latter provides event quality information based on clas12monitoring.
+To use any database you must set the corresponding environment variables
+
+setenv RCDB_HOME /where/is/rcdb
+setenv CCDB_HOME /where/is/ccdb
+setenv CLASQADB_HOME /where/is/clasqaDB
+
+ands pecify the location of the database before you create your clas12root object
+
+        clas12databases::SetCCDBLocalConnection("/where/to/ccdb.sqlite");
+  	clas12databases::SetQADBConnection("/where/to/qaDB.json");
+  	clas12databases::SetRCDBRootConnection("/where/to/rcdb.root");
+
+These local files can be created using the $CLAS12ROOT/RunRoot/PrepareDatabases.C macro. You are best copying this locally and editing for any datafiles you want to add to the RCDB file list.
+
+It is also possible to make remote connections for RCDB and CCDB, but this is not a good idea so please do not, other than in the PrepareDatabases.C script.
+
+  	clas12databases::SetCCDBRemoteConnection(); //not recommended
+  	clas12databases::SetRCDBRemoteConnection(); //not recommended
+
+It is generally recommended to run clas12root via HipoChain for processing of more than 1 file. In case you do not use this you can still connect the databases to your clas12reader
+
+      clas12reader c12("/this/is/my/file.hipo",{0});
+      clas12databases db;
+      c12.connectDataBases(&db);
+
+When using HipoChain the databases are connected automatically as long as you have the SetCCDB etc, lines in your code.
+
+      auto c12=chain.GetC12Reader();
+      c12->db()->ccdb().....
+
+Example of using clas12databases are given in Ex10_clas12Databases.C  Ex10_clas12DatabasesChain.C
+
+### Reading from the Run Conditions DataBase
+
+  Supposing you have successfully setup clas12databases you can access the RCDB table via, 
+
+      auto& rcdbData= c12->rcdb()->current();//using HipoChain
+      OR auto& rcdbData= c12.rcdb()->current();//using standalone clas12reader object
       auto energy = rcdbData.beam_energy;
-      
+
+
+
 An interface to the run conditions database is implemented by the class rcdb_reader. It will open a connection to rcdb@clasdb.jlab.org/rcdb and allow you to retrieve condition values for a given run. This class interfaces to the Run Conditions DataBase c++ code, more information on it can be found at https://github.com/JeffersonLab/rcdb/wiki/Cpp and the database itself can be viewed at https://clasweb.jlab.org/rcdb/. A full list of the relevent variables can be found at https://clasweb.jlab.org/rcdb/conditions/
 
-An example on how to use the raw rcdb_reader interface can be found in RunRoot/Ex8_RcdbReader.C. But users should just use the clas12reader functions rather than handling rcdb_reader directly to limit the number of connections and queries as given in Ex8b_RcdbReader.C.
+### Reading from the Calibration Conditions DataBase
+
+  Supposing you have successfully setup clas12databases you can access a CCDB table via, for example,
+
+     auto&  ccdbElSF=c12->ccdb()->requestTableDoubles("/calibration/eb/electron_sf");//using HipoChain
+    OR  auto&  ccdbElSF=c12.ccdb()->requestTableDoubles("/calibration/eb/electron_sf");//using standalone clas12reader object
+
+Where ccdbElSF is a std::vector<std::vector<double>> and so you can access the elements like ccdbElSF[0][2];... When using HipoChain these values will update when you change file as the auto& => a reference to the table values rather than a fixed value. 
 
 
-To try the example
+### Skimming Based on Data Quality Assurance
 
-       clas12root RunRoot/Ex8b_RcdbReader.C+
+clas12root can use the Quality Assurance database .json files found at https://github.com/c-dilks/clasqaDB/tree/master to reject events that have been identified as failing to meet certain requirements. This is implemented in an analysis using the clas12reader with the functions
+
+     c12.db().qadb_requireOkForAsymmetry(true);
+     c12.db().qadb_requireGolden(true);
+     c12.db().qadb_addQARequirement("MarginalOutlier");
+     c12.db().qadb_addQARequirement("TotalOutlier");
+     c12.applyQA();
+
+
+Or in case you use HipoChain (also for when running PROOF/HipoSelector)
+
+      auto c12=chain.GetC12Reader();
+
+      c12->db().qadb_requireOkForAsymmetry(true);
+      c12->db().qadb_requireGolden(true);
+      c12->db().qadb_addQARequirement("MarginalOutlier");
+      c12->db().qadb_addQARequirement("TotalOutlier");
+      c12->applyQA();
+
  
-In the case where many files are to be analysed use of HipoChain is recommended and this includes some rcdb features. Once a chain of file is created it can be used to access the RCDB and download the info for those files. This information is then saved locally in a root file which can be used directly when processing the HipoChain. Reading of the local rcdb file is then already automated in HipoSelector
+    
+where requireOkForAsymmetry(true) requires only events that were identified as suitable for asymmetry calculations, and requireGolden(true) requires only events without any defects. addQARequirement("Requirement") allows to reject events that fail to meet the specified requirement. These can be:
 
-      clas12root::HipoChain chain;
-      chain.Add("/dir/files_*.hipo");//To creat rcdb data RCDB_HOME must be set prior to installation
-      chain.WriteRcdbData("rcdb.root"); //Must use this first time to create local copy
-      //Then when we have local copy can just use the following
-      chain.SetRcdbFile("rcdb.root");
+    TotalOutlier: outlier N/F, but not terminal, marginal, or sector loss
+    TerminalOutlier: outlier N/F of first or last file of run
+    MarginalOutlier: marginal outlier N/F, within one stddev of cut line
+    SectorLoss: N/F diminished within a sector for several consecutive files
+    LowLiveTime: live time < 0.9
+    Misc: miscellaneous defect
+
+The QA database is contained in several .json files that can be found on the clasqaDB github [repository](https://github.com/c-dilks/clasqaDB/tree/master). These can be merged within clas12root using the jsonFileMerger class with the functions:
+
+    jsonFileMerger merger("/absolute/path/for/output.json");
+    merger.addFile("/absolute/path/for/input1.json");
+    merger.addFile("/absolute/path/for/input2.json");
+    merger.mergeAllFiles();
+
+This step can be performed with the RunRoot PrepareDatabases.C script,
+You should copy this locally and edit the HipoChain files if you are using RCDB.
+ 
+More information on the Quality Assurance process can be found in the RGA analysis note.
+
+### Using databases with HipoSelector
+
+In your run script you must just set the paths to the data as normal and configure the QADB conditions as above.
+
+Inside your Selector class for CCDB tables :
+
+1) Include CCDBTable datamember for any table you will use, in YourSelector.h class defintion
+
+      clas12::CCDBTable _sampleFrac;
+
+2) In SlaveBegin() request the table,
+
+     //get links to items in CCDB table
+      _sampleFrac = requestCCDBTable("/calibration/eb/electron_sf");
+
+3) In ProcessEvent() use the table entries
+
+     Double_t aTableEntry = (&_sampleFrac)[0][0];
 
 
-See also Ex1_CLAS12ReaderChain.C for the relevent lines.
+Inside your Selector class for RCDB tables :
+
+1)  In Notify() access the rcdb table values e.g.
+
+     _beam.SetE( _c12->rcdb()->current().beam_energy/1000);
+
+
+See Ex3b_TestSelector.C and testSelector.C and .h for implementation example. To use the databases you need to comment in the lines
+
+    clas12databases::SetCCDBLocalConnection("ccdb.sqlite");
+    clas12databases::SetQADBConnection("qaDB.json");
+    clas12databases::SetRCDBRootConnection("rcdb.root");
+
+Having run PrepareDatabases.C with the  HipoChain set for the files you wish to process.

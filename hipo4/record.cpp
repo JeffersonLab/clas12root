@@ -99,8 +99,8 @@ namespace hipo {
 
         if(dataBufferLengthBytes>recordCompressedBuffer.size()){
           int newSize = dataBufferLengthBytes + 5*1024;
-          printf("---> resizing internal compressed buffer size to from %ld to %d\n",
-             recordCompressedBuffer.size(), newSize);
+          //printf("---> resizing internal compressed buffer size to from %ld to %d\n",
+          //   recordCompressedBuffer.size(), newSize);
           recordCompressedBuffer.resize(newSize);
         }
         //dataBufferLengthBytes    -= compressedDataLengthPadding;
@@ -117,7 +117,7 @@ namespace hipo {
                                  recordHeader.recordDataLength;
 
         if(recordBuffer.size()<decompressedLength){
-          printf(" resizing internal buffer from %lu to %d\n", recordBuffer.size(), recordHeader.recordDataLength);
+          //printf(" resizing internal buffer from %lu to %d\n", recordBuffer.size(), recordHeader.recordDataLength);
           recordBuffer.resize(decompressedLength+1024);
         }
         //readBenchmark.pause();

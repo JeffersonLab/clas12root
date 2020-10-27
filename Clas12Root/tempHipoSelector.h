@@ -23,7 +23,8 @@ namespace clas12root{
       void    Terminate() final;
 
       void AddFilter() override;
- 
+      Bool_t Notify() override;
+
   private:
 
       

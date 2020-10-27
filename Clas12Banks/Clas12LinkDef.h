@@ -31,6 +31,11 @@
 #pragma link C++ class clas12::clas12writer+;
 #pragma link C++ class clas12::clas12reader+;
 #pragma link C++ class clas12::rcdb_reader+;
+#pragma link C++ class clas12::rcdb_vals+;
+#pragma link C++ class clas12::ccdb_reader+;
+#pragma link C++ class clas12::clas12databases+;
 #pragma link C++ class clas12::scaler_reader+;
 #pragma link C++ class clas12::mesonex_trigger+;
+#pragma link C++ class clas12::jsonFileMerger+;
+#pragma link C++ class clas12::qadb_reader+;
 #endif

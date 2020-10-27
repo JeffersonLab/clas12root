@@ -135,11 +135,11 @@ namespace hipo {
 
 
   typedef struct {
-      long recordPosition;
-      int  recordLength;
-      int  recordEntries;
-      long userWordOne;
-      long userWordTwo;
+      long recordPosition{};
+      int  recordLength{};
+      int  recordEntries{};
+      long userWordOne{};
+      long userWordTwo{};
   } recordInfo_t;
 
 
@@ -163,8 +163,8 @@ namespace hipo {
 
    public:
 
-      readerIndex()= default;
-      ~readerIndex()= default;
+      readerIndex()= default;;
+      ~readerIndex()= default;;
 
       bool canAdvance();
       bool advance();
@@ -236,10 +236,10 @@ namespace hipo {
         void  read(hipo::event &dataevent);
         void  printWarning();
 	//dglazier
- 	      int getNRecords() const {return readerEventIndex.getNRecords()-1;}
-	      bool  nextInRecord();
-	      bool loadRecord(int irec);
-	      int  getEntries(){return readerEventIndex.getMaxEvents();}
-      };
+	int getNRecords() const {return readerEventIndex.getNRecords()-1;}
+	bool  nextInRecord();
+	bool loadRecord(int irec);
+	int  getEntries(){return readerEventIndex.getMaxEvents();}
+  };
 }
 #endif /* HIPOREADER_H */

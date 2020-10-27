@@ -19,8 +19,8 @@ namespace hipo {
       entry.clear();
       hipo::utils::tokenize(entries[i],entry, "/");
       schemaEntry_t e;
-      e.name = entry[0];
-      e.type = entry[1];
+      e.name = hipo::utils::trim(entry[0]);
+      e.type = hipo::utils::trim(entry[1]);
       e.typeId = getTypeByString(e.type);
       e.typeSize = getTypeSize(e.typeId);
       e.offset   = offset;
@@ -64,9 +64,10 @@ namespace hipo {
     printf("schema : %14s , group = %6d, item = %3d\n",
        schemaName.c_str(),groupid,itemid);
     for(auto & schemaEntrie : schemaEntries){
-      printf("%16s : (%3s) %5d %5d , offset = %3d\n",
+      printf("%16s : (%3s) %5d %5d , offset = %3d --> [%s]\n",
          schemaEntrie.name.c_str(),schemaEntrie.type.c_str(),
-         schemaEntrie.typeId,schemaEntrie.typeSize, schemaEntrie.offset
+         schemaEntrie.typeId,schemaEntrie.typeSize, schemaEntrie.offset,
+         schemaEntrie.name.c_str()
          );
     }
   }

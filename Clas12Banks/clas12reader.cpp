@@ -14,7 +14,8 @@ namespace clas12 {
 
     cout<<" clas12reader::clas12reader reading "<<filename.data()<<endl;
     _reader.setTags(tags);
- 
+    
+     
     if(_filename.empty()==false)initReader();
   }
   ///////////////////////////////////////////////////
@@ -22,7 +23,10 @@ namespace clas12 {
   ///opens a new reader
   ///Can give alternative filename
   clas12reader::clas12reader(const clas12reader &other,std::string filename,
-			     std::vector<long> tags):_filename(filename){
+			     std::vector<long> tags):
+    _filename(filename)
+    //_db{other._db}
+  {
     
     cout<<" COPY clas12reader::clas12reader reading "<<filename.data()<<endl;
 
@@ -39,8 +43,11 @@ namespace clas12 {
     _zeroOfRestPid=other._zeroOfRestPid;
     _useFTBased=other._useFTBased;
     _nToProcess=other._nToProcess;
- 
+
+    //if(other._connectDB)connectDataBases(other._db); //give databases the run number
+    _applyQA=other._applyQA;
   }
+
   void clas12reader::initReader(){
     _reader.open(_filename.data()); //keep a pointer to the reader
 
@@ -81,10 +88,7 @@ namespace clas12 {
     if(_factory.hasSchema("HEL::online"))
       _bhelonline.reset(new clas12::helonline{_factory.getSchema("HEL::online")});
 
-    
     makeListBanks();
-    
-  
 
   }
 
@@ -92,11 +96,24 @@ namespace clas12 {
   ///Basically get the run number!
   ///will open and close a hipo file
   int  clas12reader::readQuickRunConfig(const std::string& filename) {
+
+
+    //There are some inconsistencies on which the RunConfig tag is...
+    //So just in case...
+    int rnb=tryTaggRunConfig( filename,1);
+    if(rnb==0) return tryTaggRunConfig( filename,0);
+    else return rnb;
+
+  }
+     
+  int  clas12reader::tryTaggRunConfig(const std::string& filename, int tag) {
+   if(filename.empty()==true) return 0;
+    
     hipo::reader     areader;
     hipo::event      anevent;
     hipo::dictionary  afactory;
     
-    areader.setTags(1);
+    areader.setTags(tag);
     areader.open(filename.data()); //keep a pointer to the reader
     areader.readDictionary(afactory);
     
@@ -110,28 +127,29 @@ namespace clas12 {
 
       runNo=arunconf.getRun();
     }
-
-    std::cout<<"Found run number : "<<runNo<<std::endl;
+    std::cout<<"Found run number : "<<runNo<<"  in tag "<<tag<<std::endl;
     return runNo;
   }
   ///////////////////////////////////////////////////////////////////////
   ///Function to query RCDB and record most relevant run conditions.
   ///This is only called once to avoid overloading the database.
-  void clas12reader::queryRcdb(){
+  /*void clas12reader::queryRcdb(){
     if(_rcdbQueried==true) return; //only allowed to call once
     _rcdbQueried=true;
 
 #ifdef RCDB_MYSQL
-    _runNo=readQuickRunConfig(_filename);
+    if(_runNo==0){
+      _runNo=readQuickRunConfig(_filename);
+    }
     
-    rcdb_reader rc; //initialise rcdb_reader
+    rcdb_reader rc("mysql://rcdb@clasdb.jlab.org/rcdb"); //initialise rcdb_reader
     
     //For full list see https://clasweb.jlab.org/rcdb/conditions/
     _rcdbVals = rc.readAll(_runNo,getFilename());
-#endif
+ #endif
     //rcdb connection closed when rc goes out of scope here 
   }
-
+  */
   
   ///////////////////////////////////////////////////////
   ///read the data
@@ -195,7 +213,13 @@ namespace clas12 {
     }
     //Special run banks
     if(_brunconfig.get())_event.getStructure(*_brunconfig.get());
-   
+    //check if event has QA requirements and those were met
+    if(_applyQA&&_db->qa()!=nullptr){
+      if(!_db->qa()->passQAReqs(_brunconfig->getEvent())){
+  	return false;
+      }
+    }
+
     //now getthe data for the rest of the banks
     if(_bmcparts.get())_event.getStructure(*_bmcparts.get());
     if(_bcovmat.get())_event.getStructure(*_bcovmat.get());
@@ -397,6 +421,40 @@ namespace clas12 {
 			    {return dr->par()->getCharge()==ch;});
   }
 
+  ////////////////////////////////////////////////////////////////
+  ///Enable QA skimming.
+  /*void clas12reader::applyQA(std::string jsonFilePath){
+#ifdef CLAS_QADB
+    //_runNo may already have been found
+    if(_runNo==0){
+      _runNo=readQuickRunConfig(_filename);
+    }
+    _qa.reset(new qadb_reader(jsonFilePath, _runNo));
+#endif
+}*/
+
+  //////////////////////////////////////////////////////////////
+  ///Returns qadb_reader once declared
+  /*#ifdef CLAS_QADB
+  qadb_reader * clas12reader::getQAReader(){
+    return _qa.get();
+  }
+#endif
+  */
+  ////////////////////////////////////////////////////////////
+  ///connect to the data bases
+  void clas12reader::connectDataBases(clas12databases* db){
+    _db=db;
+    //void clas12reader::connectDataBases(){
+
+    _connectDB=true;
+    
+    // if(_runNo==0){
+    _runNo=readQuickRunConfig(_filename);
+    //}
+    std::cout<<"Connecting databases to run "<<_runNo<<std::endl;
+     if(_runNo!=0)_db->notifyRun(_runNo);
+  }
   /////////////////////////////////////////////////////////
   ///make a list of banks
   void clas12reader::makeListBanks(){
