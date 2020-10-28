@@ -45,7 +45,6 @@ void Ex1_CLAS12ReaderChain(){
    int counter=0;
    
    clas12root::HipoChain chain;
-   chain.Add("/work/jlab/clas12data/pass0/skim3_005424.hipo");
    // chain.Add("/WHERE/IS/MY/HIPO/file1.hipo");
    // chain.Add("/WHERE/IS/MY/HIPO/file2.hipo");
    // chain.Add("/WHERE/IS/MY/HIPO/file*.hipo");
@@ -56,21 +55,24 @@ void Ex1_CLAS12ReaderChain(){
   //Then when we have local copy can just use the following
   //chain.SetRcdbFile("rcdb.root");
 
-   auto c12=chain.GetC12Reader();
-   //c12->scalerReader();//if you want integrated charge
+   auto config_c12=chain.GetC12Reader();
+   config_c12->scalerReader();//if you want integrated charge
    //Add some event Pid based selections
-   //////////c12->AddAtLeastPid(211,1); //at least 1 pi+
-   // c12->addExactPid(11,1);    //exactly 1 electron
-   // c12->addExactPid(211,1);    //exactly 1 pi+
-   // c12->addExactPid(-211,1);    //exactly 1 pi-
-   // c12->addExactPid(2212,1);    //exactly 1 proton
-   // c12->addExactPid(22,2);    //exactly 2 gamma
-   //////c12->addZeroOfRestPid();  //nothing else
-   //////c12->useFTBased(); //and use the Pids from RECFT
+   //////////config_c12->AddAtLeastPid(211,1); //at least 1 pi+
+   // config_c12->addExactPid(11,1);    //exactly 1 electron
+   // config_c12->addExactPid(211,1);    //exactly 1 pi+
+   // config_c12->addExactPid(-211,1);    //exactly 1 pi-
+   // config_c12->addExactPid(2212,1);    //exactly 1 proton
+   // config_c12->addExactPid(22,2);    //exactly 2 gamma
+   //////config_c12->addZeroOfRestPid();  //nothing else
+   //////config_c12->useFTBased(); //and use the Pids from RECFT
 
+   //now get reference to (unique)ptr for accessing data in loop
+   //this will point to the correct place when file changes
+   auto& c12=chain.C12ref();
+   
    while (chain.Next()){
-     c12=chain.GetC12Reader();
-     if(counter++>1E5) break;
+     //c12=chain.GetC12Reader();
      
      //c12->event()->getStartTime();
      
@@ -82,7 +84,6 @@ void Ex1_CLAS12ReaderChain(){
 	 p->getTime();
 	 p->getDetEnergy();
 	 p->getDeltaEnergy();
-	 
 	 //check trigger bits
 	 //	 if(c12->checkTriggerBit(25)) cout<<"MesonExTrigger"<<endl;
 	 //	 else cout<<"NOT"<<endl;
@@ -91,17 +92,23 @@ void Ex1_CLAS12ReaderChain(){
 	 // there should be a get function for any entry in the bank
 	 switch(p->getRegion()) {
 	 case FD :
-	   p->cal(PCAL)->getEnergy();
+	   
+	   p->cal(PCAL)->getEnergy();	   
 	   p->cal(ECIN)->getEnergy();
 	   p->cal(ECOUT)->getEnergy();
+	   
 	   p->sci(FTOF1A)->getEnergy();
 	   p->sci(FTOF1B)->getEnergy();
 	   p->sci(FTOF2)->getEnergy();
+	   	   
 	   p->trk(DC)->getSector();
+	   
 	   p->che(HTCC)->getNphe();
 	   p->che(LTCC)->getNphe();
+ 
 	   //trajectories
 	   p->traj(LTCC)->getX();
+	   
 	   // p->traj(DC,DC1)->getCx();; //First layer of DC, hipo4
 	   break;
 	 case FT :
@@ -115,7 +122,7 @@ void Ex1_CLAS12ReaderChain(){
 	 }
 	 //   covariance matrix (comment in to see!)
 	 // p->covmat()->print();
-	 p->cmat();
+	 //p->cmat();
      }
 
      // get particles by type

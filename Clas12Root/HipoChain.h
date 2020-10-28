@@ -54,7 +54,8 @@ namespace clas12root {
     std::vector<long> ReaderTags()const noexcept{return _readerTags;}
     
     clas12::clas12reader* GetC12Reader();
-
+    const std::unique_ptr<clas12::clas12reader>& C12ref()const {return _c12;}
+    
     void AddBeamCharge(Double_t bc){_totBeamCharge+=bc;}
     Double_t TotalBeamCharge() const noexcept{return _totBeamCharge;}
 
