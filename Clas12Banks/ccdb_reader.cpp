@@ -66,6 +66,10 @@ namespace clas12 {
     
     //Find the column index for this item in this table
     auto ipos=requestTableEntryFor(item,tableName);
+    if(ipos<0){
+      std::cerr<<" ccdb_reader::requestTableValueFor no "<<item<<" in row "<<row<< " of "<<tableName<<std::endl;
+      return 0.;
+    }
     return table->at(row)[ipos];
     
   }
