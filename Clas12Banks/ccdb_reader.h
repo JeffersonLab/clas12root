@@ -47,6 +47,8 @@ namespace clas12 {
   public:
     const TableOfDoubles_t& requestTableDoubles(std::string tableName);
     void updateTables();
+    int requestTableEntryFor(const std::string& item,const std::string& tableName);
+    double requestTableValueFor(int row,const std::string& item,const std::string& tableName);
     
   private:
 
@@ -55,8 +57,6 @@ namespace clas12 {
 #ifdef CLAS_CCDB
    
     std::unique_ptr<ccdb::Calibration> _calib ={nullptr};
-
-
       
 #endif
 

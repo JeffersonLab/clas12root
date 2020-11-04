@@ -1,5 +1,7 @@
 #include "ccdb_reader.h"
 #include <iostream>
+#include <algorithm>
+
 namespace clas12 {
 
    
@@ -16,6 +18,7 @@ namespace clas12 {
 
     ccdb::CalibrationGenerator gen;
     _calib.reset( gen.MakeCalibration(_path, 0, "default", 0 ) );
+
 #endif
 
   }
@@ -46,6 +49,37 @@ namespace clas12 {
 
 #endif
 
+  double ccdb_reader::requestTableValueFor(int row,const std::string& item,const std::string& tableName){
+    
+    const TableOfDoubles_t* table=nullptr;
+
+    //Find the requested table
+    auto it = std::find_if(_localTable.begin(),_localTable.end(),
+		  [&tableName](const  TableRecord_t& element)
+		  { return element.first == tableName;} );
+    if(it==_localTable.end()){
+      //need to create table
+      table = &requestTableDoubles(tableName);
+    }
+
+    else table=&(it->second);
+    
+    //Find the column index for this item in this table
+    auto ipos=requestTableEntryFor(item,tableName);
+    return table->at(row)[ipos];
+    
+  }
+  int ccdb_reader::requestTableEntryFor(const std::string& item,const std::string& tableName){
+    
+    int entry=-1;
+#ifdef CLAS_CCDB
+    const auto& columns = _calib->GetAssignment(tableName)->GetTypeTable()->GetColumnNames();
+    entry= std::distance(
+            columns.begin(),
+            std::find(columns.begin(), columns.end(), item) );
+#endif
+    return entry;
+  }
  const TableOfDoubles_t& ccdb_reader::requestTableDoubles(std::string tableName){
     /* 
     Get a table from the database, will reconnect to database automatically
