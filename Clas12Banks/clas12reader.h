@@ -299,11 +299,7 @@ namespace clas12 {
 	std::cout<<"Warning, clas12reader  applyQA() not valid"<<std::endl;
       }
     }
-   
-  
-    //  const rcdb_vals& getRcdbVals(){return _rcdbVals;}
-    //void setRcdbVals(const rcdb_vals& vals){_rcdbVals=vals;}
-
+ 
     
   private:
  ///////////////////////////////
