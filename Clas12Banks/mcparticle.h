@@ -92,10 +92,13 @@ namespace clas12 {
     void notify() final {
       bank::notify();
     }
-    int match(int pindex){ return _match.get()!=nullptr ?
+    int match(int pindex){
+      return _match.get()!=nullptr ?
 	_entry=_match->getIndex(pindex) : -1 ;
     }
 
+    mcmatch* getMatch()const {return _match.get();}
+    
   private:
 
     int _pid_order{-1};

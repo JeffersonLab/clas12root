@@ -241,6 +241,7 @@ namespace clas12 {
     if(_bftbevent.get())_event.getStructure(*_bftbevent.get());
     if(_bcal.get())_event.getStructure(*_bcal.get());
     if(_bscint.get())_event.getStructure(*_bscint.get());
+    if(_bscint->getExtras())_event.getStructure(*_bscint->getExtras());
     if(_btrck.get())_event.getStructure(*_btrck.get());
     if(_btraj.get())_event.getStructure(*_btraj.get());
     if(_bcher.get())_event.getStructure(*_bcher.get());
@@ -248,9 +249,12 @@ namespace clas12 {
     if(_bvtp.get())_event.getStructure(*_bvtp.get());
     if(_bhelonline.get())_event.getStructure(*_bhelonline.get());
  
-    if(_bmcparts.get())_event.getStructure(*_bmcparts.get());
-    if(_bmcevent.get())_event.getStructure(*_bmcevent.get());
- 
+    if(_bmcparts.get()){
+      _event.getStructure(*_bmcparts.get());
+      if(_bmcevent.get())_event.getStructure(*_bmcevent.get());
+      if(_bmcparts->getMatch())_event.getStructure(*_bmcparts->getMatch());
+    }
+    
     for(auto& ibank:_addBanks){//if any additional banks requested get those
       _event.getStructure(*ibank.get());
     }

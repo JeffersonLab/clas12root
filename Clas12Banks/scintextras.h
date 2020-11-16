@@ -49,7 +49,7 @@ namespace clas12 {
       return 0;
     }
  
-    double getDedx(int index) const noexcept{ 
+    double getDedx(int index) const noexcept{
       if(index>-1)return getFloat(_dedx_order,index);
       return 0.;
     }
@@ -63,7 +63,8 @@ namespace clas12 {
     }
  
   
-     
+    void setBankEntry(short i){ _index=i;} //faster for BankHist
+
  private:
     friend scintillator;
     

@@ -14,7 +14,7 @@ namespace clas12 {
  
     _dedx_order   = __schema.getEntryOrder("dedx");
     _size_order   = __schema.getEntryOrder("size");
-    _layermulti_order   = __schema.getEntryOrder("layermulti");
+    _layermulti_order   = __schema.getEntryOrder("layermult");
   
     
   }

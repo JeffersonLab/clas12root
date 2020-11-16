@@ -107,7 +107,8 @@ namespace clas12 {
  	return _extras.get()!=nullptr ? _extras->getLayermulti(_index):0;
       }
       
-     
+      scintextras* getExtras()const {return _extras.get();}
+      
  private:
 
     int   _layer_order=-1;
