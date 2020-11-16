@@ -13,6 +13,7 @@
 #include "particle.h"
 #include "ftbparticle.h"
 #include "mcparticle.h"
+#include "mcevent.h"
 #include "calorimeter.h"
 #include "scintillator.h"
 #include "tracker.h"
@@ -112,8 +113,10 @@ namespace clas12 {
     event_ptr event() const{return _bevent.get();};
     ftbevent_ptr ftbevent() const{return _bftbevent.get();};
     vtp_ptr vtp() const{return _bvtp.get();};
-    //scaler_ptr scaler() const{return _bscal.get();};
+ 
+    
     mcpar_ptr mcparts() const{return _bmcparts.get();};
+    mcevt_ptr mcevent() const{return _bmcevent.get();};
 
 
     //support for generic non-DST banks
@@ -219,7 +222,6 @@ namespace clas12 {
     par_uptr _bparts;//!
     //    std::unique_ptr<clas12::particle> _ownbparts;
     ftbpar_uptr _bftbparts;//!
-    mcpar_uptr _bmcparts;//!
     covmat_uptr _bcovmat;//!
     cal_uptr  _bcal;//!
     scint_uptr _bscint;//!
@@ -229,6 +231,8 @@ namespace clas12 {
     ft_uptr _bft;//!
     vtp_uptr _bvtp;//!
 
+    mcpar_uptr _bmcparts;//!
+    mcevt_uptr _bmcevent;//!
 
     
     std::vector<std::unique_ptr<hipo::bank> > _addBanks; //!owns additional banks

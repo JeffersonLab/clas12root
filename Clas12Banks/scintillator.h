@@ -15,6 +15,7 @@
 #define CLAS12_SCINTILLATOR_H
 
 #include "particle_detector.h"
+#include "scintextras.h"
 
 
 namespace clas12 {
@@ -27,7 +28,8 @@ namespace clas12 {
 
     scintillator()=default;
 
-    scintillator(hipo::schema __schema);
+    scintillator(hipo::schema aschema);
+    scintillator(hipo::schema aschema,hipo::schema extras);
 
     ~scintillator() override=default;
     
@@ -88,12 +90,23 @@ namespace clas12 {
       if(_index>-1)return getFloat(_hz_order,_index);
       return 0;
     }
-      double getChi2() const noexcept{ 
+    double getChi2() const noexcept{ 
       if(_index>-1)return getFloat(_chi2_order,_index);
       return 0;
     }
- 
-    
+
+
+      //get extras
+      double getDedx() const noexcept{
+	return _extras.get()!=nullptr ? _extras->getDedx(_index):0;
+      }
+      int getSize() const noexcept{ 
+  	return _extras.get()!=nullptr ? _extras->getSize(_index):0;
+      }
+      int getLayermulti() const noexcept{ 
+ 	return _extras.get()!=nullptr ? _extras->getLayermulti(_index):0;
+      }
+      
      
  private:
 
@@ -112,7 +125,7 @@ namespace clas12 {
     int       _hz_order=-1;
     int    _chi2_order=-1;
  
-
+    scintextra_uptr _extras;
  
    }; //class scintillator
 

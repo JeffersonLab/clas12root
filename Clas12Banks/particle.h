@@ -40,7 +40,7 @@ namespace clas12 {
     int _st_order{-1};
     int _chi2pid_order{-1};
     
-    short _entry=0;
+    short _entry={0};
     
   public:
 

@@ -37,6 +37,9 @@ namespace clas12root {
     //Covariance Matrix
     _mapOfParts["CovMat"]="p->covmat()->";
    
+    //Truth matched mc
+    _mapOfParts["MC"]="p->mc()->";
+
     //Particles
     _mapOfParts["PBANK"]="p->par()->";
 

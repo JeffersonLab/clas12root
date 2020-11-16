@@ -59,8 +59,6 @@ namespace clas12 {
       _bftbparts.reset(new ftbparticle{_factory.getSchema("RECFT::Particle")});
     if(_factory.hasSchema("REC::Particle"))
       _bparts.reset(new particle{_factory.getSchema("REC::Particle"),_bftbparts.get()});
-    if(_factory.hasSchema("MC::Lund"))
-      _bmcparts.reset( new mcparticle{_factory.getSchema("MC::Lund")});
     if(_factory.hasSchema("REC::CovMat"))
       _bcovmat.reset(new covmatrix{_factory.getSchema("REC::CovMat")});
     if(_factory.hasSchema("RECFT::Event"))
@@ -71,8 +69,14 @@ namespace clas12 {
       _bevent.reset(new clas12::event{_factory.getSchema("REC::Event"),_bftbevent.get()});
     if(_factory.hasSchema("REC::Calorimeter"))
       _bcal.reset(new calorimeter{_factory.getSchema("REC::Calorimeter")});
-    if(_factory.hasSchema("REC::Scintillator"))
-      _bscint.reset(new scintillator{_factory.getSchema("REC::Scintillator")});
+    if(_factory.hasSchema("REC::Scintillator")){
+      if(_factory.hasSchema("REC::ScintExtras")){
+	_bscint.reset(new scintillator{_factory.getSchema("REC::Scintillator"),_factory.getSchema("REC::ScintExtras")});
+      }
+      else
+	_bscint.reset(new scintillator{_factory.getSchema("REC::Scintillator")});
+ 
+    }
     if(_factory.hasSchema("REC::Track"))
       _btrck.reset(new tracker{_factory.getSchema("REC::Track")});
     if(_factory.hasSchema("REC::Traj"))
@@ -82,6 +86,17 @@ namespace clas12 {
     if(_factory.hasSchema("REC::ForwardTagger"))
       _bft.reset(new forwardtagger{_factory.getSchema("REC::ForwardTagger")});
     
+    if(_factory.hasSchema("MC::Lund")){
+      if(_factory.hasSchema("MC::IsParticleMatched")){
+	_bmcparts.reset( new mcparticle{_factory.getSchema("MC::Lund"),_factory.getSchema("MC::IsParticleMatched")});
+      }
+      else
+	_bmcparts.reset( new mcparticle{_factory.getSchema("MC::Lund")});
+    }
+    if(_factory.hasSchema("MC::Event"))
+      _bmcevent.reset( new clas12::mcevent{_factory.getSchema("MC::Event")});
+
+    //could remove below
     if(_factory.hasSchema("RAW::vtp"))
       _bvtp.reset(new clas12::vtp{_factory.getSchema("RAW::vtp")});
     
@@ -221,7 +236,6 @@ namespace clas12 {
     }
 
     //now getthe data for the rest of the banks
-    if(_bmcparts.get())_event.getStructure(*_bmcparts.get());
     if(_bcovmat.get())_event.getStructure(*_bcovmat.get());
     if(_bevent.get())_event.getStructure(*_bevent.get());
     if(_bftbevent.get())_event.getStructure(*_bftbevent.get());
@@ -233,8 +247,10 @@ namespace clas12 {
     if(_bft.get())_event.getStructure(*_bft.get());
     if(_bvtp.get())_event.getStructure(*_bvtp.get());
     if(_bhelonline.get())_event.getStructure(*_bhelonline.get());
-    //if(_bscal.get())_event.getStructure(*_bscal.get());
-
+ 
+    if(_bmcparts.get())_event.getStructure(*_bmcparts.get());
+    if(_bmcevent.get())_event.getStructure(*_bmcevent.get());
+ 
     for(auto& ibank:_addBanks){//if any additional banks requested get those
       _event.getStructure(*ibank.get());
     }
@@ -465,6 +481,7 @@ namespace clas12 {
     if(_bparts.get())_allBanks.push_back(_bparts.get());
     if(_bftbparts.get())_allBanks.push_back(_bftbparts.get());
     if(_bmcparts.get())_allBanks.push_back(_bmcparts.get());
+    if(_bmcevent.get())_allBanks.push_back(_bmcevent.get());
     if(_bcovmat.get())_allBanks.push_back(_bcovmat.get());
     if(_bevent.get())_allBanks.push_back(_bevent.get());
     if(_bftbevent.get())_allBanks.push_back(_bftbevent.get());
