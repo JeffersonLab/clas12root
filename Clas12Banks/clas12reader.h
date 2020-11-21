@@ -120,9 +120,10 @@ namespace clas12 {
 
 
     //support for generic non-DST banks
-    uint addBank(std::string name){
+    uint addBank(const std::string& name){
       std::unique_ptr<hipo::bank> bnk{new hipo::bank{_factory.getSchema(name.data())}};
       _addBanks.push_back(std::move(bnk));
+      _addBankNames.push_back(name);
       return _addBanks.size()-1; //return place in vector
     }
 
@@ -271,7 +272,7 @@ namespace clas12 {
     std::map<short,short> _pidSelectExact;
     bool _zeroOfRestPid{false};
     bool _useFTBased{false};
-
+    std::vector<std::string> _addBankNames;
      
     ///////////////////////////////DB
   private:

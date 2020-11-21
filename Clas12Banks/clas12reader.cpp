@@ -44,7 +44,9 @@ namespace clas12 {
     _useFTBased=other._useFTBased;
     _nToProcess=other._nToProcess;
 
-    //if(other._connectDB)connectDataBases(other._db); //give databases the run number
+    for(const auto& additionalBank : other._addBankNames)
+      addBank(additionalBank);
+	
     _applyQA=other._applyQA;
   }
 
