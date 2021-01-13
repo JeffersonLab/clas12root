@@ -5,11 +5,11 @@ set(CLASS_LIST_CPP helflip.cpp helonline.cpp runconfig.cpp event.cpp ftbevent.cp
 
 set(CLASS_LIST_H helflip.h  helonline.h runconfig.h event.h ftbevent.h particle.h ftbparticle.h mcparticle.h scaler.h vtp.h particle_detector.h scintillator.h tracker.h traj.h forwardtagger.h cherenkov.h calorimeter.h covmatrix.h region_particle.h region_ft.h region_fdet.h region_cdet.h region_band.h clas12writer.h clas12reader.h mesonex_trigger.h  scaler_reader.h clas12databases.h  qadb_reader.h ccdb_reader.h rcdb_reader.h)
 
-IF (DEFINED ENV{CLASQADB_HOME})
+IF (DEFINED ENV{QADB})
   set(CLASS_LIST_CPP ${CLASS_LIST_CPP} jsonFileMerger.cpp)
   set(CLASS_LIST_H ${CLASS_LIST_H} jsonFileMerger.h)
   add_definitions(-DCLAS_QADB)
-ENDIF (DEFINED ENV{CLASQADB_HOME})
+ENDIF (DEFINED ENV{QADB})
 
 #include rcdb c++ header library
 IF (DEFINED ENV{CCDB_HOME})

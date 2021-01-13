@@ -26,7 +26,7 @@ namespace clas12 {
     //where to make database connections
     static string  _RcdbPath;//!
     static string  _CcdbPath;//!
-    static string  _QadbPath;//!
+    //static string  _QadbPath;//!
 
   public:
     
@@ -40,7 +40,7 @@ namespace clas12 {
     void notifyRun(int runNb);
 
     
-    static void SetQADBConnection(const string& name);
+    //static void SetQADBConnection(const string& name);
     static void SetCCDBLocalConnection(const string& name);
     static void SetCCDBRemoteConnection();
     static void SetRCDBLocalConnection(const string& name);
@@ -57,7 +57,7 @@ namespace clas12 {
  
     const string&  ccdbPath() const {return _myCcdbPath;}
     const string&  rcdbPath() const {return _myRcdbPath;}
-    const string&  qadbPath() const {return _myQadbPath;}
+    //const string&  qadbPath() const {return _myQadbPath;}
 
 
  
@@ -65,7 +65,7 @@ namespace clas12 {
     //I would rather this was not needed here
     //but it is to make sure it gets passed to PROOF
     void qadb_addQARequirement(string req){ _qadb->addQARequirement(req);_qadbReqsQA.push_back(req);};
-    void qadb_setQARequirements( std::vector<string> reqs){_qadb->setQARequirements(reqs); _qadbReqsQA = reqs; };
+    void qadb_setQARequirements( std::vector<string> reqs){_qadb->setQARequirements(reqs); _qadbReqsQA = reqs;};
 
     void qadb_requireOkForAsymmetry(bool ok){_qadb->requireOkForAsymmetry(ok);_qadbReqOKAsymmetry=ok;};
     void qadb_requireGolden(bool ok){_qadb->requireGolden(ok);_qadbReqGolden=ok;};
@@ -76,7 +76,7 @@ namespace clas12 {
    //names for copying to ROOT file for selector
     string _myRcdbPath;
     string  _myCcdbPath;
-    string  _myQadbPath;
+    //string  _myQadbPath;
 
     int _runNb={0};//!
 

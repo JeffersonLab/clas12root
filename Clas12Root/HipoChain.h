@@ -58,6 +58,7 @@ namespace clas12root {
     
     void AddBeamCharge(Double_t bc){_totBeamCharge+=bc;}
     Double_t TotalBeamCharge() const noexcept{return _totBeamCharge;}
+    void SetTotalBeamCharge(Double_t bc){_totBeamCharge+=bc;}
 
     clas12::clas12databases* db() {return &_db;}
     void ConnectDataBases(){_c12->connectDataBases(&_db);}
