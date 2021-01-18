@@ -18,7 +18,6 @@ void Ex10_clas12Databases(){
   //It is recommended to edit and run the scrpit PrepareDatabases.C
   //for this purpose
   //clas12databases::SetCCDBLocalConnection("ccdb.sqlite");
-  //clas12databases::SetQADBConnection("qaDB.json");
   //clas12databases::SetRCDBRootConnection("rcdb.root");
   
 
@@ -58,6 +57,13 @@ void Ex10_clas12Databases(){
   while(c12.next()) {
    
   }
+
+  /*
+   * The clasqaDB software also provides the accumulated charge for events
+   * that pass the quality assurance requirements.
+   */
+  cout<<"Accumulated charge past QA: "<<c12.db().qa()->getAccCharge()<<" nC"<<endl;
+
   
   gBenchmark->Stop("db");
   gBenchmark->Print("db");

@@ -109,6 +109,27 @@ namespace clas12root{
     }
     return kTRUE;
   }
+
+  void HipoSelector::SlaveTerminate()
+  {
+    //Get accumulated charge for each and add to fOutput to concatenate
+    if(qadb()!=nullptr){
+      auto chargeHist=new TH1D("accumulatedCharge","accumulatedCharge",1,0,1);
+      chargeHist->SetBinContent(1,qadb()->getAccCharge());
+      fOutput->Add(chargeHist);
+    }
+
+  }
+
+  void HipoSelector::Terminate()
+  {
+    //Get total charge accumulated charge
+    if(qadb()!=nullptr){
+      auto chargeHist=dynamic_cast<TH1D*>(fOutput->FindObject("accumulatedCharge")); 
+      _chain->SetTotalBeamCharge(chargeHist->GetBinContent(1));
+      std::cout<<"Total accumulated charge: "<<chargeHist->GetBinContent(1)<<std::endl;
+    }
+  }
   
  
 }

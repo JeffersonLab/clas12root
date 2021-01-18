@@ -18,13 +18,12 @@ void Ex10_clas12DatabasesChain(){
     It is recommended to edit and run the script PrepareDatabases.C
     for this purpose*/
   //clas12databases::SetCCDBLocalConnection("ccdb.sqlite");
-  //clas12databases::SetQADBConnection("qaDB.json");
   //clas12databases::SetRCDBRootConnection("rcdb.root");
   
   clas12root::HipoChain chain;
   // chain.Add("/where/are/my/files/f1.hipo");
   //chain.Add("/where/are/my/files/f2.hipo");
-  chain.Add("/work/jlab/clas12data/skim14_005038.hipo");
+
   chain.SetReaderTags({0});  //create clas12reader with just tag 0 events
 
   auto config_c12=chain.GetC12Reader();
@@ -90,6 +89,12 @@ void Ex10_clas12DatabasesChain(){
     }
     //break;
   }
+
+   /*
+   * The clasqaDB software also provides the accumulated charge for events
+   * that pass the quality assurance requirements.
+   */
+  cout<<"Accumulated charge past QA: "<<c12->db().qadb()->getAccCharge()<<" nC"<<endl;
   
   gBenchmark->Stop("db");
   gBenchmark->Print("db");
