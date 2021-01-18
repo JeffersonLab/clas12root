@@ -57,6 +57,9 @@ You may also want to download the latest CCDB sqlite database so you do not need
 ##To download the clasqaDB repository 
 git clone --recurse-submodules https://github.com/c-dilks/clasqaDB.git
 
+cd clasqaDB
+source env.csh
+
 ```
 
 ## To setup Run ROOT
@@ -70,8 +73,8 @@ setenv HIPO /Where/Is/hipo
 setenv RCDB_HOME /Where/Is/rcdb
 #To use the CCDB interface 
 setenv CCDB_HOME /Where/Is/ccdb
-#To use clasqaDB interface
-setenv CLASQADB_HOME /Where/Is/clasqaDB
+#To use clasqaDB interface - already done with source env.csh
+setenv QADB /Where/Is/clasqaDB
 ```
 
 or for bash
@@ -81,8 +84,8 @@ export PATH="$PATH":"$CLAS12ROOT/bin"
 export HIPO=/Where/Is/hipo
 #To use the RCDB interface 
 export RCDB_HOME /Where/Is/rcdb
-#To use clasqaDB interface
-export CLASQADB_HOME /Where/Is/clasqaDB
+#To use clasqaDB interface - already done with source env.csh
+export QADB /Where/Is/clasqaDB
 ```
 
 ## To install
@@ -453,12 +456,11 @@ To use any database you must set the corresponding environment variables
 
 setenv RCDB_HOME /where/is/rcdb
 setenv CCDB_HOME /where/is/ccdb
-setenv CLASQADB_HOME /where/is/clasqaDB
+setenv QADB /where/is/clasqaDB
 
 ands pecify the location of the database before you create your clas12root object
 
         clas12databases::SetCCDBLocalConnection("/where/to/ccdb.sqlite");
-  	clas12databases::SetQADBConnection("/where/to/qaDB.json");
   	clas12databases::SetRCDBRootConnection("/where/to/rcdb.root");
 
 These local files can be created using the $CLAS12ROOT/RunRoot/PrepareDatabases.C macro. You are best copying this locally and editing for any datafiles you want to add to the RCDB file list.
@@ -522,9 +524,7 @@ Or in case you use HipoChain (also for when running PROOF/HipoSelector)
       c12->db().qadb_requireGolden(true);
       c12->db().qadb_addQARequirement("MarginalOutlier");
       c12->db().qadb_addQARequirement("TotalOutlier");
-      c12->applyQA();
-
- 
+      c12->applyQA(); 
     
 where requireOkForAsymmetry(true) requires only events that were identified as suitable for asymmetry calculations, and requireGolden(true) requires only events without any defects. addQARequirement("Requirement") allows to reject events that fail to meet the specified requirement. These can be:
 
@@ -535,16 +535,10 @@ where requireOkForAsymmetry(true) requires only events that were identified as s
     LowLiveTime: live time < 0.9
     Misc: miscellaneous defect
 
-The QA database is contained in several .json files that can be found on the clasqaDB github [repository](https://github.com/c-dilks/clasqaDB/tree/master). These can be merged within clas12root using the jsonFileMerger class with the functions:
+The clasqaDB software also returns the accumulated charge for events that have passed the quality assurance requirements. This is accessed with: 
 
-    jsonFileMerger merger("/absolute/path/for/output.json");
-    merger.addFile("/absolute/path/for/input1.json");
-    merger.addFile("/absolute/path/for/input2.json");
-    merger.mergeAllFiles();
+    c12.db()->qadb()->getAccCharge();
 
-This step can be performed with the RunRoot PrepareDatabases.C script,
-You should copy this locally and edit the HipoChain files if you are using RCDB.
- 
 More information on the Quality Assurance process can be found in the RGA analysis note.
 
 ### Using databases with HipoSelector
@@ -577,7 +571,6 @@ Inside your Selector class for RCDB tables :
 See Ex3b_TestSelector.C and testSelector.C and .h for implementation example. To use the databases you need to comment in the lines
 
     clas12databases::SetCCDBLocalConnection("ccdb.sqlite");
-    clas12databases::SetQADBConnection("qaDB.json");
     clas12databases::SetRCDBRootConnection("rcdb.root");
 
 Having run PrepareDatabases.C with the  HipoChain set for the files you wish to process.

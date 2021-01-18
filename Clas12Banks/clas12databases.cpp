@@ -7,9 +7,9 @@ namespace clas12 {
   
   string clas12databases::_RcdbPath="";
   string clas12databases::_CcdbPath="";
-  string clas12databases::_QadbPath="";
+  //string clas12databases::_QadbPath="";
   
-  void clas12databases::SetQADBConnection(const string& name){_QadbPath=FullPath(name);}
+  //void clas12databases::SetQADBConnection(const string& name){_QadbPath=FullPath(name);}
   void clas12databases::SetCCDBLocalConnection(const string& name){_CcdbPath="sqlite://"+FullPath(name);}
   void clas12databases::SetCCDBRemoteConnection(){_CcdbPath="mysql://clas12reader@clasdb.jlab.org/clas12";}
   void clas12databases::SetRCDBLocalConnection(const string& name){_RcdbPath="sqlite://"+FullPath(name);}
@@ -26,11 +26,11 @@ namespace clas12 {
   {
     std::cout<<"clas12databases() rcdb path "<<_RcdbPath<<" "<<_myRcdbPath<<std::endl;
     std::cout<<"clas12databases() ccdb path "<<_CcdbPath<<std::endl;
-    std::cout<<"clas12databases() qadb path "<<_QadbPath<<std::endl;
+    //std::cout<<"clas12databases() qadb path "<<_QadbPath<<std::endl;
 
     _myRcdbPath=_RcdbPath;
     _myCcdbPath=_CcdbPath;
-    _myQadbPath=_QadbPath;
+    //_myQadbPath=_QadbPath;
 
     initDBs();
    }
@@ -39,7 +39,7 @@ namespace clas12 {
     
     _myRcdbPath=other._myRcdbPath;
     _myCcdbPath=other._myCcdbPath;
-    _myQadbPath=other._myQadbPath;
+    //_myQadbPath=other._myQadbPath;
     
     initDBs();
 
@@ -47,7 +47,6 @@ namespace clas12 {
      qadb_requireOkForAsymmetry(other._qadbReqOKAsymmetry);
      qadb_requireGolden(other._qadbReqGolden);
      qadb_setQARequirements(other._qadbReqsQA);
-     
     }
  
     return *this;
@@ -56,7 +55,7 @@ namespace clas12 {
     
     _myRcdbPath=other._myRcdbPath;
     _myCcdbPath=other._myCcdbPath;
-    _myQadbPath=other._myQadbPath;
+    //_myQadbPath=other._myQadbPath;
     
     
     initDBs();
@@ -72,7 +71,7 @@ namespace clas12 {
   void clas12databases::initDBs(){
     std::cout<<"clas12databases() rcdb path "<<_myRcdbPath<<std::endl;
     std::cout<<"clas12databases() ccdb path "<<_myCcdbPath<<std::endl;
-    std::cout<<"clas12databases() qadb path "<<_myQadbPath<<std::endl;
+    //std::cout<<"clas12databases() qadb path "<<_myQadbPath<<std::endl;
 
      
     if(_myCcdbPath.empty()==false)
@@ -85,12 +84,11 @@ namespace clas12 {
 	_rcdb.reset( new rcdb_reader{_myRcdbPath.data()} );
     }
     
-    if(_myQadbPath.empty()==false){
-      _qadb.reset( new qadb_reader{_myQadbPath.data()} );
-      qadb_requireOkForAsymmetry(_qadbReqOKAsymmetry);
-      qadb_requireGolden(_qadbReqGolden);
-      qadb_setQARequirements(_qadbReqsQA);
-    }
+    
+    _qadb.reset( new qadb_reader{0} );
+    qadb_requireOkForAsymmetry(_qadbReqOKAsymmetry);
+    qadb_requireGolden(_qadbReqGolden);
+    qadb_setQARequirements(_qadbReqsQA);  
 
 }
   //update run number to each database

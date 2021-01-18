@@ -24,7 +24,7 @@ void PrepareDatabases(){
 
 
   
-#ifdef CLAS_QADB
+  
   
   /*
    * The jsonFileMerger class included in clas12root allows to
@@ -37,9 +37,15 @@ void PrepareDatabases(){
    * mergeAllFiles merges all the added files and saves the output
    * to the specified location
    */
-  
+
+
+/* Deprecated - clasqaDB software now premerges the database files
+and automatically opens these.
+
+
+#ifdef QADB 
   jsonFileMerger merger("qaDB.json");
-  TString QAHOME=gSystem->Getenv("CLASQADB_HOME");
+  TString QAHOME=gSystem->Getenv("QADB");
   std::cout<<"CLASQA adding json file "<<(QAHOME+"/qa.inbending1/qaTree.json").Data()<<std::endl;
   merger.addFile((QAHOME+"/qa.inbending1/qaTree.json").Data());
   std::cout<<"CLASQA adding json file "<<(QAHOME+"/qa.inbending2/qaTree.json").Data()<<std::endl;
@@ -48,7 +54,7 @@ void PrepareDatabases(){
   merger.addFile((QAHOME+"/qa.outbending/qaTree.json").Data());
   merger.mergeAllFiles();
   
-#endif
+#endif*/
 
   
 }

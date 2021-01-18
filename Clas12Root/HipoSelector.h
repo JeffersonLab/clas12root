@@ -37,6 +37,8 @@ namespace clas12root{
       void    SlaveBegin(TTree *tree) override;
       Bool_t  Process(Long64_t entry) override;
       Bool_t  Notify() override;
+      void    SlaveTerminate() override;
+      void    Terminate() override;
       
       virtual Bool_t ProcessEvent() =  0; //loop action to be defined in derived class
 
