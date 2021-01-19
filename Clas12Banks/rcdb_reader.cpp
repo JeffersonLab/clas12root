@@ -206,6 +206,7 @@ namespace clas12 {
   void rcdb_root::readRun(int runNb){
 
     if(runNb==11) return;//Simulation
+    if(runNb==10) return;//Simulation
     
     //make file and list unique_ptr so deleted when we return
     auto rcdbFile=std::unique_ptr<TFile>{TFile::Open(_rootFile.data())};
