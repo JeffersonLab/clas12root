@@ -1,5 +1,7 @@
 cp $HIPO/hipo4/*.h hipo4/.
 cp $HIPO/hipo4/*.cpp hipo4/.
+cp $CLAS12ROOT/ccdb_patch/Directory.h $CCDB_HOME/include/CCDB/Model/Directory.h
+cp $CLAS12ROOT/ccdb_patch/DataProvider.h $CCDB_HOME/include/CCDB/Providers/DataProvider.h
 mkdir build
 cd build
 cmake ../
