@@ -178,7 +178,8 @@ namespace clas12 {
     double getCurrApproxCharge(){return _runBeamCharge*_nevent/_reader.getEntries();}
 
     void summary(){
-      std::cout<<"for file "<<_filename<<"\n   read "<<_nevent<<" events from which "<<_nselected<< " passed filtering conditions."<<" The beam charge to this point in the file was "<<getCurrApproxCharge()<<std::endl;
+      std::cout<<"for file "<<_filename<<"\n   read "<<_nevent<<" events from which "<<_nselected<< " passed filtering conditions."<<std::endl;
+      if(db().qa())cout<<"Accumulated charge past QA: "<<db().qa()->getAccCharge()<<" nC"<<endl;
     }
     
     void getStructure(hipo::bank* bank){

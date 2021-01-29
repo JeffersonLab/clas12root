@@ -15,7 +15,7 @@ ENDIF (DEFINED ENV{QADB})
 IF (DEFINED ENV{CCDB_HOME})
   # CCDB related
   include_directories($ENV{CCDB_HOME}/include)
-  link_libraries($ENV{CCDB_HOME}/lib/libccdb.so)
+  link_libraries($ENV{CCDB_HOME}/lib/libccdb${CMAKE_SHARED_LIBRARY_SUFFIX})
   add_definitions(-DCLAS_CCDB)
 ENDIF (DEFINED ENV{CCDB_HOME})
 
@@ -69,9 +69,11 @@ target_link_libraries(Clas12Banks ${ROOT_LIBRARIES} Hipo4)
 install(TARGETS Clas12Banks
   LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}")
 
-FILE(GLOB ROOT_CLAS12_PCM ${CMAKE_BINARY_DIR}/Clas12Banks/*pcm)
+#FILE(GLOB ROOT_CLAS12_PCM ${CMAKE_BINARY_DIR}/Clas12Banks/*pcm)
 
-install (FILES  ${ROOT_CLAS12_PCM}     
+#install (FILES  ${ROOT_CLAS12_PCM}     
+#  DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+
+
+install (FILES  ${CMAKE_CURRENT_BINARY_DIR}/libClas12Banks_rdict.pcm    
   DESTINATION "${CMAKE_INSTALL_LIBDIR}")
-
-

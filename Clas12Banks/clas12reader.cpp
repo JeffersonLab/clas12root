@@ -28,8 +28,7 @@ namespace clas12 {
     //_db{other._db}
   {
     
-    cout<<" COPY clas12reader::clas12reader reading "<<filename.data()<<endl;
-
+  
     //if default filename take same file as original
     if(_filename.empty())_filename=other._filename;
     if(other._scalReader.get()) scalerReader();
