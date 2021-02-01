@@ -70,7 +70,8 @@ namespace clas12 {
     void qadb_requireOkForAsymmetry(bool ok){_qadb->requireOkForAsymmetry(ok);_qadbReqOKAsymmetry=ok;};
     void qadb_requireGolden(bool ok){_qadb->requireGolden(ok);_qadbReqGolden=ok;};
     
- 
+    void  setVerbose(short level=1){_verbose=level;}
+
   private:
     
    //names for copying to ROOT file for selector
@@ -92,6 +93,7 @@ namespace clas12 {
     bool _qadbReqOKAsymmetry{false};
     bool _qadbReqGolden{false};
 
+    short _verbose={0};
     };
   
 

@@ -209,7 +209,8 @@ namespace hipo {
         hipo::record       inputRecord;
         hipo::readerIndex  readerEventIndex;
         std::vector<long>  tagsToRead;
-
+	short _verbose = {0} ;
+	
         void  readHeader();
         void  readIndex();
     public:
@@ -225,10 +226,10 @@ namespace hipo {
 
         void  open(const char *filename);
         void  setTags(int tag){ tagsToRead.push_back(tag);}
-	      void  setTags(std::vector<long> tags){ tagsToRead=std::move(tags);}
-
-
-	      bool  hasNext();
+	void  setTags(std::vector<long> tags){ tagsToRead=std::move(tags);}
+	void  setVerbose(short level=1){_verbose=level;}
+	      
+	bool  hasNext();
         bool  next();
         bool  gotoEvent(int eventNumber);
         bool  gotoRecord(int irec);

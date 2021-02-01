@@ -12,7 +12,7 @@ namespace clas12 {
   clas12reader::clas12reader(std::string filename,std::vector<long> tags):
     _filename(filename){
 
-    cout<<" clas12reader::clas12reader reading "<<filename.data()<<endl;
+    if(_verbose) cout<<" clas12reader::clas12reader reading "<<filename.data()<<endl;
     _reader.setTags(tags);
     
      
@@ -42,6 +42,8 @@ namespace clas12 {
     _zeroOfRestPid=other._zeroOfRestPid;
     _useFTBased=other._useFTBased;
     _nToProcess=other._nToProcess;
+
+    setVerbose(other._verbose);
 
     for(const auto& additionalBank : other._addBankNames)
       addBank(additionalBank);
@@ -143,7 +145,7 @@ namespace clas12 {
 
       runNo=arunconf.getRun();
     }
-    std::cout<<"Found run number : "<<runNo<<"  in tag "<<tag<<std::endl;
+    //std::cout<<"Found run number : "<<runNo<<"  in tag "<<tag<<std::endl;
     return runNo;
   }
   ///////////////////////////////////////////////////////////////////////
@@ -473,7 +475,7 @@ namespace clas12 {
     // if(_runNo==0){
     _runNo=readQuickRunConfig(_filename);
     //}
-    std::cout<<"Connecting databases to run "<<_runNo<<std::endl;
+    if(_verbose )std::cout<<"Connecting databases to run "<<_runNo<<std::endl;
      if(_runNo!=0)_db->notifyRun(_runNo);
   }
   /////////////////////////////////////////////////////////

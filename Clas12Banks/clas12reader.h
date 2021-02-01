@@ -174,7 +174,10 @@ namespace clas12 {
       _runBeamCharge = _scalReader->getBeamCharge();
       return _scalReader.get();
     }
-    double getRunBeamCharge() const noexcept{ return _runBeamCharge;}
+    double getRunBeamCharge() {
+      if(db().qa()!=nullptr) return db().qa()->getAccCharge();
+      return _runBeamCharge;
+    }
     double getCurrApproxCharge(){return _runBeamCharge*_nevent/_reader.getEntries();}
 
     void summary(){
@@ -194,7 +197,11 @@ namespace clas12 {
     
   
     void setEntries(long n){_nToProcess = n;}
-
+    void setVerbose(short level=1){
+      _verbose=level;
+      _reader.setVerbose(level);
+    }
+    
   protected:
 
     void initReader();
@@ -262,6 +269,8 @@ namespace clas12 {
     ushort _n_rfts{0};
     ushort _n_rbands{0};
 
+    ushort _verbose{0};
+    
     std::vector<short> _pids;
     bool _isRead{false};
     //bool _rcdbQueried=false;
