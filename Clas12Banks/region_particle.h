@@ -49,7 +49,8 @@ namespace clas12 {
     //For all regions
     region_particle(par_ptr pars,ftbpar_ptr ftbpars,covmat_ptr cm, cal_ptr calp,
 		    scint_ptr scp, trck_ptr trp, traj_ptr trj,
-		    cher_ptr chp, ft_ptr ftp,event_ptr event);
+		    cher_ptr chp, ft_ptr ftp,event_ptr event,
+		    mcpar_ptr mcp=nullptr);
 
     virtual ~region_particle() =default;
 
@@ -58,7 +59,7 @@ namespace clas12 {
     /// i.e. how the detector banks relate to that region
     virtual bool sort(){
       _pentry=_parts->getEntry();
-      //check for covarince matrix
+      //check for covariance matrix
       if(_covmat)_pcmat=_covmat->getIndex(_pentry);
       if(_mcpart)_pmc=_mcpart->match(_pentry);
       return true;
@@ -103,7 +104,12 @@ namespace clas12 {
     float getPdgMass();
 
     void useFTBPid(){if(_ftbparts)_useFTBPid=1;}
-    
+
+    float getMCThetaDiff() {return getTheta()-mc()->getTheta();}
+    float getMCPhiDiff() {return getPhi()-mc()->getPhi();}
+    float getMCPDiff() {return getP()-mc()->getP();}
+
+    //if(_parts->getCharge())
   protected:
 
     par_ptr _parts={nullptr};

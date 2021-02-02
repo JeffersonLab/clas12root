@@ -35,20 +35,30 @@ namespace clas12 {
     int  getMCTindex(int index) const noexcept { return getShort(_mcTindex_order,index);}
     int  getRecTindex(int index) const noexcept { return getShort(_recTindex_order,index);}
     int  getPindex(int index) const noexcept { return getShort(_pindex_order,index);}
-    int  getIsInAcc(int index) const noexcept { return getByte(_inAcc_order,index);}
-    int  getNMCclusters(int index) const noexcept { return getShort(_nClust_order,index);}
-    float  getFraction(int index) const noexcept { return getFloat(_fraction_order,index);}
     */
     
-    int  getMCTindex() const noexcept { return getShort(_mcTindex_order,_index);}
-    int  getRecTindex() const noexcept { return getShort(_recTindex_order,_index);}
-    int  getPindex() const noexcept { return getShort(_pindex_order,_index);}
-    int  getIsInAcc() const noexcept { return getByte(_inAcc_order,_index);}
-    int  getNMCclusters() const noexcept { return getShort(_nClust_order,_index);}
-    float  getFraction() const noexcept { return getFloat(_fraction_order,_index);}
+    short  getMCTindex() const noexcept { return getShort(_mcTindex_order,_index);}
+    short  getPindex() const noexcept { return getShort(_pindex_order,_index);}
+
+    //bit patterns
+    long  getMCLayersTrk() const noexcept { return getLong(_mclayerstrk_order,_index);}
+    long  getMCLayersNeut() const noexcept { return getLong(_mclayersneut_order,_index);}
+    long  getRecLayersTrk() const noexcept { return getLong(_reclayerstrk_order,_index);}
+    long  getRecLayersNeut() const noexcept { return getLong(_reclayersneut_order,_index);}
+ 
 
     int  getPindex(int index) const noexcept { return getShort(_pindex_order,index);}
- 
+
+    bool checkBitInPattern(uint k) const noexcept {
+      return  checkBit(getMCLayersTrk(),k);
+    }
+    bool checkBit(long word, uint k) const noexcept {
+      return  ( (word >> k) & 1 )!=0;
+    }
+
+    bool checkFDSuperLayers(const short nMinSL, const short nMinLayerPerSL) const noexcept ;
+    
+    
     void setEntry(short i){ _index=i;}
     void setBankEntry(short i){ _index=i;} //faster for BankHist
     short getEntry() const  noexcept{return _index;}
@@ -71,11 +81,11 @@ namespace clas12 {
   private:
 
     int _mcTindex_order{-1};
-    int _recTindex_order{-1};
     int _pindex_order{-1};
-    int _inAcc_order{-1};
-    int _nClust_order{-1};
-    int _fraction_order{-1};
+    int _mclayerstrk_order{-1};
+    int _mclayersneut_order{-1};
+    int _reclayerstrk_order{-1};
+    int _reclayersneut_order{-1};
  
     std::vector<int> _rvec{};
  

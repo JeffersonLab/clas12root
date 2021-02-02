@@ -12,12 +12,12 @@ namespace clas12 {
 
   mcmatch::mcmatch(hipo::schema __schema): hipo::bank(__schema) {
     _mcTindex_order = __schema.getEntryOrder("mcTindex"); 
-    _recTindex_order = __schema.getEntryOrder("recTindex"); 
     _pindex_order = __schema.getEntryOrder("pindex"); 
-    _inAcc_order = __schema.getEntryOrder("isInAcc"); 
-    _nClust_order = __schema.getEntryOrder("nMCclusters"); 
-    _fraction_order = __schema.getEntryOrder("fraction"); 
-  }
+    _mclayerstrk_order= __schema.getEntryOrder("MCLayersTrk"); 
+    _mclayersneut_order= __schema.getEntryOrder("MCLayersNeut"); 
+    _reclayerstrk_order= __schema.getEntryOrder("RecLayersTrk"); 
+    _reclayersneut_order= __schema.getEntryOrder("RecLayersNeut"); 
+   }
 
   
   int mcmatch::getIndex(int pindex){
@@ -39,5 +39,19 @@ namespace clas12 {
        _rvec.emplace_back(pindex);
      }
    }
+  
+   bool mcmatch::checkFDSuperLayers(const short nMinSL, const short nMinLayerPerSL) const noexcept {
+      auto pattern=getMCLayersTrk();
+      short isSuper = 0;
+      for(uint isu=0;isu<6;++isu){//6 superlayers
+	short isLay = 0;
+	for(uint ilay=0;ilay<6;++ilay){//6 layers
+	  isLay+=static_cast<short>(checkBit(pattern,isu*6+ilay));       
+	}
+	if(isLay>=nMinLayerPerSL) ++isSuper;//at least 4 layers
+      }
+      if(isSuper>=nMinSL) return true; //at least 5 superlayers
+      return false;
+    }
 
 }

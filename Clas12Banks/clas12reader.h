@@ -82,26 +82,26 @@ namespace clas12 {
     void addARegionFDet(){
       //Forward detector needs particles, calorimeter, scintillator,
       //track, cherenkov
-      region_fdet_uptr  reg{new region_fdet{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get()}};
+      region_fdet_uptr  reg{new region_fdet{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get(),_bmcparts.get()}};
       if(_useFTBased)reg->useFTBPid();
      _rfdets.push_back(std::move(reg));
     }
      void addARegionCDet(){
       //Forward detector needs particles, calorimeter, scintillator,
       //track, cherenkov
-       region_cdet_uptr  reg{new region_cdet{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get()}};
+       region_cdet_uptr  reg{new region_cdet{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get(),_bmcparts.get()}};
       if(_useFTBased)reg->useFTBPid();
       _rcdets.push_back(std::move(reg));
     }
     void addARegionFT(){
       //Forward tagger needs particles and forward tagger
-       region_ft_uptr  reg{new region_ft{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get()}};
+       region_ft_uptr  reg{new region_ft{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get(),_bmcparts.get()}};
        if(_useFTBased)reg->useFTBPid();
       _rfts.push_back(std::move(reg));
      }
   void addARegionBAND(){
       //Forward tagger needs particles and forward tagger
-       region_band_uptr  reg{new region_band{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get()}};
+       region_band_uptr  reg{new region_band{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get(),_bmcparts.get()}};
        if(_useFTBased)reg->useFTBPid();
       _rbands.push_back(std::move(reg));
      }

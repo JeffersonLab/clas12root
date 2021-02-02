@@ -28,8 +28,9 @@ namespace clas12 {
 
      region_ft(par_ptr pars,ftbpar_ptr ftbpars,covmat_ptr cm,
 	       cal_ptr calp, scint_ptr scp,trck_ptr trp,
-	       traj_ptr trj, cher_ptr chp, ft_ptr ftp,event_ptr event);
-    ~region_ft()=default;
+	       traj_ptr trj, cher_ptr chp, ft_ptr ftp,event_ptr event,
+	       mcpar_ptr mcp=nullptr);
+    ~region_ft() final=default;
 
     
     bool sort() override;

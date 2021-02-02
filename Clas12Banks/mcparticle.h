@@ -81,8 +81,14 @@ namespace clas12 {
       return atan2(y,x);
     }
     
-    void setEntry(short i){ _entry=i;}
-    void setBankEntry(short i){ _entry=i;} //faster for BankHist
+    void setEntry(short i){
+      _entry=i;
+      if(_match.get()!=nullptr)_match->setEntry(i);
+    }
+    void setBankEntry(short i){
+      _entry=i;
+      if(_match.get()!=nullptr)_match->setEntry(i);
+    } //faster for BankHist
     short getEntry() const  noexcept{return _entry;}
     /**
     * This is virtual method from hipo::bank it will be called
@@ -92,11 +98,12 @@ namespace clas12 {
     void notify() final {
       bank::notify();
     }
-    int match(int pindex){
+    int match(int pindex){//pindex is index of reconstructed particle
       return _match.get()!=nullptr ?
 	_entry=_match->getIndex(pindex) : -1 ;
     }
-
+    bool isMatched() const noexcept{return _entry!=-1;}
+    
     mcmatch* getMatch()const {return _match.get();}
     
   private:
