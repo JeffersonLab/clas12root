@@ -78,6 +78,7 @@ namespace clas12 {
     QADB _qa;//!  
 
 #else
+  public:
     double getAccCharge(){return 0.0;};
 
 #endif
