@@ -7,3 +7,6 @@
 [submodule "rcdb"]
 	path = rcdb
 	url = https://github.com/JeffersonLab/rcdb
+[submodule "clasqaDB"]
+	path = clasqaDB
+	url = https://github.com/JeffersonLab/clasqaDB
