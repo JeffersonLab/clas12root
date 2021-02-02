@@ -3,4 +3,4 @@
 	url = https://github.com/lz4/lz4.git
 [submodule "ccdb"]
 	path = ccdb
-	url = /home/dglazier/clas12root/ccdb/
+	url = https://github.com/JeffersonLab/ccdb.git
