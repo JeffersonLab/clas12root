@@ -39,10 +39,10 @@ void ExMC_CLAS12ReaderChain(){
    //this will point to the correct place when file changes
    auto& c12=chain.C12ref();
    
-   while (chain.Next()){ 
+   while (chain.Next()){
+     //loop over all reconstructed particles
      for(auto p : c12->getDetParticles()){
 
-       
        if(p->mc()->isMatched()){//this particle has an mc match
 	 //if charged FD, check for sufficient layers
 	 if( p->getRegion()==clas12::FD && p->par()->getCharge() )
@@ -65,11 +65,11 @@ void ExMC_CLAS12ReaderChain(){
    TCanvas* can=new TCanvas();
    can->Divide(3,1);
    can->cd(1);
-   hPDiff->DrawCopy();
+   hPDiff->Draw();
    can->cd(2);
-   hThDiff->DrawCopy();
+   hThDiff->Draw();
    can->cd(3);
-   hPhDiff->DrawCopy();
+   hPhDiff->Draw();
   
   
 }
