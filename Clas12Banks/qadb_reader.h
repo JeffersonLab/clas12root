@@ -76,7 +76,10 @@ namespace clas12 {
 
   private: 
     QADB _qa;//!  
- 
+
+#else
+    double getAccCharge(){return 0.0;};
+
 #endif
 
 
