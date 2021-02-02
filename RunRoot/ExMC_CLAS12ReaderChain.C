@@ -1,3 +1,18 @@
+#include <cstdlib>
+#include <iostream>
+#include <chrono>
+#include <TFile.h>
+#include <TTree.h>
+#include <TApplication.h>
+#include <TROOT.h>
+#include <TDatabasePDG.h>
+#include <TLorentzVector.h>
+#include <TH1.h>
+#include <TChain.h>
+#include <TCanvas.h>
+#include <TBenchmark.h>
+#include "clas12reader.h"
+#include "HipoChain.h"
 
 using namespace clas12;
 
