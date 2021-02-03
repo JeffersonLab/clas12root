@@ -176,7 +176,7 @@ namespace clas12 {
     }
     double getRunBeamCharge() {
       if(_db!=nullptr)
-	if(db().qa()!=nullptr) return db().qa()->getAccCharge();
+	if(db()->qa()!=nullptr) return db()->qa()->getAccCharge();
       return _runBeamCharge;
     }
     double getCurrApproxCharge(){return _runBeamCharge*_nevent/_reader.getEntries();}
@@ -184,7 +184,7 @@ namespace clas12 {
     void summary(){
       std::cout<<"for file "<<_filename<<"\n   read "<<_nevent<<" events from which "<<_nselected<< " passed filtering conditions."<<std::endl;
       if(_db!=nullptr)
-	if(db().qa())cout<<"Accumulated charge past QA: "<<db().qa()->getAccCharge()<<" nC"<<endl;
+	if(db()->qa())cout<<"Accumulated charge past QA: "<<db()->qa()->getAccCharge()<<" nC"<<endl;
     }
     
     void getStructure(hipo::bank* bank){
@@ -304,7 +304,7 @@ namespace clas12 {
     rcdb_reader* rcdb()const {return _db->rc();}
     qadb_reader* qadb()const {return _db->qa();}
 
-    clas12databases& db(){return *_db;};
+    clas12databases* db(){return _db;};
     
     //clasqaDB   
     void applyQA() {
