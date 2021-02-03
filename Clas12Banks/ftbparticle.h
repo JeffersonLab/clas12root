@@ -50,15 +50,18 @@ namespace clas12 {
     float  getChi2Pid(int index)    const noexcept{ return getFloat(_chi2pid_order,index);}
     int    getStatus(int index)    const noexcept{ return getShort(_st_order,index);}
 
-    int    getPid()   const noexcept{ return getInt(_pid_order,_entry);}
-    float  getVt()    const noexcept{ return getFloat(_vt_order,_entry);}
-    float  getBeta()    const noexcept{ return getFloat(_beta_order,_entry);}
-    float  getChi2Pid()    const noexcept{ return getFloat(_chi2pid_order,_entry);}
-    int    getStatus()    const noexcept{ return getShort(_st_order,_entry);}
+    int    getPid()   const noexcept{ return _entry==-1?0:getInt(_pid_order,_entry);}
+    float  getVt()    const noexcept{ return _entry==-1?0:getFloat(_vt_order,_entry);}
+    float  getBeta()    const noexcept{ return _entry==-1?0:getFloat(_beta_order,_entry);}
+    float  getChi2Pid()    const noexcept{ return _entry==-1?0:getFloat(_chi2pid_order,_entry);}
+    int    getStatus()    const noexcept{ return _entry==-1?0:getShort(_st_order,_entry);}
 
  
     
-    void setEntry(short i){ _entry=i;}
+    void setEntry(short i){
+      if( i<getRows() )_entry=i;
+      else _entry = -1;
+    }
     void setBankEntry(short i){ _entry=i;} //faster for BankHist
     short getEntry() const  noexcept{return _entry;}
     /**

@@ -82,7 +82,9 @@ namespace clas12 {
     }
     
     void setEntry(short i){
-      _entry=i;
+      if( i<getRows() )_entry=i;
+      else _entry = -1;
+      
       if(_match.get()!=nullptr)_match->setEntry(i);
     }
     void setBankEntry(short i){
