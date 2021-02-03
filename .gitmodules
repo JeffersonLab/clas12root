@@ -1,3 +1,12 @@
 [submodule "lz4"]
 	path = lz4
 	url = https://github.com/lz4/lz4.git
+[submodule "ccdb"]
+	path = ccdb
+	url = https://github.com/JeffersonLab/ccdb.git
+[submodule "rcdb"]
+	path = rcdb
+	url = https://github.com/JeffersonLab/rcdb
+[submodule "clasqaDB"]
+	path = clasqaDB
+	url = https://github.com/JeffersonLab/clasqaDB

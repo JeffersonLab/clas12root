@@ -46,6 +46,7 @@ namespace clas12root {
     vector<TString> RemoveArithmetic(TString& expr);
 
     void SetEntries(Long64_t n){_nEntriesToProcess=n;}
+    void SetVerbose(short v=1){_verbose=v;}
   protected :
     
     TString _tempActionName;
@@ -54,7 +55,7 @@ namespace clas12root {
 
     TString GetCurrMacroName(){return _curMacro;}
     Int_t GetNActions(){return _Nactions;}
-  private :
+   private :
 
     TString _hipoFileName;
     TString _curMacro;
@@ -64,7 +65,7 @@ namespace clas12root {
     TChain _chain;
     Int_t _iHipoFile=0;
     Long64_t _nEntriesToProcess=-1;
-    
+    short _verbose=0;
   };//class HipoROOTOut
   
 }

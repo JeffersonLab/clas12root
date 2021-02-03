@@ -46,11 +46,9 @@ namespace clas12root{
       Int_t NtempFiles=1;
       TString tempMacro=_curMacro;
       while(gSystem->FindFile(_tempDir,tempMacro)){
-	cout<<_curMacro<<endl;
 	_curMacro=_tempDir+Form("asdf%d__%s__.C",_Nruns+NtempFiles++*1000,_tempActionName.Data());
 	tempMacro=_curMacro;
       }
-      cout<<"CURR MACRO "<<_curMacro<<endl;
 
       
       TString strline=macro.GetLineWith("NNNN")->GetString();
@@ -93,7 +91,7 @@ namespace clas12root{
   void HipoROOTOut::CompileAction(){
     PreCompileAction();
     TMacro macro(_curMacro);
-    macro.Print();
+    if(_verbose)macro.Print();
     
     auto result=gROOT->LoadMacro(Form("%s++",_curMacro.Data()));
   

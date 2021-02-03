@@ -7,7 +7,6 @@
 //selector name
 {
   //clas12databases::SetCCDBLocalConnection("ccdb.sqlite");
-  //clas12databases::SetQADBConnection("qaDB.json");
   //clas12databases::SetRCDBRootConnection("rcdb.root");
 
   clas12root::HipoChain chain;

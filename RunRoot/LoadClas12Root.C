@@ -37,5 +37,12 @@ void LoadClas12Root(){
     gROOT->ProcessLine("#define RCDB_MYSQ"); //For cling interpreter
     //gROOT->ProcessLine("#define RCDB_SQLITE"); //For cling interpreter
   }
-  
+  //remove aclic warnings for ccdb....
+  gSystem->SetAclicMode(TSystem::EAclicMode::kOpt);
+  TString optFlags = gSystem->GetFlagsOpt();
+  optFlags+=" -Wno-ignored-qualifiers";
+  optFlags+=" -Wno-format";
+  gSystem->SetFlagsOpt(optFlags.Data());
+
+
 }

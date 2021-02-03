@@ -72,7 +72,6 @@ void Ex1_CLAS12ReaderChain(){
    auto& c12=chain.C12ref();
    
    while (chain.Next()){
-     //c12=chain.GetC12Reader();
      
      //c12->event()->getStartTime();
      
