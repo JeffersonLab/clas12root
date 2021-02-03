@@ -100,6 +100,10 @@ Remember to build ccdb with scons if you are using it before installing clas12ro
 installC12Root
 ```
 
+You might want to add clas12root/bin to you PATH
+
+    setenv PATH ${PATH}:${CLAS12ROOT}/bin
+
 If there are issues with cmake and your ROOTSYS you can try using the local FindROOT file. Edit the CMakeList.txt files removing the lines with comment ##USEROOTSYS and uncomment the line
 
    	 #######include("cmake/FindROOT.cmake")
