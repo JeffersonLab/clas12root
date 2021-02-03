@@ -8,23 +8,6 @@ using namespace clas12;
 using namespace std;
 
 void Ex9_QualityAssurance(){
-
-
-  /*
-   * The jsonFileMerger class included in clas12root allows to
-   * quickly merge several jason files. It takes as an
-   * argument the absolute path for the merged output.
-   *
-   * addFile takes as argument the absolute path for an input 
-   * .json file to be merged.
-   *
-   * mergeAllFiles merges all the added files and saves the output
-   * to the specified location
-   */
-  jsonFileMerger merger("/absolute/path/for/output.json");
-  merger.addFile("/absolute/path/for/input1.json");
-  merger.addFile("/absolute/path/for/input2.json");
-  merger.mergeAllFiles();
   
   //clas12reader declared as usual.
   clas12reader c12("/path/to/data.hipo");
@@ -35,7 +18,7 @@ void Ex9_QualityAssurance(){
    * argument. This file should contain the Clas12 Quality Assurance
    * database.
    */
-  c12.applyQA("/absolute/path/to/qaDB.json");
+  c12.applyQA();
 
   /*
    * Several quality assurance requirements can be specified.
@@ -49,14 +32,20 @@ void Ex9_QualityAssurance(){
    * See RGA analysis note and clasqaDB github repository for
    * additional information.
    */
-  c12.getQAReader()->requireOkForAsymmetry(true);
-  c12.getQAReader()->requireGolden(true);
-  c12.getQAReader()->addQARequirement("MarginalOutlier");
-  c12.getQAReader()->addQARequirement("TotalOutlier");
+  c12.qadb()->requireOkForAsymmetry(true);
+  c12.qadb()->requireGolden(true);
+  c12.qadb()->addQARequirement("MarginalOutlier");
+  c12.qadb()->addQARequirement("TotalOutlier");
 
   //The analysis can then proceed as usual.
   while(c12.next()) {
     //Do rest of analysis...
   }
+
+  /*
+   * The clasqaDB software also provides the accumulated charge for events
+   * that pass the quality assurance requirements.
+   */
+  cout<<"Accumulated charge past QA: "<<c12.qadb()->getAccCharge()<<" nC"<<endl;
 
 }

@@ -24,6 +24,21 @@ An interface to the c++ [Run Conditions DataBase](https://github.com/JeffersonLa
 
 clas12root provides an interface to the clasqaDB c++ code to allow skimming of events based on the Data Quality Assurance. This is optional and depends on the existence of an environment variable containing the path to the clasqaDB code, which must be downloaded from https://github.com/c-dilks/clasqaDB/tree/master.
 
+## NEW
+
+To simplify installation of the dependencies, ccdb, rcdb, clasqadb are now includes as submodules tagged to specific releases. Now when you clone with   --recurse-submodules all 3 plus lz4 will also be downloaded into your clas12root directory. If you already have your own versions of these you may ignore these and just set the required paths to your own installation.
+
+It is still required to build ccdb with scons after you have cloned it (before running installC12Root). You will need to make sure you have the necessary depndencies for ccdb on your system. If you do not and do not want to use ccdb in anycase you may just not set the CCDB_HOME enviroment variable.  [https://github.com/JeffersonLab/ccdb]
+
+      cd ccdb
+      source environment.csh
+      scons
+
+ccdb is prown to giving warnings when you try and compile ROOT scripts via macros. To get rid of these wanrings you may need to copy the Directory.h file from ccdb_patch.
+
+      cp $CLAS12ROOT/ccdb_patch/Directory.h $CCDB_HOME/include/CCDB/Model/Directory.h
+
+
 ## Also see c++ function for accessing banks "Cheat sheet" AccesssingBankDataInCpp.txt in the top level directory.
 
 The Clas12Root package depends on both Hipo and Clas12Banks. This provides ROOT-like analysis tools for operating on clas12 hipo DSTs.
@@ -37,52 +52,30 @@ The Clas12Root package depends on both Hipo and Clas12Banks. This provides ROOT-
 git clone --recurse-submodules https://github.com/jeffersonlab/clas12root.git
 cd clas12root
 
-Note you can try the install script for the DBs once CLAS12ROOT is set. But you may already have these installed on your system. You will also need to make sure you meet the installation requirements for these, (check the github pages, you may need to install mysql, scons,...)
 
 
-To individually install just the DBs you want to use,
-
-##To download the RCDB repository
-git clone --recurse-submodules https://github.com/jeffersonlab/rcdb.git
-
-##To download the CCDB repository
-git clone --recurse-submodules https://github.com/JeffersonLab/ccdb.git
-
-cd ccdb
-source environment.csh
-scons
-
-You may also want to download the latest CCDB sqlite database so you do not need remote connections. See  https://clasweb.jlab.org/wiki/index.php/CLAS12_Software_Center#tab=Reconstruction for details. Alternativly this is done in the PrepareDatabases.C script.
-
-##To download the clasqaDB repository 
-git clone --recurse-submodules https://github.com/c-dilks/clasqaDB.git
-
-```
-
-## To setup Run ROOT
+## To setup Enviroment
 
 for cshrc
 ```sh
 setenv CLAS12ROOT $PWD  (the actual path can be added in your bashrc or tchrc)
 setenv PATH "$PATH":"$CLAS12ROOT/bin"
-setenv HIPO /Where/Is/hipo
 #To use the RCDB interface 
-setenv RCDB_HOME /Where/Is/rcdb
+setenv RCDB_HOME /Where/Is/rcdb  (e.g. setenv RCDB_HOME ${CLAS12ROOT}/rcdb )
 #To use the CCDB interface 
-setenv CCDB_HOME /Where/Is/ccdb
-#To use clasqaDB interface
-setenv CLASQADB_HOME /Where/Is/clasqaDB
+setenv CCDB_HOME /Where/Is/ccdb   (e.g. setenv RCDB_HOME ${CLAS12ROOT}/ccdb )
+#To use clasqaDB interface 
+setenv QADB /Where/Is/clasqaDB (e.g. setenv RCDB_HOME ${CLAS12ROOT}/clasqaDB )
 ```
 
 or for bash
 ```bash
 export CLAS12ROOT=$PWD
 export PATH="$PATH":"$CLAS12ROOT/bin"
-export HIPO=/Where/Is/hipo
 #To use the RCDB interface 
 export RCDB_HOME /Where/Is/rcdb
 #To use clasqaDB interface
-export CLASQADB_HOME /Where/Is/clasqaDB
+export QADB /Where/Is/clasqaDB
 ```
 
 ## To install
@@ -99,9 +92,17 @@ setenv CXX  /myz/c++
 ```
 Or just set the paths to CC and CXX directly.
 
+Remember to build ccdb with scons if you are using it before installing clas12root. If you alredy have CCDB_HOME set to somewhere else on your system then you will not need to do this.
+
 ```bash
+cd ccdb
+source environment.csh
+scons
+cd..
+
 installC12Root
 ```
+
 
 If there are issues with cmake and your ROOTSYS you can try using the local FindROOT file. Edit the CMakeList.txt files removing the lines with comment ##USEROOTSYS and uncomment the line
 
@@ -198,10 +199,15 @@ You can now try running this using HipoChain to process many files. See the exam
     	clas12root::HipoChain chain;
 	//Add lots of files
 	chain.Add("/WHERE/IS/MY/HIPO/file1.hipo");
-	auto c12=chain.GetC12Reader();
-	c12->addExactPid(11,1); //if want some filters
+	
+	//Get a c12 object for configuring
+	auto config_c12=chain.GetC12Reader();
+	config_c12->addExactPid(11,1); //if want some filters
+
+	//get c12 obect for running
+	auto& c12=chain.C12ref();
 	while (chain.Next()){
-     	      c12=chain.GetC12Reader();
+     
  	      auto electrons=c12->getByID(11);
 	      ....
 	}
@@ -215,19 +221,6 @@ Also you can check trigger bits directly
 
      	 c12.checkTriggerBit(24);
 	 
-### Jupyter
-
-To install rootbooks see https://root.cern.ch/how/how-create-rootbook
-
-       mkdir myNotebooks
-       cp -r $CLAS12ROOT/RunRoot/jupy myNotebooks/.
-       cd myNotebooks/jupy
-
-Start a ROOT note book :
-
-      	root --notebook
-
-Click on the notebook CLAS12Reader3Pi.ipynb and follow the tutorial
 
 
 ## Ex 2 Drawing particle histograms from hipo files
@@ -291,15 +284,6 @@ For Run::config
     ParticleHist [0] hists.SetEntries(1E6);
 
 
-### Jupyter
-
-Go to directory containing notebooks e.g. $CLAS12ROOT/RunRoot/jupy
-
-Start a ROOT note book :
-
-      	root --notebook
-	
-Click on the notebook HipoDraw.ipynb and follow the tutorial
 
 ## Ex 4 Filtering and Skimming into a ROOT ntuple (tree)
 
@@ -324,16 +308,6 @@ You can perform some arithmetic and define a new branch e.g.
      treemaker.AddExactPid(11,1); //filter events with exactly 1 e-
      treemaker.AddAtLeastPid(211,1);//and at least 1 pi+
      treemaker.AddZeroOfRestPid(); //and zero of any other particle type (default is any)
-
-### Jupyter
-
-Go to directory containing notebooks e.g. $CLAS12ROOT/RunRoot/jupy
-
-Start a ROOT note book :
-
-      	root --notebook
-
-Click on the notebook HipoToRootTree.ipynb and follow the tutorial
 
 
 ## Ex 3 Using HipoSelector & PROOFLite
@@ -376,19 +350,6 @@ As a more complete example you can check testSelector in RunRoot which implement
 
          clas12proof 8 RunRoot/testSelector.C+  RunRoot/Ex3b_TestSelector.C
 
-
-### Jupyter
-
-Go to directory containing notebooks e.g. $CLAS12ROOT/RunRoot/jupy
-
-Start a ROOT note book :
-
-      	root --notebook
-
-Click on the notebook CreateHipoSelector.ipynb and follow instructions. This creates the selector you wish to run.
-
-Once this is complete you should open the notebook HipoProof.ipynb and process the selector with PROOF
-
 ## Ex 5  Writing out specific events to a hipo file
 
 The clas12writer class allows you to write out specific events to a new hipo file. The idea behind this is to avoid repeating the same event selection everytime you want to access information about a specific set of events. The writer is assigned a clas12reader from which it gets the event information, and is initialised with the desired location for the outputted hipo file. You can also choose not to write out certain banks to speed the process up.
@@ -401,39 +362,6 @@ To run:
 
 Note the use of the + sign after the macro name. This compiles the script meaning it will run much faster. The script will then ask you for the locations of an input hipo file and an output file. The script is similar to Ex1_CLAS12Writer.C so you can compare the two.
 
-## Ex 7 Scaler beam charge information
-
-To normalise events you will need the beam charge. This is stored in 2 ways in clas12 DSTs. (1) accumalating in REC::Event::beamCharge (2) accumulating in tag=1 RAW::scaler::fcupgated . The problem with (1) for trains is that the events are not garaunteed to be in correct time order, so the last event in the hipo file may not have the largest beamCharge. And indeed if you have a large event filter you may not include any events with the largest beam cahrge in your train. (2) contains all the scaler reads and therefore the correct total charge, but these events are not in time order and the are not interspersed with the correct hipo events (I think).
-
-To make sure the correct beam charge is accessed and time history rates can be produced for a file there is a scaler_reader class. At file initialisation this will read all the tag=1 events (which is quite fast) and sort all the scaler events by event number. It will return the difference between the highest and lowest beamCharge, so it should work for individual run files as well as files with whole runs. It also allows you to add counters for any monitoring and will increment REC::* information with the correct associated scaler event.
-
-For example,
-
-    clas12reader c12("file.hipo",{0}); //reader for tag 0 events
-
-    //create the scaler reader and make some counters
-    //the counters have an entry for each scaler read
-    //you can increment them for each real event corresponding
-    //to the scaler read in the normal event loop
-    auto scal=c12.scalerReader();
-    auto count_mesonex=scal->addLongCounter();
-    auto count_events=scal->addLongCounter();
-    while(c12.next()==true){
-       auto currEvent=c12.runconfig()->getEvent(); 
-       //check for valid charge events, i.e. RUN::Scaler::BeamCharge!<0
-       if( scal->validCharge(currEvent) ==false ) continue;
-       if( c12.checkTriggerBit(24) ) //check if mesonex trigger fired for this event
-	   scal->incrementLong(count_mesonex,currEvent,1);
-       //counter for all events
-       scal->incrementLong(count_events,currEvent,1);
-
-     }
-
-Be aware that if your events have been filtered this will effect the rates.
-
-To try the example
-
-       clas12root --in=/work/jlab/clas12data/v16/skim9_5038.hipo RunRoot/Ex7_ScalerReader.C+
 
 ### Jupyter
 
@@ -453,12 +381,11 @@ To use any database you must set the corresponding environment variables
 
 setenv RCDB_HOME /where/is/rcdb
 setenv CCDB_HOME /where/is/ccdb
-setenv CLASQADB_HOME /where/is/clasqaDB
+setenv QADB /where/is/clasqaDB
 
 ands pecify the location of the database before you create your clas12root object
 
         clas12databases::SetCCDBLocalConnection("/where/to/ccdb.sqlite");
-  	clas12databases::SetQADBConnection("/where/to/qaDB.json");
   	clas12databases::SetRCDBRootConnection("/where/to/rcdb.root");
 
 These local files can be created using the $CLAS12ROOT/RunRoot/PrepareDatabases.C macro. You are best copying this locally and editing for any datafiles you want to add to the RCDB file list.
@@ -507,10 +434,10 @@ Where ccdbElSF is a std::vector<std::vector<double>> and so you can access the e
 
 clas12root can use the Quality Assurance database .json files found at https://github.com/c-dilks/clasqaDB/tree/master to reject events that have been identified as failing to meet certain requirements. This is implemented in an analysis using the clas12reader with the functions
 
-     c12.db().qadb_requireOkForAsymmetry(true);
-     c12.db().qadb_requireGolden(true);
-     c12.db().qadb_addQARequirement("MarginalOutlier");
-     c12.db().qadb_addQARequirement("TotalOutlier");
+     c12.db()->qadb_requireOkForAsymmetry(true);
+     c12.db()->qadb_requireGolden(true);
+     c12.db()->qadb_addQARequirement("MarginalOutlier");
+     c12.db()->qadb_addQARequirement("TotalOutlier");
      c12.applyQA();
 
 
@@ -518,13 +445,11 @@ Or in case you use HipoChain (also for when running PROOF/HipoSelector)
 
       auto c12=chain.GetC12Reader();
 
-      c12->db().qadb_requireOkForAsymmetry(true);
-      c12->db().qadb_requireGolden(true);
-      c12->db().qadb_addQARequirement("MarginalOutlier");
-      c12->db().qadb_addQARequirement("TotalOutlier");
-      c12->applyQA();
-
- 
+      c12->db()->qadb_requireOkForAsymmetry(true);
+      c12->db()->qadb_requireGolden(true);
+      c12->db()->qadb_addQARequirement("MarginalOutlier");
+      c12->db()->qadb_addQARequirement("TotalOutlier");
+      c12->applyQA(); 
     
 where requireOkForAsymmetry(true) requires only events that were identified as suitable for asymmetry calculations, and requireGolden(true) requires only events without any defects. addQARequirement("Requirement") allows to reject events that fail to meet the specified requirement. These can be:
 
@@ -535,16 +460,14 @@ where requireOkForAsymmetry(true) requires only events that were identified as s
     LowLiveTime: live time < 0.9
     Misc: miscellaneous defect
 
-The QA database is contained in several .json files that can be found on the clasqaDB github [repository](https://github.com/c-dilks/clasqaDB/tree/master). These can be merged within clas12root using the jsonFileMerger class with the functions:
+The clasqaDB software also returns the accumulated charge for events that have passed the quality assurance requirements. This is accessed with: 
 
-    jsonFileMerger merger("/absolute/path/for/output.json");
-    merger.addFile("/absolute/path/for/input1.json");
-    merger.addFile("/absolute/path/for/input2.json");
-    merger.mergeAllFiles();
+    c12.db()->qadb()->getAccCharge();
 
-This step can be performed with the RunRoot PrepareDatabases.C script,
-You should copy this locally and edit the HipoChain files if you are using RCDB.
- 
+Or if using a HipoChain
+
+     chain.TotalBeamCharge()
+
 More information on the Quality Assurance process can be found in the RGA analysis note.
 
 ### Using databases with HipoSelector
@@ -577,7 +500,6 @@ Inside your Selector class for RCDB tables :
 See Ex3b_TestSelector.C and testSelector.C and .h for implementation example. To use the databases you need to comment in the lines
 
     clas12databases::SetCCDBLocalConnection("ccdb.sqlite");
-    clas12databases::SetQADBConnection("qaDB.json");
     clas12databases::SetRCDBRootConnection("rcdb.root");
 
 Having run PrepareDatabases.C with the  HipoChain set for the files you wish to process.

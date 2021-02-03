@@ -1,21 +1,21 @@
 
 
 
-set(CLASS_LIST_CPP helflip.cpp helonline.cpp runconfig.cpp event.cpp ftbevent.cpp particle.cpp ftbparticle.cpp mcparticle.cpp scaler.cpp vtp.cpp particle_detector.cpp scintillator.cpp tracker.cpp traj.cpp forwardtagger.cpp cherenkov.cpp calorimeter.cpp covmatrix.cpp region_particle.cpp region_ft.cpp region_fdet.cpp region_cdet.cpp region_band.cpp clas12writer.cpp clas12reader.cpp mesonex_trigger.cpp scaler_reader.cpp clas12databases.cpp qadb_reader.cpp ccdb_reader.cpp rcdb_reader.cpp)
+set(CLASS_LIST_CPP helflip.cpp helonline.cpp runconfig.cpp event.cpp ftbevent.cpp particle.cpp ftbparticle.cpp mcparticle.cpp mcevent.cpp  mcmatch.cpp scaler.cpp vtp.cpp particle_detector.cpp scintillator.cpp  scintextras.cpp tracker.cpp traj.cpp forwardtagger.cpp cherenkov.cpp calorimeter.cpp covmatrix.cpp region_particle.cpp region_ft.cpp region_fdet.cpp region_cdet.cpp region_band.cpp clas12writer.cpp clas12reader.cpp mesonex_trigger.cpp scaler_reader.cpp clas12databases.cpp qadb_reader.cpp ccdb_reader.cpp rcdb_reader.cpp)
 
-set(CLASS_LIST_H helflip.h  helonline.h runconfig.h event.h ftbevent.h particle.h ftbparticle.h mcparticle.h scaler.h vtp.h particle_detector.h scintillator.h tracker.h traj.h forwardtagger.h cherenkov.h calorimeter.h covmatrix.h region_particle.h region_ft.h region_fdet.h region_cdet.h region_band.h clas12writer.h clas12reader.h mesonex_trigger.h  scaler_reader.h clas12databases.h  qadb_reader.h ccdb_reader.h rcdb_reader.h)
+set(CLASS_LIST_H helflip.h  helonline.h runconfig.h event.h ftbevent.h particle.h ftbparticle.h mcparticle.h  mcevent.h mcmatch.h scaler.h vtp.h particle_detector.h scintillator.h scintextras.h tracker.h traj.h forwardtagger.h cherenkov.h calorimeter.h covmatrix.h region_particle.h region_ft.h region_fdet.h region_cdet.h region_band.h clas12writer.h clas12reader.h mesonex_trigger.h  scaler_reader.h clas12databases.h  qadb_reader.h ccdb_reader.h rcdb_reader.h)
 
-IF (DEFINED ENV{CLASQADB_HOME})
+IF (DEFINED ENV{QADB})
   set(CLASS_LIST_CPP ${CLASS_LIST_CPP} jsonFileMerger.cpp)
   set(CLASS_LIST_H ${CLASS_LIST_H} jsonFileMerger.h)
   add_definitions(-DCLAS_QADB)
-ENDIF (DEFINED ENV{CLASQADB_HOME})
+ENDIF (DEFINED ENV{QADB})
 
 #include rcdb c++ header library
 IF (DEFINED ENV{CCDB_HOME})
   # CCDB related
   include_directories($ENV{CCDB_HOME}/include)
-  link_libraries($ENV{CCDB_HOME}/lib/libccdb.so)
+  link_libraries($ENV{CCDB_HOME}/lib/libccdb${CMAKE_SHARED_LIBRARY_SUFFIX})
   add_definitions(-DCLAS_CCDB)
 ENDIF (DEFINED ENV{CCDB_HOME})
 
@@ -69,9 +69,11 @@ target_link_libraries(Clas12Banks ${ROOT_LIBRARIES} Hipo4)
 install(TARGETS Clas12Banks
   LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}")
 
-FILE(GLOB ROOT_CLAS12_PCM ${CMAKE_BINARY_DIR}/Clas12Banks/*pcm)
+#FILE(GLOB ROOT_CLAS12_PCM ${CMAKE_BINARY_DIR}/Clas12Banks/*pcm)
 
-install (FILES  ${ROOT_CLAS12_PCM}     
+#install (FILES  ${ROOT_CLAS12_PCM}     
+#  DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+
+
+install (FILES  ${CMAKE_CURRENT_BINARY_DIR}/libClas12Banks_rdict.pcm    
   DESTINATION "${CMAKE_INSTALL_LIBDIR}")
-
-

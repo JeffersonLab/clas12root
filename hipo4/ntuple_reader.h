@@ -31,7 +31,12 @@ namespace hipo {
     int64_t& getLong(string bankName,string itemName);
     float& getFloat(string bankName,string itemName);
     double& getDouble(string bankName,string itemName);
-    
+
+
+    void show(const string& bank){
+      auto sch=_dict.getSchema(bank.data());
+      sch.show();
+    }
   private:
      hipo::reader  _reader;
      hipo::dictionary  _dict;

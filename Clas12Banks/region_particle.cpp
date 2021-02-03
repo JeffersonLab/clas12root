@@ -41,7 +41,7 @@ namespace clas12 {
   {
     
   }
-  region_particle::region_particle(par_ptr pars,ftbpar_ptr ftbpars,covmat_ptr cm, cal_ptr calp, scint_ptr scp, trck_ptr trp, traj_ptr trj, cher_ptr chp, ft_ptr ftp,event_ptr event):
+  region_particle::region_particle(par_ptr pars,ftbpar_ptr ftbpars,covmat_ptr cm, cal_ptr calp, scint_ptr scp, trck_ptr trp, traj_ptr trj, cher_ptr chp, ft_ptr ftp,event_ptr event, mcpar_ptr mcp):
     _parts(pars),
     _ftbparts(ftbpars),
     _covmat(cm),
@@ -51,11 +51,12 @@ namespace clas12 {
     _traj(trj),
     _cher(chp),
     _ft(ftp),
-    _event(event)
+    _event(event),
+    _mcpart(mcp)
   {
     
   }
-  
+ 
   float region_particle::getTheta() const{
     _parts->setEntry(_pentry);
     float x=_parts->getPx();

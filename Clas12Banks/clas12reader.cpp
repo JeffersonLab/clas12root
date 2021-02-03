@@ -12,7 +12,7 @@ namespace clas12 {
   clas12reader::clas12reader(std::string filename,std::vector<long> tags):
     _filename(filename){
 
-    cout<<" clas12reader::clas12reader reading "<<filename.data()<<endl;
+    if(_verbose) cout<<" clas12reader::clas12reader reading "<<filename.data()<<endl;
     _reader.setTags(tags);
     
      
@@ -28,8 +28,7 @@ namespace clas12 {
     //_db{other._db}
   {
     
-    cout<<" COPY clas12reader::clas12reader reading "<<filename.data()<<endl;
-
+  
     //if default filename take same file as original
     if(_filename.empty())_filename=other._filename;
     if(other._scalReader.get()) scalerReader();
@@ -44,7 +43,11 @@ namespace clas12 {
     _useFTBased=other._useFTBased;
     _nToProcess=other._nToProcess;
 
-    //if(other._connectDB)connectDataBases(other._db); //give databases the run number
+    setVerbose(other._verbose);
+
+    for(const auto& additionalBank : other._addBankNames)
+      addBank(additionalBank);
+	
     _applyQA=other._applyQA;
   }
 
@@ -59,8 +62,6 @@ namespace clas12 {
       _bftbparts.reset(new ftbparticle{_factory.getSchema("RECFT::Particle")});
     if(_factory.hasSchema("REC::Particle"))
       _bparts.reset(new particle{_factory.getSchema("REC::Particle"),_bftbparts.get()});
-    if(_factory.hasSchema("MC::Lund"))
-      _bmcparts.reset( new mcparticle{_factory.getSchema("MC::Lund")});
     if(_factory.hasSchema("REC::CovMat"))
       _bcovmat.reset(new covmatrix{_factory.getSchema("REC::CovMat")});
     if(_factory.hasSchema("RECFT::Event"))
@@ -71,8 +72,14 @@ namespace clas12 {
       _bevent.reset(new clas12::event{_factory.getSchema("REC::Event"),_bftbevent.get()});
     if(_factory.hasSchema("REC::Calorimeter"))
       _bcal.reset(new calorimeter{_factory.getSchema("REC::Calorimeter")});
-    if(_factory.hasSchema("REC::Scintillator"))
-      _bscint.reset(new scintillator{_factory.getSchema("REC::Scintillator")});
+    if(_factory.hasSchema("REC::Scintillator")){
+      if(_factory.hasSchema("REC::ScintExtras")){
+	_bscint.reset(new scintillator{_factory.getSchema("REC::Scintillator"),_factory.getSchema("REC::ScintExtras")});
+      }
+      else
+	_bscint.reset(new scintillator{_factory.getSchema("REC::Scintillator")});
+ 
+    }
     if(_factory.hasSchema("REC::Track"))
       _btrck.reset(new tracker{_factory.getSchema("REC::Track")});
     if(_factory.hasSchema("REC::Traj"))
@@ -82,6 +89,17 @@ namespace clas12 {
     if(_factory.hasSchema("REC::ForwardTagger"))
       _bft.reset(new forwardtagger{_factory.getSchema("REC::ForwardTagger")});
     
+    if(_factory.hasSchema("MC::Lund")){
+      if(_factory.hasSchema("MC::IsParticleMatched")){
+	_bmcparts.reset( new mcparticle{_factory.getSchema("MC::Lund"),_factory.getSchema("MC::IsParticleMatched")});
+      }
+      else
+	_bmcparts.reset( new mcparticle{_factory.getSchema("MC::Lund")});
+    }
+    if(_factory.hasSchema("MC::Event"))
+      _bmcevent.reset( new clas12::mcevent{_factory.getSchema("MC::Event")});
+
+    //could remove below
     if(_factory.hasSchema("RAW::vtp"))
       _bvtp.reset(new clas12::vtp{_factory.getSchema("RAW::vtp")});
     
@@ -127,7 +145,7 @@ namespace clas12 {
 
       runNo=arunconf.getRun();
     }
-    std::cout<<"Found run number : "<<runNo<<"  in tag "<<tag<<std::endl;
+    //std::cout<<"Found run number : "<<runNo<<"  in tag "<<tag<<std::endl;
     return runNo;
   }
   ///////////////////////////////////////////////////////////////////////
@@ -221,20 +239,25 @@ namespace clas12 {
     }
 
     //now getthe data for the rest of the banks
-    if(_bmcparts.get())_event.getStructure(*_bmcparts.get());
     if(_bcovmat.get())_event.getStructure(*_bcovmat.get());
     if(_bevent.get())_event.getStructure(*_bevent.get());
     if(_bftbevent.get())_event.getStructure(*_bftbevent.get());
     if(_bcal.get())_event.getStructure(*_bcal.get());
     if(_bscint.get())_event.getStructure(*_bscint.get());
+    if(_bscint->getExtras())_event.getStructure(*_bscint->getExtras());
     if(_btrck.get())_event.getStructure(*_btrck.get());
     if(_btraj.get())_event.getStructure(*_btraj.get());
     if(_bcher.get())_event.getStructure(*_bcher.get());
     if(_bft.get())_event.getStructure(*_bft.get());
     if(_bvtp.get())_event.getStructure(*_bvtp.get());
     if(_bhelonline.get())_event.getStructure(*_bhelonline.get());
-    //if(_bscal.get())_event.getStructure(*_bscal.get());
-
+ 
+    if(_bmcparts.get()){
+      _event.getStructure(*_bmcparts.get());
+      if(_bmcevent.get())_event.getStructure(*_bmcevent.get());
+      if(_bmcparts->getMatch())_event.getStructure(*_bmcparts->getMatch());
+    }
+    
     for(auto& ibank:_addBanks){//if any additional banks requested get those
       _event.getStructure(*ibank.get());
     }
@@ -452,7 +475,7 @@ namespace clas12 {
     // if(_runNo==0){
     _runNo=readQuickRunConfig(_filename);
     //}
-    std::cout<<"Connecting databases to run "<<_runNo<<std::endl;
+    if(_verbose )std::cout<<"Connecting databases to run "<<_runNo<<std::endl;
      if(_runNo!=0)_db->notifyRun(_runNo);
   }
   /////////////////////////////////////////////////////////
@@ -465,6 +488,7 @@ namespace clas12 {
     if(_bparts.get())_allBanks.push_back(_bparts.get());
     if(_bftbparts.get())_allBanks.push_back(_bftbparts.get());
     if(_bmcparts.get())_allBanks.push_back(_bmcparts.get());
+    if(_bmcevent.get())_allBanks.push_back(_bmcevent.get());
     if(_bcovmat.get())_allBanks.push_back(_bcovmat.get());
     if(_bevent.get())_allBanks.push_back(_bevent.get());
     if(_bftbevent.get())_allBanks.push_back(_bftbevent.get());

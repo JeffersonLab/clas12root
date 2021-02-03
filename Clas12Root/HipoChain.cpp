@@ -75,20 +75,20 @@ namespace clas12root {
     /////Warning any changes to this function should
     ////also be considered for  HipoSelector::Process
     std::cout<<"HipoChain::NextFile() "<<_idxFile<<" out of "<<GetNFiles()<<std::endl;
-   if(_idxFile>=GetNFiles())
+    if(_idxFile>=GetNFiles())
       return kFALSE;//no more files
-    std::cout<<"HipoChain::NextFile() "<<GetFileName(_idxFile)<<std::endl;
+    //std::cout<<"HipoChain::NextFile() "<<GetFileName(_idxFile)<<std::endl;
     //open next file
     // _c12.reset(new clas12::clas12reader{*_c12.get(),GetFileName(_idxFile++).Data(),_readerTags});
-   _c12.reset(new clas12::clas12reader{*GetC12Reader(),GetFileName(_idxFile++).Data(),_readerTags});
-   ConnectDataBases();
-   //if there is a root rcdb file use it
-   //if(_rcdbFileName.Length())_c12->setRcdbVals(FetchRunRcdb(_c12->getFilename()));
-   
+    _c12.reset(new clas12::clas12reader{*GetC12Reader(),GetFileName(_idxFile++).Data(),_readerTags});
+    ConnectDataBases();
+    //if there is a root rcdb file use it
+    //if(_rcdbFileName.Length())_c12->setRcdbVals(FetchRunRcdb(_c12->getFilename()));
+    
     _c12ptr = _c12.get();	
     return kTRUE;
   }
-
+  
 
   clas12::clas12reader* HipoChain::GetC12Reader() {
       if( (_c12ptr=_c12.get()) )

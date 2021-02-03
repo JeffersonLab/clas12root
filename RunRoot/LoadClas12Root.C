@@ -19,7 +19,7 @@ void LoadClas12Root(){
  
   gROOT->SetMacroPath(Form("%s:%s/RunRoot/",gROOT->GetMacroPath(),CLAS12ROOT.Data()));
 
-  TString QADB=gSystem->Getenv("CLASQADB_HOME");
+  TString QADB=gSystem->Getenv("QADB");
   if(QADB.Length()!=0){ //For #ifdef CLAS_QADB in header files
     gSystem->AddIncludePath("-DCLAS_QADB");
     gROOT->ProcessLine("#define CLAS_QADB"); //For cling interpreter
@@ -37,5 +37,12 @@ void LoadClas12Root(){
     gROOT->ProcessLine("#define RCDB_MYSQ"); //For cling interpreter
     //gROOT->ProcessLine("#define RCDB_SQLITE"); //For cling interpreter
   }
-  
+  //remove aclic warnings for ccdb....
+  gSystem->SetAclicMode(TSystem::EAclicMode::kOpt);
+  TString optFlags = gSystem->GetFlagsOpt();
+  optFlags+=" -Wno-ignored-qualifiers";
+  optFlags+=" -Wno-format";
+  gSystem->SetFlagsOpt(optFlags.Data());
+
+
 }

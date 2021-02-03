@@ -13,11 +13,11 @@ namespace clas12root {
     _mapOfParts["RECFT::Particle"]="ftbparticle";
     _mapOfParts["REC::Calorimeter"]="calorimeter";
     _mapOfParts["REC::Scintillator"]="scintillator";
+    _mapOfParts["REC::ScintExtras"]="scintextras";
     _mapOfParts["REC::Cherenkov"]="cherenkov";
     _mapOfParts["REC::Track"]="tracker";
     _mapOfParts["REC::Traj"]="traj";
     _mapOfParts["REC::ForwardTagger"]="forwardtagger";
-    _mapOfParts["MC::Lund"]="mcparticle";
     _mapOfParts["REC::CovMat"]="covmatrix";
     _mapOfParts["RAW::vtp"]="vtp";
     _mapOfParts["RAW::scaler"]="scaler";
@@ -29,6 +29,8 @@ namespace clas12root {
     _mapOfParts["HEL::flip"]="helflip";
     _mapOfParts["MC::Particle"]="mcparticle";
     _mapOfParts["MC::Lund"]="mcparticle";
+    _mapOfParts["MC::Event"]="mcevent";
+    _mapOfParts["MC::IsParticleMatched"]="mcmatch";
 
 
   }

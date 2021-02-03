@@ -1,11 +1,15 @@
-git clone --recurse-submodules https://github.com/c-dilks/clasqaDB.git
-setenv CLASQADB_HOME $PWD/clasqaDB/
+#git clone --recurse-submodules https://github.com/c-dilks/clasqaDB.git
+setenv QADB $PWD/clasqaDB/
 
-git clone --recurse-submodules https://github.com/jeffersonlab/rcdb.git
+#git clone --recurse-submodules https://github.com/jeffersonlab/rcdb.git
 setenv RCDB_HOME $PWD/rcdb
 
-git clone --recurse-submodules https://github.com/JeffersonLab/ccdb.git
+#git clone --recurse-submodules https://github.com/JeffersonLab/ccdb.git
 
+#cp $CLAS12ROOT/ccdb_patch/Directory.h $CCDB_HOME/include/CCDB/Model/Directory.h
+#cp $CLAS12ROOT/ccdb_patch/DataProvider.h $CCDB_HOME/include/CCDB/Providers/DataProvider.h
+#cp $CLAS12ROOT/ccdb_patch/Library_SConscript $CCDB_HOME/src/Library/SConscript
+#cp $CLAS12ROOT/ccdb_patch/SConstruct $CCDB_HOME/SConstruct
 
 cd ccdb
 source environment.csh

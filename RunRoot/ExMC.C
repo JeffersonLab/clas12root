@@ -13,6 +13,9 @@ void ExMC(){
    while (chain.Next()){
      auto c12=chain.GetC12Reader();
 
+     auto mceve=c12->mcevent(); 
+     cout<<" beam energy  "<<mceve->getEbeam()<<" type "<<mceve->getBtype()<<endl;
+
      auto mcpbank=c12->mcparts(); 
      const Int_t  Ngen=mcpbank->getRows();
      

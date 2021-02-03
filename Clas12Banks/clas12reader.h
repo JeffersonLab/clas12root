@@ -13,6 +13,7 @@
 #include "particle.h"
 #include "ftbparticle.h"
 #include "mcparticle.h"
+#include "mcevent.h"
 #include "calorimeter.h"
 #include "scintillator.h"
 #include "tracker.h"
@@ -81,26 +82,26 @@ namespace clas12 {
     void addARegionFDet(){
       //Forward detector needs particles, calorimeter, scintillator,
       //track, cherenkov
-      region_fdet_uptr  reg{new region_fdet{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get()}};
+      region_fdet_uptr  reg{new region_fdet{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get(),_bmcparts.get()}};
       if(_useFTBased)reg->useFTBPid();
      _rfdets.push_back(std::move(reg));
     }
      void addARegionCDet(){
       //Forward detector needs particles, calorimeter, scintillator,
       //track, cherenkov
-       region_cdet_uptr  reg{new region_cdet{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get()}};
+       region_cdet_uptr  reg{new region_cdet{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get(),_bmcparts.get()}};
       if(_useFTBased)reg->useFTBPid();
       _rcdets.push_back(std::move(reg));
     }
     void addARegionFT(){
       //Forward tagger needs particles and forward tagger
-       region_ft_uptr  reg{new region_ft{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get()}};
+       region_ft_uptr  reg{new region_ft{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get(),_bmcparts.get()}};
        if(_useFTBased)reg->useFTBPid();
       _rfts.push_back(std::move(reg));
      }
   void addARegionBAND(){
       //Forward tagger needs particles and forward tagger
-       region_band_uptr  reg{new region_band{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get()}};
+       region_band_uptr  reg{new region_band{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get(),_bmcparts.get()}};
        if(_useFTBased)reg->useFTBPid();
       _rbands.push_back(std::move(reg));
      }
@@ -112,14 +113,17 @@ namespace clas12 {
     event_ptr event() const{return _bevent.get();};
     ftbevent_ptr ftbevent() const{return _bftbevent.get();};
     vtp_ptr vtp() const{return _bvtp.get();};
-    //scaler_ptr scaler() const{return _bscal.get();};
+ 
+    
     mcpar_ptr mcparts() const{return _bmcparts.get();};
+    mcevt_ptr mcevent() const{return _bmcevent.get();};
 
 
     //support for generic non-DST banks
-    uint addBank(std::string name){
+    uint addBank(const std::string& name){
       std::unique_ptr<hipo::bank> bnk{new hipo::bank{_factory.getSchema(name.data())}};
       _addBanks.push_back(std::move(bnk));
+      _addBankNames.push_back(name);
       return _addBanks.size()-1; //return place in vector
     }
 
@@ -170,11 +174,17 @@ namespace clas12 {
       _runBeamCharge = _scalReader->getBeamCharge();
       return _scalReader.get();
     }
-    double getRunBeamCharge() const noexcept{ return _runBeamCharge;}
+    double getRunBeamCharge() {
+      if(_db!=nullptr)
+	if(db()->qa()!=nullptr) return db()->qa()->getAccCharge();
+      return _runBeamCharge;
+    }
     double getCurrApproxCharge(){return _runBeamCharge*_nevent/_reader.getEntries();}
 
     void summary(){
-      std::cout<<"for file "<<_filename<<"\n   read "<<_nevent<<" events from which "<<_nselected<< " passed filtering conditions."<<" The beam charge to this point in the file was "<<getCurrApproxCharge()<<std::endl;
+      std::cout<<"for file "<<_filename<<"\n   read "<<_nevent<<" events from which "<<_nselected<< " passed filtering conditions."<<std::endl;
+      if(_db!=nullptr)
+	if(db()->qa())cout<<"Accumulated charge past QA: "<<db()->qa()->getAccCharge()<<" nC"<<endl;
     }
     
     void getStructure(hipo::bank* bank){
@@ -189,7 +199,11 @@ namespace clas12 {
     
   
     void setEntries(long n){_nToProcess = n;}
-
+    void setVerbose(short level=1){
+      _verbose=level;
+      _reader.setVerbose(level);
+    }
+    
   protected:
 
     void initReader();
@@ -219,7 +233,6 @@ namespace clas12 {
     par_uptr _bparts;//!
     //    std::unique_ptr<clas12::particle> _ownbparts;
     ftbpar_uptr _bftbparts;//!
-    mcpar_uptr _bmcparts;//!
     covmat_uptr _bcovmat;//!
     cal_uptr  _bcal;//!
     scint_uptr _bscint;//!
@@ -229,6 +242,8 @@ namespace clas12 {
     ft_uptr _bft;//!
     vtp_uptr _bvtp;//!
 
+    mcpar_uptr _bmcparts;//!
+    mcevt_uptr _bmcevent;//!
 
     
     std::vector<std::unique_ptr<hipo::bank> > _addBanks; //!owns additional banks
@@ -256,6 +271,8 @@ namespace clas12 {
     ushort _n_rfts{0};
     ushort _n_rbands{0};
 
+    ushort _verbose{0};
+    
     std::vector<short> _pids;
     bool _isRead{false};
     //bool _rcdbQueried=false;
@@ -267,7 +284,7 @@ namespace clas12 {
     std::map<short,short> _pidSelectExact;
     bool _zeroOfRestPid{false};
     bool _useFTBased{false};
-
+    std::vector<std::string> _addBankNames;
      
     ///////////////////////////////DB
   private:
@@ -287,7 +304,7 @@ namespace clas12 {
     rcdb_reader* rcdb()const {return _db->rc();}
     qadb_reader* qadb()const {return _db->qa();}
 
-    clas12databases& db(){return *_db;};
+    clas12databases* db(){return _db;};
     
     //clasqaDB   
     void applyQA() {
@@ -299,11 +316,7 @@ namespace clas12 {
 	std::cout<<"Warning, clas12reader  applyQA() not valid"<<std::endl;
       }
     }
-   
-  
-    //  const rcdb_vals& getRcdbVals(){return _rcdbVals;}
-    //void setRcdbVals(const rcdb_vals& vals){_rcdbVals=vals;}
-
+ 
     
   private:
  ///////////////////////////////

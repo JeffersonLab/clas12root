@@ -24,6 +24,8 @@
 #include "event.h"
 #include "cherenkov.h"
 #include "forwardtagger.h"
+#include "mcparticle.h"
+#include "mcmatch.h"
 
 
 namespace clas12 {
@@ -47,7 +49,8 @@ namespace clas12 {
     //For all regions
     region_particle(par_ptr pars,ftbpar_ptr ftbpars,covmat_ptr cm, cal_ptr calp,
 		    scint_ptr scp, trck_ptr trp, traj_ptr trj,
-		    cher_ptr chp, ft_ptr ftp,event_ptr event);
+		    cher_ptr chp, ft_ptr ftp,event_ptr event,
+		    mcpar_ptr mcp=nullptr);
 
     virtual ~region_particle() =default;
 
@@ -56,8 +59,9 @@ namespace clas12 {
     /// i.e. how the detector banks relate to that region
     virtual bool sort(){
       _pentry=_parts->getEntry();
-      //check for covarince matrix
+      //check for covariance matrix
       if(_covmat)_pcmat=_covmat->getIndex(_pentry);
+      if(_mcpart)_pmc=_mcpart->match(_pentry);
       return true;
     }
 
@@ -84,7 +88,9 @@ namespace clas12 {
     virtual  ft_ptr ft(ushort lay) const{_ft->setIndex(-1);return _ft;};
 
     const CovMatrix* cmat() const{_covmat->setIndex(_pcmat);return _covmat->matrix();};
- 
+
+    mcpar_ptr mc() const{_mcpart->setEntry(_pmc);return _mcpart;};
+
     
     short getRegion() const {return _region;}
     float getTheta() const;
@@ -98,23 +104,31 @@ namespace clas12 {
     float getPdgMass();
 
     void useFTBPid(){if(_ftbparts)_useFTBPid=1;}
-    
+
+    float getMCThetaDiff() {return getTheta()-mc()->getTheta();}
+    float getMCPhiDiff() {return getPhi()-mc()->getPhi();}
+    float getMCPDiff() {return getP()-mc()->getP();}
+
+    //if(_parts->getCharge())
   protected:
 
-    par_ptr _parts;
-    ftbpar_ptr _ftbparts;
-    covmat_ptr _covmat;
-    ft_ptr  _ft;
-    cal_ptr  _cal;
-    scint_ptr _scint;
-    trck_ptr _trck;
-    traj_ptr _traj;
-    cher_ptr _cher;
-    event_ptr _event;
+    par_ptr _parts={nullptr};
+    ftbpar_ptr _ftbparts={nullptr};
+    covmat_ptr _covmat={nullptr};
+    ft_ptr  _ft={nullptr};
+    cal_ptr  _cal={nullptr};
+    scint_ptr _scint={nullptr};
+    trck_ptr _trck={nullptr};
+    traj_ptr _traj={nullptr};
+    cher_ptr _cher={nullptr};
+    event_ptr _event={nullptr};
+    mcmatch_ptr _mcmatch={nullptr};
+    mcpar_ptr _mcpart={nullptr};
  
     
     //particle index
     short _pentry=-1;
+    short _pmc=-1;
     short _pcmat=-1;
     short _region=-1;
     short _useFTBPid=0;

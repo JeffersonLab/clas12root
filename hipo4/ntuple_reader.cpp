@@ -8,7 +8,7 @@ namespace hipo{
   ntuple_reader::ntuple_reader(string name){
     _reader.open(name.data());
     _reader.readDictionary(_dict);
-    //_dict.show();
+    //  _dict.show();
     
     //create getters functions
     _getters[0]=[](hipo::bank* b,void *addr,int item, int index){
@@ -33,7 +33,7 @@ namespace hipo{
     }
     _schemaID[name]=_bankNumber++;
     auto sch=_dict.getSchema(name.data());
- 
+   
     bank_uptr bank{new hipo::bank{sch}};
     _bankNames.push_back(name);
     _itemLinksAndGets.push_back(data_addrs_to_func(sch.getEntries()));
@@ -158,8 +158,7 @@ namespace hipo{
     auto ptr = double_uptr(new double);
     auto raw = ptr.get();
     auto isch=_schemaID[bankName];
-
-    //Check item exists
+   //Check item exists
     auto& sch = _schemas[isch];
     if(sch.exists(itemName.data())==false){
       std::cerr<<"Error item "<<itemName<<" does not exist in bank "<<bankName<<std::endl;
@@ -194,8 +193,10 @@ namespace hipo{
       _event.getStructure(*rawBank);
       auto pos=0;
       for(auto& itemFuncAndAddr :_itemLinksAndGets[ibank]){
-	if(itemFuncAndAddr.get()!=nullptr)
-	  itemFuncAndAddr->first(rawBank,itemFuncAndAddr->second,pos++,0);
+	if(itemFuncAndAddr.get()!=nullptr){
+	  itemFuncAndAddr->first(rawBank,itemFuncAndAddr->second,pos,0);
+	}
+	pos++;
       }
       ++ibank;
     }
