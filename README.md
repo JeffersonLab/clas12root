@@ -92,7 +92,7 @@ setenv CXX  /myz/c++
 ```
 Or just set the paths to CC and CXX directly.
 
-Remember to build ccdb with scons if you are using it before installing clas12root.
+Remember to build ccdb with scons if you are using it before installing clas12root. If you alredy have CCDB_HOME set to somewhere else on your system then you will not need to do this.
 
 ```bash
 cd ccdb
