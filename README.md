@@ -60,23 +60,21 @@ for cshrc
 ```sh
 setenv CLAS12ROOT $PWD  (the actual path can be added in your bashrc or tchrc)
 setenv PATH "$PATH":"$CLAS12ROOT/bin"
-setenv HIPO /Where/Is/hipo
 #To use the RCDB interface 
-setenv RCDB_HOME /Where/Is/rcdb
+setenv RCDB_HOME /Where/Is/rcdb  (e.g. setenv RCDB_HOME ${CLAS12ROOT}/rcdb )
 #To use the CCDB interface 
-setenv CCDB_HOME /Where/Is/ccdb
-#To use clasqaDB interface - already done with source env.csh
-setenv QADB /Where/Is/clasqaDB
+setenv CCDB_HOME /Where/Is/ccdb   (e.g. setenv RCDB_HOME ${CLAS12ROOT}/ccdb )
+#To use clasqaDB interface 
+setenv QADB /Where/Is/clasqaDB (e.g. setenv RCDB_HOME ${CLAS12ROOT}/clasqaDB )
 ```
 
 or for bash
 ```bash
 export CLAS12ROOT=$PWD
 export PATH="$PATH":"$CLAS12ROOT/bin"
-export HIPO=/Where/Is/hipo
 #To use the RCDB interface 
 export RCDB_HOME /Where/Is/rcdb
-#To use clasqaDB interface - already done with source env.csh
+#To use clasqaDB interface
 export QADB /Where/Is/clasqaDB
 ```
 
@@ -97,12 +95,14 @@ Or just set the paths to CC and CXX directly.
 Remember to build ccdb with scons if you are using it before installing clas12root.
 
 ```bash
+cd ccdb
+source environment.csh
+scons
+cd..
+
 installC12Root
 ```
 
-You might want to add clas12root/bin to you PATH
-
-    setenv PATH ${PATH}:${CLAS12ROOT}/bin
 
 If there are issues with cmake and your ROOTSYS you can try using the local FindROOT file. Edit the CMakeList.txt files removing the lines with comment ##USEROOTSYS and uncomment the line
 
