@@ -65,11 +65,28 @@ namespace clas12 {
       return true;
     }
 
+    //solve FTB ambiguity at this stage
     int getPid(){
       _parts->setEntry(_pentry);
       return _useFTBPid*_ftbparts->getRows()?_ftbparts->getPid():_parts->getPid();
     }
-    
+    int getVt(){
+      _parts->setEntry(_pentry);
+      return _useFTBPid*_ftbparts->getRows()?_ftbparts->getVt():_parts->getVt();
+    }
+    int getStatus(){
+      _parts->setEntry(_pentry);
+      return _useFTBPid*_ftbparts->getRows()?_ftbparts->getStatus():_parts->getStatus();
+    }
+    int getChi2Pid(){
+      _parts->setEntry(_pentry);
+      return _useFTBPid*_ftbparts->getRows()?_ftbparts->getChi2Pid():_parts->getChi2Pid();
+    }
+    int getBeta(){
+      _parts->setEntry(_pentry);
+      return _useFTBPid*_ftbparts->getRows()?_ftbparts->getBeta():_parts->getBeta();
+    }
+ 
     virtual double getTime()=0;
     virtual double getPath()=0;
     virtual double getDetEnergy()=0;
@@ -97,7 +114,7 @@ namespace clas12 {
     float getPhi() const;
     float getP(){_parts->setEntry(_pentry);return _parts->getP();}
     float getCalcMass();
-    float getBeta();
+    //float getBeta();
     float getGamma();
     float getDeltaTime();
     float getBetaFromP();

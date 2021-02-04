@@ -82,15 +82,15 @@ namespace clas12 {
     float mass= p/getBeta()/getGamma();
     return mass;
   }
-
-  float region_particle::getBeta() {
-    float t=getTime()-_event->getStartTime();
-    float d=getPath()/100;
-    if(t==0)
-      return 0;
-    float beta= d/t/2.9979246e+08*1E9;
-    return beta;
-  }
+  ////clashes with bank item
+  // float region_particle::getBeta() {
+  //   float t=getTime()-_event->getStartTime();
+  //   float d=getPath()/100;
+  //   if(t==0)
+  //     return 0;
+  //   float beta= d/t/2.9979246e+08*1E9;
+  //   return beta;
+  // }
   float region_particle::getGamma() {
     float beta=getBeta();
     float gamma= sqrt(1/(1-beta*beta));
@@ -131,6 +131,8 @@ namespace clas12 {
       return 0.00051099891;
     case -2212:
       return 0.93827200;
+    case 45:
+      return 1.875612;
     default :
       return 0;
     }
