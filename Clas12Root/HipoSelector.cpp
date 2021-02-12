@@ -68,7 +68,7 @@ namespace clas12root{
     fInput->Print();
     TString option = GetOption();
     _chain=dynamic_cast<HipoChain*>(fInput->FindObject("HIPOFILES"));
-    std::cout<<"CHAIN OPEN "<<_chain->db()->ccdbPath()<<endl;
+    std::cout<<"CHAIN OPEN "<<endl;
     _chain->db()->initDBs();
   }
   Bool_t  HipoSelector::Notify() {
