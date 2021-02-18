@@ -41,7 +41,7 @@ namespace clas12 {
     int    getBtype() const noexcept { return getShort(_btype_order,_entry);}
     int    getTargetid() const noexcept { return getShort(_targetid_order,_entry);}
     int    getProcessid() const noexcept { return getShort(_processid_order,_entry);}
-    float    getWeight() const noexcept { return getShort(_weight_order,_entry);}
+    float    getWeight() const noexcept { return getFloat(_weight_order,_entry);}
 
     
     //void setEntry(short i){ _entry=i;}
