@@ -154,6 +154,11 @@ void  reader::readIndex(){
 
     inputRecord.readRecord(inputStream,header.trailerPosition,0);
     if(_verbose)printf("*** reader:: trailer record event count : %d\n",inputRecord.getEventCount());
+
+    //a catch for broken files
+    //can use hiporeader.getNRecords() to see if succesfull (=-1 if not)
+    if(inputRecord.getEventCount()==0) return;//dglazier
+
     hipo::event event;
     inputRecord.readHipoEvent(event,0);
     if(_verbose)event.show();
