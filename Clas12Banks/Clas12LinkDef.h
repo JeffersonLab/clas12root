@@ -38,4 +38,5 @@
 #pragma link C++ class clas12::mesonex_trigger+;
 #pragma link C++ class clas12::jsonFileMerger+;
 #pragma link C++ class clas12::qadb_reader+;
+#pragma link C++ class clas12root::TRcdbVals+;
 #endif
