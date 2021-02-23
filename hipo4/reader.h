@@ -220,6 +220,7 @@ namespace hipo {
 
         ~reader();
 
+        void  about();
         void  readDictionary(hipo::dictionary &dict);
         void  getStructure(hipo::structure &structure,int group, int item);
         void  getStructureNoCopy(hipo::structure &structure,int group, int item);
@@ -236,7 +237,7 @@ namespace hipo {
         bool  next(hipo::event &dataevent);
         void  read(hipo::event &dataevent);
         void  printWarning();
-	//dglazier
+
 	int getNRecords() const {return readerEventIndex.getNRecords()-1;}
 	bool  nextInRecord();
 	bool loadRecord(int irec);

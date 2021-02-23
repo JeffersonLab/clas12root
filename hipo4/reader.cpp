@@ -51,7 +51,7 @@ namespace hipo {
   */
   reader::reader(){
     printWarning();
-    if(_verbose)hipoutils.printLogo();
+    //hipoutils.printLogo();
   }
 
   /**
@@ -61,6 +61,10 @@ namespace hipo {
     if(inputStream.is_open()==true){
       inputStream.close();
     }
+  }
+
+  void  reader::about(){
+    hipoutils.printLogo();
   }
   /**
    * Open file, if file stream is open, it is closed first.
