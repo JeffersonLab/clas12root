@@ -1,0 +1,62 @@
+name: C++ CI Testing
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: rootproject/root:${{ matrix.version }}
+    strategy:
+      matrix:
+        version: [6.22.02-ubuntu20.04]
+    
+    steps:
+      - name: set paths
+        run: |
+          echo "HIPO=$CLAS12ROOT/hipo" >> $GITHUB_PATH
+
+      - name: system dependancies
+        run: |
+          apt update
+          apt -y install git
+      
+      - name: checkout repository
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+        
+      - name: build clas12root
+        run: |
+          ./installC12Root
+
+  tests:
+    needs: build
+    runs-on: ubuntu-latest
+    container: rootproject/root:6.22.02-ubuntu20.04
+
+    steps:
+      - name: set paths
+        run: |
+          echo "$PATH:$PWD/bin" >> $GITHUB_PATH
+
+      - name: system dependancies
+        run: |
+          apt update
+          apt -y install git
+      
+      - name: checkout repository
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+        
+      - name: build clas12root
+        run: |
+          ./installC12Root
+
+      - name: download data file
+        run: wget http://nuclear.gla.ac.uk/~adamt/data/skim3_005036_subset.hipo
+
+      - name: run example on data file
+        run: |
+          export CLAS12ROOT=$PWD
+          ./bin/clas12root -q ./tests/read_file.C
