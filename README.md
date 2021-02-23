@@ -63,9 +63,10 @@ setenv PATH "$PATH":"$CLAS12ROOT/bin"
 #To use the RCDB interface 
 setenv RCDB_HOME /Where/Is/rcdb  (e.g. setenv RCDB_HOME ${CLAS12ROOT}/rcdb )
 #To use the CCDB interface 
-setenv CCDB_HOME /Where/Is/ccdb   (e.g. setenv RCDB_HOME ${CLAS12ROOT}/ccdb )
+setenv CCDB_HOME /Where/Is/ccdb   (e.g. setenv CCDB_HOME ${CLAS12ROOT}/ccdb )
+source ${CCDB_HOME}/environment.csh
 #To use clasqaDB interface 
-setenv QADB /Where/Is/clasqaDB (e.g. setenv RCDB_HOME ${CLAS12ROOT}/clasqaDB )
+setenv QADB /Where/Is/clasqaDB (e.g. setenv QADB ${CLAS12ROOT}/clasqaDB )
 ```
 
 or for bash
