@@ -59,6 +59,9 @@ namespace hipo {
         getStructure(b,b.getSchema().getGroup(),b.getSchema().getItem());
     }
 
+    void   event::read(hipo::bank &b){
+        getStructure(b,b.getSchema().getGroup(),b.getSchema().getItem());
+    }
 
 
     void event::getStructure(hipo::structure &str, int group, int item){

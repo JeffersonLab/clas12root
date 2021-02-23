@@ -126,7 +126,7 @@ namespace hipo {
         //showBuffer(&recordBuffer[0], 10, 200);
         //unzipBenchmark.resume();
         if(recordHeader.compressionType==0){
-          //printf("compression type = 0 data length = %d\n",decompressedLength);
+          printf("compression type = 0 data length = %d\n",decompressedLength);
           memcpy((&recordBuffer[0]),(&recordCompressedBuffer[0]),decompressedLength);
         } else {
           int unc_result = getUncompressed((&recordCompressedBuffer[0]) , (&recordBuffer[0]),
@@ -173,7 +173,7 @@ namespace hipo {
       recordHeader.recordDataLength = *(reinterpret_cast<int *>(&recordHeaderBuffer[32]));
       recordHeader.userHeaderLength = *(reinterpret_cast<int *>(&recordHeaderBuffer[24]));
       int compressedWord            = *(reinterpret_cast<int *>(&recordHeaderBuffer[36]));
- 
+
       if(recordHeader.signatureString==0xc0da0100) recordHeader.dataEndianness = 0;
       if(recordHeader.signatureString==0x0001dac0) recordHeader.dataEndianness = 1;
 
@@ -300,7 +300,7 @@ namespace hipo {
       recordHeader.recordDataLength = *(reinterpret_cast<int *>(&recordCompressedBuffer[32]));
       recordHeader.userHeaderLength = *(reinterpret_cast<int *>(&recordCompressedBuffer[24]));
       int compressedWord            = *(reinterpret_cast<int *>(&recordCompressedBuffer[36]));
-   
+
       if(recordHeader.signatureString==0xc0da0100) recordHeader.dataEndianness = 0;
       if(recordHeader.signatureString==0x0001dac0) recordHeader.dataEndianness = 1;
 
@@ -406,18 +406,14 @@ namespace hipo {
     */
     void  record::getData(hipo::data &data, int index){
         int first_position = 0;
-	
         if(index > 0){
           first_position  = *(reinterpret_cast<uint32_t *>(&recordBuffer[(index -1)*4]));
         }
-
-	int last_position = *(reinterpret_cast<uint32_t *>(&recordBuffer[index*4]));
-	
+        int last_position = *(reinterpret_cast<uint32_t *>(&recordBuffer[index*4]));
         int offset        = recordHeader.indexDataLength
                           + recordHeader.userHeaderLength
                           + recordHeader.userHeaderLengthPadding;
-	
-	data.setDataPtr(&recordBuffer[first_position+offset]);
+        data.setDataPtr(&recordBuffer[first_position+offset]);
         data.setDataSize(last_position-first_position);
         data.setDataOffset(first_position + offset);
     }
