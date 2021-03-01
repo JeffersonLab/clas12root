@@ -27,6 +27,7 @@ jobs:
 
       - name: system dependancies
         run: |
+          printenv
           apt update
           apt -y install git scons python2
       
