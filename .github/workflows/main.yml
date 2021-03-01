@@ -9,21 +9,37 @@ jobs:
     strategy:
       matrix:
         version: [6.22.02-ubuntu20.04]
+    env:
+      CLAS12ROOT: ${{ env.GITHUB_WORKSPACE }}
+      HIPO:       ${{ env.CLAS12ROOT }}/hipo
+      CCDB_HOME:  ${{ env.CLAS12ROOT }}/ccdb
+      RCDB_HOME:  ${{ env.CLAS12ROOT }}/rcdb
+      QADB:       ${{ env.CLAS12ROOT }}/clasqaDB
     
     steps:
       - name: set paths
         run: |
-          echo "HIPO=$CLAS12ROOT/hipo" >> $GITHUB_PATH
+          echo "PYTHONPATH=$CCDB_HOME/python:$RCDB_HOME/python:$PYTHONPATH" >> $GITHUB_ENV
+          echo "PATH=$PWD/bin:$CCDB_HOME:$CCDB_HOME/bin:$RCDB_HOME/bin:$RCDB_HOME/cpp/bin:$PATH" >> $GITHUB_ENV
+          echo "LD_LIBRARY_PATH=$RCDB_HOME/cpp/lib:$CCDB_HOME/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
 
       - name: system dependancies
         run: |
           apt update
-          apt -y install git
+          apt -y install git scons python2
       
       - name: checkout repository
         uses: actions/checkout@v2
         with:
           submodules: recursive
+
+      - name: build ccdb
+        run: |
+          shopt -s expand_aliases
+          alias scons2="/usr/bin/env python2 $(which scons)" 
+          cd $CCDB_HOME
+          source environment.bash
+          scons2
         
       - name: build clas12root
         run: |
