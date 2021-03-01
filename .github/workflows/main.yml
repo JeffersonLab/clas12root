@@ -9,14 +9,16 @@ jobs:
     strategy:
       matrix:
         version: [6.22.02-ubuntu20.04]
-    env:
-      CLAS12ROOT: ${{ env.GITHUB_WORKSPACE }}
-      HIPO:       ${{ env.CLAS12ROOT }}/hipo
-      CCDB_HOME:  ${{ env.CLAS12ROOT }}/ccdb
-      RCDB_HOME:  ${{ env.CLAS12ROOT }}/rcdb
-      QADB:       ${{ env.CLAS12ROOT }}/clasqaDB
     
     steps:
+      - name: set env vars
+        run: |
+          echo "CLAS12ROOT=${{ env.GITHUB_WORKSPACE }}" >> $GITHUB_ENV
+          echo "HIPO=${{ env.GITHUB_WORKSPACE }}/hipo" >> $GITHUB_ENV
+          echo "CCDB_HOME=${{ env.GITHUB_WORKSPACE }}/ccdb" >> $GITHUB_ENV
+          echo "RCDB_HOME=${{ env.GITHUB_WORKSPACE }}/rcdb" >> $GITHUB_ENV
+          echo "QADB=${{ env.GITHUB_WORKSPACE }}clasqaDB" >> $GITHUB_ENV
+
       - name: set paths
         run: |
           echo "PYTHONPATH=$CCDB_HOME/python:$RCDB_HOME/python:$PYTHONPATH" >> $GITHUB_ENV
