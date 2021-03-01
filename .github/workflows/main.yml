@@ -13,11 +13,11 @@ jobs:
     steps:
       - name: set env vars
         run: |
-          echo "CLAS12ROOT=${{ env.GITHUB_WORKSPACE }}" >> $GITHUB_ENV
-          echo "HIPO=${{ env.GITHUB_WORKSPACE }}/hipo" >> $GITHUB_ENV
-          echo "CCDB_HOME=${{ env.GITHUB_WORKSPACE }}/ccdb" >> $GITHUB_ENV
-          echo "RCDB_HOME=${{ env.GITHUB_WORKSPACE }}/rcdb" >> $GITHUB_ENV
-          echo "QADB=${{ env.GITHUB_WORKSPACE }}/clasqaDB" >> $GITHUB_ENV
+          echo "CLAS12ROOT=$GITHUB_WORKSPACE" >> $GITHUB_ENV
+          echo "HIPO=$GITHUB_WORKSPACE/hipo" >> $GITHUB_ENV
+          echo "CCDB_HOME=$GITHUB_WORKSPACE/ccdb" >> $GITHUB_ENV
+          echo "RCDB_HOME=$GITHUB_WORKSPACE/rcdb" >> $GITHUB_ENV
+          echo "QADB=$GITHUB_WORKSPACE/clasqaDB" >> $GITHUB_ENV
 
       - name: set paths
         run: |
