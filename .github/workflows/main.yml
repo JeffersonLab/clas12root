@@ -37,11 +37,9 @@ jobs:
 
       - name: build ccdb
         run: |
-          shopt -s expand_aliases
-          alias scons2="/usr/bin/env python2 $(which scons)" 
           cd $CCDB_HOME
           source environment.bash
-          scons2
+          /usr/bin/env python2 $(which scons)
         
       - name: build clas12root
         run: |
