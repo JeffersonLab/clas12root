@@ -11,6 +11,11 @@ jobs:
         version: [6.22.02-ubuntu20.04]
     
     steps:
+      - name: system dependancies
+        run: |
+          apt update
+          apt -y install git scons python2
+
       - name: checkout repository
         uses: actions/checkout@v2
         with:
@@ -29,12 +34,6 @@ jobs:
           echo "PYTHONPATH=$CCDB_HOME/python:$RCDB_HOME/python:$PYTHONPATH" >> $GITHUB_ENV
           echo "PATH=$PWD/bin:$CCDB_HOME:$CCDB_HOME/bin:$RCDB_HOME/bin:$RCDB_HOME/cpp/bin:$PATH" >> $GITHUB_ENV
           echo "LD_LIBRARY_PATH=$RCDB_HOME/cpp/lib:$CCDB_HOME/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
-
-      - name: system dependancies
-        run: |
-          printenv
-          apt update
-          apt -y install git scons python2
 
       - name: build ccdb
         run: |
