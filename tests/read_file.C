@@ -1,6 +1,6 @@
 {
   //hipo file to be analysed
-  //RGA pass 1, skim3, 5000 events
+  //Simulated electron + proton -> proton + X + 2pi, 500 events
   HipoChain chain;
   chain.Add("./tests/data/EptopX2pi_sample.hipo");
 
