@@ -70,9 +70,6 @@ jobs:
         run: |
           ./installC12Root
 
-      - name: download data file
-        run: wget http://nuclear.gla.ac.uk/~adamt/data/skim3_005036_subset.hipo
-
       - name: run example on data file
         run: |
           export CLAS12ROOT=$PWD
