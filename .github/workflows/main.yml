@@ -1,0 +1,76 @@
+name: C++ CI Testing
+
+on: pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: rootproject/root:${{ matrix.version }}
+    strategy:
+      matrix:
+        version: [6.22.02-ubuntu20.04]
+    
+    steps:
+      - name: system dependancies
+        run: |
+          apt update
+          apt -y install git scons python2
+
+      - name: checkout repository
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+          path: .
+
+      - name: set env vars
+        run: |
+          echo "CLAS12ROOT=$GITHUB_WORKSPACE" >> $GITHUB_ENV
+          echo "HIPO=$GITHUB_WORKSPACE/hipo" >> $GITHUB_ENV
+          echo "CCDB_HOME=$GITHUB_WORKSPACE/ccdb" >> $GITHUB_ENV
+          echo "RCDB_HOME=$GITHUB_WORKSPACE/rcdb" >> $GITHUB_ENV
+          echo "QADB=$GITHUB_WORKSPACE/clasqaDB" >> $GITHUB_ENV
+
+      - name: set paths
+        run: |
+          echo "PYTHONPATH=$CCDB_HOME/python:$RCDB_HOME/python:$PYTHONPATH" >> $GITHUB_ENV
+          echo "PATH=$PWD/bin:$CCDB_HOME:$CCDB_HOME/bin:$RCDB_HOME/bin:$RCDB_HOME/cpp/bin:$PATH" >> $GITHUB_ENV
+          echo "LD_LIBRARY_PATH=$RCDB_HOME/cpp/lib:$CCDB_HOME/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+
+      - name: build ccdb
+        run: |
+          cd $CCDB_HOME
+          bash environment.bash
+          /usr/bin/env python2 $(which scons)
+        
+      - name: build clas12root
+        run: |
+          ./installC12Root
+
+  tests:
+    needs: build
+    runs-on: ubuntu-latest
+    container: rootproject/root:6.22.02-ubuntu20.04
+
+    steps:
+      - name: set paths
+        run: |
+          echo "$PATH:$PWD/bin" >> $GITHUB_PATH
+
+      - name: system dependancies
+        run: |
+          apt update
+          apt -y install git
+      
+      - name: checkout repository
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+        
+      - name: build clas12root
+        run: |
+          ./installC12Root
+
+      - name: run example on data file
+        run: |
+          export CLAS12ROOT=$PWD
+          ./bin/clas12root -q ./tests/read_file.C

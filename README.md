@@ -75,6 +75,9 @@ export CLAS12ROOT=$PWD
 export PATH="$PATH":"$CLAS12ROOT/bin"
 #To use the RCDB interface 
 export RCDB_HOME /Where/Is/rcdb
+#To use the CCDB interface 
+export CCDB_HOME /Where/Is/ccdb
+source ${CCDB_HOME}/environment.csh
 #To use clasqaDB interface
 export QADB /Where/Is/clasqaDB
 ```

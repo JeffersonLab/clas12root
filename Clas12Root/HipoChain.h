@@ -37,7 +37,7 @@ namespace clas12root {
 
     TString GetFileName(Int_t i)const{
       if(i>=GetNFiles()) return TString();
-      return _ListOfFiles->At(i)->GetTitle();
+      return _ListOfFiles->At(_index[i])->GetTitle();
     }
 
     Int_t GetFileRecords(Int_t i)const{
@@ -91,6 +91,8 @@ namespace clas12root {
     std::vector<Int_t> _fileRecords;
 
     std::vector<long> _readerTags;
+    std::vector<int> _index;
+
     Int_t _idxFile{0};
 
     Double_t _totBeamCharge{0};

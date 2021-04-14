@@ -39,7 +39,7 @@ namespace clas12 {
     _vz_order  = aschema.getEntryOrder("vz");
     _mass_order  = aschema.getEntryOrder("mass");
     _type_order  = aschema.getEntryOrder("type");
-    _life_order  = aschema.getEntryOrder("life");
+    _life_order  = aschema.getEntryOrder("lifetime");
     _index_order  = aschema.getEntryOrder("index");
     _parent_order  = aschema.getEntryOrder("parent");
     _daughter_order  = aschema.getEntryOrder("daughter");

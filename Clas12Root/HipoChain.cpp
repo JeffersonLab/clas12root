@@ -9,13 +9,21 @@ namespace clas12root {
   HipoChain::HipoChain(): TNamed("HIPOFILES","A chain of hipo files"){
 
     _ListOfFiles=_tchain.GetListOfFiles();
-  }
+
+   }
   
   
   void HipoChain::Add(TString name){
 
     _tchain.Add(name);
-    _Nrecords=-1; //must recalculate    
+    _Nrecords=-1; //must recalculate
+
+    auto nfiles=GetNFiles();
+    _index.resize(nfiles);
+
+    for(int i=0;i<nfiles;i++)
+      _index[i]=i;
+
   }
 
   Long64_t HipoChain::GetNRecords(){
@@ -26,12 +34,23 @@ namespace clas12root {
     _fileRecords.clear();
     auto nfiles=GetNFiles();
     //loop over files and get the number of records
+    int ngood=0;
     for(auto i=0;i<nfiles;++i){
       hipo::reader hiporeader;
       hiporeader.setTags(_readerTags);
-      hiporeader.open(GetFileName(i));
+      hiporeader.open(GetFileName(ngood));
+      if(hiporeader.getNRecords()<=0){
+	Warning("GetNRecords()",Form("problem with hipo file %s, will ignore",GetFileName(ngood).Data()),"");
+	//remove file from chain, need to use i rather than ngood here
+	_ListOfFiles->RemoveAt(i);
+	//adjust index to avoid _ListOfFiles->At(i)
+	//which will be null
+	_index.erase(_index.begin() + ngood);
+	continue;
+      }
       _Nrecords+=hiporeader.getNRecords();
       _fileRecords.push_back(hiporeader.getNRecords());
+      ngood++;
     }
     return _Nrecords;
   }
@@ -77,13 +96,9 @@ namespace clas12root {
     std::cout<<"HipoChain::NextFile() "<<_idxFile<<" out of "<<GetNFiles()<<std::endl;
     if(_idxFile>=GetNFiles())
       return kFALSE;//no more files
-    //std::cout<<"HipoChain::NextFile() "<<GetFileName(_idxFile)<<std::endl;
     //open next file
-    // _c12.reset(new clas12::clas12reader{*_c12.get(),GetFileName(_idxFile++).Data(),_readerTags});
     _c12.reset(new clas12::clas12reader{*GetC12Reader(),GetFileName(_idxFile++).Data(),_readerTags});
     ConnectDataBases();
-    //if there is a root rcdb file use it
-    //if(_rcdbFileName.Length())_c12->setRcdbVals(FetchRunRcdb(_c12->getFilename()));
     
     _c12ptr = _c12.get();	
     return kTRUE;
@@ -127,34 +142,5 @@ namespace clas12root {
 #endif
     
   }
-  /*
-  ////////////////////////////////////////////////////////////
-  ///Get a copy of the rcdb values for run number runNb,
-  ///from file fname created previously by WriteRcdbData
-  //#include ""
-  clas12::rcdb_vals HipoChain::FetchRunRcdb(const TString& datafile){
-#ifdef CLAS_RCDB
-
-    //make file and list unique_ptr so deleted when we return
-    auto rcdbFile=std::unique_ptr<TFile>{TFile::Open(_rcdbFileName)};
-    if(rcdbFile.get()==nullptr){
-      Warning("HipoChain::FetchRunRcdb ",Form("No rcdb root file provided to the chain :  %s",_rcdbFileName.Data()),"");
-      return clas12::rcdb_vals();
-    }
-    auto keys= rcdbFile->GetListOfKeys();
-    for(const auto& key:*keys){
-      //the rcdb_vals Title is mapped to the data file name
-      if(TString(key->GetTitle())==TString(datafile)){
-	auto vals=std::unique_ptr<TRcdbVals>{dynamic_cast<TRcdbVals*>(rcdbFile->Get(key->GetName()))};
-	if(vals.get())
-	  return vals.get()->_data;
-      }
-    }
-    Warning("HipoChain::FetchRunRcdb ",Form("run file %s not found in list in file %s",datafile.Data(),_rcdbFileName.Data()),"");
-
-#endif
-    //no rcdb     
-    return clas12::rcdb_vals();
-  }
-  */
+ 
 }

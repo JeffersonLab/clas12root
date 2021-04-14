@@ -70,7 +70,7 @@ namespace clas12 {
       _parts->setEntry(_pentry);
       return _useFTBPid*_ftbparts->getRows()?_ftbparts->getPid():_parts->getPid();
     }
-    int getVt(){
+    float getVt(){
       _parts->setEntry(_pentry);
       return _useFTBPid*_ftbparts->getRows()?_ftbparts->getVt():_parts->getVt();
     }
@@ -78,11 +78,11 @@ namespace clas12 {
       _parts->setEntry(_pentry);
       return _useFTBPid*_ftbparts->getRows()?_ftbparts->getStatus():_parts->getStatus();
     }
-    int getChi2Pid(){
+    float getChi2Pid(){
       _parts->setEntry(_pentry);
       return _useFTBPid*_ftbparts->getRows()?_ftbparts->getChi2Pid():_parts->getChi2Pid();
     }
-    int getBeta(){
+    float getBeta(){
       _parts->setEntry(_pentry);
       return _useFTBPid*_ftbparts->getRows()?_ftbparts->getBeta():_parts->getBeta();
     }

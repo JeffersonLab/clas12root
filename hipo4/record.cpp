@@ -126,7 +126,7 @@ namespace hipo {
         //showBuffer(&recordBuffer[0], 10, 200);
         //unzipBenchmark.resume();
         if(recordHeader.compressionType==0){
-          //printf("compression type = 0 data length = %d\n",decompressedLength);
+          printf("compression type = 0 data length = %d\n",decompressedLength);
           memcpy((&recordBuffer[0]),(&recordCompressedBuffer[0]),decompressedLength);
         } else {
           int unc_result = getUncompressed((&recordCompressedBuffer[0]) , (&recordBuffer[0]),

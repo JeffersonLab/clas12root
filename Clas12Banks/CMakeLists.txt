@@ -39,13 +39,13 @@ IF (DEFINED ENV{RCDB_HOME})
     )
 
   #include mysql library and directory if they were found
-#  IF (MYSQL_INCLUDE_DIR AND MYSQL_LIBRARY)
-  IF (MYSQL_INCLUDE_DIR)
+  IF (MYSQL_INCLUDE_DIR AND MYSQL_LIBRARY)
+  #IF (MYSQL_INCLUDE_DIR)
     include_directories(${MYSQL_INCLUDE_DIR})
-   # link_libraries(${MYSQL_LIBRARY})
+    link_libraries(${MYSQL_LIBRARY})
     add_definitions(-DRCDB_MYSQL)
-  #ENDIF (MYSQL_INCLUDE_DIR AND MYSQL_LIBRARY)
- ENDIF (MYSQL_INCLUDE_DIR)
+  ENDIF (MYSQL_INCLUDE_DIR AND MYSQL_LIBRARY)
+ #ENDIF (MYSQL_INCLUDE_DIR)
 
  
  #This should allow RCDB lite but I get an error when it tries to open file
