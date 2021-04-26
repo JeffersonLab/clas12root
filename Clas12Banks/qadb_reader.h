@@ -75,7 +75,7 @@ namespace clas12 {
     double getAccCharge(){return _qa.GetAccumulatedCharge();};
 
   private: 
-    QADB _qa;//!  
+    QA::QADB _qa;//!  
 
 #else
   public:

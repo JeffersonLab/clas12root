@@ -38,12 +38,7 @@ set(CMAKE_INSTALL_INCLUDEDIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 #include clasqaDB c++ library and rapidjson library
 IF (DEFINED ENV{QADB})
-
-  include_directories($ENV{QADB}/srcC/rapidjson/include)
   include_directories($ENV{QADB}/srcC/include)
-  #clasqaDB header contains function definitions which are not inlined
-  #including this header causes multiple definitions of these functions
-  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}  -Wl,--allow-multiple-definition")
   add_definitions(-DCLAS_QADB)
 ENDIF (DEFINED ENV{QADB})
 
