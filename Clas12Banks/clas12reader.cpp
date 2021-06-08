@@ -221,14 +221,12 @@ namespace clas12 {
     return _pids;
   }
   bool clas12reader::readEvent(){
-    //get pid of tracks and save in _pids
+  
+    //First get pid of tracks and save in _pids
+    //also responsible for calling hiporead()
     preCheckPids();
-   
-     //check if event is of the right type
-    if(!passPidSelect()){
-      _pids.clear(); //reset so read next event in preChekPids
-      return false;
-    }
+
+    //Second check qa
     //Special run banks
     if(_brunconfig.get())_event.getStructure(*_brunconfig.get());
     //check if event has QA requirements and those were met
@@ -237,7 +235,19 @@ namespace clas12 {
   	return false;
       }
     }
+    else   if(_db->qa()!=nullptr){
+      //accumulate charge even if no conditions given
+      _db->qa()->accumulateCharge(_brunconfig->getEvent());
+    }
 
+   
+     //Third check if event is of the right type
+    if(!passPidSelect()){
+      _pids.clear(); //reset so read next event in preChekPids
+      return false;
+    }
+
+    //Now event OK, read all the data
     //now getthe data for the rest of the banks
     if(_bcovmat.get())_event.getStructure(*_bcovmat.get());
     if(_bevent.get())_event.getStructure(*_bevent.get());
@@ -487,13 +497,19 @@ namespace clas12 {
     if(_brunconfig.get())_allBanks.push_back(_brunconfig.get());
     if(_bparts.get())_allBanks.push_back(_bparts.get());
     if(_bftbparts.get())_allBanks.push_back(_bftbparts.get());
-    if(_bmcparts.get())_allBanks.push_back(_bmcparts.get());
+    if(_bmcparts.get()){
+      _allBanks.push_back(_bmcparts.get());
+      if(_bmcparts->getMatch())_allBanks.push_back(_bmcparts->getMatch());     
+    }
     if(_bmcevent.get())_allBanks.push_back(_bmcevent.get());
     if(_bcovmat.get())_allBanks.push_back(_bcovmat.get());
     if(_bevent.get())_allBanks.push_back(_bevent.get());
     if(_bftbevent.get())_allBanks.push_back(_bftbevent.get());
     if(_bcal.get())_allBanks.push_back(_bcal.get());
-    if(_bscint.get())_allBanks.push_back(_bscint.get());
+    if(_bscint.get()){
+      _allBanks.push_back(_bscint.get());
+      if(_bscint->getExtras())_allBanks.push_back(_bscint->getExtras());     
+    }
     if(_btrck.get())_allBanks.push_back(_btrck.get());
     if(_btraj.get())_allBanks.push_back(_btraj.get());
     if(_bcher.get())_allBanks.push_back(_bcher.get());
