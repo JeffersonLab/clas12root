@@ -497,12 +497,14 @@ namespace clas12 {
     if(_brunconfig.get())_allBanks.push_back(_brunconfig.get());
     if(_bparts.get())_allBanks.push_back(_bparts.get());
     if(_bftbparts.get())_allBanks.push_back(_bftbparts.get());
-    if(_bmcparts.get())_allBanks.push_back(_bmcparts.get());
+    if(_bmcparts.get()){
+      _allBanks.push_back(_bmcparts.get());
+      if(_bmcparts->getMatch())_allBanks.push_back(_bmcparts->getMatch());     
+    }
     if(_bmcevent.get())_allBanks.push_back(_bmcevent.get());
     if(_bcovmat.get())_allBanks.push_back(_bcovmat.get());
     if(_bevent.get())_allBanks.push_back(_bevent.get());
     if(_bftbevent.get())_allBanks.push_back(_bftbevent.get());
-    if(_bcal.get())_allBanks.push_back(_bcal.get());
     if(_bcal.get())_allBanks.push_back(_bcal.get());
     if(_bscint.get()){
       _allBanks.push_back(_bscint.get());
