@@ -77,7 +77,7 @@ namespace clas12root {
     if( _c12.get() )  more = _c12->next();
     if(more) return kTRUE;
    //When file opened add beam charge _c12.get()==nullptr when files are finished
-   // if(_idxFile>0&&_c12.get())_totBeamCharge+=_c12->getRunBeamCharge();
+   // if(_idxFile>0&&_c12.get()) _totBeamCharge+=_c12->getRunBeamCharge();
     if(NextFile()==false) return kFALSE;
     more = _c12->next();
     if(more) return kTRUE;
