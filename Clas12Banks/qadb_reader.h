@@ -70,6 +70,7 @@ namespace clas12 {
 
     double getCharge(){return _qa.GetCharge();};
     void resetAccCharge(){_qa.ResetAccumulatedCharge();};
+    void accumulateCharge(int evNb){if(evNb!=0){query(_runNb,evNb);_qa.AccumulateCharge();}};
     void addMask(const char * defectName, bool maskBit){_qa.SetMaskBit(defectName,maskBit);};
     void addAllMasks();
     double getAccCharge(){return _qa.GetAccumulatedCharge();};

@@ -94,7 +94,7 @@ void Ex10_clas12DatabasesChain(){
    * The clasqaDB software also provides the accumulated charge for events
    * that pass the quality assurance requirements.
    */
-  cout<<"Accumulated charge past QA: "<< chain.TotalBeamCharge()<<" nC"<<endl;
+  cout<<"Accumulated charge past QA: "<< chain.db()->qa()->getAccCharge()<<" nC"<<endl;
 
   gBenchmark->Stop("db");
   gBenchmark->Print("db");
