@@ -75,16 +75,12 @@ namespace clas12root {
     bool more = kFALSE;
 
     if( _c12.get() )  more = _c12->next();
-    if(more) return kTRUE;
-   //When file opened add beam charge _c12.get()==nullptr when files are finished
-   // if(_idxFile>0&&_c12.get()) _totBeamCharge+=_c12->getRunBeamCharge();
+    if(more) return kTRUE;//found valid event in current file
+    //try new file
     if(NextFile()==false) return kFALSE;
     more = _c12->next();
-    if(more) return kTRUE;
-    
-    //no more delete reader
-    _c12.reset();
-    _c12ptr=nullptr;
+    if(more) return kTRUE;//found valid event in new file
+    //no valid entries in this file   
     //check if another file
     return Next();
     
@@ -96,7 +92,7 @@ namespace clas12root {
     std::cout<<"HipoChain::NextFile() "<<_idxFile<<" out of "<<GetNFiles()<<std::endl;
     if(_idxFile>=GetNFiles())
       return kFALSE;//no more files
-    //open next file
+    //open next file, using previously configured reader 
     _c12.reset(new clas12::clas12reader{*GetC12Reader(),GetFileName(_idxFile++).Data(),_readerTags});
     ConnectDataBases();
     
@@ -106,8 +102,9 @@ namespace clas12root {
   
 
   clas12::clas12reader* HipoChain::GetC12Reader() {
-      if( (_c12ptr=_c12.get()) )
+      if( (_c12ptr=_c12.get()) != nullptr )
 	return _c12ptr;
+      //the following will only be called once
       _c12.reset(new clas12::clas12reader{""});
       ConnectDataBases();
       _c12ptr = _c12.get();

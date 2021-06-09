@@ -230,14 +230,16 @@ namespace clas12 {
     //Special run banks
     if(_brunconfig.get())_event.getStructure(*_brunconfig.get());
     //check if event has QA requirements and those were met
-    if(_applyQA&&_db->qa()!=nullptr){
-      if(!_db->qa()->passQAReqs(_brunconfig->getEvent())){
-  	return false;
+    if(_db!=nullptr){
+      if(_applyQA&&_db->qa()!=nullptr){
+	if(!_db->qa()->passQAReqs(_brunconfig->getEvent())){
+	  return false;
+	}
       }
-    }
-    else   if(_db->qa()!=nullptr){
-      //accumulate charge even if no conditions given
-      _db->qa()->accumulateCharge(_brunconfig->getEvent());
+      else   if(_db->qa()!=nullptr){
+	//accumulate charge even if no conditions given
+	_db->qa()->accumulateCharge(_brunconfig->getEvent());
+      }
     }
 
    
