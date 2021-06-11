@@ -48,7 +48,8 @@ void Ex1_CLAS12ReaderChain(){
    // chain.Add("/WHERE/IS/MY/HIPO/file1.hipo");
    // chain.Add("/WHERE/IS/MY/HIPO/file2.hipo");
    // chain.Add("/WHERE/IS/MY/HIPO/file*.hipo");
-   
+    chain.Add("/hdd/jlab/clas12data/skim14_005038.hipo");
+ 
    //////////////////////////////////////
   //To creat rcdb data RCDB_HOME must be set prior to installation
   //chain.WriteRcdbData("rcdb.root"); //Must use this first time to create local copy
@@ -56,7 +57,6 @@ void Ex1_CLAS12ReaderChain(){
   //chain.SetRcdbFile("rcdb.root");
 
    auto config_c12=chain.GetC12Reader();
-   config_c12->scalerReader();//if you want integrated charge
    //Add some event Pid based selections
    //////////config_c12->AddAtLeastPid(211,1); //at least 1 pi+
    // config_c12->addExactPid(11,1);    //exactly 1 electron

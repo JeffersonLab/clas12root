@@ -56,8 +56,18 @@ namespace clas12root {
     clas12::clas12reader* GetC12Reader();
     const std::unique_ptr<clas12::clas12reader>& C12ref()const {return _c12;}
     
-    void AddBeamCharge(Double_t bc){_totBeamCharge+=bc;}
-    Double_t TotalBeamCharge() const noexcept{return _totBeamCharge;}
+    //void AddBeamCharge(Double_t bc){_totBeamCharge+=bc;}
+    // Double_t TotalBeamCharge() const noexcept{return _totBeamCharge;}
+    Double_t TotalBeamCharge() const noexcept{
+      //check if set manually (e.g. from HipoSelector)
+      if(_totBeamCharge!=0) return _totBeamCharge;
+      //or check if we have qadb
+      if(_db.qa()){
+	return _db.qa()->getAccCharge();
+      }
+      //else do not try and get it ourselves (so accidents do not occur)
+      return 0.;
+    }
     void SetTotalBeamCharge(Double_t bc){_totBeamCharge=bc;}
 
     clas12::clas12databases* db() {return &_db;}
