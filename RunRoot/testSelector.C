@@ -124,7 +124,8 @@ namespace clas12root{
   
  void testSelector::SlaveTerminate()
   {
-    // The SlaveTerminate() function is called after all entries or objects
+    HipoSelector::SlaveTerminate();
+   // The SlaveTerminate() function is called after all entries or objects
     // have been processed. When running with PROOF SlaveTerminate() is called
     // on each slave server.
       
@@ -135,7 +136,8 @@ namespace clas12root{
     // The Terminate() function is the last function to be called during
     // a query. It always runs on the client, it can be used to present
     // the results graphically or save the results to file.
-
+    HipoSelector::Terminate();
+ 
     TCanvas* can=new TCanvas();
     can->Divide(2,1);
     can->cd(1);

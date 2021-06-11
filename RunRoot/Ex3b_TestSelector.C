@@ -12,14 +12,14 @@
   clas12root::HipoChain chain;
   chain.Add("/where/are/my/files/f1.hipo");
   chain.Add("/where/are/my/files/f2.hipo");
-  auto c12=chain.GetC12Reader();
+  auto config_c12=chain.GetC12Reader();
 
   
-  if(c12->qadb()!=nullptr){
-    c12->db().qadb_requireOkForAsymmetry(true);
-    c12->db().qadb_requireGolden(true);
-    c12->db().qadb_addQARequirement("MarginalOutlier");
-    c12->db().qadb_addQARequirement("TotalOutlier");
+  if(config_c12->qadb()!=nullptr){
+    config_c12->db()->qadb_requireOkForAsymmetry(true);
+    config_c12->db()->qadb_requireGolden(true);
+    config_c12->db()->qadb_addQARequirement("MarginalOutlier");
+    config_c12->db()->qadb_addQARequirement("TotalOutlier");
     /*
      * applyQA specifies to the clas12reader that quality assurance
      * cuts will be applied, based on the .json file given as an 
@@ -28,11 +28,13 @@
      * i.e. clas12reader will only process events that pass quality assurance
      * and ignore those which fail
      */
+    config_c12->applyQA();
+  }
+
     c12->applyQA();
   }
 
   
-  //chain.Add("/WHERE/IS/MY/HIPO/FILE.hipo");
-  clas12root::testSelector sel(&chain);
-  gProof->Process(&sel,chain.GetNRecords());
+   clas12root::testSelector sel(&chain);
+   gProof->Process(&sel,chain.GetNRecords());
 }
