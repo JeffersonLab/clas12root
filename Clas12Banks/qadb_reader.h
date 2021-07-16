@@ -30,7 +30,11 @@ namespace clas12 {
     void requireGolden(bool ok){_reqGolden=ok;};
     bool passQAReqs(int evNb);
 
-    void setRun(int runNb){_runNb=runNb;}
+    void setRun(int runNb){
+      if(runNb==11||runNb==10) //simulation no QADB
+	runNb=0;
+      _runNb=runNb;
+    }
 
     void copySettings(const qadb_reader& other);
     
