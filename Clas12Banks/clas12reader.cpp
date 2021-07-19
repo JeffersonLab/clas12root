@@ -88,7 +88,9 @@ namespace clas12 {
       _bcher.reset(new cherenkov{_factory.getSchema("REC::Cherenkov")});
     if(_factory.hasSchema("REC::ForwardTagger"))
       _bft.reset(new forwardtagger{_factory.getSchema("REC::ForwardTagger")});
-    
+    if(_factory.hasSchema("REC::VertDoca"))
+      _bvertdoca.reset(new clas12::vertdoca{_factory.getSchema("REC::VertDoca")});
+  
     if(_factory.hasSchema("MC::Lund")){
       if(_factory.hasSchema("MC::IsParticleMatched")){
 	_bmcparts.reset( new mcparticle{_factory.getSchema("MC::Lund"),_factory.getSchema("MC::IsParticleMatched")});
@@ -263,7 +265,8 @@ namespace clas12 {
     if(_bft.get())_event.getStructure(*_bft.get());
     if(_bvtp.get())_event.getStructure(*_bvtp.get());
     if(_bhelonline.get())_event.getStructure(*_bhelonline.get());
- 
+    if(_bvertdoca.get())_event.getStructure(*_bvertdoca.get());
+
     if(_bmcparts.get()){
       _event.getStructure(*_bmcparts.get());
       if(_bmcevent.get())_event.getStructure(*_bmcevent.get());
@@ -491,7 +494,7 @@ namespace clas12 {
      if(_runNo!=0)_db->notifyRun(_runNo);
   }
   /////////////////////////////////////////////////////////
-  ///make a list of banks
+  ///make a list of banks, required for writer
   void clas12reader::makeListBanks(){
     _allBanks.clear();
    
@@ -517,7 +520,8 @@ namespace clas12 {
     if(_bcher.get())_allBanks.push_back(_bcher.get());
     if(_bft.get())_allBanks.push_back(_bft.get());
     if(_bvtp.get())_allBanks.push_back(_bvtp.get());
-    
+    if(_bvertdoca.get())_allBanks.push_back(_bvertdoca.get());
+  
 
   }
 

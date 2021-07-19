@@ -16,6 +16,7 @@
 #pragma link C++ class clas12::mcparticle+;
 #pragma link C++ class clas12::scaler+;
 #pragma link C++ class clas12::vtp+;
+#pragma link C++ class clas12::vertdoca+;
 #pragma link C++ class clas12::particle_detector+;
 #pragma link C++ class clas12::scintillator+;
 #pragma link C++ class clas12::tracker+;
