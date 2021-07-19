@@ -48,8 +48,7 @@ void Ex1_CLAS12ReaderChain(){
    // chain.Add("/WHERE/IS/MY/HIPO/file1.hipo");
    // chain.Add("/WHERE/IS/MY/HIPO/file2.hipo");
    // chain.Add("/WHERE/IS/MY/HIPO/file*.hipo");
-    chain.Add("/hdd/jlab/clas12data/skim14_005038.hipo");
- 
+  
    //////////////////////////////////////
   //To creat rcdb data RCDB_HOME must be set prior to installation
   //chain.WriteRcdbData("rcdb.root"); //Must use this first time to create local copy
@@ -150,6 +149,17 @@ void Ex1_CLAS12ReaderChain(){
 
        //could also get particle time etc. here too
        //Double_t eTime=electrons[0]->sci(FTOF1A)->getTime();
+
+       //if interested in vertdoca
+       //this example checks proton pi-
+       // auto vdentry=c12->vertdoca()->getCombinationEntry(protons[0]->getIndex(),pims[0]->getIndex());
+       // cout<<"vertdoca : proton index "<<protons[0]->getIndex()
+       // 	   <<" pi- index "<<pims[0]->getIndex()<<" vertdoca indices : "
+       // 	   <<c12->vertdoca()->getIndex1(vdentry)<<" "
+       // 	   <<c12->vertdoca()->getIndex2(vdentry)<<" proton track index1 ?= "
+       // 	   <<c12->vertdoca()->isTrack1(protons[0]->getIndex(),vdentry)<<endl;
+       
+     
      }
     
        

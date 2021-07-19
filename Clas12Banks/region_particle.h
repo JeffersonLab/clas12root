@@ -108,7 +108,8 @@ namespace clas12 {
 
     mcpar_ptr mc() const{_mcpart->setEntry(_pmc);return _mcpart;};
 
-    
+    short getIndex()const {return _pentry;}
+      
     short getRegion() const {return _region;}
     float getTheta() const;
     float getPhi() const;

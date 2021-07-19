@@ -72,6 +72,9 @@ namespace clas12 {
     
     void  setVerbose(short level=1){_verbose=level;}
 
+    void turnOffQADB(){_qadb.reset();}
+    void turnOffRCDB(){_rcdb.reset();}
+    void turnOffCCDB(){_ccdb.reset();}
   private:
     
    //names for copying to ROOT file for selector

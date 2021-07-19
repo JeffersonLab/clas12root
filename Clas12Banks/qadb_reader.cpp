@@ -18,6 +18,8 @@ namespace clas12 {
   ///////////////////////////////////////////////////////
   ///Checks if an event passes all the QA requirements
   bool qadb_reader::passQAReqs(int evNb){
+    if(_runNb==0) return true;//e.g. simulation
+    
     //First event always has index 0 which doesn't exist in qaDB
     if(evNb!=0){
       //isOkForAsymmetry already queries _QA, want to avoid doing it twice

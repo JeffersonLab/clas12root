@@ -23,6 +23,7 @@
 #include "runconfig.h"
 #include "ftbevent.h"
 #include "vtp.h"
+#include "vertdoca.h"
 #include "scaler.h"
 #include "covmatrix.h"
 #include "helonline.h"
@@ -113,6 +114,7 @@ namespace clas12 {
     event_ptr event() const{return _bevent.get();};
     ftbevent_ptr ftbevent() const{return _bftbevent.get();};
     vtp_ptr vtp() const{return _bvtp.get();};
+    vertdoca_ptr vertdoca() const{return _bvertdoca.get();};
  
     
     mcpar_ptr mcparts() const{return _bmcparts.get();};
@@ -241,7 +243,9 @@ namespace clas12 {
     cher_uptr _bcher;//!
     ft_uptr _bft;//!
     vtp_uptr _bvtp;//!
+    vertdoca_uptr _bvertdoca;//!
 
+    
     mcpar_uptr _bmcparts;//!
     mcevt_uptr _bmcevent;//!
 
