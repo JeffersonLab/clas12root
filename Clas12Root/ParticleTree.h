@@ -34,7 +34,8 @@ namespace clas12root {
     }
 
     void UseEventData(){_useEventData=kTRUE;}
-  private :
+
+   private :
    std::map<short,short> _pidSelect;
    std::map<short,short> _pidSelectExact;
    bool _zeroOfRestPid=false;

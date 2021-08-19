@@ -47,6 +47,11 @@ namespace clas12root {
 
     void SetEntries(Long64_t n){_nEntriesToProcess=n;}
     void SetVerbose(short v=1){_verbose=v;}
+
+    void CreateBankLink(TString label,TString code){
+      _mapOfParts[label]=code;
+    }
+    
   protected :
     
     TString _tempActionName;

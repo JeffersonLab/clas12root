@@ -308,6 +308,16 @@ You can perform some arithmetic and define a new branch e.g.
     	treemaker.Branch("P.Time-EVNT.StartTime/F","Time"); //branch name Time
   	treemaker.Branch("P.Time-EVNT.FTBStartTime/F","FTBTime"); //branch name FTBTime
 
+Or for banks without links create one yourself, this is useful for trajectories which require specific detector elements.
+
+!!!! WARNING the label e.g. TRAJFTOFFTOF1A must only contain alphanumeric characters !!!!!
+
+     treemaker.CreateBankLink("TRAJFTOFFTOF1A","p->traj(FTOF,FTOF1A)->");
+     treemaker.Branch("TRAJFTOFFTOF1A.X/F");
+     treemaker.Branch("TRAJFTOFFTOF1A.Y/F");
+     treemaker.Branch("TRAJFTOFFTOF1A.Z/F");
+
+You can also add standard clas12root filtering
 
      treemaker.AddExactPid(11,1); //filter events with exactly 1 e-
      treemaker.AddAtLeastPid(211,1);//and at least 1 pi+
