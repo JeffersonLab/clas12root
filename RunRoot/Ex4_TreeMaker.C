@@ -22,6 +22,14 @@
   treemaker.Branch("PBANK.Pid/I");
   //treemaker.Branch("PBANK.FTBPid/I");//FT based PID
 
+  //Or for banks without links create one yourself
+  //Useful for trajectories which require specific detector elements
+  //!!!! WARNING the label e.g. TRAJFTOFFTOF1A must only contain alphanumeric characters !!!!!
+  //treemaker.CreateBankLink("TRAJFTOFFTOF1A","p->traj(FTOF,FTOF1A)->");
+  //treemaker.Branch("TRAJFTOFFTOF1A.X/F");
+  //treemaker.Branch("TRAJFTOFFTOF1A.Y/F");
+  //treemaker.Branch("TRAJFTOFFTOF1A.Z/F");
+
   //e.g. Only save electron information
   // treemaker.AddParticleCut("PBANK.Pid==11");
 

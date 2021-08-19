@@ -60,7 +60,7 @@ namespace clas12 {
     }
   
     int getCombinationEntry(const int index1,const int index2){
-      for(uint i=0;i<getSize();++i){
+      for(int i=0;i<getSize();++i){
 	auto i1= getIndex1(i);
 	auto i2= getIndex2(i);
 	if(i1==index1&&i2==index2)
