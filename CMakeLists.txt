@@ -39,6 +39,7 @@ set(CMAKE_INSTALL_INCLUDEDIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 #include clasqaDB c++ library and rapidjson library
 IF (DEFINED ENV{QADB})
   include_directories($ENV{QADB}/srcC/include)
+  include_directories($ENV{QADB}/srcC/rapidjson/include)
   add_definitions(-DCLAS_QADB)
 ENDIF (DEFINED ENV{QADB})
 
