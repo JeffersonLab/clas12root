@@ -48,13 +48,8 @@ void Ex1_CLAS12ReaderChain(){
    // chain.Add("/WHERE/IS/MY/HIPO/file1.hipo");
    // chain.Add("/WHERE/IS/MY/HIPO/file2.hipo");
    // chain.Add("/WHERE/IS/MY/HIPO/file*.hipo");
-  
    //////////////////////////////////////
-  //To creat rcdb data RCDB_HOME must be set prior to installation
-  //chain.WriteRcdbData("rcdb.root"); //Must use this first time to create local copy
-  //Then when we have local copy can just use the following
-  //chain.SetRcdbFile("rcdb.root");
-
+ 
    auto config_c12=chain.GetC12Reader();
    //Add some event Pid based selections
    //////////config_c12->AddAtLeastPid(211,1); //at least 1 pi+
@@ -74,7 +69,6 @@ void Ex1_CLAS12ReaderChain(){
      
      //c12->event()->getStartTime();
      
-     //  cout<<c12->getRcdbVals().beam_energy<<endl;;
      //Loop over all particles to see how to access detector info.
      
      for(auto& p : c12->getDetParticles()){
@@ -153,7 +147,7 @@ void Ex1_CLAS12ReaderChain(){
        //if interested in vertdoca
        //this example checks proton pi-
        // auto vdentry=c12->vertdoca()->getCombinationEntry(protons[0]->getIndex(),pims[0]->getIndex());
-       // cout<<"vertdoca : proton index "<<protons[0]->getIndex()
+       // cout<<"vertdoca : "vdentry<<" proton index "<<protons[0]->getIndex()
        // 	   <<" pi- index "<<pims[0]->getIndex()<<" vertdoca indices : "
        // 	   <<c12->vertdoca()->getIndex1(vdentry)<<" "
        // 	   <<c12->vertdoca()->getIndex2(vdentry)<<" proton track index1 ?= "
@@ -165,7 +159,7 @@ void Ex1_CLAS12ReaderChain(){
        
      counter++;
    }
-   cout<<"Number of Events = " <<counter<<" total charge = "<<chain.TotalBeamCharge()<<endl;
+   cout<<"Number of Events = " <<counter<<endl;
 
    gBenchmark->Stop("timer");
    gBenchmark->Print("timer");
