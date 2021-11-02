@@ -133,8 +133,8 @@ namespace clas12root {
       lines->AddAt(new TObjString("	_eventdata->Helicity=evbank->getHelicity();"),place++);
       lines->AddAt(new TObjString("	_eventdata->HelicityRaw=evbank->getHelicityRaw();"),place++);
       lines->AddAt(new TObjString("	_eventdata->EventNumber=runbank->getEvent();"),place++);
-      lines->AddAt(new TObjString("	if(helobank.get())_eventdata->onlineHelicity=helobank->getCurrHelicity();"),place++);
-      lines->AddAt(new TObjString("	if(helfbank.get())_eventdata->flipHelicity=helfbank->getCurrHelicity();"),place++);
+      // lines->AddAt(new TObjString("	if(helobank.get())_eventdata->onlineHelicity=helobank->getCurrHelicity();"),place++);
+      //lines->AddAt(new TObjString("	if(helfbank.get())_eventdata->flipHelicity=helfbank->getCurrHelicity();"),place++);
  
     }
 
