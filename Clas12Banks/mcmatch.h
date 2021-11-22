@@ -90,11 +90,12 @@ namespace clas12 {
     }
     
     void   scanIndex();
-
-  private:
+    
     short  getPindex(int ix) const noexcept { return getShort(_pindex_order,ix);}
     short  getMCindex(int ix) const noexcept { return getShort(_mcindex_order,ix);}
 
+  private:
+ 
     int _mcindex_order{-1};
     int _pindex_order{-1};
     int _player1_order{-1};
