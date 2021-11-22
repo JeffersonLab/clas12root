@@ -92,8 +92,8 @@ namespace clas12 {
       _bvertdoca.reset(new clas12::vertdoca{_factory.getSchema("REC::VertDoca")});
   
     if(_factory.hasSchema("MC::Lund")){
-      if(_factory.hasSchema("MC::IsParticleMatched")){
-	_bmcparts.reset( new mcparticle{_factory.getSchema("MC::Lund"),_factory.getSchema("MC::IsParticleMatched")});
+      if(_factory.hasSchema("MC::RecMatch")){
+	_bmcparts.reset( new mcparticle{_factory.getSchema("MC::Lund"),_factory.getSchema("MC::RecMatch")});
       }
       else
 	_bmcparts.reset( new mcparticle{_factory.getSchema("MC::Lund")});

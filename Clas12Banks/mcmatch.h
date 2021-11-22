@@ -31,33 +31,45 @@ namespace clas12 {
     ~mcmatch() override = default;
 
 
-    /*
-    int  getMCTindex(int index) const noexcept { return getShort(_mcTindex_order,index);}
-    int  getRecTindex(int index) const noexcept { return getShort(_recTindex_order,index);}
-    int  getPindex(int index) const noexcept { return getShort(_pindex_order,index);}
+     /*
+     "name": "MC::RecMatch",
+        "group": 40,
+        "item" : 6,
+        "info": "Rec::Particle -> MC::Particle matching",
+        "entries": [
+            {"name":"pindex",        "type":"S", "info":"REC::Particle index"},
+            {"name":"mcindex",       "type":"S", "info":"MC::Particle index"},
+            {"name":"player1",       "type":"L",  "info":"layers from the 1st set of detectors hit by Recon particle"},
+            {"name":"player2",       "type":"L",  "info":"layers from the 1st set of detectors hit by Recon particle"},
+            {"name":"mclayer1",      "type":"L",  "info":"layers from the 1st set of detectors hit by MC particle"},
+            {"name":"mclayer2",      "type":"L",  "info":"layers from the 2nd set of detectors hit by MC particle"},
+            {"name":"quality",       "type":"F",  "info":"matching quality parameter"}
     */
-    
-    short  getMCTindex() const noexcept { return getShort(_mcTindex_order,_index);}
+    //OR
+    /*
+ "name": "MC::GenMatch",
+        "group": 40,
+        "item" : 5,
+        "info": "MC::Particle -> REC::Particle matching",
+        "entries": [
+            {"name":"mcindex",       "type":"S", "info":"MC::Particle index"},
+            {"name":"pindex",        "type":"S", "info":"REC::Particle index"},
+            {"name":"mclayer1",      "type":"L",  "info":"layers from the 1st set of detectors hit by MC particle"},
+            {"name":"mclayer2",      "type":"L",  "info":"layers from the 2nd set of detectors hit by MC particle"},
+            {"name":"player1",       "type":"L",  "info":"layers from the 1st set of detectors hit by Recon particle"},
+            {"name":"player2",       "type":"L",  "info":"layers from the 2nd set of detectors hit by Recon particle"},
+            {"name":"quality",       "type":"F",  "info":"matching quality parameter"}
+        ] 
+     */
+    short  getMCindex() const noexcept { return getShort(_mcindex_order,_index);}
     short  getPindex() const noexcept { return getShort(_pindex_order,_index);}
 
-    //bit patterns
-    long  getMCLayersTrk() const noexcept { return getLong(_mclayerstrk_order,_index);}
-    long  getMCLayersNeut() const noexcept { return getLong(_mclayersneut_order,_index);}
-    long  getRecLayersTrk() const noexcept { return getLong(_reclayerstrk_order,_index);}
-    long  getRecLayersNeut() const noexcept { return getLong(_reclayersneut_order,_index);}
+    long getPlayer1() const noexcept {return getLong(_player1_order,_index);} 
+    long getPlayer2() const noexcept {return getLong(_player2_order,_index);} 
+    long getMClayer1() const noexcept {return getLong(_mclayer1_order,_index);} 
+    long getMClayer2() const noexcept {return getLong(_mclayer2_order,_index);} 
+    float getQuality() const noexcept {return getFloat(_qual_order,_index);}
  
-
-    int  getPindex(int index) const noexcept { return getShort(_pindex_order,index);}
-
-    bool checkBitInPattern(uint k) const noexcept {
-      return  checkBit(getMCLayersTrk(),k);
-    }
-    bool checkBit(long word, uint k) const noexcept {
-      return  ( (word >> k) & 1 )!=0;
-    }
-
-    bool checkFDSuperLayers(const short nMinSL, const short nMinLayerPerSL) const noexcept ;
-    
     
     void setEntry(short i){ _index=i;}
     void setBankEntry(short i){ _index=i;} //faster for BankHist
@@ -65,6 +77,7 @@ namespace clas12 {
 
     int getIndex()   const noexcept{return _index;}
     int getIndex(int pindex);
+    int getMCIndex(int pindex);
     
    /**
     * This is virtual method from hipo::bank it will be called
@@ -79,15 +92,19 @@ namespace clas12 {
     void   scanIndex();
 
   private:
+    short  getPindex(int ix) const noexcept { return getShort(_pindex_order,ix);}
+    short  getMCindex(int ix) const noexcept { return getShort(_mcindex_order,ix);}
 
-    int _mcTindex_order{-1};
+    int _mcindex_order{-1};
     int _pindex_order{-1};
-    int _mclayerstrk_order{-1};
-    int _mclayersneut_order{-1};
-    int _reclayerstrk_order{-1};
-    int _reclayersneut_order{-1};
- 
+    int _player1_order{-1};
+    int _player2_order{-1};
+    int _mclayer1_order{-1};
+    int _mclayer2_order{-1};
+    int _qual_order{-1};
+
     std::vector<int> _rvec{};
+    std::vector<int> _rmcvec{};
  
     short _index={0};
 

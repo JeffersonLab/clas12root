@@ -61,29 +61,34 @@ namespace clas12 {
       _pentry=_parts->getEntry();
       //check for covariance matrix
       if(_covmat)_pcmat=_covmat->getIndex(_pentry);
-      if(_mcpart)_pmc=_mcpart->match(_pentry);
+      if(_mcpart)_pmc=_mcpart->match_to(_pentry);
       return true;
     }
 
     //solve FTB ambiguity at this stage
     int getPid(){
       _parts->setEntry(_pentry);
+      if(_ftbparts==nullptr) return _parts->getPid();
       return _useFTBPid*_ftbparts->getRows()?_ftbparts->getPid():_parts->getPid();
     }
     float getVt(){
       _parts->setEntry(_pentry);
+      if(_ftbparts==nullptr) return _parts->getVt();
       return _useFTBPid*_ftbparts->getRows()?_ftbparts->getVt():_parts->getVt();
     }
     int getStatus(){
       _parts->setEntry(_pentry);
-      return _useFTBPid*_ftbparts->getRows()?_ftbparts->getStatus():_parts->getStatus();
+       if(_ftbparts==nullptr) return _parts->getStatus();
+       return _useFTBPid*_ftbparts->getRows()?_ftbparts->getStatus():_parts->getStatus();
     }
     float getChi2Pid(){
       _parts->setEntry(_pentry);
+      if(_ftbparts==nullptr) return  _parts->getChi2Pid();
       return _useFTBPid*_ftbparts->getRows()?_ftbparts->getChi2Pid():_parts->getChi2Pid();
     }
     float getBeta(){
       _parts->setEntry(_pentry);
+      if(_ftbparts==nullptr) return  _parts->getBeta();
       return _useFTBPid*_ftbparts->getRows()?_ftbparts->getBeta():_parts->getBeta();
     }
  
@@ -140,7 +145,7 @@ namespace clas12 {
     traj_ptr _traj={nullptr};
     cher_ptr _cher={nullptr};
     event_ptr _event={nullptr};
-    mcmatch_ptr _mcmatch={nullptr};
+    // mcmatch_ptr _mcmatch={nullptr};
     mcpar_ptr _mcpart={nullptr};
  
     

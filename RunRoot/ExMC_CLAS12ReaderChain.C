@@ -59,17 +59,12 @@ void ExMC_CLAS12ReaderChain(){
      for(auto p : c12->getDetParticles()){
 
        if(p->mc()->isMatched()){//this particle has an mc match
-	 //if charged FD, check for sufficient layers
-	 if( p->getRegion()==clas12::FD && p->par()->getCharge() )
-	   if(p->mc()->getMatch()->checkFDSuperLayers(5,4)==false)
-	     continue;
-	 // p->mc()->getMatch()->checkBitInPattern(33);//check other bits
-	 
-	 hPDiff->Fill(p->getMCPDiff());
-	 hThDiff->Fill(p->getMCThetaDiff()*TMath::RadToDeg());
-	 hPhDiff->Fill(p->getMCPhiDiff()*TMath::RadToDeg());
-       }
-
+	 cout<<p->pbank()->getPindex()<<" rec pid "<<p->pbank()->getPid()<<" "<<p->mc()->getPid()<<" match pindex "<<p->mc()->getMatch()->getPindex()<<" mcindex "<<p->mc()->getMatch()->getMCindex(p->mc()->getEntry())<<" "<<p->mc()->getMatch()->getQuality()<<endl;
+	 if(p->mc()->getMatch()->getQuality()>0.955){
+	   hPDiff->Fill(p->getMCPDiff());
+	   hThDiff->Fill(p->getMCThetaDiff()*TMath::RadToDeg());
+	   hPhDiff->Fill(p->getMCPhiDiff()*TMath::RadToDeg());
+	 }
      }
      counter++;
    }
