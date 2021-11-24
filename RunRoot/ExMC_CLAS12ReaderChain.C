@@ -28,7 +28,7 @@ void ExMC_CLAS12ReaderChain(){
    int counter=0;
    
    clas12root::HipoChain chain;
-   // chain.Add("/WHERE/IS/MY/HIPO/file2.hipo");
+   chain.Add("/w/work5/jlab/hallb/clas12/rg-b/simulations/n2eFPS_wRafoTruthmatching/eD_n2eFPS_Recon_9.hipo");
    // chain.Add("/WHERE/IS/MY/HIPO/file*.hipo");
    
    //////////////////////////////////////
@@ -59,17 +59,13 @@ void ExMC_CLAS12ReaderChain(){
      for(auto p : c12->getDetParticles()){
 
        if(p->mc()->isMatched()){//this particle has an mc match
-	 //if charged FD, check for sufficient layers
-	 if( p->getRegion()==clas12::FD && p->par()->getCharge() )
-	   if(p->mc()->getMatch()->checkFDSuperLayers(5,4)==false)
-	     continue;
-	 // p->mc()->getMatch()->checkBitInPattern(33);//check other bits
-	 
-	 hPDiff->Fill(p->getMCPDiff());
-	 hThDiff->Fill(p->getMCThetaDiff()*TMath::RadToDeg());
-	 hPhDiff->Fill(p->getMCPhiDiff()*TMath::RadToDeg());
+	 // cout<<p->par()->getEntry()<<" rec pid "<<p->par()->getPid()<<" "<<p->mc()->getPid()<<" mcindex "<<" "<<p->mc()->getMatch()->getQuality()<<" "<<p->mc()->getMatch()->getMCindex()<<endl;
+	 if(p->mc()->getMatch()->getQuality()>0.9){
+	   hPDiff->Fill(p->getMCPDiff());
+	   hThDiff->Fill(p->getMCThetaDiff()*TMath::RadToDeg());
+	   hPhDiff->Fill(p->getMCPhiDiff()*TMath::RadToDeg());
+	 }
        }
-
      }
      counter++;
    }
