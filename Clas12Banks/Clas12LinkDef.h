@@ -14,6 +14,7 @@
 #pragma link C++ class clas12::particle+;
 #pragma link C++ class clas12::ftbparticle+;
 #pragma link C++ class clas12::mcparticle+;
+#pragma link C++ class clas12::mcevent+;
 #pragma link C++ class clas12::scaler+;
 #pragma link C++ class clas12::vtp+;
 #pragma link C++ class clas12::vertdoca+;

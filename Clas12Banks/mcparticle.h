@@ -85,11 +85,14 @@ namespace clas12 {
       if( i<getRows() )_entry=i;
       else _entry = -1;
       
-      if(_match.get()!=nullptr)_match->setEntry(i);
-    }
+     }
+    void setMatchEntry(short ip,short imc){
+      _entry=imc;
+      _matched_pindex=ip;
+      if(_match.get())_match->setEntry(_matched_pindex);
+     }
     void setBankEntry(short i){
       _entry=i;
-      if(_match.get()!=nullptr)_match->setEntry(i);
     } //faster for BankHist
     short getEntry() const  noexcept{return _entry;}
     /**
@@ -98,16 +101,24 @@ namespace clas12 {
     * mcparticles and or map mcparticles by pid or type (i.e. charge)
     */
     void notify() final {
+      _entry=-1;
+      _matched_pindex=-1;
       bank::notify();
     }
-    int match(int pindex){//pindex is index of reconstructed particle
+    int match_to(int pindex){//pindex is index of reconstructed particle
+      _matched_pindex=pindex;
       return _match.get()!=nullptr ?
-	_entry=_match->getIndex(pindex) : -1 ;
+	_entry=_match->getMCindex(pindex) : _entry=-1 ;
     }
-    bool isMatched() const noexcept{return _entry!=-1;}
+    bool isMatched() const noexcept{return _entry>=0;}
     
-    mcmatch* getMatch()const {return _match.get();}
-    
+    //mcmatch* getParticleMatch()const {return _match.get();}
+
+    //if matched
+    mcmatch* getMatch()const {
+      return _match.get();
+    }
+      
   private:
 
     int _pid_order{-1};
@@ -126,7 +137,7 @@ namespace clas12 {
     int _daughter_order{-1};
     
     short _entry={0};
-
+    short _matched_pindex;
     mcmatch_uptr _match;
   };
   

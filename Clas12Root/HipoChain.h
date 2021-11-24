@@ -24,11 +24,11 @@ namespace clas12root {
   public :
     HipoChain();
     virtual ~HipoChain()=default;
-    HipoChain(const HipoChain& other) = default; //Copy Constructor
-    HipoChain(HipoChain&& other) = default; //Move Constructor
+    HipoChain(const HipoChain& other) = delete; //Copy Constructor
+    HipoChain(HipoChain&& other) = delete; //Move Constructor
       
-    HipoChain& operator=(const HipoChain& other)=default;
-    HipoChain& operator=(HipoChain&& other)=default;
+    HipoChain& operator=(const HipoChain& other)=delete;
+    HipoChain& operator=(HipoChain&& other)=delete;
 
 
     void Add(TString name);
