@@ -76,8 +76,8 @@ namespace clas12 {
     short getEntry() const  noexcept{return _index;}
 
     int getIndex()   const noexcept{return _index;}
-    int getIndex(int pindex);
-    int getMCIndex(int pindex);
+    // int getIndex(int pindex);
+    // int findMCIndex(int pindex);
     
    /**
     * This is virtual method from hipo::bank it will be called
@@ -86,7 +86,7 @@ namespace clas12 {
     */
     void notify() final {
       bank::notify();
-      scanIndex();
+      //  scanIndex();
     }
     
     void   scanIndex();
@@ -104,8 +104,8 @@ namespace clas12 {
     int _mclayer2_order{-1};
     int _qual_order{-1};
 
-    std::vector<int> _rvec{};
-    std::vector<int> _rmcvec{};
+    //  std::vector<int> _rvec{};
+    //std::vector<int> _rmcvec{};
  
     short _index={0};
 

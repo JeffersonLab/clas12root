@@ -87,6 +87,11 @@ namespace clas12 {
       
       // if(_match.get()!=nullptr)_match->setEntry(i);
     }
+    void setMatchEntry(short ip,short imc){
+      _entry=imc;
+      _matched_pindex=ip;
+      if(_match.get())_match->setEntry(_matched_pindex);
+     }
     void setBankEntry(short i){
       _entry=i;
       //if(_match.get()!=nullptr)_match->setEntry(i);
@@ -99,18 +104,29 @@ namespace clas12 {
     */
     void notify() final {
       _entry=-1;
-      bank::notify();
+      _matched_pindex=-1;
+     bank::notify();
     }
     int match_to(int pindex){//pindex is index of reconstructed particle
+      _matched_pindex=pindex;
       return _match.get()!=nullptr ?
-	_entry=_match->getIndex(pindex) : -1 ;
+	_entry=_match->getMCindex(pindex) : _entry=-1 ;
     }
-    bool isMatched() const noexcept{return _entry!=-1;}
+    bool isMatched() const noexcept{return _entry>=0;}
     
     //mcmatch* getParticleMatch()const {return _match.get();}
 
-    mcmatch* getMatch()const {_match->setEntry(_entry);return _match.get();}
-    mcmatch* getNoRecMatch()const {_match->getMCIndex(_entry);return _match.get();}
+    //if matched
+    mcmatch* getMatch()const {
+      // if(_match.get()==nullptr)return nullptr;
+      return _match.get();
+    }
+    // //if not getting via a matched REC::Particle
+    // mcmatch* getNoRecMatch()const {
+    //   if(_match.get()) _matched_pindex=_match->findMCIndex(_entry);
+    //   else return nullptr;
+    //   return _match.get();
+    // }
 
     
   private:
@@ -131,7 +147,7 @@ namespace clas12 {
     int _daughter_order{-1};
     
     short _entry={0};
-
+    short _matched_pindex;
     mcmatch_uptr _match;
   };
   

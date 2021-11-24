@@ -111,7 +111,7 @@ namespace clas12 {
 
     const CovMatrix* cmat() const{_covmat->setIndex(_pcmat);return _covmat->matrix();};
 
-    mcpar_ptr mc() const{_mcpart->setEntry(_pmc);return _mcpart;};
+    mcpar_ptr mc() const{_mcpart->setMatchEntry(_pentry,_pmc);return _mcpart;};
 
     short getIndex()const {return _pentry;}
       
