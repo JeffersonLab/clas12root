@@ -20,42 +20,5 @@ namespace clas12 {
     _qual_order = __schema.getEntryOrder("quality"); 
     }
 
-
-  //return mcmatch index for this particle pindex
-  // int mcmatch::getIndex(int pindex){
-  //   std::vector<int>::iterator it;
-  //   if((it=std::find(_rvec.begin(),_rvec.end(),pindex))!=_rvec.end()){
-  //     _index = std::distance(_rvec.begin(), it);
-  //     return _index;
-  //   }
-  //   return _index=-1;
-  // }
-  //return mcmatch index for this particle pindex
-  // int mcmatch::findMCIndex(int mcindex){
-  //   std::vector<int>::iterator it;
-  //   if((it=std::find(_rmcvec.begin(),_rmcvec.end(),mcindex))!=_rmcvec.end()){
-  //     _index = std::distance(_rmcvec.begin(), it);
-  //     return _index;
-  //   }
-  //   return _index=-1;
-  // }
-
-  // //find pindex order
-  // void  mcmatch::scanIndex(){
-  //    _rvec.clear();
-  //    const int size = getRows();
-  //    _rvec.reserve(size);
-     
-  //    _rmcvec.clear();
-  //    _rmcvec.reserve(size);
-
-  //    for(int i = 0; i < size; i++){
-  //      int pindex   = getPindex(i);
-  //      _rvec.emplace_back(pindex);
-  //      int mcindex   = getMCindex(i);
-  //      _rmcvec.emplace_back(mcindex);
-  //    }
-  //  }
-  
  
 }

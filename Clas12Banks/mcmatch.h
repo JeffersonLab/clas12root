@@ -76,9 +76,7 @@ namespace clas12 {
     short getEntry() const  noexcept{return _index;}
 
     int getIndex()   const noexcept{return _index;}
-    // int getIndex(int pindex);
-    // int findMCIndex(int pindex);
-    
+   
    /**
     * This is virtual method from hipo::bank it will be called
     * every time a bank is read in the reader. Can be used to sort
@@ -86,11 +84,9 @@ namespace clas12 {
     */
     void notify() final {
       bank::notify();
-      //  scanIndex();
     }
     
-    void   scanIndex();
-    
+     
     short  getPindex(int ix) const noexcept { return getShort(_pindex_order,ix);}
     short  getMCindex(int ix) const noexcept { return getShort(_mcindex_order,ix);}
 

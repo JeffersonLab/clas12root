@@ -59,7 +59,7 @@ void ExMC_CLAS12ReaderChain(){
      for(auto p : c12->getDetParticles()){
 
        if(p->mc()->isMatched()){//this particle has an mc match
-	 cout<<p->par()->getEntry()<<" rec pid "<<p->par()->getPid()<<" "<<p->mc()->getPid()<<" match pindex "<<p->mc()->getMatch()->getPindex()<<" mcindex "<<" "<<p->mc()->getMatch()->getQuality()<<" "<<p->mc()->getMatch()->getMCindex()<<endl;
+	 // cout<<p->par()->getEntry()<<" rec pid "<<p->par()->getPid()<<" "<<p->mc()->getPid()<<" mcindex "<<" "<<p->mc()->getMatch()->getQuality()<<" "<<p->mc()->getMatch()->getMCindex()<<endl;
 	 if(p->mc()->getMatch()->getQuality()>0.9){
 	   hPDiff->Fill(p->getMCPDiff());
 	   hThDiff->Fill(p->getMCThetaDiff()*TMath::RadToDeg());
