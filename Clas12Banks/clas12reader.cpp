@@ -53,7 +53,7 @@ namespace clas12 {
 
   void clas12reader::initReader(){
     _reader.open(_filename.data()); //keep a pointer to the reader
-
+    _isOpen=true;
       // hipo::dictionary  factory;
     _reader.readDictionary(_factory);
 

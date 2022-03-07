@@ -49,7 +49,7 @@ namespace clas12root {
 
     //Functions for sequential processing of chains of files
     Bool_t Next();
-    Bool_t NextFile();
+    Bool_t ReallyNextFile(){return NextFile();}//just in case someone needs to change file
     void SetReaderTags(std::vector<long> tags){_readerTags=tags;}
     std::vector<long> ReaderTags()const noexcept{return _readerTags;}
     
@@ -86,6 +86,8 @@ namespace clas12root {
 ///////////////////////////////
     
   private :
+    Bool_t NextFile();
+  
     TChain _tchain;
 
     TObjArray* _ListOfFiles{nullptr}; //!owned by _tchain

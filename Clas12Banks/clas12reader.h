@@ -54,6 +54,7 @@
 namespace clas12 {
   using std::cout;
   using std::endl;
+  using std::cerr;
 
   class clas12reader  {
 
@@ -123,6 +124,11 @@ namespace clas12 {
 
     //support for generic non-DST banks
     uint addBank(const std::string& name){
+      if(isOpen()==false){
+	cerr<<"clas12reader::addBank reader not opened, exiting..."<<endl;
+	cerr<<"  in case using HipoChain, call NextFile() first"<<endl;
+	exit(0);
+      }
       std::unique_ptr<hipo::bank> bnk{new hipo::bank{_factory.getSchema(name.data())}};
       _addBanks.push_back(std::move(bnk));
       _addBankNames.push_back(name);
@@ -199,7 +205,9 @@ namespace clas12 {
     static int readQuickRunConfig(const std::string& filename);
     static int tryTaggRunConfig(const std::string& filename, int tag);
     
-  
+
+    bool isOpen(){return _isOpen;}
+    
     void setEntries(long n){_nToProcess = n;}
     void setVerbose(short level=1){
       _verbose=level;
@@ -288,6 +296,7 @@ namespace clas12 {
     std::map<short,short> _pidSelectExact;
     bool _zeroOfRestPid{false};
     bool _useFTBased{false};
+    bool _isOpen{false};
     std::vector<std::string> _addBankNames;
      
     ///////////////////////////////DB

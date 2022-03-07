@@ -60,7 +60,7 @@ void Ex1_CLAS12ReaderChain(){
    // config_c12->addExactPid(22,2);    //exactly 2 gamma
    //////config_c12->addZeroOfRestPid();  //nothing else
    //////config_c12->useFTBased(); //and use the Pids from RECFT
-
+   //////chain.db()->turnOffQADB(); //partiuclarly useful if does not exist for run period
    //now get reference to (unique)ptr for accessing data in loop
    //this will point to the correct place when file changes
    auto& c12=chain.C12ref();

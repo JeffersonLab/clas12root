@@ -90,8 +90,9 @@ namespace clas12root {
     /////Warning any changes to this function should
     ////also be considered for  HipoSelector::Process
     std::cout<<"HipoChain::NextFile() "<<_idxFile<<" out of "<<GetNFiles()<<std::endl;
-    if(_idxFile>=GetNFiles())
+    if(_idxFile>=GetNFiles()){
       return kFALSE;//no more files
+    }
     //open next file, using previously configured reader 
     _c12.reset(new clas12::clas12reader{*GetC12Reader(),GetFileName(_idxFile++).Data(),_readerTags});
     ConnectDataBases();
@@ -102,12 +103,20 @@ namespace clas12root {
   
 
   clas12::clas12reader* HipoChain::GetC12Reader() {
-      if( (_c12ptr=_c12.get()) != nullptr )
-	return _c12ptr;
+    if( (_c12ptr=_c12.get()) != nullptr )
+      return _c12ptr;
       //the following will only be called once
-      _c12.reset(new clas12::clas12reader{""});
-      ConnectDataBases();
-      _c12ptr = _c12.get();
+      if(GetNFiles()==0){
+	//No files, just open an empty reader
+	_c12.reset(new clas12::clas12reader{""});
+	ConnectDataBases();
+	_c12ptr = _c12.get();
+      }
+      //got some files, init with the first file
+      else{
+	_c12.reset(new clas12::clas12reader{""});//dummy first, so can create first valid one
+	NextFile();
+      }
       return  _c12ptr;
     }
 
