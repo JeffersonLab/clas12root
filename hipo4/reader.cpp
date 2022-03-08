@@ -268,6 +268,10 @@ void  reader::getStructureNoCopy(hipo::structure &structure,int group, int item)
  * @param dict - reference to dictionary object.
  */
 void  reader::readDictionary(hipo::dictionary &dict){
+  if(inputStream.is_open()==false){
+    printf("\n\nhipo::reader (ERROR) file is not open.... exiting...\n\n");
+    exit(0);
+  }
   long position = header.headerLength*4;
   hipo::record  dictRecord;
   dictRecord.readRecord(inputStream,position,0);

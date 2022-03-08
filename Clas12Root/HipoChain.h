@@ -10,9 +10,6 @@
 #include <TString.h>
 #include <TSystem.h>
 
-//#ifdef CLAS_RCDB
-//   #include "rcdb_reader.h"
-//#endif
 
 
 namespace clas12root {
@@ -34,7 +31,11 @@ namespace clas12root {
     void Add(TString name);
     Int_t GetNFiles() const {return _ListOfFiles->GetEntries();}
     Long64_t GetNRecords();
-
+    TString CurrentFileName()const {
+      return _idxFile>0 ? GetFileName(_idxFile-1) : TString();
+    }
+    Int_t CurrentFileNumber() const{ return _idxFile;}
+    
     TString GetFileName(Int_t i)const{
       if(i>=GetNFiles()) return TString();
       return _ListOfFiles->At(_index[i])->GetTitle();
@@ -85,16 +86,20 @@ namespace clas12root {
       }*/
 ///////////////////////////////
     
+  protected:
+    virtual Bool_t NextFile();
+    virtual Bool_t FirstFile();
+
+    
   private :
-    Bool_t NextFile();
-  
+   
     TChain _tchain;
 
     TObjArray* _ListOfFiles{nullptr}; //!owned by _tchain
 
 
     std::unique_ptr<clas12::clas12reader> _c12;
-
+  
     clas12::clas12reader* _c12ptr{nullptr};//!
 
     clas12::clas12databases _db;
@@ -105,7 +110,7 @@ namespace clas12root {
     std::vector<long> _readerTags;
     std::vector<int> _index;
 
-    Int_t _idxFile{0};
+    Int_t _idxFile{-1};
 
     Double_t _totBeamCharge{0};
 

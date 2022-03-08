@@ -75,7 +75,6 @@ namespace clas12 {
     void sort();
     bool readEvent();
     void clearEvent();
-    void makeListBanks();
     
     std::vector<hipo::bank* > getAllBanksPtrs(){return _allBanks;}
     hipo::dictionary& getDictionary(){return _factory;}
@@ -131,6 +130,7 @@ namespace clas12 {
       }
       std::unique_ptr<hipo::bank> bnk{new hipo::bank{_factory.getSchema(name.data())}};
       _addBanks.push_back(std::move(bnk));
+      _allBanks.push_back(_addBanks.back().get());
       _addBankNames.push_back(name);
       return _addBanks.size()-1; //return place in vector
     }
@@ -221,7 +221,8 @@ namespace clas12 {
     
     private:
 
-    
+    void makeListBanks(); //calls clear, so only do this in here
+  
     void hipoRead(){
       _reader.read(_event);
       _isRead=true;

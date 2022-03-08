@@ -497,8 +497,13 @@ namespace clas12 {
   ///make a list of banks, required for writer
   void clas12reader::makeListBanks(){
     _allBanks.clear();
-   
-    for(auto& bnk:_addBanks) _allBanks.push_back(bnk.get());
+    //  cout<<"clas12reader::makeListBanks() "<<_addBanks.size()<<endl;
+    //If any non standard DST banks added include them
+    //for(auto& bnk:_addBanks){
+    // cout<<" add bank "<<bnk->getSchema().getName()<<endl;
+    //  _allBanks.push_back(bnk.get());
+    //}
+    //Now standard DST banks
     if(_brunconfig.get())_allBanks.push_back(_brunconfig.get());
     if(_bparts.get())_allBanks.push_back(_bparts.get());
     if(_bftbparts.get())_allBanks.push_back(_bftbparts.get());

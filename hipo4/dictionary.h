@@ -25,7 +25,7 @@
 
 namespace hipo {
 
-  typedef struct {
+  typedef struct schemaEntry_t {
     std::string  name;
     std::string  type;
     int          typeId{};
@@ -135,7 +135,13 @@ class schema {
     std::vector<std::string> getSchemaList();
     void    addSchema(schema sc){ factory[sc.getName()] = sc;}
     bool    hasSchema(const char *name) { return (factory.count(name)!=0);}
-    schema &getSchema(const char *name){ return factory[name];}
+    schema &getSchema(const char *name){ 
+      if(factory.count(name)==0){
+        printf("\n\nhipo::dictionary (ERROR) schema {%s} does not exist... exiting\n\n",name);
+           exit(0);
+      }
+      return factory[name];
+    }
     bool    parse(const char *schemaString);
     void    show();
   };

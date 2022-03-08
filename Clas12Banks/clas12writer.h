@@ -39,7 +39,7 @@ namespace clas12 {
     clas12writer(std::string filename);
     virtual ~clas12writer()=default;
 
-    hipo::writer& getWriter(){return _writer;}   
+    hipo::writer& getWriter() {return _writer;}   
    
     void writeEvent();
     void clearEvent();
@@ -53,7 +53,7 @@ namespace clas12 {
     void addSchema(std::string schemaName, hipo::dictionary& factory);
     bool hasSchema(std::string schemaName);
     void setTag(long tag);
-
+    void setFile(const std::string& file){_filename=file;}
     //////////////////////////////////////////////////////////////////////////////////////////
     ///adds a bank name to the list of banks to skip
     void skipBank(std::string bankName){
@@ -61,7 +61,7 @@ namespace clas12 {
 	_bankNamesToSkip.push_back(bankName);
       }
     } 
-    
+    bool isOpen()const {return _isOpen;}
   private:
     
     //reader
@@ -70,9 +70,11 @@ namespace clas12 {
     std::vector<std::string> _bankNamesToSkip;
     std::string _filename;
     std::vector<hipo::bank* > _banks;
-    bool _specialBanksBool = true;
     long _nEvents = 0;
     long _nSpecialEvents = 0;
+    bool _specialBanksBool = true;
+    bool _isOpen = false;
+
   }; 
 
 }

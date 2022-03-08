@@ -19,19 +19,20 @@ namespace clas12 {
   ///different readers but written into one file.
   void clas12writer::assignReader(clas12reader& c12reader){
     _banks.clear();
-   
+    
+    auto hipoDict=c12reader.getDictionary();
+    
     for(auto& bank : c12reader.getAllBanksPtrs()){
       std::string bankName = bank->getSchema().getName();
 	if(!savedBankName(bankName)){
 	 _banks.push_back(bank);
+	 //Only add schema for banks we are writing
+	 addSchema(bankName.data(),hipoDict);
        }
     }
     
-    if(_writer.getDictionary().getSchemaList().empty()){
-      addSchemas(c12reader.getDictionary());   
-      openFile();
-    }
-
+    openFile();
+ 
     if(_specialBanksBool){
       processSpecialBanks(c12reader.getFilename());
     } 
@@ -98,6 +99,7 @@ namespace clas12 {
   void clas12writer::closeWriter(){
     _writer.close();
     std::cout<<"clas12writer closed. Wrote "<<_nEvents<<" events and "<<_nSpecialEvents<<" events from special banks"<<std::endl;
+    _isOpen=false;
   }
 
   ////////////////////////////////////////////////////////////
@@ -117,6 +119,7 @@ namespace clas12 {
   void clas12writer::openFile(){
     std::cout<<" clas12writer writing to "<<_filename.data()<<std::endl;
     _writer.open(_filename.data()); //keep a pointer to the writer
+    _isOpen=true;
   }
 
   ///////////////////////////////////////////////////////////////////////////
