@@ -85,6 +85,7 @@ namespace clas12 {
 #else
   public:
     double getAccCharge(){return 0.0;};
+    void accumulateCharge(int evNb){return 0;}
 
 #endif
 
