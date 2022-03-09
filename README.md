@@ -536,7 +536,7 @@ See Ex3b_TestSelector.C and testSelector.C and .h for implementation example. To
 
 Having run PrepareDatabases.C with the  HipoChain set for the files you wish to process.
 
-##Example GrabEvent
+## Example GrabEvent
 
 To create a clas12reader and go straight o a particular event in the file,
 
