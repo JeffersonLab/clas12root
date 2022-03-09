@@ -68,7 +68,12 @@ namespace clas12 {
     
     virtual ~clas12reader()=default;
 
-    hipo::reader& getReader(){return _reader;}
+    hipo::reader& getReader(){
+      if(_isOpen==false){
+	cerr<<"hipo::reader& getReader() clas12reader must be created with valid filename, currently we have  "<<getFilename()<<endl;
+      }
+      return _reader;
+    }
     
     bool next();
     bool nextInRecord();
@@ -200,6 +205,7 @@ namespace clas12 {
 	hipoRead();
       _event.getStructure(*bank);
     }
+    bool grabEvent(Long64_t Nev);
 
     //rcdb
     static int readQuickRunConfig(const std::string& filename);

@@ -52,6 +52,7 @@ namespace clas12 {
   }
 
   void clas12reader::initReader(){
+  
     _reader.open(_filename.data()); //keep a pointer to the reader
     _isOpen=true;
       // hipo::dictionary  factory;
@@ -528,6 +529,23 @@ namespace clas12 {
     if(_bvertdoca.get())_allBanks.push_back(_bvertdoca.get());
   
 
+  }
+  
+  bool clas12reader::grabEvent(Long64_t Nev){
+    if(_isOpen==false){
+      cout<<"clas12reader::grabEvent "<<" reader not open"<<endl;
+      return false;
+    }
+    //clear event, so can read next
+    clearEvent();
+    //move to Nev via hipo::reader
+    if(getReader().gotoEvent(Nev)==false){
+      return false; //outwith event range
+    }
+    //read full event
+    readEvent();
+    sort();
+    return true;
   }
 
 }

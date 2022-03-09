@@ -316,7 +316,14 @@ bool  reader::next(){
  */
 bool reader::gotoEvent(int eventNumber){
   int recordNumber = readerEventIndex.getRecordNumber();
-  readerEventIndex.gotoEvent(eventNumber);
+
+  //goto event in index if exists, if not return
+  if(readerEventIndex.gotoEvent(eventNumber)==false){
+    printf("[WARNING] hipo::reader::gotoEvent event %d greater than max events = %d, will stay at current event\n",
+	   eventNumber, readerEventIndex.getMaxEvents());
+    return false;
+  }
+  
   int recordToBeRead = readerEventIndex.getRecordNumber();
   if(recordToBeRead!=recordNumber){
     long position = readerEventIndex.getPosition(recordToBeRead);
@@ -424,7 +431,9 @@ bool readerIndex::advance(){
  * @return true - if event number is valid event, false - otherwise
  */
 bool readerIndex::gotoEvent(int eventNumber){
-    // The proper record number is found by binary search through records array
+  //check if event exists
+  if(eventNumber>=getMaxEvents()) return false;
+  // The proper record number is found by binary search through records array
     std::vector<int>::iterator l_bound =
       std::lower_bound(recordEvents.begin(), recordEvents.end(), eventNumber);
     std::vector<int>::iterator u_bound =
