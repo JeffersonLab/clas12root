@@ -67,6 +67,7 @@ namespace clas12 {
     //reader
     hipo::writer     _writer;
     hipo::event      _outEvent;
+    hipo::dictionary _readerDict;
     std::vector<std::string> _bankNamesToSkip;
     std::string _filename;
     std::vector<hipo::bank* > _banks;
