@@ -13,8 +13,8 @@ namespace clas12root {
   public :
     HipoChainWriter()=delete;
     HipoChainWriter(const TString& output);
-    //virtual ~HipoChainWriter(){CloseOutput();}
-    virtual ~HipoChainWriter()=default;
+    virtual ~HipoChainWriter(){CloseOutput();}
+    //virtual ~HipoChainWriter()=default;
     HipoChainWriter(const HipoChainWriter& other) = delete; //Copy Constructor
     HipoChainWriter(HipoChainWriter&& other) = delete; //Move Constructor
       
