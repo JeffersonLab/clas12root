@@ -268,6 +268,10 @@ void  reader::getStructureNoCopy(hipo::structure &structure,int group, int item)
  * @param dict - reference to dictionary object.
  */
 void  reader::readDictionary(hipo::dictionary &dict){
+  if(inputStream.is_open()==false){
+    printf("\n\nhipo::reader (ERROR) file is not open.... exiting...\n\n");
+    exit(0);
+  }
   long position = header.headerLength*4;
   hipo::record  dictRecord;
   dictRecord.readRecord(inputStream,position,0);
@@ -312,7 +316,14 @@ bool  reader::next(){
  */
 bool reader::gotoEvent(int eventNumber){
   int recordNumber = readerEventIndex.getRecordNumber();
-  readerEventIndex.gotoEvent(eventNumber);
+
+  //goto event in index if exists, if not return
+  if(readerEventIndex.gotoEvent(eventNumber)==false){
+    printf("[WARNING] hipo::reader::gotoEvent event %d greater than max events = %d, will stay at current event\n",
+	   eventNumber, readerEventIndex.getMaxEvents());
+    return false;
+  }
+  
   int recordToBeRead = readerEventIndex.getRecordNumber();
   if(recordToBeRead!=recordNumber){
     long position = readerEventIndex.getPosition(recordToBeRead);
@@ -420,7 +431,9 @@ bool readerIndex::advance(){
  * @return true - if event number is valid event, false - otherwise
  */
 bool readerIndex::gotoEvent(int eventNumber){
-    // The proper record number is found by binary search through records array
+  //check if event exists
+  if(eventNumber>=getMaxEvents()) return false;
+  // The proper record number is found by binary search through records array
     std::vector<int>::iterator l_bound =
       std::lower_bound(recordEvents.begin(), recordEvents.end(), eventNumber);
     std::vector<int>::iterator u_bound =

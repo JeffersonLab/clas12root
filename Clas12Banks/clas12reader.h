@@ -54,6 +54,7 @@
 namespace clas12 {
   using std::cout;
   using std::endl;
+  using std::cerr;
 
   class clas12reader  {
 
@@ -67,14 +68,18 @@ namespace clas12 {
     
     virtual ~clas12reader()=default;
 
-    hipo::reader& getReader(){return _reader;}
+    hipo::reader& getReader(){
+      if(_isOpen==false){
+	cerr<<"hipo::reader& getReader() clas12reader must be created with valid filename, currently we have  "<<getFilename()<<endl;
+      }
+      return _reader;
+    }
     
     bool next();
     bool nextInRecord();
     void sort();
     bool readEvent();
     void clearEvent();
-    void makeListBanks();
     
     std::vector<hipo::bank* > getAllBanksPtrs(){return _allBanks;}
     hipo::dictionary& getDictionary(){return _factory;}
@@ -123,8 +128,14 @@ namespace clas12 {
 
     //support for generic non-DST banks
     uint addBank(const std::string& name){
+      if(isOpen()==false){
+	cerr<<"clas12reader::addBank reader not opened, exiting..."<<endl;
+	cerr<<"  in case using HipoChain, call NextFile() first"<<endl;
+	exit(0);
+      }
       std::unique_ptr<hipo::bank> bnk{new hipo::bank{_factory.getSchema(name.data())}};
       _addBanks.push_back(std::move(bnk));
+      _allBanks.push_back(_addBanks.back().get());
       _addBankNames.push_back(name);
       return _addBanks.size()-1; //return place in vector
     }
@@ -194,12 +205,15 @@ namespace clas12 {
 	hipoRead();
       _event.getStructure(*bank);
     }
+    bool grabEvent(Long64_t Nev);
 
     //rcdb
     static int readQuickRunConfig(const std::string& filename);
     static int tryTaggRunConfig(const std::string& filename, int tag);
     
-  
+
+    bool isOpen(){return _isOpen;}
+    
     void setEntries(long n){_nToProcess = n;}
     void setVerbose(short level=1){
       _verbose=level;
@@ -213,7 +227,8 @@ namespace clas12 {
     
     private:
 
-    
+    void makeListBanks(); //calls clear, so only do this in here
+  
     void hipoRead(){
       _reader.read(_event);
       _isRead=true;
@@ -288,6 +303,7 @@ namespace clas12 {
     std::map<short,short> _pidSelectExact;
     bool _zeroOfRestPid{false};
     bool _useFTBased{false};
+    bool _isOpen{false};
     std::vector<std::string> _addBankNames;
      
     ///////////////////////////////DB

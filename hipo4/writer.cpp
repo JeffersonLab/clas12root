@@ -180,6 +180,7 @@ void writer::close(){
   writeRecord(recordBuilder);
   writeIndexTable();
   outputStream.close();
+  writerRecordInfo.clear();
 }
 
 /***

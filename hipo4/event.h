@@ -72,7 +72,7 @@ namespace hipo {
         void   init(std::vector<char> &buffer);
         void   init(const char *buffer, int size);
         void   getStructure(hipo::structure &str, int group, int item);
-
+        int    getTag();
         void   getStructure(hipo::bank &b);
         void   read(hipo::bank &b);
         void   addStructure(hipo::structure &str);

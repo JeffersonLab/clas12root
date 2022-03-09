@@ -52,8 +52,9 @@ namespace clas12 {
   }
 
   void clas12reader::initReader(){
+  
     _reader.open(_filename.data()); //keep a pointer to the reader
-
+    _isOpen=true;
       // hipo::dictionary  factory;
     _reader.readDictionary(_factory);
 
@@ -497,8 +498,13 @@ namespace clas12 {
   ///make a list of banks, required for writer
   void clas12reader::makeListBanks(){
     _allBanks.clear();
-   
-    for(auto& bnk:_addBanks) _allBanks.push_back(bnk.get());
+    //  cout<<"clas12reader::makeListBanks() "<<_addBanks.size()<<endl;
+    //If any non standard DST banks added include them
+    //for(auto& bnk:_addBanks){
+    // cout<<" add bank "<<bnk->getSchema().getName()<<endl;
+    //  _allBanks.push_back(bnk.get());
+    //}
+    //Now standard DST banks
     if(_brunconfig.get())_allBanks.push_back(_brunconfig.get());
     if(_bparts.get())_allBanks.push_back(_bparts.get());
     if(_bftbparts.get())_allBanks.push_back(_bftbparts.get());
@@ -523,6 +529,23 @@ namespace clas12 {
     if(_bvertdoca.get())_allBanks.push_back(_bvertdoca.get());
   
 
+  }
+  
+  bool clas12reader::grabEvent(Long64_t Nev){
+    if(_isOpen==false){
+      cout<<"clas12reader::grabEvent "<<" reader not open"<<endl;
+      return false;
+    }
+    //clear event, so can read next
+    clearEvent();
+    //move to Nev via hipo::reader
+    if(getReader().gotoEvent(Nev)==false){
+      return false; //outwith event range
+    }
+    //read full event
+    readEvent();
+    sort();
+    return true;
   }
 
 }

@@ -24,7 +24,6 @@ An interface to the c++ [Run Conditions DataBase](https://github.com/JeffersonLa
 
 clas12root provides an interface to the clasqaDB c++ code to allow skimming of events based on the Data Quality Assurance. This is optional and depends on the existence of an environment variable containing the path to the clasqaDB code, which must be downloaded from https://github.com/c-dilks/clasqaDB/tree/master.
 
-## NEW
 
 To simplify installation of the dependencies, ccdb, rcdb, clasqadb are now includes as submodules tagged to specific releases. Now when you clone with   --recurse-submodules all 3 plus lz4 will also be downloaded into your clas12root directory. If you already have your own versions of these you may ignore these and just set the required paths to your own installation.
 
@@ -34,7 +33,7 @@ It is still required to build ccdb with scons after you have cloned it (before r
       source environment.csh
       scons
 
-ccdb is prown to giving warnings when you try and compile ROOT scripts via macros. To get rid of these wanrings you may need to copy the Directory.h file from ccdb_patch.
+ccdb is prone to giving warnings when you try and compile ROOT scripts via macros. To get rid of these wanrings you may need to copy the Directory.h file from ccdb_patch.
 
       cp $CLAS12ROOT/ccdb_patch/Directory.h $CCDB_HOME/include/CCDB/Model/Directory.h
 
@@ -377,6 +376,25 @@ To run:
 Note the use of the + sign after the macro name. This compiles the script meaning it will run much faster. The script will then ask you for the locations of an input hipo file and an output file. The script is similar to Ex1_CLAS12Writer.C so you can compare the two.
 
 
+### Writing using HipoChainWriter
+
+You can also write chains of files using HipoChainWriter. Usage is basically the same as HipoChain with the addition of supply an output, wither file (for single file) or directory (to write 1 output file for each input file)
+
+      clas12root::HipoChainWriter chain("outdir/"); or clas12root::HipoChainWriter chain("outfile.hipo");
+      chain.Add("indir/*.hipo");
+      //add options like Ex5
+      chain.GetWriter().writeSpecialBanks(true);
+      chain.GetWriter().skipBank("REC::Scintillator");
+   
+      ...
+      while(chain.Next()){
+
+	// some conditions on event
+      	if(...) chain.WriteEvent();
+      }
+ 	 
+
+
 ### Jupyter
 
 Go to directory containing notebooks e.g. $CLAS12ROOT/RunRoot/jupy
@@ -517,3 +535,16 @@ See Ex3b_TestSelector.C and testSelector.C and .h for implementation example. To
     clas12databases::SetRCDBRootConnection("rcdb.root");
 
 Having run PrepareDatabases.C with the  HipoChain set for the files you wish to process.
+
+## Example GrabEvent
+
+To create a clas12reader and go straight o a particular event in the file,
+
+         clas12reader c12("/hdd/jlab/clas12data/skim3_005644.hipo",{0});
+	 auto good= c12.grabEvent(12345);
+    	 if(good){
+	    //do stuff with clas12reader as in normal event loop
+	 }
+
+
+Note the event number is just its position in the file, not the DST RUN::Config::Event.

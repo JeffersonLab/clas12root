@@ -19,23 +19,26 @@ namespace clas12 {
   ///different readers but written into one file.
   void clas12writer::assignReader(clas12reader& c12reader){
     _banks.clear();
-   
+    
+    _readerDict=c12reader.getDictionary();
+    
     for(auto& bank : c12reader.getAllBanksPtrs()){
-      std::string bankName = bank->getSchema().getName();
+      auto bankName = bank->getSchema().getName();
 	if(!savedBankName(bankName)){
 	 _banks.push_back(bank);
+	 //Only add schema for banks we are writing
+	 addSchema(bankName.data(),_readerDict);
        }
     }
     
-    if(_writer.getDictionary().getSchemaList().empty()){
-      addSchemas(c12reader.getDictionary());   
-      openFile();
-    }
-
+    //special banks first so get written to dictionary
     if(_specialBanksBool){
       processSpecialBanks(c12reader.getFilename());
-    } 
-  }
+    }
+    
+    //ready to open file
+    openFile();
+ }
 
   ////////////////////////////////////////////////////////////////////
   ///Write the special banks (tag 1) to the output hipo file.
@@ -57,11 +60,19 @@ namespace clas12 {
     if(hasSchema("RUN::scaler")) specialBanks.push_back(factory_.getSchema("RUN::scaler"));
     if(hasSchema("RAW::scaler")) specialBanks.push_back(factory_.getSchema("RAW::scaler"));
     if(hasSchema("RAW::epics")) specialBanks.push_back(factory_.getSchema("RAW::epics"));
-    
+
+    //add schema to dictionary
+     for(auto& bank : specialBanks){
+       
+      auto bankName = bank.getSchema().getName();
+      addSchema(bankName.data(),factory_);
+     }
+
+     _writer.getDictionary().show();
     while(reader_.next()==true){
       reader_.read(inEvent_);
       outEvent_.reset();
-      for(auto bank : specialBanks){
+      for(auto& bank : specialBanks){
 	inEvent_.getStructure(bank);
 	outEvent_.addStructure(bank);
       }
@@ -74,7 +85,7 @@ namespace clas12 {
   ////////////////////////////////////////////////////////
   ///check if the writer contains a given schema
   bool clas12writer::hasSchema(std::string schemaName){
-    std::vector<std::string> schemaList =  _writer.getDictionary().getSchemaList();
+    std::vector<std::string> schemaList =  _readerDict.getSchemaList();
     return std::find( schemaList.begin(), schemaList.end(), schemaName) != schemaList.end();
   }
 
@@ -98,6 +109,7 @@ namespace clas12 {
   void clas12writer::closeWriter(){
     _writer.close();
     std::cout<<"clas12writer closed. Wrote "<<_nEvents<<" events and "<<_nSpecialEvents<<" events from special banks"<<std::endl;
+    _isOpen=false;
   }
 
   ////////////////////////////////////////////////////////////
@@ -117,6 +129,7 @@ namespace clas12 {
   void clas12writer::openFile(){
     std::cout<<" clas12writer writing to "<<_filename.data()<<std::endl;
     _writer.open(_filename.data()); //keep a pointer to the writer
+    _isOpen=true;
   }
 
   ///////////////////////////////////////////////////////////////////////////

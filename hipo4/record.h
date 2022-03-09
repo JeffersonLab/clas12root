@@ -51,7 +51,7 @@
 
 namespace hipo {
 
-    typedef struct {
+    typedef struct recordHeader_t {
       int signatureString{}; // 1) identifier string is HREC (int = 0x43455248
       int recordLength{}; // 2) TOTAL Length of the RECORD, includes INDEX array
       int recordDataLength{}; // 3) Length of the DATA uncompressed

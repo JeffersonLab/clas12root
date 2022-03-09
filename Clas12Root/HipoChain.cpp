@@ -72,14 +72,22 @@ namespace clas12root {
   }
   
   Bool_t HipoChain::Next(){
-    bool more = kFALSE;
 
+    //Make sure first file opened and fully configured
+    if(_idxFile==-1){
+      _idxFile=0;
+      NextFile();
+    }
+    bool more = kFALSE;
+    //Get events in current file
     if( _c12.get() )  more = _c12->next();
     if(more) return kTRUE;//found valid event in current file
+
     //try new file
     if(NextFile()==false) return kFALSE;
     more = _c12->next();
     if(more) return kTRUE;//found valid event in new file
+
     //no valid entries in this file   
     //check if another file
     return Next();
@@ -90,10 +98,29 @@ namespace clas12root {
     /////Warning any changes to this function should
     ////also be considered for  HipoSelector::Process
     std::cout<<"HipoChain::NextFile() "<<_idxFile<<" out of "<<GetNFiles()<<std::endl;
-    if(_idxFile>=GetNFiles())
+    // if(_idxFile>=GetNFiles()){
+    //   return kFALSE;//no more files
+    // }
+    // //open next file, using previously configured reader 
+    // _c12.reset(new clas12::clas12reader{*GetC12Reader(),GetFileName(_idxFile++).Data(),_readerTags});
+    // ConnectDataBases();
+    
+    // _c12ptr = _c12.get();	
+    // return kTRUE;
+    auto res = FirstFile();
+    _idxFile++;
+    return res;
+  }
+  
+  Bool_t HipoChain::FirstFile(){
+    /////Warning any changes to this function should
+    ////also be considered for  HipoSelector::Process
+    std::cout<<"HipoChain::FirstFile() "<<_idxFile<<" out of "<<GetNFiles()<<std::endl;
+    if(_idxFile>=GetNFiles()){
       return kFALSE;//no more files
+    }
     //open next file, using previously configured reader 
-    _c12.reset(new clas12::clas12reader{*GetC12Reader(),GetFileName(_idxFile++).Data(),_readerTags});
+    _c12.reset(new clas12::clas12reader{*GetC12Reader(),GetFileName(_idxFile).Data(),_readerTags});
     ConnectDataBases();
     
     _c12ptr = _c12.get();	
@@ -102,12 +129,21 @@ namespace clas12root {
   
 
   clas12::clas12reader* HipoChain::GetC12Reader() {
-      if( (_c12ptr=_c12.get()) != nullptr )
-	return _c12ptr;
+    if( (_c12ptr=_c12.get()) != nullptr )
+      return _c12ptr;
+    
       //the following will only be called once
-      _c12.reset(new clas12::clas12reader{""});
-      ConnectDataBases();
-      _c12ptr = _c12.get();
+      if(GetNFiles()==0){
+	//No files, just open an empty reader
+	_c12.reset(new clas12::clas12reader{""});
+	ConnectDataBases();
+	_c12ptr = _c12.get();
+      }
+      //got some files, init with the first file
+      else{
+	_c12.reset(new clas12::clas12reader{""});//dummy first, so can create first valid one
+	FirstFile();
+      }
       return  _c12ptr;
     }
 

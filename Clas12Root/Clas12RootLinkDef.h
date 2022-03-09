@@ -9,6 +9,7 @@
 #pragma link C++ class clas12root::HipoHist+;
 #pragma link C++ class clas12root::HipoTreeMaker+;
 #pragma link C++ class clas12root::HipoChain+;
+#pragma link C++ class clas12root::HipoChainWriter+;
 #pragma link C++ class clas12root::HipoRootAction+;
 #pragma link C++ class clas12root::HipoSelector+;
 #pragma link C++ class clas12root::ParticleTree+;
