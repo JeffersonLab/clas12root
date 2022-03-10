@@ -33,12 +33,14 @@ namespace clas12 {
     
     //special banks first so get written to dictionary
     if(_specialBanksBool){
+      //This will call openFile to write the specialBanks
       processSpecialBanks(c12reader.getFilename());
     }
-    
-    //ready to open file
-    openFile();
- }
+    else{
+      //ready to open file
+      openFile();
+    }
+  }
 
   ////////////////////////////////////////////////////////////////////
   ///Write the special banks (tag 1) to the output hipo file.
@@ -67,9 +69,12 @@ namespace clas12 {
       auto bankName = bank.getSchema().getName();
       addSchema(bankName.data(),factory_);
      }
-
-     _writer.getDictionary().show();
-    while(reader_.next()==true){
+     //now we have defined dictionary for special banks
+     //we open file for writing specialBanks
+     //it is then ready for other events too
+     openFile();
+     
+     while(reader_.next()==true){
       reader_.read(inEvent_);
       outEvent_.reset();
       for(auto& bank : specialBanks){
