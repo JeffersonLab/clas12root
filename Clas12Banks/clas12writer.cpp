@@ -56,25 +56,29 @@ namespace clas12 {
     reader_.open(inputFilename.data());
     reader_.readDictionary(factory_);
 
-    if(hasSchema("RUN::config")) specialBanks.push_back(factory_.getSchema("RUN::config"));
-    if(hasSchema("HEL::online")) specialBanks.push_back(factory_.getSchema("HEL::online"));
-    if(hasSchema("HEL::flip")) specialBanks.push_back(factory_.getSchema("HEL::flip"));
-    if(hasSchema("RUN::scaler")) specialBanks.push_back(factory_.getSchema("RUN::scaler"));
-    if(hasSchema("RAW::scaler")) specialBanks.push_back(factory_.getSchema("RAW::scaler"));
-    if(hasSchema("RAW::epics")) specialBanks.push_back(factory_.getSchema("RAW::epics"));
+    if(_isOpen==false){
+      if(hasSchema("RUN::config")) specialBanks.push_back(factory_.getSchema("RUN::config"));
+      if(hasSchema("HEL::online")) specialBanks.push_back(factory_.getSchema("HEL::online"));
+      if(hasSchema("HEL::flip")) specialBanks.push_back(factory_.getSchema("HEL::flip"));
+      if(hasSchema("RUN::scaler")) specialBanks.push_back(factory_.getSchema("RUN::scaler"));
+      if(hasSchema("RAW::scaler")) specialBanks.push_back(factory_.getSchema("RAW::scaler"));
+      if(hasSchema("RAW::epics")) specialBanks.push_back(factory_.getSchema("RAW::epics"));
 
-    //add schema to dictionary
-     for(auto& bank : specialBanks){
+      //add schema to dictionary
+      for(auto& bank : specialBanks){
        
-      auto bankName = bank.getSchema().getName();
-      addSchema(bankName.data(),factory_);
-     }
-     //now we have defined dictionary for special banks
-     //we open file for writing specialBanks
-     //it is then ready for other events too
-     openFile();
-     
-     while(reader_.next()==true){
+	auto bankName = bank.getSchema().getName();
+	addSchema(bankName.data(),factory_);
+      }
+    
+      //now we have defined dictionary for special banks
+      //we open file for writing specialBanks
+      //it is then ready for other events too
+      openFile();
+    }
+
+    //file ready for writing
+    while(reader_.next()==true){
       reader_.read(inEvent_);
       outEvent_.reset();
       for(auto& bank : specialBanks){
@@ -112,7 +116,7 @@ namespace clas12 {
   /////////////////////////////////////////////////////////////
   ///closes hipo::writer, writes out events still on buffer
   void clas12writer::closeWriter(){
-    _writer.close();
+    if(_isOpen==true)_writer.close();
     std::cout<<"clas12writer closed. Wrote "<<_nEvents<<" events and "<<_nSpecialEvents<<" events from special banks"<<std::endl;
     _isOpen=false;
   }
@@ -132,8 +136,9 @@ namespace clas12 {
   /////////////////////////////////////////////////////////////////////////
   ///opens file in hipo::writer, only open it once.
   void clas12writer::openFile(){
-    std::cout<<" clas12writer writing to "<<_filename.data()<<std::endl;
-    _writer.open(_filename.data()); //keep a pointer to the writer
+    std::cout<<" clas12writer writing to "<<_filename.data()<<" which is already open ? "<<_isOpen<<std::endl;
+    if(_isOpen==false)_writer.open(_filename.data()); //keep a pointer to the writer
+    else std::cerr<<"clas12writer::openFile() Error trying to open file when already open"<<std::endl;
     _isOpen=true;
   }
 
