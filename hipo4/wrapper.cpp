@@ -1,12 +1,16 @@
 #include <iostream>
 #include "reader.h"
 #include "event.h"
+#include "fusion.h"
 
 hipo::reader      hipo_FORT_Reader;
 hipo::event       hipo_FORT_Event;
 hipo::dictionary  hipo_FORT_Dictionary;
 
 std::map<std::string, hipo::bank *> eventStore;
+
+
+hipo::fusion hFusion;
 
 extern "C" {
 
@@ -227,4 +231,32 @@ extern "C" {
 
     }*/
 
+
+    int fusion_open(const char *filename){
+         int handle = hFusion.open(filename); return handle;
+    }
+
+    bool   fusion_next(int handle){ return hFusion.next(handle);}
+    void   fusion_define(int handle, const char *bank){ hFusion.define(handle,bank);}
+    int    fusion_bankSize(int handle, const char *bank){ return hFusion.getSize(handle,bank);}
+    
+    int    fusion_get_int(int handle, const char *bank, const char *entry, int row){ 
+      return hFusion.getInt(handle,bank,entry,row);
+    }
+
+    float    fusion_get_float(int handle, const char *bank, const char *entry, int row){ 
+      float value = hFusion.getFloat(handle,bank,entry,row);
+      //printf(" result from wrapper = %f\n",value);
+      return value;
+    }
+
+    int fusion_entry_type(int handle, const char *bank, const char *entry){
+          return hFusion.getType(handle,bank,entry);
+    }
+
+    float *fusion_create_array(int size){
+      float *array = new float[size];
+      for(int i = 0; i < size; i++) array[i]=(i+1)*2;
+      return array;
+    }
 }

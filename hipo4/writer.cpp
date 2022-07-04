@@ -61,17 +61,40 @@ namespace hipo {
 
     }
 
+    //-------------------------------------------------------------------------
+    // This section is added on April-28-2022, it will store user provided
+    // configurations along with the schema in the record that goes into
+    // HIPO header. G^2
+    //-------------------------------------------------------------------------
+    std::map<std::string,std::string>::iterator it;
+    event configEvent;
+    
+    for( it = userConfig.begin(); it != userConfig.end(); it++){
+      printf("::: adding user configuration (key): %s\n",it->first.c_str());
 
-    printf(" RECORD SIZE BEFORE BUILD = %d\n",builder.getRecordSize());
+      std::string wKey = std::string(it->first.c_str());
+      std::string wConfig = std::string(it->second.c_str());
+      
+      structure configKey(32555,1,wKey);
+      structure configString(32555,2,wConfig);
+      
+      configEvent.reset();
+      configEvent.addStructure(configKey);
+      configEvent.addStructure(configString);
+      builder.addEvent(configEvent);
+    }
+    
+    //printf(" RECORD SIZE BEFORE BUILD = %d\n",builder.getRecordSize());
     builder.build();
-    printf(" RECORD SIZE AFTER  BUILD = %d, NENTRIES = %d\n",
-      builder.getRecordSize(),builder.getEntries());
+    //printf(" RECORD SIZE AFTER  BUILD = %d, NENTRIES = %d\n",
+    //  builder.getRecordSize(),builder.getEntries());
 
     int dictionarySize = builder.getRecordSize();
 
     hipoFileHeader_t header;
 
-    header.uniqueid         = 0x43455248;
+    //header.uniqueid         = 0x43455248;
+    header.uniqueid         = 0x4F504948;// 4849504F;
     header.filenumber       = 1;
     header.headerLength     = 14;
     header.recordCount      = 0;

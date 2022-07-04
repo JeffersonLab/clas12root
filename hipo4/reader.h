@@ -212,9 +212,12 @@ namespace hipo {
         hipo::readerIndex  readerEventIndex;
         std::vector<long>  tagsToRead;
 	short _verbose = {0} ;
-	
+
+        std::map<std::string,std::string>  userConfig;
+
         void  readHeader();
         void  readIndex();
+    
     public:
 
         reader();
@@ -227,6 +230,9 @@ namespace hipo {
         void  getStructure(hipo::structure &structure,int group, int item);
         void  getStructureNoCopy(hipo::structure &structure,int group, int item);
 
+        void readUserConfig(std::map<std::string,std::string> &mapConfig);
+    //std::string getUserConfig(const char *key);
+        
         void  open(const char *filename);
         void  setTags(int tag){ tagsToRead.push_back(tag);}
 	void  setTags(std::vector<long> tags){ tagsToRead=std::move(tags);}
@@ -239,7 +245,7 @@ namespace hipo {
         bool  next(hipo::event &dataevent);
         void  read(hipo::event &dataevent);
         void  printWarning();
-
+    //void  showUserConfig();
 	int getNRecords() const {return readerEventIndex.getNRecords()-1;}
 	bool  nextInRecord();
 	bool loadRecord(int irec);
