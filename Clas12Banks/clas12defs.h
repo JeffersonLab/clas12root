@@ -3,6 +3,8 @@
 
 
 namespace clas12{
+  static const short UndefPDG=1E4;
+
   //regions
   static const short FT = 1000;
   static const short FD = 2000;

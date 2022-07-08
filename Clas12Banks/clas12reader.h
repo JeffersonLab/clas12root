@@ -153,6 +153,7 @@ namespace clas12 {
     std::vector<region_part_ptr> getByCharge(int ch);
     
     const std::vector<short>& preCheckPids();
+    const std::vector<short>& preCheckPidsOrCharge();
 
     short getNPid(short pid)const noexcept{return std::count(_pids.begin(),_pids.end(), pid);};
     void addAtLeastPid(short pid,short n){

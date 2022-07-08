@@ -31,6 +31,7 @@
   * File:   reader.cpp
   * Author: gavalian
   *
+  * Additions by: dglazier
   * Created on April 11, 2017, 2:07 PM
   */
 
@@ -262,6 +263,34 @@ void  reader::getStructureNoCopy(hipo::structure &structure,int group, int item)
   inputRecord.getData(data,eventNumberInRecord);
   event::getStructureNoCopy(data.getDataPtr(),structure,group,item);
 }
+
+  void reader::readUserConfig(std::map<std::string,std::string> &mapConfig){
+  
+  if(inputStream.is_open()==false){
+    printf("\n\nhipo::reader (ERROR) file is not open.... exiting...\n\n");
+    exit(0);
+  }
+  long position = header.headerLength*4;
+  hipo::record  dictRecord;
+  dictRecord.readRecord(inputStream,position,0);
+  int nevents = dictRecord.getEventCount();
+  /* printf(" reading record at position %8lu, number of entries = %5d\n", 
+      position,dictRecord.getEventCount()); */
+  hipo::structure sKey;
+  hipo::structure sConfig;
+  hipo::event  event;
+  for(int i = 0; i < nevents; i++){
+    dictRecord.readHipoEvent(event,i);
+    event.getStructure(sKey,32555,1);
+    event.getStructure(sConfig,32555,2);
+    if(sKey.getSize()>0){
+      mapConfig[std::string(sKey.getStringAt(0).c_str())] = std::string(sConfig.getStringAt(0).c_str());
+    }
+    //printf("schema : %s\n",schemaStructure.getStringAt(0).c_str());
+    //dict.parse(schemaStructure.getStringAt(0).c_str());
+  }
+}
+  
 /**
  * Reads the dictionary for the file. C++ API is reading packed dictionary
  * format from node (120,2), parses each schema and creates schema dictionary.

@@ -223,6 +223,54 @@ namespace clas12 {
     }
     return _pids;
   }
+  const std::vector<short>& clas12reader::preCheckPidsOrCharge(){
+    //Required for EventBuilder Pid==0, which may have any charge
+    //give these particles Pid = UndefPDG*charge
+ 
+    //regular particle bank
+     if(_isRead) return _pids; //already read return current pids
+     hipoRead();
+  
+     _event.getStructure(*_bparts.get());
+    if(_bftbparts.get())_event.getStructure(*_bftbparts.get());//FT based PID particle bank
+   
+    //First check if event passes criteria
+    _nparts=_bparts->getRows();
+    _pids.clear();
+    _pids.reserve(_nparts);
+ 
+    //Loop over particles and find their Pid
+    for(ushort i=0;i<_nparts;i++){
+      if(!_useFTBased){
+	_bparts->setEntry(i);
+	
+	auto pidch=_bparts->getPid();
+	if(pidch==0) //no PID use charge instead
+	  pidch=_bparts->getCharge()*UndefPDG;
+	_pids.emplace_back(pidch);
+      }
+      else{
+	if(_bftbparts->getRows()){
+	  _bftbparts->setEntry(i);
+	  
+	  auto pidch=_bparts->getPid();
+	  if(pidch==0) //no PID use charge instead
+	    pidch=_bparts->getCharge()*UndefPDG;
+	  _pids.emplace_back(pidch);
+ 	}
+	else{//if not ftbased use FD based
+	  _bparts->setEntry(i);
+	  
+	  auto pidch=_bparts->getPid();
+	  if(pidch==0) //no PID use charge instead
+	    pidch=_bparts->getCharge()*UndefPDG;
+	  _pids.emplace_back(pidch);
+	}
+      }
+	
+    }
+    return _pids;
+  }
   bool clas12reader::readEvent(){
   
     //First get pid of tracks and save in _pids

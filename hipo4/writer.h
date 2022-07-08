@@ -142,22 +142,25 @@ namespace hipo {
 * record are exhausted.
 */
 class writer {
+  
+  private:
+    std::ofstream         outputStream;
+    hipo::recordbuilder   recordBuilder;
+    hipo::dictionary      writerDictionary;
+    std::vector<hipo::recordInfo_t>   writerRecordInfo;
+    std::map<std::string,std::string> userConfig;
+  
+    void writeIndexTable();
 
-   private:
-      std::ofstream         outputStream;
-      hipo::recordbuilder   recordBuilder;
-      hipo::dictionary      writerDictionary;
-      std::vector<hipo::recordInfo_t>   writerRecordInfo;
-
-      void writeIndexTable();
-   public:
+  public:
 
      writer(){};
      virtual ~writer(){};
 
      void addEvent(hipo::event &hevent);
      void addEvent(std::vector<char> &vec, int size = -1);
-     
+     void addUserConfig(std::string key, std::string value){ userConfig[key] = value;}
+     void addUserConfig(const char *key, const char *value){ userConfig[std::string(key)] = std::string(value);}
      void writeRecord(recordbuilder &builder);
      void open(const char *filename);
      void close();
