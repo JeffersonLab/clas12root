@@ -250,12 +250,14 @@ namespace clas12 {
 	_pids.emplace_back(pidch);
       }
       else{
-	if(_bftbparts->getRows()){
+	if(_bftbparts->getRows()!=0){
+	  _bparts->setEntry(i);
 	  _bftbparts->setEntry(i);
 	  
-	  auto pidch=_bparts->getPid();
+	  auto pidch=_bftbparts->getPid();
 	  if(pidch==0) //no PID use charge instead
 	    pidch=_bparts->getCharge()*UndefPDG;
+	 
 	  _pids.emplace_back(pidch);
  	}
 	else{//if not ftbased use FD based
