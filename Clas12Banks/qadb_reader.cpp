@@ -18,6 +18,7 @@ namespace clas12 {
   ///////////////////////////////////////////////////////
   ///Checks if an event passes all the QA requirements
   bool qadb_reader::passQAReqs(int evNb){
+    //std::cout<<"DEBUG qadb_reader::passQAReqs "<<_runNb<<" "<<evNb<<std::endl;
     if(_runNb==0) return true;//e.g. simulation
     
     //First event always has index 0 which doesn't exist in qaDB
@@ -38,6 +39,8 @@ namespace clas12 {
       if(passAsymReq && queried){
 	//If an event is Golden it won't have other defects
 	if(_reqGolden){
+	  // std::cout<<"DEBUG qadb_reader::passQAReqs "<<_runNb<<" "<<evNb<<"isgolden "<<isGolden(_runNb,evNb)<<std::endl;
+  	  
 	  //If the event passes the requirements, add charge
 	  if(isGolden(_runNb,evNb)){
 	    _qa.AccumulateCharge();

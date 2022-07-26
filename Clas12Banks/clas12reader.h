@@ -314,7 +314,9 @@ namespace clas12 {
 
     bool _applyQA=false;
     bool _connectDB=false;
-    
+    bool checkQA();
+    bool justCheckQA();
+
   public:
 
     //Database stuff
@@ -338,6 +340,7 @@ namespace clas12 {
       }
     }
  
+    //double sumChargeFromQA();
     
   private:
  ///////////////////////////////

@@ -271,15 +271,9 @@ namespace clas12 {
     }
     return _pids;
   }
-  bool clas12reader::readEvent(){
-  
-    //First get pid of tracks and save in _pids
-    //also responsible for calling hiporead()
-    preCheckPids();
 
-    //Second check qa
-    //Special run banks
-    if(_brunconfig.get())_event.getStructure(*_brunconfig.get());
+  bool clas12reader::checkQA(){
+
     //check if event has QA requirements and those were met
     if(_db!=nullptr){
       if(_applyQA&&_db->qa()!=nullptr){
@@ -292,7 +286,38 @@ namespace clas12 {
 	_db->qa()->accumulateCharge(_brunconfig->getEvent());
       }
     }
+    return true;
+  }
+  bool clas12reader::justCheckQA(){
+    if(_brunconfig.get())_event.getStructure(*_brunconfig.get());
+    if(checkQA()==false) return false;
+    return true;
+  }
+  // double clas12reader::sumChargeFromQA(){
+  //   while(_reader.next()){
+  //     if(_nevent==_nToProcess){
+  // 	summary();
+  // 	return false; //reached supplied event limit
+  //     }
+  //     hipoRead();
+  //     ++_nevent;
+  //     if(justCheckQA())
+  // 	++_nselected;
+  //   }
+  //   std::cout<<" clas12reader::sumChargeFromQA() "<<db()->qa()->getAccCharge()<<" from "<<_nselected <<" events out of "<<_nevent<<endl;
+  //   return db()->qa()->getAccCharge();
+  // }
+  
+  bool clas12reader::readEvent(){
+  
+    //First get pid of tracks and save in _pids
+    //also responsible for calling hiporead()
+    preCheckPids();
 
+    //Second check qa
+    //Special run banks
+    if(_brunconfig.get())_event.getStructure(*_brunconfig.get());
+    if(checkQA()==false) return false;
    
      //Third check if event is of the right type
     if(!passPidSelect()){
