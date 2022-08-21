@@ -193,6 +193,9 @@ namespace clas12 {
 	if(db()->qa()!=nullptr) return db()->qa()->getAccCharge();
       return _runBeamCharge;
     }
+
+    int getRunNumber()const {return _runNo;}//works if connectDatabases called
+    
     double getCurrApproxCharge(){return _runBeamCharge*_nevent/_reader.getEntries();}
 
     void summary(){

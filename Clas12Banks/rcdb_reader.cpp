@@ -171,6 +171,7 @@ namespace clas12 {
     fetcher.solenoid_current=getDoubleValue(runNb, "solenoid_current");
     fetcher.solenoid_scale=getDoubleValue(runNb, "solenoid_scale");
     fetcher.target_position=getDoubleValue(runNb, "target_position");
+    fetcher.target_polarization=getDoubleValue(runNb, "target_polarization");
     fetcher.test=getDoubleValue(runNb, "test");
     fetcher.torus_current=getDoubleValue(runNb, "torus_current");
     fetcher.torus_scale=getDoubleValue(runNb, "torus_scale");

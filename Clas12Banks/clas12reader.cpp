@@ -559,15 +559,13 @@ namespace clas12 {
   ///connect to the data bases
   void clas12reader::connectDataBases(clas12databases* db){
     _db=db;
-    //void clas12reader::connectDataBases(){
 
     _connectDB=true;
     
-    // if(_runNo==0){
     _runNo=readQuickRunConfig(_filename);
-    //}
+
     if(_verbose )std::cout<<"Connecting databases to run "<<_runNo<<std::endl;
-     if(_runNo!=0)_db->notifyRun(_runNo);
+    if(_runNo!=0)_db->notifyRun(_runNo);
   }
   /////////////////////////////////////////////////////////
   ///make a list of banks, required for writer
