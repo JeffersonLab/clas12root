@@ -80,7 +80,8 @@ void Ex10_clas12DatabasesChain(){
     //cout<<"Event count: "<<rcdbData.event_count<<endl;
     //cout<<"Beam energy: "<<rcdbData.beam_energy<<endl;
     //cout<<"Beam current: "<<rcdbData.beam_current<<endl;
- 
+    //cout<<"Target Polarisation: "<<rcdbData.target_polarization<<endl;
+
     if(c12->ccdb()){
       //cout<< ccdbElSF.size()<<endl; //-0.036 
       //cout<< ccdbElSF[0].size()<<endl; //-0.036 

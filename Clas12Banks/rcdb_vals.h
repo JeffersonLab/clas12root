@@ -23,6 +23,7 @@ namespace clas12 {
     float	solenoid_current{0};	//Solenoid current
     float	solenoid_scale{0};  //Solenoid scale factor
     float	target_position{0};	//Target position
+    float	target_polarization{0};	//Target position
     float	test{0};	//Beam test
     float	torus_current{0};	//Torus current
     float	torus_scale{0};	//Torus scale factor

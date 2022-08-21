@@ -250,12 +250,14 @@ namespace clas12 {
 	_pids.emplace_back(pidch);
       }
       else{
-	if(_bftbparts->getRows()){
+	if(_bftbparts->getRows()!=0){
+	  _bparts->setEntry(i);
 	  _bftbparts->setEntry(i);
 	  
-	  auto pidch=_bparts->getPid();
+	  auto pidch=_bftbparts->getPid();
 	  if(pidch==0) //no PID use charge instead
 	    pidch=_bparts->getCharge()*UndefPDG;
+	 
 	  _pids.emplace_back(pidch);
  	}
 	else{//if not ftbased use FD based
@@ -271,15 +273,9 @@ namespace clas12 {
     }
     return _pids;
   }
-  bool clas12reader::readEvent(){
-  
-    //First get pid of tracks and save in _pids
-    //also responsible for calling hiporead()
-    preCheckPids();
 
-    //Second check qa
-    //Special run banks
-    if(_brunconfig.get())_event.getStructure(*_brunconfig.get());
+  bool clas12reader::checkQA(){
+
     //check if event has QA requirements and those were met
     if(_db!=nullptr){
       if(_applyQA&&_db->qa()!=nullptr){
@@ -292,7 +288,38 @@ namespace clas12 {
 	_db->qa()->accumulateCharge(_brunconfig->getEvent());
       }
     }
+    return true;
+  }
+  bool clas12reader::justCheckQA(){
+    if(_brunconfig.get())_event.getStructure(*_brunconfig.get());
+    if(checkQA()==false) return false;
+    return true;
+  }
+  // double clas12reader::sumChargeFromQA(){
+  //   while(_reader.next()){
+  //     if(_nevent==_nToProcess){
+  // 	summary();
+  // 	return false; //reached supplied event limit
+  //     }
+  //     hipoRead();
+  //     ++_nevent;
+  //     if(justCheckQA())
+  // 	++_nselected;
+  //   }
+  //   std::cout<<" clas12reader::sumChargeFromQA() "<<db()->qa()->getAccCharge()<<" from "<<_nselected <<" events out of "<<_nevent<<endl;
+  //   return db()->qa()->getAccCharge();
+  // }
+  
+  bool clas12reader::readEvent(){
+  
+    //First get pid of tracks and save in _pids
+    //also responsible for calling hiporead()
+    preCheckPids();
 
+    //Second check qa
+    //Special run banks
+    if(_brunconfig.get())_event.getStructure(*_brunconfig.get());
+    if(checkQA()==false) return false;
    
      //Third check if event is of the right type
     if(!passPidSelect()){
@@ -532,15 +559,13 @@ namespace clas12 {
   ///connect to the data bases
   void clas12reader::connectDataBases(clas12databases* db){
     _db=db;
-    //void clas12reader::connectDataBases(){
 
     _connectDB=true;
     
-    // if(_runNo==0){
     _runNo=readQuickRunConfig(_filename);
-    //}
+
     if(_verbose )std::cout<<"Connecting databases to run "<<_runNo<<std::endl;
-     if(_runNo!=0)_db->notifyRun(_runNo);
+    if(_runNo!=0)_db->notifyRun(_runNo);
   }
   /////////////////////////////////////////////////////////
   ///make a list of banks, required for writer
