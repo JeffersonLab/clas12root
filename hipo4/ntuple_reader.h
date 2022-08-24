@@ -21,7 +21,8 @@ namespace hipo {
 
     bool next();
     //hipo::bank *data() const noexcept{return _bank.get();}
-
+    bool  loadIndex(int index);
+    
     bool initBank(string name);
     void linkItemGetter(string bankName, string itemName, void* addr);
     
@@ -32,7 +33,8 @@ namespace hipo {
     float& getFloat(string bankName,string itemName);
     double& getDouble(string bankName,string itemName);
 
-
+    int getBankRows(int i)const {return _banks[i]->getRows();}
+    
     void show(const string& bank){
       auto sch=_dict.getSchema(bank.data());
       sch.show();
