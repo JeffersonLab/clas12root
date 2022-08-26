@@ -135,6 +135,7 @@ namespace hipo {
       hipo::utils::writeInt(&bufferRecord[0], 36, compressionWord);
       hipo::utils::writeLong(&bufferRecord[0], 40, bufferUserWordOne);
       hipo::utils::writeLong(&bufferRecord[0], 48, bufferUserWordTwo);
+      
       //printf("record::build uncompressed size = %8d, compressed size = %8d, rounding = %4d , compressed FULL = %6d, record size = %6d, version = %X, size = %5X\n",
       //      uncompressedSize,compressedSize, rounding,compressedSizeToWrite, recordLength*4,versionWord,compressionWord);
   }

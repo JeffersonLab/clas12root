@@ -54,7 +54,15 @@ namespace hipo {
     double& doubleItem(string bankName, string itemName);
     
     void fill();
-
+    void clear(){
+      _event.reset();
+    }
+    void initBank(int index,int length){
+      _banks[index]->setRows(length);
+    }
+    void copyRow(int index);
+    void fillRows();
+    
     void open(){_writer.open(_filename.data());}
     void close(){_writer.close();}
     

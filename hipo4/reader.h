@@ -187,7 +187,7 @@ namespace hipo {
 
       //dglazier
       int getNRecords() const {return recordEvents.size();}
-
+    void show();
       void rewind(){
         currentRecord = -1; currentEvent  = -1; currentRecordEvent = -1;
       }
@@ -249,6 +249,7 @@ namespace hipo {
 	int getNRecords() const {return readerEventIndex.getNRecords()-1;}
 	bool  nextInRecord();
 	bool loadRecord(int irec);
+    bool loadRecord(hipo::record &record, int irec); 
 	int  getEntries(){return readerEventIndex.getMaxEvents();}
   };
 }

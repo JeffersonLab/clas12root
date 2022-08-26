@@ -56,9 +56,11 @@ namespace hipo {
       void setAddress(const char *address);
 
     protected:
+
       void initStructureBySize(int __group, int __item, int __type, int __size);
       std::vector<char>  &getStructureBuffer(){ return structureBuffer;}
       int                 getStructureBufferSize(){ return 8+getSize();}
+      friend class tuple;
     public:
 
       structure(){ structureAddress = nullptr;}
@@ -223,6 +225,10 @@ namespace hipo {
 	         int offset = bankSchema.getOffset(item, index, bankRows);
 	         return getDoubleAt(offset);
       }
+      if(bankSchema.getEntryType(item)==4){
+	         int offset = bankSchema.getOffset(item, index, bankRows);
+	         return getFloatAt(offset);
+      }
       return 0.0;
     }
 
@@ -318,8 +324,12 @@ namespace hipo {
     inline double  bank::getDouble(const char *name, int index) const noexcept{
       int item = bankSchema.getEntryOrder(name);
       if(bankSchema.getEntryType(item)==5){
-	int offset = bankSchema.getOffset(item, index, bankRows);
-	return getDoubleAt(offset);
+	      int offset = bankSchema.getOffset(item, index, bankRows);
+	      return getDoubleAt(offset);
+      }
+      if(bankSchema.getEntryType(item)==4){
+        int offset = bankSchema.getOffset(item, index, bankRows);
+        return (double) getFloatAt(offset);
       }
       return 0.0;
     }

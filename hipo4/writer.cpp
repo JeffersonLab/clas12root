@@ -54,11 +54,10 @@ namespace hipo {
         schemaEvent.reset();
         structure schemaNode(120,2,schemaString);
         structure schemaNodeJson(120,1,schemaStringJson);
-        schemaEvent.addStructure(schemaNode);
         schemaEvent.addStructure(schemaNodeJson);
-        schemaEvent.show();
+        schemaEvent.addStructure(schemaNode);
+	      schemaEvent.show();
         builder.addEvent(schemaEvent);
-
     }
 
     //-------------------------------------------------------------------------
@@ -124,11 +123,21 @@ void writer::addDictionary(hipo::dictionary &dict){
 }
 
  void writer::addEvent(hipo::event &hevent){
-   bool status = recordBuilder.addEvent(hevent);
-   if(status==false){
-     writeRecord(recordBuilder);
-     recordBuilder.addEvent(hevent);
-   }
+  if(hevent.getTag()==0){
+    bool status = recordBuilder.addEvent(hevent);
+    if(status==false){
+      writeRecord(recordBuilder);
+      recordBuilder.addEvent(hevent);
+    } 
+  } else {
+    int tag = hevent.getTag();
+    extendedBuilder[tag].setUserWordOne(tag);
+    bool status = extendedBuilder[tag].addEvent(hevent);
+    if(status==false){
+      writeRecord(extendedBuilder[tag]);
+      extendedBuilder[tag].addEvent(hevent);
+    } 
+  }
  }
 
 void writer::addEvent(std::vector<char> &vec, int size ){
@@ -152,11 +161,11 @@ void writer::addEvent(std::vector<char> &vec, int size ){
    if(recordInfo.recordEntries>0){
       outputStream.write( reinterpret_cast<char *> (&builder.getRecordBuffer()[0]),recordInfo.recordLength);
       writerRecordInfo.push_back(recordInfo);
-      printf("%6ld : writing::record : size = %8d, entries = %8d, position = %12ld word = %12ld %12ld\n",
+      if(verbose>0) printf("%6ld : writing::record : size = %8d, entries = %8d, position = %12ld word = %12ld %12ld\n",
                   writerRecordInfo.size(), recordInfo.recordLength,recordInfo.recordEntries,
                   recordInfo.recordPosition,recordInfo.userWordOne,recordInfo.userWordTwo);
    }  else {
-     printf(" write::record : empty record will not be written.....");
+     if(verbose>0) printf(" write::record : empty record will not be written.....\n");
    }
    builder.reset();
  }
@@ -201,6 +210,12 @@ void writer::writeIndexTable(){
 
 void writer::close(){
   writeRecord(recordBuilder);
+
+  std::map<int,hipo::recordbuilder>::iterator it;
+  for(it = extendedBuilder.begin(); it != extendedBuilder.end(); it++){
+    writeRecord(it->second);
+  } 
+
   writeIndexTable();
   outputStream.close();
   writerRecordInfo.clear();

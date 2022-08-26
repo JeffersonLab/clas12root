@@ -149,9 +149,12 @@ class writer {
     hipo::dictionary      writerDictionary;
     std::vector<hipo::recordInfo_t>   writerRecordInfo;
     std::map<std::string,std::string> userConfig;
-  
-    void writeIndexTable();
+    
+    std::map<int,hipo::recordbuilder> extendedBuilder;
 
+    void writeIndexTable();
+    int  verbose = 0;
+  
   public:
 
      writer(){};
@@ -170,6 +173,7 @@ class writer {
      void setUserIntegerOne(long userIntOne);
      void setUserIntegerTwo(long userIntTwo);
      void flush();
+     void setVerbose(int level){ verbose = level;}
 };
 
 };

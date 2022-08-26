@@ -31,11 +31,11 @@
  * File:   event.h
  * Author: gavalian
  *
- * Created on April 12, 2017, 10:14 AM
+ * Created on August 15, 2022, 17:04 PM
  */
 
-#ifndef HIPO_EVENT_H
-#define HIPO_EVENT_H
+#ifndef HIPO_TUPLE_H
+#define HIPO_TUPLE_H
 
 #include <iostream>
 #include <vector>
@@ -44,7 +44,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <map>
-#include "bank.h"
+#include "writer.h"
 
 // if the library is compiled with C++11
 // support we will use unordered map which
@@ -58,45 +58,30 @@ namespace hipo {
 
   //typedef std::auto_ptr<hipo::generic_node> node_pointer;
 
-  class event {
+  class tuple {
 
     private:
-        std::vector<char> dataBuffer;
+        std::vector<hipo::structure *> branches;
+        int  currentPosition = 0;
+        hipo::writer  writer;
+        hipo::event   event;
+        
+    protected:
+        
+        void writeAndUpdate();
+
     public:
 
-        event();
-        event(int size);
-        virtual ~event();
+        tuple();
+        tuple(const char *format);
+        virtual ~tuple();
 
-        void   show();
-        void   init(std::vector<char> &buffer);
-        void   init(const char *buffer, int size);
-        void   getStructure(hipo::structure &str, int group, int item);
-        int    getTag();
-        void   setTag(int tag);
-        void   getStructure(hipo::bank &b);
-        void   read(hipo::bank &b);
-        void   addStructure(hipo::structure &str);
-
-        std::pair<int,int>  getStructurePosition(int group, int item);
-
-        std::vector<char>  &getEventBuffer();
-        int                 getSize();
-        void                reset();
-
-        //*******************************************************************
-        //** static methods for reading structures from event structure
-        //** from the memory. It does not have to copy event into separate
-        //** buffer.
-        //*******************************************************************
-        static std::pair<int,int>
-              getStructurePosition(const char *buffer, int group, int item);
-        //static std::pair<int,int>  getStructurePosition(const char *buffer, int group, int item);
-        static void
-              getStructure(const char *buffer, hipo::structure &str, int group, int item);
-        static void
-              getStructureNoCopy(const char *buffer, hipo::structure &str, int group, int item);
+        void open(const char *file);
+        void initBranches(int size);
+        void setVerbose(int level){ writer.setVerbose(level);}
+        void fill(const float *array);
+        void close();
     };
 }
 
-#endif /* EVENT_H */
+#endif /* TUPLE_H */

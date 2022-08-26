@@ -112,7 +112,8 @@ namespace hipo {
         if(data_size>0){
 	        if((evt_size + str_size)<evt_capacity){
 	           memcpy(&dataBuffer[evt_size], &str.getStructureBuffer()[0],str_size);
-	            *(reinterpret_cast<uint32_t*>(&dataBuffer[4])) = (evt_size + str_size + 24);
+	            //*(reinterpret_cast<uint32_t*>(&dataBuffer[4])) = (evt_size + str_size + 24);
+              *(reinterpret_cast<uint32_t*>(&dataBuffer[4])) = (evt_size + str_size);
 	          } else {
 	              printf("event::add : error adding structure with size = %5d (capacity = %5d, size = %5d)\n",
 		              str_size,evt_capacity, evt_size);
@@ -123,6 +124,10 @@ namespace hipo {
     int  event::getTag(){
       int eventTag = *(reinterpret_cast<const uint32_t*>(&dataBuffer[8]));
       return eventTag;
+    }
+
+    void  event::setTag(int tag){
+      *(reinterpret_cast<uint32_t*>(&dataBuffer[8])) = tag;
     }
 
     void event::init(std::vector<char> &buffer){
@@ -159,7 +164,22 @@ namespace hipo {
       }
       return std::make_pair(-1,0);
     }
-
+/*
+    std::pair<int,int>  event::getStructurePosition(const char *buffer, int group, int item){
+      int position = 16;
+      int eventSize = *(reinterpret_cast<uint32_t*>(&buffer[4]));
+      while(position+8<eventSize){
+          uint16_t   gid = *(reinterpret_cast<uint16_t*>(&buffer[position]));
+          uint8_t    iid = *(reinterpret_cast<uint8_t*>(&buffer[position+2]));
+          uint8_t   type = *(reinterpret_cast<uint8_t*>(&buffer[position+3]));
+          int     length = *(reinterpret_cast<int*>(&buffer[position+4]));
+          //printf("group = %4d , item = %4d\n",(unsigned int) gid, (unsigned int) iid);
+          if(gid==group&&iid==item) return std::make_pair(position,length);
+          position += (length + 8);
+      }
+      return std::make_pair(-1,0);
+    }
+*/
     void event::init(const char *buffer, int size){
        if(dataBuffer.size()<=size){
          dataBuffer.resize(size+1024);

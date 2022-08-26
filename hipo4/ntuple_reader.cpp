@@ -204,6 +204,32 @@ namespace hipo{
 	
     return true;
   }
+ //////////////////////////////////////////////////////////////////////////
+  bool  ntuple_reader::loadIndex(int index){
+    auto ibank=0;
+    bool gotOne = false;
+    for(auto& bank: _banks){
+      auto* rawBank=bank.get();
+      //     std::cout<<"ntuple_reader::loadIndex "<<rawBank->getRows()<<" "<<index<<std::endl;
+      if(rawBank->getRows()<=index){
+	++ibank;
+	continue;
+      }
+      //      _event.getStructure(*rawBank);
+      gotOne = true; //one of the banks has enough entries
+      auto pos=0;
+      for(auto& itemFuncAndAddr :_itemLinksAndGets[ibank]){
+	if(itemFuncAndAddr.get()!=nullptr){
+	  itemFuncAndAddr->first(rawBank,itemFuncAndAddr->second,pos,index);
+	}
+	pos++;
+      }
+      ++ibank;
+    }
+
+	
+    return gotOne;
+  }
 
 
 }
