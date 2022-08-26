@@ -73,7 +73,8 @@ namespace hipo {
       int          data_size{};
       int          data_endianness{};
       int          data_offset{};
-
+      int          data_type;
+      
       public:
         data(){ data_ptr = nullptr; data_size = 0;}
         ~data()= default;
@@ -82,14 +83,14 @@ namespace hipo {
         void setDataSize(int __size){ data_size = __size;}
         void setDataOffset(int __offset) { data_offset = __offset;}
         void setDataEndianness(int __endianness) { data_endianness = __endianness;}
-
+        void setDataType(int __type){ data_type = __type;}
         const uint32_t   *getEvioPtr(){ return reinterpret_cast<const uint32_t *>(data_ptr);}
         int         getEvioSize(){ return (int) data_size/4 ;}
         const char *getDataPtr(){ return data_ptr;}
         int         getDataSize(){ return data_size;}
+        int         getDataType(){ return data_type;}
         int         getDataEndianness(){ return data_endianness;}
         int         getDataOffset(){ return data_offset;}
-
     };
 
     class record {
@@ -116,15 +117,23 @@ namespace hipo {
         record();
         ~record();
 
-        void  readRecord(std::ifstream &stream, long position, int dataOffset);
-        void  readRecord__(std::ifstream &stream, long position, long recordLength);
-        bool  readRecord(std::ifstream &stream, long position, int dataOffset, long inputSize);
-        int   getEventCount();
-        int   getRecordSizeCompressed();
+        void   read(hipo::bank &b, int event);
+        void   readRecord(std::ifstream &stream, long position, int dataOffset);
+        void   readRecord__(std::ifstream &stream, long position, long recordLength);
+        bool   readRecord(std::ifstream &stream, long position, int dataOffset, long inputSize);
+        int    getEventCount();
+        int    getRecordSizeCompressed();
+        
+        void   getColumn(hipo::data &data,int column, hipo::bank &bank, int event);
+        void   getColumn(hipo::data &data,const char* column, hipo::bank &bank, int event);
+        
+        void   readEvent( std::vector<char> &vec, int index);
+        void   readHipoEvent(hipo::event &event, int index);
+        
+        void   getData(   hipo::data &data, int index);
+        //void   getBank(   hipo::bank &bank, int index);
 
-        void  readEvent( std::vector<char> &vec, int index);
-        void  readHipoEvent(hipo::event &event, int index);
-        void  getData(   hipo::data &data, int index);
+        void   getEventsMap(std::vector<std::pair<int,int>> &emap);
 
         hipo::benchmark  &getReadBenchmark(){ return readBenchmark;}
         hipo::benchmark  &getUnzipBenchmark(){ return unzipBenchmark;}

@@ -27,76 +27,55 @@
  *   For more information contact author at gavalian@jlab.org
  *   Department of Experimental Nuclear Physics, Jefferson Lab.
  */
-/*
- * File:   event.h
- * Author: gavalian
- *
- * Created on April 12, 2017, 10:14 AM
- */
+ /*
+  * File:   event.h
+  * Author: gavalian
+  *
+  * Created on August 15, 2022, 17:04 PM
+  */
 
-#ifndef HIPO_EVENT_H
-#define HIPO_EVENT_H
-
-#include <iostream>
-#include <vector>
-#include <cstring>
-#include <cstdint>
-#include <cstdio>
-#include <cstdlib>
-#include <map>
-#include "bank.h"
-
-// if the library is compiled with C++11
-// support we will use unordered map which
-// is faster than standard map
-#if __cplusplus > 199711L
-#include <unordered_map>
-#endif
-
+#include "tuple.h"
 
 namespace hipo {
 
-  //typedef std::auto_ptr<hipo::generic_node> node_pointer;
 
-  class event {
+    tuple::tuple(){
 
-    private:
-        std::vector<char> dataBuffer;
-    public:
+    }
 
-        event();
-        event(int size);
-        virtual ~event();
+    tuple::tuple(const char *format){
+    }
 
-        void   show();
-        void   init(std::vector<char> &buffer);
-        void   init(const char *buffer, int size);
-        void   getStructure(hipo::structure &str, int group, int item);
-        int    getTag();
-        void   setTag(int tag);
-        void   getStructure(hipo::bank &b);
-        void   read(hipo::bank &b);
-        void   addStructure(hipo::structure &str);
+    tuple::~tuple()= default;
 
-        std::pair<int,int>  getStructurePosition(int group, int item);
+   void tuple::initBranches(int size){
+        for(int i = 0; i < size; i++) branches.push_back(new hipo::structure());
+        for(int i = 0; i < branches.size(); i++) branches[i]->initStructureBySize(120,1,4,800);
+        currentPosition = 0;
+   }
 
-        std::vector<char>  &getEventBuffer();
-        int                 getSize();
-        void                reset();
+   void tuple::fill(const float *array){
+      for(int i = 0; i < branches.size(); i++) branches[i]->putFloatAt(currentPosition*4,array[i]);
+      currentPosition++;
+      if(currentPosition>=200){
+        writeAndUpdate(); currentPosition = 0;
+      }
+   }
 
-        //*******************************************************************
-        //** static methods for reading structures from event structure
-        //** from the memory. It does not have to copy event into separate
-        //** buffer.
-        //*******************************************************************
-        static std::pair<int,int>
-              getStructurePosition(const char *buffer, int group, int item);
-        //static std::pair<int,int>  getStructurePosition(const char *buffer, int group, int item);
-        static void
-              getStructure(const char *buffer, hipo::structure &str, int group, int item);
-        static void
-              getStructureNoCopy(const char *buffer, hipo::structure &str, int group, int item);
-    };
+   void tuple::open(const char *file){
+      writer.open(file);
+   }
+
+   void tuple::close(){
+      writer.close();
+   }
+
+   void tuple::writeAndUpdate(){
+       for(int i = 0; i < branches.size(); i++){
+         event.reset();
+         event.setTag(i+1);
+         event.addStructure(*branches[i]);
+         writer.addEvent(event);
+       }
+   }
 }
-
-#endif /* EVENT_H */

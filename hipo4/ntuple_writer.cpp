@@ -155,4 +155,41 @@ namespace hipo{
     _writer.addEvent(_event);
   
   }
+  ///////////////////////////////////////////////////////////////////////
+  void ntuple_writer::copyRow(int index){
+  
+    uint ibank=0;
+    
+    //loop over each defined bank
+    for(auto& bankItems : _itemLinksAndPuts){
+      uint pos=0;
+      auto bank = _banks[ibank++].get();
+
+      //loop over items in the bank
+      for(auto& itemFuncAndAddr : bankItems){ //get the right put type
+	//itemFuncAndAddr.first is = bank->putInt(...) etc
+	//itemFuncAndAddr.second is = address of item
+      	if(itemFuncAndAddr.get()!=nullptr)itemFuncAndAddr->first(bank,itemFuncAndAddr->second,pos++,index);
+	//std::cout<<"ntuple_writer::copyRow "<<ibank<<" "<<pos<<" "<<index<<std::endl; 
+     }//done loop over items
+      
+    }//done loop over banks
+ 
+  
+  }
+  void ntuple_writer::fillRows(){
+   uint ibank=0;
+    
+    //loop over each defined bank
+    for(auto& ubank : _banks){
+      auto bank = ubank.get();
+      //     std::cout<<"ntuple_writer::copyRow "<<bank->getRows()<<std::endl;
+      _event.addStructure(*bank);
+
+      }//done loop over banks
+ 
+    _writer.addEvent(_event);
+  
+  }
+  
 }
