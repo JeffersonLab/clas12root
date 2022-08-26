@@ -27,76 +27,68 @@
  *   For more information contact author at gavalian@jlab.org
  *   Department of Experimental Nuclear Physics, Jefferson Lab.
  */
-/*
- * File:   event.h
- * Author: gavalian
- *
- * Created on April 12, 2017, 10:14 AM
- */
+ /*
+  * File:   datastream.cpp
+  * Author: gavalian
+  *
+  * Created on May 5, 2020, 9:24 PM
+  */
 
-#ifndef HIPO_EVENT_H
-#define HIPO_EVENT_H
+#include "datastream.h"
 
-#include <iostream>
-#include <vector>
-#include <cstring>
-#include <cstdint>
-#include <cstdio>
 #include <cstdlib>
-#include <map>
-#include "bank.h"
-
-// if the library is compiled with C++11
-// support we will use unordered map which
-// is faster than standard map
-#if __cplusplus > 199711L
-#include <unordered_map>
-#endif
-
 
 namespace hipo {
+ /**
+  * The constructor for reader, printWarning routine
+  * will printout a warning message if the library
+  * was not compiled with compression libraries LZ4 or GZIP
+  */
+  datastreamXrootd::datastreamXrootd(){
 
-  //typedef std::auto_ptr<hipo::generic_node> node_pointer;
+  }
 
-  class event {
+  /*datastreamXrootd::datastreamXrootd(const char *address){
 
-    private:
-        std::vector<char> dataBuffer;
-    public:
+  }*/
+  /**
+   * Default destructor. Does nothing
+   */
+  datastreamXrootd::~datastreamXrootd(){
+    #ifdef __XROOTD__
+     if(cli!=NULL) delete cli;
+    #endif
+  }
 
-        event();
-        event(int size);
-        virtual ~event();
 
-        void   show();
-        void   init(std::vector<char> &buffer);
-        void   init(const char *buffer, int size);
-        void   getStructure(hipo::structure &str, int group, int item);
-        int    getTag();
-        void   setTag(int tag);
-        void   getStructure(hipo::bank &b);
-        void   read(hipo::bank &b);
-        void   addStructure(hipo::structure &str);
+  void  datastreamXrootd::open(const char *filename){
+#ifdef __XROOTD__
+      printf("[datastream::xrootd] >>> open : %s\n" + filename);
+      XrdClient *cli = new new XrdClient(filename);
+      cli->Open(open_mode,open_opts);
+#endif
+  }
 
-        std::pair<int,int>  getStructurePosition(int group, int item);
+  long   datastreamXrootd::size(){
+    #ifdef __XROOTD__
+     XrdClientStatInfo stats;
+     cli->Stat(&stats);
+     return stats.size();
+     #endif
+     #ifndef __XROOTD__
+      return 0;
+     #endif
+  }
 
-        std::vector<char>  &getEventBuffer();
-        int                 getSize();
-        void                reset();
-
-        //*******************************************************************
-        //** static methods for reading structures from event structure
-        //** from the memory. It does not have to copy event into separate
-        //** buffer.
-        //*******************************************************************
-        static std::pair<int,int>
-              getStructurePosition(const char *buffer, int group, int item);
-        //static std::pair<int,int>  getStructurePosition(const char *buffer, int group, int item);
-        static void
-              getStructure(const char *buffer, hipo::structure &str, int group, int item);
-        static void
-              getStructureNoCopy(const char *buffer, hipo::structure &str, int group, int item);
-    };
+  long   datastreamXrootd::position(){ return streamPosition;}
+  long   datastreamXrootd::position(long pos){ streamPosition = pos; return streamPosition;}
+  int datastreamXrootd::read(char *s, int size){
+      #ifdef __XROOTD__
+       cli->Read(s,streamPosition,size);
+       return size;
+      #endif
+      #ifndef __XROOTD__
+       return 0;
+      #endif
+  }
 }
-
-#endif /* EVENT_H */

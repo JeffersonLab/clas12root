@@ -417,7 +417,67 @@ namespace hipo {
         data.setDataSize(last_position-first_position);
         data.setDataOffset(first_position + offset);
     }
+void   record::read(hipo::bank &b, int event){
+   hipo::data event_data;
+   getData(event_data,event);
+   hipo::event::getStructure(event_data.getDataPtr(),b,b.getSchema().getGroup(),b.getSchema().getItem());
+}
 
+void   record::getColumn(hipo::data &data,const char* column, hipo::bank &bank, int event){
+  int order = bank.getSchema().getEntryOrder(column);
+  getColumn(data,order,bank,event);
+}
+
+void   record::getColumn(hipo::data &data,int column, hipo::bank &bank, int event){
+    hipo::data event_data;
+    getData(event_data,event);
+    std::pair<int,int> pos = hipo::event::getStructurePosition(event_data.getDataPtr(),
+         bank.getSchema().getGroup(), bank.getSchema().getItem());
+
+    //printf(" returned position = %8d, %8d\n",pos.first,pos.second);
+
+    if(pos.second<=0) {
+      data.setDataPtr(NULL);
+      data.setDataSize(0);
+      data.setDataType(0);
+      return;
+    }
+    //printf("----- hok ---- we are here now ----\n");
+    int size = *reinterpret_cast<const uint32_t *>(&event_data.getDataPtr()[pos.first+4]);
+    //printf("----- hok ---- one more step ----\n");
+    int bankRows = size/bank.getSchema().getRowLength();
+    //printf(" returned sizes = %8d, %8d\n",size,bankRows);
+    data.setDataSize(bankRows);
+    data.setDataType(bank.getSchema().getEntryType(column));
+
+    //printf(" returned type = %d\n",data.getDataType());
+    int offset   = bank.getSchema().getOffset(column,0,bankRows);
+    //printf("============ offset = %8d\n",offset);
+    data.setDataPtr(&(event_data.getDataPtr()[pos.first+offset+8]));
+}
+
+void record::getEventsMap(std::vector<std::pair<int,int>> &emap){
+   emap.clear();
+   int offset        = recordHeader.indexDataLength
+                          + recordHeader.userHeaderLength
+                          + recordHeader.userHeaderLengthPadding;
+                          /*
+   printf(" offset for the record = %8d, %8d, %8d, %8d\n",offset,
+          recordHeader.indexDataLength
+        , recordHeader.userHeaderLength
+        , recordHeader.userHeaderLengthPadding
+        );*/
+
+   int nevents = recordHeader.numberOfEvents;
+   for(int index = 0; index < nevents; index++){
+      int first_position = 0;
+        if(index > 0){
+          first_position  = *(reinterpret_cast<uint32_t *>(&recordBuffer[(index -1)*4]));
+        }
+        int last_position = *(reinterpret_cast<uint32_t *>(&recordBuffer[index*4]));
+        emap.push_back(std::make_pair(first_position+offset,last_position+offset));
+   }
+}
     void  record::readHipoEvent(hipo::event &event, int index){
           hipo::data event_data;
           getData(event_data,index);

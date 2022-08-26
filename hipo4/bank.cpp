@@ -177,6 +177,7 @@ void    bank::putDouble(const char *name, int index, double value){
   int offset = bankSchema.getOffset(item, index, bankRows);
   putDoubleAt(offset,value);
 }
+
 void    bank::putLong(const char *name, int index, int64_t value){
   int item = bankSchema.getEntryOrder(name);
   int type = bankSchema.getEntryType(item);
