@@ -2,7 +2,7 @@
 {
   //treemaker.SetEntries(1E5);//only process given number of events
   //add event header branch, includes start time
-  //treemaker.UseEventData();
+  treemaker.UseEventData();
   
   //make branch with given formula and alias it to name Time
   //give branch type with /F = float etc.
