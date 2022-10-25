@@ -1,7 +1,7 @@
 {
 
   HipoChain chain;
-  chain.Add("/home/dglazier/clas12/clas12root/tutorial/skim.hipo");
+  chain.Add("/my/hipo/file.hipo");
   chain.SetReaderTags({0});  //create clas12reader with just tag 0 events
 
   //chain.Add("/where/is/myHipo.hipo");
@@ -45,12 +45,12 @@
     //Loop over entries in the bank for this event using its ID = idx_RECPart
     //get the value of its PID from its id = iPid
     for(auto ipa=0;ipa<c12->getBank(idx_RECPart)->getRows();ipa++){
-      cout<<"particle "<<ipa<<" pid "<<c12->getBank(idx_RECPart)->getInt(iPid,ipa)<<endl;
+      //cout<<"particle "<<ipa<<" pid "<<c12->getBank(idx_RECPart)->getInt(iPid,ipa)<<endl;
     }
       
     //Loop over track based hits
     for(auto itr=0;itr<c12->getBank(idx_TRCKHits)->getRows();itr++){
-      cout<<"track "<<itr<<" id "<<c12->getBank(idx_TRCKHits)->getInt(iTrckId,itr)<<" layer "<<c12->getBank(idx_TRCKHits)->getInt(iTrckLayer,itr)<<endl;
+      //cout<<"track "<<itr<<" id "<<c12->getBank(idx_TRCKHits)->getInt(iTrckId,itr)<<" layer "<<c12->getBank(idx_TRCKHits)->getInt(iTrckLayer,itr)<<endl;
     }
       
     auto parts=c12->getDetParticles();
