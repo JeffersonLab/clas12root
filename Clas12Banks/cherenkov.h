@@ -36,7 +36,7 @@ namespace clas12 {
       if(_index>-1)return getFloat(_time_order,_index);
       return 0;
     }
-    float getNphe() const noexcept{ 
+    double getNphe() const noexcept{ 
       if(_index>-1)return getFloat(_nphe_order,_index);
       return 0;
     }
@@ -45,14 +45,18 @@ namespace clas12 {
       return 0;
     }
     int getSector() const noexcept{ 
-      if(_index>-1)return getInt(_sector_order,_index);
+      if(_index>-1)return getByte(_sector_order,_index);
       return 0;
     }
-    double getX() const noexcept{ 
+     double getChi2() const noexcept{ 
+      if(_index>-1)return getFloat(_chi2_order,_index);
+      return 0;
+     }
+     double getX() const noexcept{ 
       if(_index>-1)return getFloat(_x_order,_index);
       return 0;
     }
-    double getY() const noexcept{ 
+     double getY() const noexcept{ 
       if(_index>-1)return getFloat(_y_order,_index);
       return 0;
     }
@@ -69,7 +73,7 @@ namespace clas12 {
       return 0;
     }
     int getStatus() const noexcept{ 
-      if(_index>-1)return getInt(_status_order,_index);
+      if(_index>-1)return getShort(_status_order,_index);
       return 0;
     }
   
