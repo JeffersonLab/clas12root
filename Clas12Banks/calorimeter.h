@@ -33,7 +33,7 @@ namespace clas12 {
     ~calorimeter() override=default;
     
     int getLayer(int index)  const noexcept override{
-      if(index>-1)return getInt(_layer_order,index);
+      if(index>-1)return getByte(_layer_order,index);
       return 0;
     }
    //getter funtions for items in calorimeter bank
@@ -47,6 +47,10 @@ namespace clas12 {
     }
     double getPath() const noexcept{
       if(_index>-1)return getFloat(_path_order,_index);
+      return 0;
+    }
+     double getChi2() const noexcept{
+      if(_index>-1)return getFloat(_chi2_order,_index);
       return 0;
     }
     int getLayer()  const noexcept override{
