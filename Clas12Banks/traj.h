@@ -64,6 +64,14 @@ namespace clas12 {
       if(_index>-1)return getFloat(_z_order,_index);
       return 0;
     }
+    double getPath()  const noexcept{ 
+      if(_index>-1)return getFloat(_path_order,_index);
+      return 0;
+    }
+    double getEdge()  const noexcept{ 
+      if(_index>-1)return getFloat(_edge_order,_index);
+      return 0;
+    }
     /* short getDetID(){  */
     /*   if(_index>-1)return getShort(_detector_id_order,_index); */
     /*   return 0; */
@@ -93,6 +101,8 @@ namespace clas12 {
     int    _x_order=-1;
     int    _y_order=-1;
     int    _z_order=-1;
+    int    _path_order=-1;
+    int    _edge_order=-1;
  
 
  
