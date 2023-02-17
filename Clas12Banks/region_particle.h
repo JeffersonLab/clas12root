@@ -74,7 +74,9 @@ namespace clas12 {
     float getVt(){
       _parts->setEntry(_pentry);
       if(_ftbparts==nullptr) return _parts->getVt();
-      return _useFTBPid*_ftbparts->getRows()?_ftbparts->getVt():_parts->getVt();
+      auto vt =  _useFTBPid*_ftbparts->getRows()?_ftbparts->getVt():_parts->getVt();
+      if(vt==-1)return getStartTime();
+      else return vt;
     }
     int getStatus(){
       _parts->setEntry(_pentry);
@@ -116,12 +118,27 @@ namespace clas12 {
     short getIndex()const {return _pentry;}
       
     short getRegion() const {return _region;}
-    double getTheta() const;
-    double getPhi() const;
+    double getTheta() ;
+    double getPhi() ;
     double getP(){
       _parts->setEntry(_pentry);
       if(_ftbparts==nullptr) return  _parts->getP();
       return _useFTBPid*_ftbparts->getRows()?_parts->getFTBP():_parts->getP();    }
+    double getPx(){
+      _parts->setEntry(_pentry);
+      if(_ftbparts==nullptr) return  _parts->getPx();
+      return _useFTBPid*_ftbparts->getRows()?_parts->getFTBPx():_parts->getPx();    }
+    double getPy(){
+      _parts->setEntry(_pentry);
+      if(_ftbparts==nullptr) return  _parts->getPy();
+      return _useFTBPid*_ftbparts->getRows()?_parts->getFTBPy():_parts->getPy();    }
+    double getPz(){
+      _parts->setEntry(_pentry);
+      if(_ftbparts==nullptr) return  _parts->getPz();
+      return _useFTBPid*_ftbparts->getRows()?_parts->getFTBPz():_parts->getPz();    }
+    double getStartTime(){
+      if(_ftbparts==nullptr) return  _event->getStartTime();
+      return _useFTBPid*_event->getFTBStartTime()?_event->getFTBStartTime():_event->getStartTime();    }
 
     double getCalcMass();
     double getGamma();
