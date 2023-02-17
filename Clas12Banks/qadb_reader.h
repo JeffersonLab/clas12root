@@ -78,6 +78,7 @@ namespace clas12 {
     void addMask(const char * defectName, bool maskBit){_qa.SetMaskBit(defectName,maskBit);};
     void addAllMasks();
     double getAccCharge(){return _qa.GetAccumulatedCharge();};
+    double getChargeForRunlist(std::vector<int> Runs);
 
   private: 
     QA::QADB _qa;//!  
