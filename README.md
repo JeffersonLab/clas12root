@@ -500,6 +500,10 @@ Or if using a HipoChain
 
 More information on the Quality Assurance process can be found in the RGA analysis note.
 
+### Fast Accumulated Charge Lookup
+
+The qadb_reader used by the clas12reader to read the Quality Assurance Database can also perform a fast lookup of the accumulated charge of a given list of runs. An example is given in [https://github.com/dglazier/clas12root/blob/qadb_update/RunRoot/Ex9_QualityAssurance_quickLookup.C Example 9, Quality Assurance quick lookup script].
+
 ### Using databases with HipoSelector
 
 In your run script you must just set the paths to the data as normal and configure the QADB conditions as above.
