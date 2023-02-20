@@ -84,11 +84,20 @@ namespace clas12 {
     float  getFTBBeta()    const noexcept{ return _ftbpar->getBeta();}
     float  getFTBChi2Pid()    const noexcept{ return _ftbpar->getChi2Pid();}
     int    getFTBStatus()    const noexcept{ return _ftbpar->getStatus();}
+    float  getFTBPx()    const noexcept{ return _ftbpar->getPx();}
+    float  getFTBPy()    const noexcept{ return _ftbpar->getPy();}
+    float  getFTBPz()    const noexcept{ return _ftbpar->getPz();}
 
     float getP() const noexcept{
       auto x= getFloat(_px_order,_entry);
       auto y= getFloat(_py_order,_entry);
       auto z= getFloat(_pz_order,_entry);
+      return sqrt(x*x+y*y+z*z);
+    }
+    float getFTBP() const noexcept{
+      auto x= getFTBPx();
+      auto y= getFTBPy();
+      auto z= getFTBPz();
       return sqrt(x*x+y*y+z*z);
     }
     

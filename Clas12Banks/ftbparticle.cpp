@@ -18,6 +18,9 @@ namespace clas12 {
     _vt_order  = sch.getEntryOrder("vt");
     _beta_order  = sch.getEntryOrder("beta");
     _chi2pid_order  = sch.getEntryOrder("chi2pid");
+    _px_order  = sch.getEntryOrder("px");
+    _py_order  = sch.getEntryOrder("py");
+    _pz_order  = sch.getEntryOrder("pz");
     
   }
 
@@ -29,7 +32,10 @@ namespace clas12 {
     _beta_order  = sch.getEntryOrder("beta");
     _vt_order  = sch.getEntryOrder("vt");
     _chi2pid_order  = sch.getEntryOrder("chi2pid");
-     
+    _px_order  = sch.getEntryOrder("px");
+    _py_order  = sch.getEntryOrder("py");
+    _pz_order  = sch.getEntryOrder("pz");
+    
   }
 
   

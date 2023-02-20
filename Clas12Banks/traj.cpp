@@ -20,6 +20,7 @@ namespace clas12 {
     _y_order   =  __schema.getEntryOrder("y");
     _z_order   =  __schema.getEntryOrder("z");
     _layer_order   = __schema.getEntryOrder("layer");
+    _edge_order   =  __schema.getEntryOrder("edge");
  
   }
 

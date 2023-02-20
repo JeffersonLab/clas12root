@@ -15,6 +15,7 @@
 #define CLAS12_CALORIMETER_H
 
 #include "particle_detector.h"
+#include "calextras.h"
 #include <memory>
 
 
@@ -26,14 +27,15 @@ namespace clas12 {
   public:
 
 
-    calorimeter()=default;
+     calorimeter()=default;
 
-   calorimeter(hipo::schema __schema);
- 
+     calorimeter(hipo::schema __schema);
+     calorimeter(hipo::schema __schema,hipo::schema extras);
+     
     ~calorimeter() override=default;
     
     int getLayer(int index)  const noexcept override{
-      if(index>-1)return getInt(_layer_order,index);
+      if(index>-1)return getByte(_layer_order,index);
       return 0;
     }
    //getter funtions for items in calorimeter bank
@@ -47,6 +49,10 @@ namespace clas12 {
     }
     double getPath() const noexcept{
       if(_index>-1)return getFloat(_path_order,_index);
+      return 0;
+    }
+     double getChi2() const noexcept{
+      if(_index>-1)return getFloat(_chi2_order,_index);
       return 0;
     }
     int getLayer()  const noexcept override{
@@ -133,7 +139,56 @@ namespace clas12 {
       if(_index>-1)return getShort(_status_order,_index);
       return 0;
     }
-  
+
+     //get extras
+     
+     int getDbstU() const noexcept{
+       return _extras.get()!=nullptr ? _extras->getDbstU(_index):0;
+     }
+     int getDbstV() const noexcept{
+       return _extras.get()!=nullptr ? _extras->getDbstV(_index):0;
+     }
+     int getDbstW() const noexcept{
+       return _extras.get()!=nullptr ? _extras->getDbstW(_index):0;
+     }
+     double getRawEU() const noexcept{
+       return _extras.get()!=nullptr ? _extras->getRawEU(_index):0;
+     }
+     double getRawEV() const noexcept{
+       return _extras.get()!=nullptr ? _extras->getRawEV(_index):0;
+     }
+     double getRawEW() const noexcept{
+       return _extras.get()!=nullptr ? _extras->getRawEW(_index):0;
+     }
+     double getRecEU() const noexcept{
+       return _extras.get()!=nullptr ? _extras->getRecEU(_index):0;
+     }
+     double getRecEV() const noexcept{
+       return _extras.get()!=nullptr ? _extras->getRecEV(_index):0;
+     }
+     double getRecEW() const noexcept{
+       return _extras.get()!=nullptr ? _extras->getRecEW(_index):0;
+     }
+     double getRecDTU() const noexcept{
+       return _extras.get()!=nullptr ? _extras->getRecDTU(_index):0;
+     }
+     double getRecDTV() const noexcept{
+       return _extras.get()!=nullptr ? _extras->getRecDTV(_index):0;
+     }
+     double getRecDTW() const noexcept{
+       return _extras.get()!=nullptr ? _extras->getRecDTW(_index):0;
+     }
+     double getRecFTU() const noexcept{
+       return _extras.get()!=nullptr ? _extras->getRecFTU(_index):0;
+     }
+     double getRecFTV() const noexcept{
+       return _extras.get()!=nullptr ? _extras->getRecFTV(_index):0;
+     }
+     double getRecFTW() const noexcept{
+       return _extras.get()!=nullptr ? _extras->getRecFTW(_index):0;
+     }
+    calextras* getExtras()const {return _extras.get();}
+
      
  private:
 
@@ -163,7 +218,8 @@ namespace clas12 {
     int    _m3w_order=-1;
     int    _status_order=-1;
   
-
+     calextra_uptr _extras;
+ 
    }; //class calorimeter
 
    using cal_ptr=clas12::calorimeter*;

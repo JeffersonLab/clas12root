@@ -57,29 +57,29 @@ namespace clas12 {
     
   }
  
-  float region_particle::getTheta() const{
+  double region_particle::getTheta() {
     _parts->setEntry(_pentry);
-    float x=_parts->getPx();
-    float y=_parts->getPy();
-    float z=_parts->getPz();
-    return x == 0.0 && y == 0.0 && z == 0.0 ? 0.0
+    double x=getPx();
+    double y=getPy();
+    double z=getPz();
+    return  x == 0.0 && y == 0.0 && z == 0.0 ? 0.0
       : atan2(sqrt(x*x+y*y),z);
   }
-  float region_particle::getPhi() const{
+  double region_particle::getPhi() {
     _parts->setEntry(_pentry);
-    float x=_parts->getPx();
-    float y=_parts->getPy();
+    double x=getPx();
+    double y=getPy();
     return atan2(y,x);
   }
-   float region_particle::getCalcMass() {
-    float p=getP();
-    float t=getTime()-_event->getStartTime();
-    float d=getPath()/100;
+   double region_particle::getCalcMass() {
+    double p=getP();
+    double t=getTime()-getStartTime();
+    double d=getPath()/100;
     if(t==0)
       return 0;
     if(p==0)
       return 0;
-    float mass= p/getBeta()/getGamma();
+    double mass= p/getBeta()/getGamma();
     return mass;
   }
   ////clashes with bank item
@@ -91,23 +91,23 @@ namespace clas12 {
   //   float beta= d/t/2.9979246e+08*1E9;
   //   return beta;
   // }
-  float region_particle::getGamma() {
-    float beta=getBeta();
-    float gamma= sqrt(1/(1-beta*beta));
+  double region_particle::getGamma() {
+    double beta=getBeta();
+    double gamma= sqrt(1/(1-beta*beta));
     return gamma;
   }
-  float region_particle::getDeltaTime() {
+  double region_particle::getDeltaTime() {
     _parts->setEntry(_pentry);
-    float t=getTime()-_parts->getVt();
-    float d=getPath()/100;
+    double t=getTime()-getVt();
+    double d=getPath()/100;
     return t-d/getBetaFromP()/2.99792e+08*1E9;
   }
-  float region_particle::getBetaFromP() {
-    float pp=getP();
+  double region_particle::getBetaFromP() {
+    double pp=getP();
     auto mass=getPdgMass();
     return pp/sqrt(pp*pp+mass*mass);
   }
-  float region_particle::getPdgMass() {
+  double region_particle::getPdgMass() {
 
     switch (getPid()) {
 
