@@ -20,6 +20,7 @@
 #pragma link C++ class clas12::vertdoca+;
 #pragma link C++ class clas12::particle_detector+;
 #pragma link C++ class clas12::scintillator+;
+#pragma link C++ class clas12::utracker+;
 #pragma link C++ class clas12::tracker+;
 #pragma link C++ class clas12::traj+;
 #pragma link C++ class clas12::forwardtagger+;
@@ -30,6 +31,7 @@
 #pragma link C++ class clas12::region_ft+;
 #pragma link C++ class clas12::region_fdet+;
 #pragma link C++ class clas12::region_cdet+;
+#pragma link C++ class clas12::region_band+;
 #pragma link C++ class clas12::clas12writer+;
 #pragma link C++ class clas12::clas12reader+;
 #pragma link C++ class clas12::rcdb_reader+;

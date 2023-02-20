@@ -10,16 +10,16 @@ namespace clas12 {
 
   ///////////////////////////////////////////////////////
   /// constructor used for stand-alone
- region_cdet::region_cdet(par_ptr pars,covmat_ptr cm, scint_ptr scp, trck_ptr trp, traj_ptr trj):
-   region_particle(pars,cm,scp,trp,trj)
-  {
-    _region=clas12::CD;
-  }
+ // region_cdet::region_cdet(par_ptr pars,covmat_ptr cm, scint_ptr scp, trck_ptr trp, traj_ptr trj):
+ //   region_particle(pars,cm,scp,trp,trj)
+ //  {
+ //    _region=clas12::CD;
+ //  }
   ///////////////////////////////////////////////////////
   ///Constructor used for event,
   ///give all detector banks to prevent crashes when looking for FT 
-  region_cdet::region_cdet(par_ptr pars,ftbpar_ptr ftbpars,covmat_ptr cm, cal_ptr calp, scint_ptr scp, trck_ptr trp, traj_ptr trj, cher_ptr chp, ft_ptr ftp,event_ptr event,mcpar_ptr mcp):
-    region_particle(pars,ftbpars,cm,calp,scp,trp,trj,chp,ftp,event,mcp)
+  region_cdet::region_cdet(par_ptr pars,ftbpar_ptr ftbpars,covmat_ptr cm, cal_ptr calp, scint_ptr scp, trck_ptr trp,utrck_ptr utrp, traj_ptr trj, cher_ptr chp, ft_ptr ftp,event_ptr event,mcpar_ptr mcp):
+    region_particle(pars,ftbpars,cm,calp,scp,trp,utrp,trj,chp,ftp,event,mcp)
   {
     _region=clas12::CD;
   }

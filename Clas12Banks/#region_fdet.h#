@@ -95,7 +95,7 @@ namespace clas12 {
       return _cal->getSector();
     }
 
-    
+    double getCalPhotonE(){return 0;}  
     private:
 
     
