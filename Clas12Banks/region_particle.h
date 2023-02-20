@@ -20,6 +20,7 @@
 #include "calorimeter.h"
 #include "scintillator.h"
 #include "tracker.h"
+#include "utracker.h"
 #include "traj.h"
 #include "event.h"
 #include "cherenkov.h"
@@ -37,18 +38,18 @@ namespace clas12 {
 
     region_particle()=default;
     
-    region_particle(par_ptr pars,covmat_ptr cm);
-    //For region_ft
-    region_particle(par_ptr pars,covmat_ptr cm, ft_ptr ftp);
-    //For region_cdet
-    region_particle(par_ptr pars,covmat_ptr cm,
-		    scint_ptr scp, trck_ptr trp, traj_ptr trj);
-    //For region_fdet
-    region_particle(par_ptr pars,covmat_ptr cm, cal_ptr calp,
-		    scint_ptr scp, trck_ptr trp, traj_ptr trj, cher_ptr chp);
+    // region_particle(par_ptr pars,covmat_ptr cm);
+    // //For region_ft
+    // region_particle(par_ptr pars,covmat_ptr cm, ft_ptr ftp);
+    // //For region_cdet
+    // region_particle(par_ptr pars,covmat_ptr cm,
+    // 		    scint_ptr scp, trck_ptr trp, utrck_ptr utrp, traj_ptr trj);
+    // //For region_fdet
+    // region_particle(par_ptr pars,covmat_ptr cm, cal_ptr calp,
+    // 		    scint_ptr scp, trck_ptr trp, utrck_ptr utrp, traj_ptr trj, cher_ptr chp);
     //For all regions
     region_particle(par_ptr pars,ftbpar_ptr ftbpars,covmat_ptr cm, cal_ptr calp,
-		    scint_ptr scp, trck_ptr trp, traj_ptr trj,
+		    scint_ptr scp, trck_ptr trp, utrck_ptr utrp, traj_ptr trj,
 		    cher_ptr chp, ft_ptr ftp,event_ptr event,
 		    mcpar_ptr mcp=nullptr);
 
@@ -94,6 +95,8 @@ namespace clas12 {
       return _useFTBPid*_ftbparts->getRows()?_ftbparts->getBeta():_parts->getBeta();
     }
  
+    virtual double getCalPhotonE(){return 0;}
+    
     virtual double getTime()=0;
     virtual double getPath()=0;
     virtual double getDetEnergy()=0;
@@ -107,6 +110,7 @@ namespace clas12 {
     virtual  cal_ptr cal(ushort lay) const{_cal->setIndex(-1);return _cal;};
     virtual  scint_ptr sci(ushort lay) const{_scint->setIndex(-1);return _scint;};
     virtual  trck_ptr trk(ushort lay) const{_trck->setIndex(-1);return _trck;};
+    virtual  utrck_ptr utrk(ushort lay) const{_utrck->setIndex(-1);return _utrck;};
     virtual  traj_ptr traj(ushort det,ushort layer=0) const{_traj->setIndex(-1);return _traj;};
     virtual  cher_ptr che(ushort lay) const{_cher->setIndex(-1);return _cher;};
     virtual  ft_ptr ft(ushort lay) const{_ft->setIndex(-1);return _ft;};
@@ -162,6 +166,7 @@ namespace clas12 {
     cal_ptr  _cal={nullptr};
     scint_ptr _scint={nullptr};
     trck_ptr _trck={nullptr};
+    utrck_ptr _utrck={nullptr};
     traj_ptr _traj={nullptr};
     cher_ptr _cher={nullptr};
     event_ptr _event={nullptr};

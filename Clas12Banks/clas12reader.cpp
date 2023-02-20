@@ -96,7 +96,10 @@ namespace clas12 {
     
     if(_factory.hasSchema("REC::Track"))
       _btrck.reset(new tracker{_factory.getSchema("REC::Track")});
-
+    
+    if(_factory.hasSchema("REC::UTrack"))
+      _butrck.reset(new utracker{_factory.getSchema("REC::UTrack")});
+    
     if(_factory.hasSchema("REC::Traj"))
       _btraj.reset(new traj{_factory.getSchema("REC::Traj")});
 
@@ -355,6 +358,7 @@ namespace clas12 {
     if(_bscint.get())_event.getStructure(*_bscint.get());
     if(_bscint->getExtras())_event.getStructure(*_bscint->getExtras());
     if(_btrck.get())_event.getStructure(*_btrck.get());
+    if(_butrck.get())_event.getStructure(*_butrck.get());
     if(_btraj.get())_event.getStructure(*_btraj.get());
     if(_bcher.get())_event.getStructure(*_bcher.get());
     if(_bft.get())_event.getStructure(*_bft.get());
@@ -614,6 +618,7 @@ namespace clas12 {
       if(_bscint->getExtras())_allBanks.push_back(_bscint->getExtras());     
     }
     if(_btrck.get())_allBanks.push_back(_btrck.get());
+    if(_butrck.get())_allBanks.push_back(_butrck.get());
     if(_btraj.get())_allBanks.push_back(_btraj.get());
     if(_bcher.get())_allBanks.push_back(_bcher.get());
     if(_bft.get())_allBanks.push_back(_bft.get());

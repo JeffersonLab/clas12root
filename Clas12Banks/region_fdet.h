@@ -16,12 +16,6 @@
 
 #include "clas12defs.h"
 #include "region_particle.h"
-#include "calorimeter.h"
-#include "scintillator.h"
-#include "tracker.h"
-#include "traj.h"
-#include "cherenkov.h"
-
 
 namespace clas12 {
 
@@ -33,7 +27,7 @@ namespace clas12 {
 
     // region_fdet()=default;
     region_fdet(par_ptr pars,ftbpar_ptr ftbpars,covmat_ptr cm,
-		cal_ptr calp, scint_ptr scp, trck_ptr trp,
+		cal_ptr calp, scint_ptr scp, trck_ptr trp, utrck_ptr utrp,
 		traj_ptr trj, cher_ptr chp, ft_ptr ftp,event_ptr event,
 		mcpar_ptr mcp=nullptr);
     ~region_fdet() final =default;
@@ -47,6 +41,10 @@ namespace clas12 {
     trck_ptr trk(ushort lay) const final
     {
       _trck->setIndex(_ptrck);return _trck;
+    }
+    utrck_ptr utrk(ushort lay) const final
+    {
+      _utrck->setIndex(_ptrck);return _utrck;
     }
     cher_ptr che(ushort lay) const final;
     

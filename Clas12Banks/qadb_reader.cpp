@@ -21,46 +21,71 @@ namespace clas12 {
     //std::cout<<"DEBUG qadb_reader::passQAReqs "<<_runNb<<" "<<evNb<<std::endl;
     if(_runNb==0) return true;//e.g. simulation
     
-    //First event always has index 0 which doesn't exist in qaDB
-    if(evNb!=0){
-      //isOkForAsymmetry already queries _QA, want to avoid doing it twice
-      bool passAsymReq=true;
-      bool queried=false;
-      if(_reqOKAsymmetry){
-	passAsymReq = isOkForAsymmetry(_runNb,evNb);
-	queried=true;
-      } else {
-	queried = query(_runNb,evNb);
-      }
-      if(!_masksAdded){
-	addAllMasks();
-      }
-      //An event may be ok for asymmetry but have other defects
-      if(passAsymReq && queried){
-	//If an event is Golden it won't have other defects
-	if(_reqGolden){
-	  // std::cout<<"DEBUG qadb_reader::passQAReqs "<<_runNb<<" "<<evNb<<"isgolden "<<isGolden(_runNb,evNb)<<std::endl;
-  	  
-	  //If the event passes the requirements, add charge
-	  if(isGolden(_runNb,evNb)){
-	    _qa.AccumulateCharge();
-	  }
-	  return isGolden(_runNb,evNb);
-	} else {
-	  //If the event passes the requirements, add charge
-	  if(_qa.Pass(_runNb,evNb)){
-	    _qa.AccumulateCharge();
-	  }
-	  return _qa.Pass(_runNb,evNb);
-	}
-      } else {
-	return false;
-      }
-      //event passes all reqs, just don't want to acc for event 0
-      _qa.AccumulateCharge();
+    //isOkForAsymmetry already queries _QA, want to avoid doing it twice
+    bool passAsymReq=true;
+    bool queried=false;
+    if(_reqOKAsymmetry){
+      passAsymReq = isOkForAsymmetry(_runNb,evNb);
+      queried=true;
+    } else {
+      queried = query(_runNb,evNb);
     }
+    if(!_masksAdded){
+      addAllMasks();
+    }
+    //An event may be ok for asymmetry but have other defects
+    if(passAsymReq && queried){
+      //If an event is Golden it won't have other defects
+      if(_reqGolden){
+	// std::cout<<"DEBUG qadb_reader::passQAReqs "<<_runNb<<" "<<evNb<<"isgolden "<<isGolden(_runNb,evNb)<<std::endl;
+  	  
+	//If the event passes the requirements, add charge
+	if(isGolden(_runNb,evNb)){
+	  _qa.AccumulateCharge();
+	}
+	return isGolden(_runNb,evNb);
+      } else {
+	//If the event passes the requirements, add charge
+	if(_qa.Pass(_runNb,evNb)){
+	  _qa.AccumulateCharge();
+	}
+	return _qa.Pass(_runNb,evNb);
+      }
+    } else {
+      return false;
+    }
+    //event passes all reqs, just don't want to acc for event 0
+    _qa.AccumulateCharge();
+    
     //Event passes all requirements
     return true;
+  }
+
+  /*This function will take in a list of runs and return the accumulated charge
+    past specified requirements.
+    Note: This is done on a file per file basis*/
+  double qadb_reader::getChargeForRunlist(std::vector<int> Runs){
+    //loop over runs in run list
+    
+    for (auto runNb:Runs){
+      setRun(runNb);
+      //std::cout<<"Reading Run "<<_runNb<<std::endl;
+      int evNb;
+      //files go in increments of 5, hope this doesn't change
+      for(int fileNb=0; fileNb<=_qa.GetMaxFilenum(_runNb); fileNb+=5) {
+	//query the QADB can ready this run/file
+	if(_qa.QueryByFilenum(_runNb,fileNb)) {
+	  
+	  // we need an event number within this file, to pass to QA criteria
+	  // checking methods, such as Golden; no additional Query will be called
+	  evNb = _qa.GetEvnumMin();
+	  //this will check the requirements and accumulate charge
+	  passQAReqs(evNb);
+
+	}//query QADB for file/run combination, checks it exists
+      }//loop over files in runs
+    }//loop over runs
+    return _qa.GetAccumulatedCharge();
   }
 
 #else

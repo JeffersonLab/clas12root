@@ -12,13 +12,9 @@ void Ex9_QualityAssurance(){
   //clas12reader declared as usual.
   clas12reader c12("/path/to/data.hipo");
 
-  /*
-   * applyQA specifies to the clas12reader that quality assurance
-   * cuts will be applied, based on the .json file given as an 
-   * argument. This file should contain the Clas12 Quality Assurance
-   * database.
-   */
-  c12.applyQA();
+  /*c12reader needs a database*/
+  clas12databases db;
+  c12.connectDataBases(&db);
 
   /*
    * Several quality assurance requirements can be specified.
@@ -32,10 +28,18 @@ void Ex9_QualityAssurance(){
    * See RGA analysis note and clasqaDB github repository for
    * additional information.
    */
-  c12.qadb()->requireOkForAsymmetry(true);
-  c12.qadb()->requireGolden(true);
-  c12.qadb()->addQARequirement("MarginalOutlier");
-  c12.qadb()->addQARequirement("TotalOutlier");
+  c12.db()->qadb_requireOkForAsymmetry(true);
+  c12.db()->qadb_requireGolden(true);
+  c12.db()->qadb_addQARequirement("MarginalOutlier");
+  c12.db()->qadb_addQARequirement("TotalOutlier");
+
+  /*
+   * applyQA specifies to the clas12reader that quality assurance
+   * cuts will be applied, based on the .json file given as an 
+   * argument. This file should contain the Clas12 Quality Assurance
+   * database.
+   */
+  c12.applyQA();
 
   //The analysis can then proceed as usual.
   while(c12.next()) {
