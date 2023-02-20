@@ -61,36 +61,54 @@ namespace clas12 {
     //initialise banks pointers
     if(_factory.hasSchema("RECFT::Particle"))
       _bftbparts.reset(new ftbparticle{_factory.getSchema("RECFT::Particle")});
+
     if(_factory.hasSchema("REC::Particle"))
       _bparts.reset(new particle{_factory.getSchema("REC::Particle"),_bftbparts.get()});
+
     if(_factory.hasSchema("REC::CovMat"))
       _bcovmat.reset(new covmatrix{_factory.getSchema("REC::CovMat")});
+
     if(_factory.hasSchema("RECFT::Event"))
       _bftbevent.reset(new clas12::ftbevent{_factory.getSchema("RECFT::Event")});
     if(_factory.hasSchema("RUN::config"))
       _brunconfig.reset(new clas12::runconfig{_factory.getSchema("RUN::config")});
+
     if(_factory.hasSchema("REC::Event"))
       _bevent.reset(new clas12::event{_factory.getSchema("REC::Event"),_bftbevent.get()});
-    if(_factory.hasSchema("REC::Calorimeter"))
-      _bcal.reset(new calorimeter{_factory.getSchema("REC::Calorimeter")});
+
+    if(_factory.hasSchema("REC::Calorimeter")){
+      if(_factory.hasSchema("REC::CaloExtras")){
+	_bcal.reset(new calorimeter{_factory.getSchema("REC::Calorimeter"),_factory.getSchema("REC::CaloExtras")});
+      }
+      else{
+	_bcal.reset(new calorimeter{_factory.getSchema("REC::Calorimeter")});
+      }
+    }
+    
     if(_factory.hasSchema("REC::Scintillator")){
       if(_factory.hasSchema("REC::ScintExtras")){
 	_bscint.reset(new scintillator{_factory.getSchema("REC::Scintillator"),_factory.getSchema("REC::ScintExtras")});
       }
-      else
+      else{
 	_bscint.reset(new scintillator{_factory.getSchema("REC::Scintillator")});
- 
+      }
     }
+    
     if(_factory.hasSchema("REC::Track"))
       _btrck.reset(new tracker{_factory.getSchema("REC::Track")});
-     if(_factory.hasSchema("REC::UTrack"))
+    
+    if(_factory.hasSchema("REC::UTrack"))
       _butrck.reset(new utracker{_factory.getSchema("REC::UTrack")});
+    
     if(_factory.hasSchema("REC::Traj"))
       _btraj.reset(new traj{_factory.getSchema("REC::Traj")});
+
     if(_factory.hasSchema("REC::Cherenkov"))
       _bcher.reset(new cherenkov{_factory.getSchema("REC::Cherenkov")});
+
     if(_factory.hasSchema("REC::ForwardTagger"))
       _bft.reset(new forwardtagger{_factory.getSchema("REC::ForwardTagger")});
+
     if(_factory.hasSchema("REC::VertDoca"))
       _bvertdoca.reset(new clas12::vertdoca{_factory.getSchema("REC::VertDoca")});
   
@@ -101,6 +119,7 @@ namespace clas12 {
       else
 	_bmcparts.reset( new mcparticle{_factory.getSchema("MC::Lund")});
     }
+
     if(_factory.hasSchema("MC::Event"))
       _bmcevent.reset( new clas12::mcevent{_factory.getSchema("MC::Event")});
 
@@ -335,6 +354,7 @@ namespace clas12 {
     if(_bevent.get())_event.getStructure(*_bevent.get());
     if(_bftbevent.get())_event.getStructure(*_bftbevent.get());
     if(_bcal.get())_event.getStructure(*_bcal.get());
+    if(_bcal->getExtras())_event.getStructure(*_bcal->getExtras());
     if(_bscint.get())_event.getStructure(*_bscint.get());
     if(_bscint->getExtras())_event.getStructure(*_bscint->getExtras());
     if(_btrck.get())_event.getStructure(*_btrck.get());

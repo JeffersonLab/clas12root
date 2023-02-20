@@ -29,6 +29,9 @@ namespace clas12 {
     int _beta_order{-1};
     int _st_order{-1};
     int _chi2pid_order{-1};
+    int _px_order{-1};
+    int _py_order{-1};
+    int _pz_order{-1};
     
     short _entry{0};
     
@@ -49,6 +52,9 @@ namespace clas12 {
     float  getBeta(int index)    const noexcept{ return getFloat(_beta_order,index);}
     float  getChi2Pid(int index)    const noexcept{ return getFloat(_chi2pid_order,index);}
     int    getStatus(int index)    const noexcept{ return getShort(_st_order,index);}
+    float  getPx(int index)    const noexcept{ return getFloat(_px_order,index);}
+    float  getPy(int index)    const noexcept{ return getFloat(_py_order,index);}
+    float  getPz(int index)    const noexcept{ return getFloat(_pz_order,index);}
 
     int    getPid()   const noexcept{ return _entry==-1?0:getInt(_pid_order,_entry);}
     float  getVt()    const noexcept{ return _entry==-1?0:getFloat(_vt_order,_entry);}
@@ -56,7 +62,10 @@ namespace clas12 {
     float  getChi2Pid()    const noexcept{ return _entry==-1?0:getFloat(_chi2pid_order,_entry);}
     int    getStatus()    const noexcept{ return _entry==-1?0:getShort(_st_order,_entry);}
 
- 
+    float  getPx()    const noexcept{ return getFloat(_px_order,_entry);}
+    float  getPy()    const noexcept{ return getFloat(_py_order,_entry);}
+    float  getPz()    const noexcept{ return getFloat(_pz_order,_entry);}
+
     
     void setEntry(short i){
       if( i<getRows() )_entry=i;

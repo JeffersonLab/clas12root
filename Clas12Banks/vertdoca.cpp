@@ -25,6 +25,7 @@ namespace clas12 {
     _cx2_order  = sch.getEntryOrder("cx2");
     _cy2_order  = sch.getEntryOrder("cy2");
     _cz2_order  = sch.getEntryOrder("cz2");
-   
+    _r_order  = sch.getEntryOrder("r");
+ 
     }
 }

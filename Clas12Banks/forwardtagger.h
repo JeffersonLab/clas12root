@@ -34,7 +34,7 @@ namespace clas12 {
     
     //getter funtions for items in forwardtagger bank
     int getLayer(int index)   const noexcept override{
-      if(index>-1)return getInt(_layer_order,index);
+      if(index>-1)return getByte(_layer_order,index);
       return 0;
     }
     int getLayer()   const noexcept override{
@@ -82,7 +82,7 @@ namespace clas12 {
       return 0;
     }
     int getSizeFT()  const noexcept{ //watch-out banks::getSize() !
-      if(_index>-1)return getInt(_size_order,_index);
+      if(_index>-1)return getShort(_size_order,_index);
       return 0;
     }
      double getChi2()  const noexcept{ 

@@ -48,7 +48,8 @@ namespace clas12 {
     float    getCx2(int entry) const noexcept{ return getFloat(_cx2_order,entry); }
     float    getCy2(int entry) const noexcept{ return getFloat(_cy2_order,entry); }
     float    getCz2(int entry) const noexcept{ return getFloat(_cz2_order,entry); }
- 
+    float    getR(int entry) const noexcept{ return getFloat(_r_order,entry); }
+
 
     /**
     * This is virtual method from hipo::bank it will be called
@@ -77,7 +78,7 @@ namespace clas12 {
   private :
 
     
-     int _index1_order{-1};
+    int _index1_order{-1};
     int _index2_order{-1};
     int _x_order{-1};
     int _y_order{-1};
@@ -94,6 +95,7 @@ namespace clas12 {
     int _cx2_order{-1};
     int _cy2_order{-1};
     int _cz2_order{-1};
+    int _r_order{-1};
  
     
   };
