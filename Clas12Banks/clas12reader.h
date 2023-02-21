@@ -346,8 +346,50 @@ namespace clas12 {
     }
  
     //double sumChargeFromQA();
-    
+    void ignoreBank(const string& bnk ){
+      if(_bankInUse.at(bnk))
+	(*_bankInUse[bnk])=false;
+    }
+
+    void SetRecParticleOnly(){
+      _justParticleAna=true;
+       ignoreBank("REC::CovMat");
+       ignoreBank("REC::Traj");
+       ignoreBank("REC::Calorimeter");
+       ignoreBank("REC::Scintillator");
+       ignoreBank("REC::CaloExtras");
+       ignoreBank("REC::ScintExtras");
+       ignoreBank("REC::Track");
+       ignoreBank("REC::UTrack");
+       ignoreBank("REC::ForwardTagger");
+       ignoreBank("REC::VertDoca");
+       ignoreBank("REC::Cherenkov");
+       ignoreBank("HEL::online");
+       ignoreBank("RAW::vtp");
+  
+    }
   private:
+
+    std::map<string,bool*> _bankInUse;
+    bool _useCovmat={false};
+    bool _useEvent={false};
+    bool _useRunconfig={false};
+    bool _useFTBEvent={false};
+    bool _useCal={false};
+    bool _useCalExtras={false};
+    bool _useScint={false};
+    bool _useScintExtras={false};
+    bool _useTrck={false};
+    bool _useUTrck={false};
+    bool _useTraj={false};
+    bool _useCher={false};
+    bool _useFT={false};
+    bool _useVTP={false};
+    bool _useHelonline={false};
+    bool _useVertdoca={false};
+    bool _useMCparts={false};
+    bool _useMCevent={false};
+    bool _justParticleAna={false};
  ///////////////////////////////
 
    };
