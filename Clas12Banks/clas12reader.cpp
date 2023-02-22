@@ -36,9 +36,7 @@ namespace clas12 {
     _reader.setTags(tags);
     initReader();
 
-    std::cout<<"copy useBanks"<<std::endl;
     for(auto& bnk:other._bankInUse){//copy list of in use banks
-      // std::cout<<bnk.first<<" "<<*bnk.second<<" "<<other._bankInUse.size()<<std::endl;
       //give the value in other to this entry
       if(bnk.second!=nullptr)
 	(*(_bankInUse.at(bnk.first)))=*(bnk.second);
