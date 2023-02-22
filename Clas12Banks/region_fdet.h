@@ -95,8 +95,7 @@ namespace clas12 {
       return _cal->getSector();
     }
 
-    
-    private:
+     private:
 
     
   

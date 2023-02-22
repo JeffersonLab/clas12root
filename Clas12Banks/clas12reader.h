@@ -40,6 +40,7 @@
 #include "dictionary.h"
 
 #include <algorithm>
+#include <set>
 #include <vector>
 #include <string>
 #include <iostream>
@@ -196,13 +197,22 @@ namespace clas12 {
     }
 
     int getRunNumber()const {return _runNo;}//works if connectDatabases called
+    std::set<int> getRunNumbers() const {return _runNumbers;}
     
     double getCurrApproxCharge(){return _runBeamCharge*_nevent/_reader.getEntries();}
 
     void summary(){
-      std::cout<<"for file "<<_filename<<"\n   read "<<_nevent<<" events from which "<<_nselected<< " passed filtering conditions."<<std::endl;
+      std::cout<<"for file "<<_filename<<"\n\t read "<<_nevent<<" events from which "<<_nselected<< " passed filtering conditions."<<std::endl;
       if(_db!=nullptr)
-	if(db()->qa())cout<<"Accumulated charge past QA: "<<db()->qa()->getAccCharge()<<" nC"<<endl;
+	if(db()->qa()){
+	  auto prev = db()->qa()->getPreviousCharge();
+	  //Just charge for this file
+	  //  double charge=db()->qa()->getChargeForRunlist(getRunNumbers()) - prev;
+	  double charge=db()->qa()->getAccCharge();
+	  db()->qa()->setPreviousCharge(charge);
+	  charge-= prev;
+	  cout<<"\t accumulated charge past QA: "<<charge<<" nC"<<endl;
+	}
     }
     
     void getStructure(hipo::bank* bank){
@@ -315,6 +325,7 @@ namespace clas12 {
     ///////////////////////////////DB
   private:
     int _runNo{0};
+    std::set<int> _runNumbers;
     clas12databases *_db={nullptr}; //
 
     bool _applyQA=false;

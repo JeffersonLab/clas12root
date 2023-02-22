@@ -21,7 +21,19 @@ namespace clas12root{
   using std::cout;
   using std::endl;
   
+  class NumbersObject : public TNamed {
+  public :
+    std::set<int> _theset;
+    void PrintNumbers(){
+      std::cout<<"clas12root::NumbersObject Numbers in "<<GetName()<<" : ";
+      for(auto& val:_theset)
+	std::cout<<val<<" ";
+      std::cout<<endl;
+    }
+    ClassDef(clas12root::NumbersObject,1);
+  };
   
+    
   class HipoSelector : public TSelector {
       public :
 
@@ -73,7 +85,8 @@ namespace clas12root{
       Int_t _iFile=0;
       Long64_t _NfileRecords=0;
       
-       
+    NumbersObject _runNumbers;
+    
       ClassDefOverride(clas12root::HipoSelector,0);
 
     };

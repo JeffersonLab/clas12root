@@ -18,12 +18,13 @@ namespace clas12 {
   ///////////////////////////////////////////////////////
   ///Checks if an event passes all the QA requirements
   bool qadb_reader::passQAReqs(int evNb){
-    //std::cout<<"DEBUG qadb_reader::passQAReqs "<<_runNb<<" "<<evNb<<std::endl;
+    //  std::cout<<"DEBUG qadb_reader::passQAReqs "<<_runNb<<" "<<evNb<<std::endl;
     if(_runNb==0) return true;//e.g. simulation
     
     //isOkForAsymmetry already queries _QA, want to avoid doing it twice
     bool passAsymReq=true;
     bool queried=false;
+    // std::cout<<"DEBUG qadb_reader::passQAReqs "<<_runNb<<" "<<evNb<<"isgolden "<<isGolden(_runNb,evNb)<<" "<<isOkForAsymmetry(_runNb,evNb)<<std::endl;
     if(_reqOKAsymmetry){
       passAsymReq = isOkForAsymmetry(_runNb,evNb);
       queried=true;
@@ -37,7 +38,7 @@ namespace clas12 {
     if(passAsymReq && queried){
       //If an event is Golden it won't have other defects
       if(_reqGolden){
-	// std::cout<<"DEBUG qadb_reader::passQAReqs "<<_runNb<<" "<<evNb<<"isgolden "<<isGolden(_runNb,evNb)<<std::endl;
+	//std::cout<<"DEBUG qadb_reader::passQAReqs "<<_runNb<<" "<<evNb<<"isgolden "<<isGolden(_runNb,evNb)<<std::endl;
   	  
 	//If the event passes the requirements, add charge
 	if(isGolden(_runNb,evNb)){
@@ -61,32 +62,6 @@ namespace clas12 {
     return true;
   }
 
-  /*This function will take in a list of runs and return the accumulated charge
-    past specified requirements.
-    Note: This is done on a file per file basis*/
-  double qadb_reader::getChargeForRunlist(std::vector<int> Runs){
-    //loop over runs in run list
-    
-    for (auto runNb:Runs){
-      setRun(runNb);
-      //std::cout<<"Reading Run "<<_runNb<<std::endl;
-      int evNb;
-      //files go in increments of 5, hope this doesn't change
-      for(int fileNb=0; fileNb<=_qa.GetMaxFilenum(_runNb); fileNb+=5) {
-	//query the QADB can ready this run/file
-	if(_qa.QueryByFilenum(_runNb,fileNb)) {
-	  
-	  // we need an event number within this file, to pass to QA criteria
-	  // checking methods, such as Golden; no additional Query will be called
-	  evNb = _qa.GetEvnumMin();
-	  //this will check the requirements and accumulate charge
-	  passQAReqs(evNb);
-
-	}//query QADB for file/run combination, checks it exists
-      }//loop over files in runs
-    }//loop over runs
-    return _qa.GetAccumulatedCharge();
-  }
 
 #else
   qadb_reader::qadb_reader(int runNb){
@@ -106,6 +81,32 @@ namespace clas12 {
     _reqsQA=other._reqsQA;
     _reqOKAsymmetry=other._reqOKAsymmetry;
     _reqGolden=other._reqGolden;
+  }
+  /*This function will take in a list of runs and return the accumulated charge
+    past specified requirements.
+    Note: This is done on a file per file basis*/
+  double qadb_reader::getChargeForRunlist(std::set<int> Runs){
+    //loop over runs in run list
+    for (auto runNb:Runs){
+      setRun(runNb);
+      std::cout<<"qadb_reader::getChargeForRunlist Reading Run "<<_runNb<<std::endl;
+      int evNb=-1;
+      //files go in increments of 5, hope this doesn't change
+      for(int fileNb=0; fileNb<=_qa.GetMaxFilenum(_runNb); fileNb+=5) {
+	//query the QADB can ready this run/file
+	if(_qa.QueryByFilenum(_runNb,fileNb)) {
+	  
+	  // we need an event number within this file, to pass to QA criteria
+	  // checking methods, such as Golden; no additional Query will be called
+	  evNb = _qa.GetEvnumMin();
+	  //this will check the requirements and accumulate charge
+	  passQAReqs(evNb);
+
+	}//query QADB for file/run combination, checks it exists
+      }//loop over files in runs
+    }//loop over runs
+    _prevSumCharge = _qa.GetAccumulatedCharge();
+    return _qa.GetAccumulatedCharge();
   }
 
 }

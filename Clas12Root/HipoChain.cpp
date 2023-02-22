@@ -116,9 +116,18 @@ namespace clas12root {
     /////Warning any changes to this function should
     ////also be considered for  HipoSelector::Process
     std::cout<<"HipoChain::FirstFile() "<<_idxFile<<" out of "<<GetNFiles()<<std::endl;
+    //accumulate run numbers from previous file
+    if(_c12.get()){
+      auto procNumbers= _c12->getRunNumbers();
+      InsertRunNumbers(procNumbers);
+    }
+ 
+    
     if(_idxFile>=GetNFiles()){
       return kFALSE;//no more files
     }
+
+   
     //open next file, using previously configured reader 
     _c12.reset(new clas12::clas12reader{*GetC12Reader(),GetFileName(_idxFile).Data(),_readerTags});
     ConnectDataBases();

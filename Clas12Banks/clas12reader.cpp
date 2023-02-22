@@ -38,9 +38,10 @@ namespace clas12 {
 
     std::cout<<"copy useBanks"<<std::endl;
     for(auto& bnk:other._bankInUse){//copy list of in use banks
-      std::cout<<bnk.first<<" "<<*bnk.second<<" "<<other._bankInUse.size()<<std::endl;
+      // std::cout<<bnk.first<<" "<<*bnk.second<<" "<<other._bankInUse.size()<<std::endl;
       //give the value in other to this entry
-      (*(_bankInUse.at(bnk.first)))=*(bnk.second);
+      if(bnk.second!=nullptr)
+	(*(_bankInUse.at(bnk.first)))=*(bnk.second);
     }
     
     _justParticleAna=other._justParticleAna;
@@ -374,8 +375,8 @@ namespace clas12 {
 	}
       }
       else   if(_db->qa()!=nullptr){
-	//accumulate charge even if no conditions given
-	_db->qa()->accumulateCharge(_brunconfig->getEvent());
+      	//accumulate charge even if no conditions given
+      	_db->qa()->accumulateCharge(_brunconfig->getEvent());
       }
     }
     return true;
@@ -408,7 +409,14 @@ namespace clas12 {
 
     //Second check qa
     //Special run banks
-    if(_brunconfig.get())_event.getStructure(*_brunconfig.get());
+    if(_useRunconfig==true)_event.getStructure(*_brunconfig.get());
+    //Keep track of run which have been processed
+    auto currRun=_brunconfig->getRun();
+    if(currRun!=_runNo){
+      if(currRun!=0 )_runNumbers.insert(currRun);
+      _runNo=currRun;
+    }
+    
     if(checkQA()==false) return false;
    
      //Third check if event is of the right type

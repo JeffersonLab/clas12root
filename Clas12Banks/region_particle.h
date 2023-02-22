@@ -95,7 +95,6 @@ namespace clas12 {
       return _useFTBPid*_ftbparts->getRows()?_ftbparts->getBeta():_parts->getBeta();
     }
  
-    virtual double getCalPhotonE(){return 0;}
     
     virtual double getTime()=0;
     virtual double getPath()=0;
