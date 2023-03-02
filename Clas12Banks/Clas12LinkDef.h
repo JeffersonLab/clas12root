@@ -25,6 +25,8 @@
 #pragma link C++ class clas12::traj+;
 #pragma link C++ class clas12::forwardtagger+;
 #pragma link C++ class clas12::cherenkov+;
+#pragma link C++ class clas12::rich+;
+#pragma link C++ class clas12::richring+;
 #pragma link C++ class clas12::calorimeter+;
 #pragma link C++ class clas12::covmatrix+;
 #pragma link C++ class clas12::region_particle+;

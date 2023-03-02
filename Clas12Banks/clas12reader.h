@@ -90,7 +90,7 @@ namespace clas12 {
     void addARegionFDet(){
       //Forward detector needs particles, calorimeter, scintillator,
       //track, cherenkov
-      region_fdet_uptr  reg{new region_fdet{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_butrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get(),_bmcparts.get()}};
+      region_fdet_uptr  reg{new region_fdet{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_butrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get(),_brich.get(),_bmcparts.get()}};
       if(_useFTBased)reg->useFTBPid();
      _rfdets.push_back(std::move(reg));
     }
@@ -272,6 +272,7 @@ namespace clas12 {
     utrck_uptr _butrck;//!
     traj_uptr _btraj;//!
     cher_uptr _bcher;//!
+    rich_uptr _brich;//!
     ft_uptr _bft;//!
     vtp_uptr _bvtp;//!
     vertdoca_uptr _bvertdoca;//!
@@ -375,6 +376,7 @@ namespace clas12 {
        ignoreBank("REC::ForwardTagger");
        ignoreBank("REC::VertDoca");
        ignoreBank("REC::Cherenkov");
+       ignoreBank("RICH::Particle");
        ignoreBank("HEL::online");
        ignoreBank("RAW::vtp");
   
@@ -394,6 +396,7 @@ namespace clas12 {
     bool _useUTrck={false};
     bool _useTraj={false};
     bool _useCher={false};
+    bool _useRich={false};
     bool _useFT={false};
     bool _useVTP={false};
     bool _useHelonline={false};

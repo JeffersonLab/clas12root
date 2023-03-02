@@ -16,6 +16,12 @@ namespace clas12 {
     _region=clas12::FD;  
   }
 
+  region_fdet::region_fdet(par_ptr pars,ftbpar_ptr ftbpars,covmat_ptr cm, cal_ptr calp, scint_ptr scp, trck_ptr trp, utrck_ptr utrp, traj_ptr trj,cher_ptr chp, ft_ptr ftp,event_ptr event,rich_ptr rich,mcpar_ptr mcp):
+    region_particle(pars,ftbpars,cm,calp,scp,trp,utrp,trj,chp,ftp,event,mcp),_rich{rich}
+  {
+    _region=clas12::FD;  
+  }
+
   ///////////////////////////////////////////////////////
   /// check if any FD detectors associated with
   /// current particle and store the detector indices
@@ -24,6 +30,9 @@ namespace clas12 {
     _ptof=-1;
     _pcal=-1;
     _ptrck=-1;
+    _prich=-1;
+    _phtcc=-1;
+    _pltcc=-1;
     //_scint->print();
     
     //prefer tof layer 1,0,2
@@ -35,18 +44,7 @@ namespace clas12 {
     else if(_ptof1!=-1) _ptof=_ptof1;
     else if(_ptof3!=-1) _ptof=_ptof3;
 
-    // if(_ptof!=-1){
-    //   std::cout<<"XXX "<<_ptof<<" "<<_pentry<<std::endl;
-    //   _scint->setIndex(_ptof);
-    //   //if(_scint->getTime()==0){
-    // 	std::cout<<"Broken Time "<<_ptof<<" "<<_pentry<<std::endl;
-    // 	if(_ptof1!=-1)std::cout<<"PTOF1 "<<_ptof1<<" "<< sci(clas12::FTOF1A)->getTime()<<" "<< sci(_ptof1)->getFloat(7,_ptof1)<<std::endl;
-    // 	if(_ptof2!=-1)std::cout<<"PTOF2 "<<_ptof2<<" "<< sci(clas12::FTOF1B)->getTime()<<" "<< sci(_ptof1)->getFloat(7,_ptof2)<<std::endl;
-    // 	if(_ptof3!=-1)std::cout<<"PTOF3 "<<_ptof3<<" "<< sci(clas12::FTOF2)->getTime()<<" "<< sci(_ptof1)->getFloat(7,_ptof3)<<std::endl;
-    // 	_scint->print();
-    // 	//}
-    // }
-    //prefer pcal,inner, outer
+   //prefer pcal,inner, outer
     if(_cal)_pcal=_pin=_cal->getIndex( _pentry,clas12::EC, clas12::ECIN);
     if(_cal)_pcal=_pout=_cal->getIndex( _pentry,clas12::EC, clas12::ECOUT);
     if(_cal)_pcal=_ppre=_cal->getIndex( _pentry,clas12::EC, clas12::PCAL);
@@ -59,6 +57,8 @@ namespace clas12 {
    
     if(_cher)_phtcc=_cher->getIndex( _pentry,clas12::HTCC);
     if(_cher)_pltcc=_cher->getIndex( _pentry,clas12::LTCC);
+
+    if(_rich)_prich=_rich->getIndex( _pentry,clas12::RICH);
 
     //was fdet involved ?
     if((_ptof+_pcal+_ptrck) == -3)return false;
@@ -111,6 +111,18 @@ namespace clas12 {
       _cher->setIndex(_pltcc);return _cher;
     }
     _cher->setIndex(-1);return _cher;
+  }
+  
+ ///////////////////////////////////////////////////////
+  /// Get pointer to rich banks for this particle
+  /// This should be used directly to acess data
+  /// e.g. p->rich()->getId();
+  ///      p->rich()->ring()->getSector();
+  rich_ptr region_fdet::rich() const {
+    if(_rich)
+      _rich->setIndex(_prich);
+
+    return _rich;
   }
   
   ///////////////////////////////////////////////////////

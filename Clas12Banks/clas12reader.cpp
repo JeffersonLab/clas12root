@@ -153,6 +153,12 @@ namespace clas12 {
       _useCher=true;
     }
     
+    if(_factory.hasSchema("RICH::Particle")){
+      _brich.reset(new rich{_factory.getSchema("RICH::Particle"),_factory.getSchema("RICH::Ring")});
+      _bankInUse["RICH::Particle"]=&_useRich;
+      _useRich=true;
+    }
+    
     if(_factory.hasSchema("REC::ForwardTagger")){
       _bft.reset(new forwardtagger{_factory.getSchema("REC::ForwardTagger")});
       _bankInUse["REC::ForwardTagger"]=&_useFT;
@@ -436,6 +442,7 @@ namespace clas12 {
     if(_useUTrck==true)_event.getStructure(*_butrck.get());
     if(_useTraj==true)_event.getStructure(*_btraj.get());
     if(_useCher==true)_event.getStructure(*_bcher.get());
+    if(_useRich==true)_event.getStructure(*_brich.get());
     if(_useFT==true)_event.getStructure(*_bft.get());
     if(_useVTP==true)_event.getStructure(*_bvtp.get());
     if(_useHelonline==true)_event.getStructure(*_bhelonline.get());
@@ -711,6 +718,7 @@ namespace clas12 {
     if(_butrck.get())_allBanks.push_back(_butrck.get());
     if(_btraj.get())_allBanks.push_back(_btraj.get());
     if(_bcher.get())_allBanks.push_back(_bcher.get());
+    if(_brich.get())_allBanks.push_back(_brich.get());
     if(_bft.get())_allBanks.push_back(_bft.get());
     if(_bvtp.get())_allBanks.push_back(_bvtp.get());
     if(_bvertdoca.get())_allBanks.push_back(_bvertdoca.get());
