@@ -47,17 +47,17 @@ namespace clas12 {
     ///////////////////////////////////////////////////////////////
     //getter functions, same for derived classes
     //get detector id
-    int getDetector(int index)   const noexcept{ return getInt(_detector_id_order,index);}
-    int getDetector()   const noexcept{ return getInt(_detector_id_order,_index);}
+    virtual int getDetector(int index)   const noexcept{ return getByte(_detector_id_order,index);} //if the bank does not have a detector entry, you may inherit and chenge this getter.
+    virtual int getDetector()   const noexcept{ return getByte(_detector_id_order,_index);}
     //get the pindex = corresponding particle index
-    int getPindex(int index)   const noexcept{ return getInt(_pindex_order,index);}
-    int getPindex()   const noexcept{ return getInt(_pindex_order,_index);}
+    int getPindex(int index)   const noexcept{ return getShort(_pindex_order,index);}
+    int getPindex()   const noexcept{ return getShort(_pindex_order,_index);}
 
     //given a detector (layer if exists)  and pindex find the position in this bank
     int getIndex()   const noexcept{return _index;}
-    int getIndex(int pindex, int detector, int layer=0);
+    int getIndex(int pindex, int detector=0, int layer=0);
    
-    void setIndex(int ind){_index=ind;}
+    virtual void setIndex(int ind){_index=ind;}
     void setBankEntry(short i){ _index=i;} //faster for BankHist
     void setEntry(int ind){_index=ind;}
     
