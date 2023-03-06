@@ -143,8 +143,6 @@ namespace clas12 {
       return 0;
     }
     int getEmilay() const noexcept{
-      std::cout<<"getEMilay "<<_emilay_order<<" "<<_index<<" "<< _pindex_order<<std::endl;
-      //std::cout<<getPindex()<<std::endl;
       if(_index>-1)return getByte(_emilay_order,_index);
       return 0;
     }
