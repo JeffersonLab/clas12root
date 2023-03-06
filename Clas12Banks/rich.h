@@ -221,9 +221,9 @@ namespace clas12 {
     int getDetector(int index)   const noexcept final{ return clas12::RICH;} //if the bank does not have a detector entry, you may inherit and chenge this getter.
     int getDetector()   const noexcept final{ return clas12::RICH;}
 
-
-    richring_ptr const ring() {_ring->setIndex(getIndex());return _ring.get();}
-    
+  //RICH::Ring has many entries for each REC::Particle
+    richring_ptr const ring(uint index=0) {_ring->setIndex(index);return _ring.get();}
+  uint getNRing() const {return _ring->getRows();}
   private:
 
     int  _id_order=-1;
