@@ -16,12 +16,6 @@
 
 #include "clas12defs.h"
 #include "region_particle.h"
-#include "calorimeter.h"
-#include "scintillator.h"
-#include "tracker.h"
-#include "traj.h"
-#include "cherenkov.h"
-
 
 namespace clas12 {
 
@@ -33,9 +27,13 @@ namespace clas12 {
 
     // region_fdet()=default;
     region_fdet(par_ptr pars,ftbpar_ptr ftbpars,covmat_ptr cm,
-		cal_ptr calp, scint_ptr scp, trck_ptr trp,
+		cal_ptr calp, scint_ptr scp, trck_ptr trp, utrck_ptr utrp,
 		traj_ptr trj, cher_ptr chp, ft_ptr ftp,event_ptr event,
 		mcpar_ptr mcp=nullptr);
+     region_fdet(par_ptr pars,ftbpar_ptr ftbpars,covmat_ptr cm,
+		cal_ptr calp, scint_ptr scp, trck_ptr trp, utrck_ptr utrp,
+		traj_ptr trj, cher_ptr chp, ft_ptr ftp,event_ptr event,
+		rich_ptr rich,mcpar_ptr mcp=nullptr);
     ~region_fdet() final =default;
 
     
@@ -48,8 +46,12 @@ namespace clas12 {
     {
       _trck->setIndex(_ptrck);return _trck;
     }
+    utrck_ptr utrk(ushort lay) const final
+    {
+      _utrck->setIndex(_ptrck);return _utrck;
+    }
     cher_ptr che(ushort lay) const final;
-    
+    rich_ptr rich() const final;
      
 
     double getTime() final{
@@ -97,11 +99,11 @@ namespace clas12 {
       return _cal->getSector();
     }
 
-    
-    private:
+     private:
 
     
-  
+    rich_ptr _rich={nullptr};
+ 
    //calorimeter indices
     short _pcal=-1;
     short _ppre=-1;
@@ -119,6 +121,7 @@ namespace clas12 {
     //cherenkov indices
     short _phtcc=-1;
     short _pltcc=-1;
+    short _prich=-1;
     
    
     

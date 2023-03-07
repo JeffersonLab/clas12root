@@ -15,4 +15,5 @@
 #pragma link C++ class clas12root::ParticleTree+;
 #pragma link C++ class clas12root::ParticleHist+;
 #pragma link C++ class clas12root::HipoROOTOut+;
+#pragma link C++ class clas12root::NumbersObject+;
 #endif

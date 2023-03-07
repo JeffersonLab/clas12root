@@ -29,20 +29,30 @@ namespace clas12root{
       hipo::event      event;
 
       Long64_t nevents=0;
-      while(reader.next()==true){
-	if(++nevents==NENTRIESTOPROCESS) break;
-	reader.read(event); //read event
-	event.getStructure(bank); //get particle data
+      int nrec = reader.getNRecords();
+      hipo::record  record;
 
-	int nrows = bank.getRows();
-     	for(int i = 0; i < nrows; i++){
-	  bank.setBankEntry(i);
-	  ////if(CCCC)hists->at(IIII)->Fill(XXXX);
+      for(int i =0 ;i < nrec; i++){
+	reader.loadRecord(record,i);
+	int nevt = record.getEventCount();
+	//printf("event size = %d\n", nevt);
 
+	for(int r = 0; r < nevt; r++){
+	  record.read(bank,r);
+
+	  if(++nevents==NENTRIESTOPROCESS) break;
+	  //	reader.read(event); //read event
+	  //event.getStructure(bank); //get particle data
+
+	  int nrows = bank.getRows();
+	  for(int i = 0; i < nrows; i++){
+	    bank.setBankEntry(i);
+	    ////if(CCCC)hists->at(IIII)->Fill(XXXX);
+
+	  }
 	}
-     }
-    }
+      }
  
-    
+    }
   };
 }

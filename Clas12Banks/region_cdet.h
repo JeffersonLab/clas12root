@@ -16,11 +16,6 @@
 
 #include "clas12defs.h"
 #include "region_particle.h"
-#include "calorimeter.h"
-#include "scintillator.h"
-#include "tracker.h"
-#include "traj.h"
-#include "cherenkov.h"
 
 
 namespace clas12 {
@@ -31,10 +26,10 @@ namespace clas12 {
 
   public:
 
-    region_cdet(par_ptr pars,covmat_ptr cm, scint_ptr scp,
-		trck_ptr trp,traj_ptr trj);
+    // region_cdet(par_ptr pars,covmat_ptr cm, scint_ptr scp,
+    // 		trck_ptr trp,traj_ptr trj);
     region_cdet(par_ptr pars,ftbpar_ptr ftbpars,covmat_ptr cm, cal_ptr calp, scint_ptr scp,
-		trck_ptr trp, traj_ptr trj, cher_ptr chp, ft_ptr ftp,event_ptr event,
+		trck_ptr trp,utrck_ptr utrp, traj_ptr trj, cher_ptr chp, ft_ptr ftp,event_ptr event,
 		mcpar_ptr mcp=nullptr);
     ~region_cdet() final=default;
 
@@ -44,6 +39,7 @@ namespace clas12 {
     scint_ptr sci(ushort lay) const final;
     traj_ptr traj(ushort det,ushort layer=0) const final;
     trck_ptr trk(ushort lay) const final{_trck->setIndex(_ptrck);return _trck;};
+    utrck_ptr utrk(ushort lay) const final{_utrck->setIndex(_ptrck);return _utrck;};
     
      
     

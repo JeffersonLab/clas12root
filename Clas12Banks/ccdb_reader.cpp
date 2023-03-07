@@ -14,6 +14,7 @@ namespace clas12 {
 
     setRun(runNb);
 
+    
 #ifdef CLAS_CCDB
 
     ccdb::CalibrationGenerator gen;
@@ -112,6 +113,11 @@ namespace clas12 {
       tableEntry.second.clear(); //empty the vector (required for GetCalib)
       _calib->GetCalib(tableEntry.second, nameWithRun(tableEntry.first) );
     }
+    //Hack as the collaboration did not want to store
+    //the photon energy for FD in the case the neutral was
+    //PIDed as a photon
+    getSamplingFactionPars();
+ 
 #endif
     
     
@@ -124,4 +130,11 @@ namespace clas12 {
     return temp;
   }
 
+  void ccdb_reader::getSamplingFactionPars(){
+    auto& ccdbPhSF = requestTableDoubles("/calibration/eb/photon_sf");
+    _sfPa=ccdbPhSF[0][3]; //0.250 
+    _sfPb=ccdbPhSF[0][4]; //1.029
+    _sfPc=ccdbPhSF[0][5]; //-0.015
+    _sfPd=ccdbPhSF[0][6]; // 0.00012
+  }
 }

@@ -59,8 +59,14 @@ void Ex1_CLAS12ReaderChain(){
    // config_c12->addExactPid(2212,1);    //exactly 1 proton
    // config_c12->addExactPid(22,2);    //exactly 2 gamma
    //////config_c12->addZeroOfRestPid();  //nothing else
+
+   
    //////config_c12->useFTBased(); //and use the Pids from RECFT
-   //////chain.db()->turnOffQADB(); //partiuclarly useful if does not exist for run period
+   //////chain.db()->turnOffQADB(); //particularly useful if does not exist for run period
+   //////config_c12->SetRecParticleOnly(); //for faster processing of just REC::Particle
+   //////config_c12->ignoreBank("REC::CovMat"); //or just turn off chosen banks
+
+   
    //now get reference to (unique)ptr for accessing data in loop
    //this will point to the correct place when file changes
    auto& c12=chain.C12ref();
@@ -94,6 +100,7 @@ void Ex1_CLAS12ReaderChain(){
 	   p->sci(FTOF2)->getEnergy();
 	   	   
 	   p->trk(DC)->getSector();
+	   // p->utrk(CVT)->getSector();//for pass 2
 	   
 	   p->che(HTCC)->getNphe();
 	   p->che(LTCC)->getNphe();
@@ -101,7 +108,7 @@ void Ex1_CLAS12ReaderChain(){
 	   //trajectories
 	   p->traj(LTCC)->getX();
 	   
-	   // p->traj(DC,DC1)->getCx();; //First layer of DC, hipo4
+	   p->traj(DC,DC1)->getCx();; //First layer of DC
 	   break;
 	 case FT :
 	   p->ft(FTCAL)->getEnergy();
@@ -159,7 +166,8 @@ void Ex1_CLAS12ReaderChain(){
        
      counter++;
    }
-   cout<<"Number of Events = " <<counter<<endl;
+   auto bcharge = chain.TotalBeamCharge();
+   cout<<"Number of Events = " <<counter<<" total charge = "<<bcharge<<endl;
 
    gBenchmark->Stop("timer");
    gBenchmark->Print("timer");

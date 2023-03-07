@@ -1,6 +1,7 @@
 #ifndef CCDB_READER_H
 #define CCDB_READER_H
 
+#include "region_particle.h"
 #ifdef CLAS_CCDB
 #include "CCDB/CalibrationGenerator.h"
 #include "CCDB/Calibration.h"
@@ -29,7 +30,17 @@ namespace clas12 {
     void setRun(int nb){_runNb=nb; _srunNb=std::to_string(nb);}
     std::string nameWithRun(const std::string& tableName);
     
- 
+    void getSamplingFactionPars();
+    
+    double getFDPhotonEnergy(region_particle*  p){
+      if(p->getRegion()!=FD) return 0.;
+      auto edep =  p->getDetEnergy();
+      return edep/getMeanSF(edep);
+    }
+    double getMeanSF(float  Edep){
+      return _sfPa*(_sfPb+(_sfPc/Edep)+(_sfPd/(Edep*Edep)));
+    }
+
  private:
     
     ccdb_reader()=default;
@@ -54,6 +65,12 @@ namespace clas12 {
 
     std::vector< TableRecord_t > _localTable;
 
+    // Photon Sampling Fraction Parameters
+    double _sfPa={0};
+    double _sfPb={0};
+    double _sfPc={0};
+    double _sfPd={0};
+ 
 #ifdef CLAS_CCDB
    
     std::unique_ptr<ccdb::Calibration> _calib ={nullptr};

@@ -85,10 +85,13 @@ namespace clas12root{
     _iRecord=entry-_NfileRecords; //get record to analyse,subtract records of previous files
 
     //Check if we need a new file
+    auto newFile=false;
     if( _iRecord>=_NcurrRecords ){
+       newFile=true;
       _iFile=_chain->GetFileFromRecord(entry);
       _NfileRecords=_chain->GetRecordsToHere(_iFile); //Add records from previous file to give offset
-   
+      //accumulate run numbers from previous file
+
       _c12.reset(new clas12::clas12reader{*_chain->GetC12Reader(),_chain->GetFileName(_iFile).Data(),_chain->ReaderTags()});
       _c12->connectDataBases(_chain->db());
       _NcurrRecords= _c12->getReader().getNRecords(); //records in this file
@@ -98,7 +101,7 @@ namespace clas12root{
 	Notify();
       }
       
-     }
+    }
  
     //load a record from the file
     _c12->getReader().loadRecord(_iRecord);
@@ -107,17 +110,33 @@ namespace clas12root{
       //abtract function to be supplied by user base class
       ProcessEvent();
     }
+
+    auto procNumbers= _c12->getRunNumbers();
+    _chain->InsertRunNumbers(procNumbers);
+   
+    
     return kTRUE;
   }
 
   void HipoSelector::SlaveTerminate()
   {
-    
+    _runNumbers._theset = _chain->GetRunNumbers();
+    _runNumbers.SetName("HIPORUNS");
+    _runNumbers.PrintNumbers();
+
+    //create object for output list
+    auto listNumbers = new NumbersObject(_runNumbers);
+    listNumbers->SetName("HIPORUNS");
+    fOutput->Add(listNumbers); //fOutput will own
   }
   
   void HipoSelector::Terminate()
   {
-
+    _runNumbers = *(dynamic_cast<NumbersObject*>(fOutput->FindObject("HIPORUNS")));
+    _chain->InsertRunNumbers(_runNumbers._theset);
+    
+    auto totCharge =_chain->TotalBeamCharge();		     
+    cout<<" HipoSelector::Terminate() total charge = "<<totCharge<<" nA"<<endl;
   }
   
   

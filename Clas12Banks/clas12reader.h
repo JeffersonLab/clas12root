@@ -17,6 +17,7 @@
 #include "calorimeter.h"
 #include "scintillator.h"
 #include "tracker.h"
+#include "utracker.h"
 #include "traj.h"
 #include "cherenkov.h"
 #include "event.h"
@@ -39,6 +40,7 @@
 #include "dictionary.h"
 
 #include <algorithm>
+#include <set>
 #include <vector>
 #include <string>
 #include <iostream>
@@ -88,26 +90,26 @@ namespace clas12 {
     void addARegionFDet(){
       //Forward detector needs particles, calorimeter, scintillator,
       //track, cherenkov
-      region_fdet_uptr  reg{new region_fdet{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get(),_bmcparts.get()}};
+      region_fdet_uptr  reg{new region_fdet{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_butrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get(),_brich.get(),_bmcparts.get()}};
       if(_useFTBased)reg->useFTBPid();
      _rfdets.push_back(std::move(reg));
     }
      void addARegionCDet(){
       //Forward detector needs particles, calorimeter, scintillator,
       //track, cherenkov
-       region_cdet_uptr  reg{new region_cdet{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get(),_bmcparts.get()}};
+       region_cdet_uptr  reg{new region_cdet{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_butrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get(),_bmcparts.get()}};
       if(_useFTBased)reg->useFTBPid();
       _rcdets.push_back(std::move(reg));
     }
     void addARegionFT(){
       //Forward tagger needs particles and forward tagger
-       region_ft_uptr  reg{new region_ft{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get(),_bmcparts.get()}};
+       region_ft_uptr  reg{new region_ft{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_butrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get(),_bmcparts.get()}};
        if(_useFTBased)reg->useFTBPid();
       _rfts.push_back(std::move(reg));
      }
   void addARegionBAND(){
       //Forward tagger needs particles and forward tagger
-       region_band_uptr  reg{new region_band{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get(),_bmcparts.get()}};
+       region_band_uptr  reg{new region_band{_bparts.get(),_bftbparts.get(),_bcovmat.get(),_bcal.get(),_bscint.get(),_btrck.get(),_butrck.get(),_btraj.get(),_bcher.get(),_bft.get(),_bevent.get(),_bmcparts.get()}};
        if(_useFTBased)reg->useFTBPid();
       _rbands.push_back(std::move(reg));
      }
@@ -195,13 +197,22 @@ namespace clas12 {
     }
 
     int getRunNumber()const {return _runNo;}//works if connectDatabases called
+    std::set<int> getRunNumbers() const {return _runNumbers;}
     
     double getCurrApproxCharge(){return _runBeamCharge*_nevent/_reader.getEntries();}
 
     void summary(){
-      std::cout<<"for file "<<_filename<<"\n   read "<<_nevent<<" events from which "<<_nselected<< " passed filtering conditions."<<std::endl;
+      std::cout<<"for file "<<_filename<<"\n\t read "<<_nevent<<" events from which "<<_nselected<< " passed filtering conditions."<<std::endl;
       if(_db!=nullptr)
-	if(db()->qa())cout<<"Accumulated charge past QA: "<<db()->qa()->getAccCharge()<<" nC"<<endl;
+	if(db()->qa()){
+	  auto prev = db()->qa()->getPreviousCharge();
+	  //Just charge for this file
+	  //  double charge=db()->qa()->getChargeForRunlist(getRunNumbers()) - prev;
+	  double charge=db()->qa()->getAccCharge();
+	  db()->qa()->setPreviousCharge(charge);
+	  charge-= prev;
+	  cout<<"\t accumulated charge past QA: "<<charge<<" nC"<<endl;
+	}
     }
     
     void getStructure(hipo::bank* bank){
@@ -258,8 +269,10 @@ namespace clas12 {
     cal_uptr  _bcal;//!
     scint_uptr _bscint;//!
     trck_uptr _btrck;//!
+    utrck_uptr _butrck;//!
     traj_uptr _btraj;//!
     cher_uptr _bcher;//!
+    rich_uptr _brich;//!
     ft_uptr _bft;//!
     vtp_uptr _bvtp;//!
     vertdoca_uptr _bvertdoca;//!
@@ -313,6 +326,7 @@ namespace clas12 {
     ///////////////////////////////DB
   private:
     int _runNo{0};
+    std::set<int> _runNumbers;
     clas12databases *_db={nullptr}; //
 
     bool _applyQA=false;
@@ -344,8 +358,52 @@ namespace clas12 {
     }
  
     //double sumChargeFromQA();
-    
+    void ignoreBank(const string& bnk ){
+      if(_bankInUse.at(bnk))
+	(*_bankInUse[bnk])=false;
+    }
+
+    void SetRecParticleOnly(){
+      _justParticleAna=true;
+       ignoreBank("REC::CovMat");
+       ignoreBank("REC::Traj");
+       ignoreBank("REC::Calorimeter");
+       ignoreBank("REC::Scintillator");
+       ignoreBank("REC::CaloExtras");
+       ignoreBank("REC::ScintExtras");
+       ignoreBank("REC::Track");
+       ignoreBank("REC::UTrack");
+       ignoreBank("REC::ForwardTagger");
+       ignoreBank("REC::VertDoca");
+       ignoreBank("REC::Cherenkov");
+       ignoreBank("RICH::Particle");
+       ignoreBank("HEL::online");
+       ignoreBank("RAW::vtp");
+  
+    }
   private:
+
+    std::map<string,bool*> _bankInUse;
+    bool _useCovmat={false};
+    bool _useEvent={false};
+    bool _useRunconfig={false};
+    bool _useFTBEvent={false};
+    bool _useCal={false};
+    bool _useCalExtras={false};
+    bool _useScint={false};
+    bool _useScintExtras={false};
+    bool _useTrck={false};
+    bool _useUTrck={false};
+    bool _useTraj={false};
+    bool _useCher={false};
+    bool _useRich={false};
+    bool _useFT={false};
+    bool _useVTP={false};
+    bool _useHelonline={false};
+    bool _useVertdoca={false};
+    bool _useMCparts={false};
+    bool _useMCevent={false};
+    bool _justParticleAna={false};
  ///////////////////////////////
 
    };

@@ -8,6 +8,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <set>
 
 namespace clas12 {
   using std::string;
@@ -39,7 +40,8 @@ namespace clas12 {
     void copySettings(const qadb_reader& other);
     
     
-    
+    double getChargeForRunlist(std::set<int> Runs);
+   
   private:
     
     qadb_reader()=default;
@@ -78,7 +80,7 @@ namespace clas12 {
     void addMask(const char * defectName, bool maskBit){_qa.SetMaskBit(defectName,maskBit);};
     void addAllMasks();
     double getAccCharge(){return _qa.GetAccumulatedCharge();};
-
+ 
   private: 
     QA::QADB _qa;//!  
 
@@ -86,9 +88,13 @@ namespace clas12 {
   public:
     double getAccCharge(){return 0.0;};
     void accumulateCharge(int evNb){}
-
 #endif
 
+  private: 
+    double _prevSumCharge=0.0;
+  public:
+    double getPreviousCharge() const {return _prevSumCharge;}
+    void setPreviousCharge(double val) {_prevSumCharge=val;}
 
   
   };

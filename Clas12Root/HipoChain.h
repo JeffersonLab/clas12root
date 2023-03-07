@@ -57,20 +57,23 @@ namespace clas12root {
     clas12::clas12reader* GetC12Reader();
     const std::unique_ptr<clas12::clas12reader>& C12ref()const {return _c12;}
     
-    //void AddBeamCharge(Double_t bc){_totBeamCharge+=bc;}
-    // Double_t TotalBeamCharge() const noexcept{return _totBeamCharge;}
-    Double_t TotalBeamCharge() const noexcept{
-      //check if set manually (e.g. from HipoSelector)
-      if(_totBeamCharge!=0) return _totBeamCharge;
-      //or check if we have qadb
+    Double_t TotalBeamCharge() noexcept{
+    
       if(_db.qa()){
-	return _db.qa()->getAccCharge();
+	return _totBeamCharge=_db.qa()->getChargeForRunlist(GetRunNumbers());
       }
-      //else do not try and get it ourselves (so accidents do not occur)
+  
       return 0.;
     }
+    Double_t GetTotalBeamCharge() const noexcept{return _totBeamCharge;}
+  
     void SetTotalBeamCharge(Double_t bc){_totBeamCharge=bc;}
 
+    std::set<int> GetRunNumbers() const {return _runNumbers;}
+    void InsertRunNumbers(const std::set<int>& ns ){
+      _runNumbers.insert(ns.begin(),ns.end());
+    }
+    
     clas12::clas12databases* db() {return &_db;}
     void ConnectDataBases(){_c12->connectDataBases(&_db);}
     
@@ -114,6 +117,8 @@ namespace clas12root {
 
     Double_t _totBeamCharge{0};
 
+    std::set<int> _runNumbers;
+ 
     TString _rcdbFileName;
     
     ClassDef(clas12root::HipoChain,1);

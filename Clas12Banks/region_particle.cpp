@@ -9,45 +9,46 @@
 
 namespace clas12 {
 
-  region_particle::region_particle(par_ptr pars,covmat_ptr cm):
-    _parts(pars),
-    _covmat(cm)
-  {
-  }
-  region_particle::region_particle(par_ptr pars,covmat_ptr cm, ft_ptr ftp):
-    _parts(pars),
-    _covmat(cm),
-    _ft(ftp)
-  {
+  // region_particle::region_particle(par_ptr pars,covmat_ptr cm):
+  //   _parts(pars),
+  //   _covmat(cm)
+  // {
+  // }
+  // region_particle::region_particle(par_ptr pars,covmat_ptr cm, ft_ptr ftp):
+  //   _parts(pars),
+  //   _covmat(cm),
+  //   _ft(ftp)
+  // {
     
-  }
-  region_particle::region_particle(par_ptr pars,covmat_ptr cm, scint_ptr scp, trck_ptr trp, traj_ptr trj):
-    _parts(pars),
-    _covmat(cm),
-    _scint(scp),
-    _trck(trp),
-    _traj(trj)
-  {
+  // }
+  // region_particle::region_particle(par_ptr pars,covmat_ptr cm, scint_ptr scp, trck_ptr trp, traj_ptr trj):
+  //   _parts(pars),
+  //   _covmat(cm),
+  //   _scint(scp),
+  //   _trck(trp),
+  //   _traj(trj)
+  // {
     
-  }
-  region_particle::region_particle(par_ptr pars,covmat_ptr cm, cal_ptr calp, scint_ptr scp, trck_ptr trp, traj_ptr trj, cher_ptr chp):
-    _parts(pars),
-    _covmat(cm),
-    _cal(calp),
-    _scint(scp),
-    _trck(trp),
-    _traj(trj),
-    _cher(chp)
-  {
+  // }
+  // region_particle::region_particle(par_ptr pars,covmat_ptr cm, cal_ptr calp, scint_ptr scp, trck_ptr trp, traj_ptr trj, cher_ptr chp):
+  //   _parts(pars),
+  //   _covmat(cm),
+  //   _cal(calp),
+  //   _scint(scp),
+  //   _trck(trp),
+  //   _traj(trj),
+  //   _cher(chp)
+  // {
     
-  }
-  region_particle::region_particle(par_ptr pars,ftbpar_ptr ftbpars,covmat_ptr cm, cal_ptr calp, scint_ptr scp, trck_ptr trp, traj_ptr trj, cher_ptr chp, ft_ptr ftp,event_ptr event, mcpar_ptr mcp):
+  // }
+  region_particle::region_particle(par_ptr pars,ftbpar_ptr ftbpars,covmat_ptr cm, cal_ptr calp, scint_ptr scp, trck_ptr trp, utrck_ptr utrp, traj_ptr trj, cher_ptr chp, ft_ptr ftp,event_ptr event, mcpar_ptr mcp):
     _parts(pars),
     _ftbparts(ftbpars),
     _covmat(cm),
     _cal(calp),
     _scint(scp),
     _trck(trp),
+    _utrck(utrp),
     _traj(trj),
     _cher(chp),
     _ft(ftp),

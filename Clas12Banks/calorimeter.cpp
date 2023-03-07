@@ -15,7 +15,6 @@ namespace clas12 {
     clas12::particle_detector(__schema),
     _extras{new calextras(extras)}
   {
-    std::cout<<"calorimeter::calorimeter "<< _extras.get()<<std::endl;
     auto sch=getSchema();
  
     if(useItem("layer"))_layer_order   = sch.getEntryOrder("layer");
