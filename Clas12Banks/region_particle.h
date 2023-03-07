@@ -24,6 +24,7 @@
 #include "traj.h"
 #include "event.h"
 #include "cherenkov.h"
+#include "rich.h"
 #include "forwardtagger.h"
 #include "mcparticle.h"
 #include "mcmatch.h"
@@ -112,6 +113,7 @@ namespace clas12 {
     virtual  utrck_ptr utrk(ushort lay) const{_utrck->setIndex(-1);return _utrck;};
     virtual  traj_ptr traj(ushort det,ushort layer=0) const{_traj->setIndex(-1);return _traj;};
     virtual  cher_ptr che(ushort lay) const{_cher->setIndex(-1);return _cher;};
+    virtual  rich_ptr rich() const{return nullptr;};
     virtual  ft_ptr ft(ushort lay) const{_ft->setIndex(-1);return _ft;};
 
     const CovMatrix* cmat() const{_covmat->setIndex(_pcmat);return _covmat->matrix();};

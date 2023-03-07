@@ -30,6 +30,10 @@ namespace clas12 {
 		cal_ptr calp, scint_ptr scp, trck_ptr trp, utrck_ptr utrp,
 		traj_ptr trj, cher_ptr chp, ft_ptr ftp,event_ptr event,
 		mcpar_ptr mcp=nullptr);
+     region_fdet(par_ptr pars,ftbpar_ptr ftbpars,covmat_ptr cm,
+		cal_ptr calp, scint_ptr scp, trck_ptr trp, utrck_ptr utrp,
+		traj_ptr trj, cher_ptr chp, ft_ptr ftp,event_ptr event,
+		rich_ptr rich,mcpar_ptr mcp=nullptr);
     ~region_fdet() final =default;
 
     
@@ -47,7 +51,7 @@ namespace clas12 {
       _utrck->setIndex(_ptrck);return _utrck;
     }
     cher_ptr che(ushort lay) const final;
-    
+    rich_ptr rich() const final;
      
 
     double getTime() final{
@@ -98,7 +102,8 @@ namespace clas12 {
      private:
 
     
-  
+    rich_ptr _rich={nullptr};
+ 
    //calorimeter indices
     short _pcal=-1;
     short _ppre=-1;
@@ -116,6 +121,7 @@ namespace clas12 {
     //cherenkov indices
     short _phtcc=-1;
     short _pltcc=-1;
+    short _prich=-1;
     
    
     
