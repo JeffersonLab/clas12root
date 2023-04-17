@@ -32,6 +32,9 @@ namespace clas12root {
     _mapOfParts["HTCC"]="p->che(HTCC)->";
     _mapOfParts["LTCC"]="p->che(LTCC)->";
 
+    //Rich
+    _mapOfParts["RICH"]="p->rich()->";
+
     //Trackers
     _mapOfParts["DC"]="p->trk(DC)->";
     _mapOfParts["CVT"]="p->trk(CVT)->";

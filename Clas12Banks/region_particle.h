@@ -52,7 +52,7 @@ namespace clas12 {
     region_particle(par_ptr pars,ftbpar_ptr ftbpars,covmat_ptr cm, cal_ptr calp,
 		    scint_ptr scp, trck_ptr trp, utrck_ptr utrp, traj_ptr trj,
 		    cher_ptr chp, ft_ptr ftp,event_ptr event,
-		    mcpar_ptr mcp=nullptr);
+		    rich_ptr rich,mcpar_ptr mcp=nullptr);
 
     virtual ~region_particle() =default;
 
@@ -113,7 +113,8 @@ namespace clas12 {
     virtual  utrck_ptr utrk(ushort lay) const{_utrck->setIndex(-1);return _utrck;};
     virtual  traj_ptr traj(ushort det,ushort layer=0) const{_traj->setIndex(-1);return _traj;};
     virtual  cher_ptr che(ushort lay) const{_cher->setIndex(-1);return _cher;};
-    virtual  rich_ptr rich() const{return nullptr;};
+    virtual  rich_ptr rich() const{	_rich->setIndex(-1);return _rich;}
+    
     virtual  ft_ptr ft(ushort lay) const{_ft->setIndex(-1);return _ft;};
 
     const CovMatrix* cmat() const{_covmat->setIndex(_pcmat);return _covmat->matrix();};
@@ -171,7 +172,8 @@ namespace clas12 {
     traj_ptr _traj={nullptr};
     cher_ptr _cher={nullptr};
     event_ptr _event={nullptr};
-    // mcmatch_ptr _mcmatch={nullptr};
+    rich_ptr _rich={nullptr};
+     // mcmatch_ptr _mcmatch={nullptr};
     mcpar_ptr _mcpart={nullptr};
  
     
