@@ -28,7 +28,7 @@ namespace clas12 {
      region_ft(par_ptr pars,ftbpar_ptr ftbpars,covmat_ptr cm,
 	       cal_ptr calp, scint_ptr scp,trck_ptr trp,utrck_ptr utrp,
 	       traj_ptr trj, cher_ptr chp, ft_ptr ftp,event_ptr event,
-	       mcpar_ptr mcp=nullptr);
+	       rich_ptr rich,mcpar_ptr mcp=nullptr);
     ~region_ft() final=default;
 
     
