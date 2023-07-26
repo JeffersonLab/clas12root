@@ -59,7 +59,7 @@ void Ex10_clas12Databases(){
   }
 
   /*
-   * The clasqaDB software also provides the accumulated charge for events
+   * The clas12-qadb software also provides the accumulated charge for events
    * that pass the quality assurance requirements.
    */
   cout<<"Accumulated charge past QA: "<<c12.db().qa()->getAccCharge()<<" nC"<<endl;

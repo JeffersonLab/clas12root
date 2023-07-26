@@ -28,7 +28,7 @@ jobs:
           echo "HIPO=$GITHUB_WORKSPACE/hipo" >> $GITHUB_ENV
           echo "CCDB_HOME=$GITHUB_WORKSPACE/ccdb" >> $GITHUB_ENV
           echo "RCDB_HOME=$GITHUB_WORKSPACE/rcdb" >> $GITHUB_ENV
-          echo "QADB=$GITHUB_WORKSPACE/clasqaDB" >> $GITHUB_ENV
+          echo "QADB=$GITHUB_WORKSPACE/clas12-qadb" >> $GITHUB_ENV
 
       - name: set paths
         run: |

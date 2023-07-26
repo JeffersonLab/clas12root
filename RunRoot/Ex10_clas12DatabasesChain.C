@@ -50,7 +50,7 @@ void Ex10_clas12DatabasesChain(){
    * as, for example, a marginal outlier. Several requirements
    * can be assigned at the same time.
    * 
-   * See RGA analysis note and clasqaDB github repository for
+   * See RGA analysis note and clas12-qadb github repository for
    * additional information.
    */
   if(config_c12->qadb()!=nullptr){
@@ -92,7 +92,7 @@ void Ex10_clas12DatabasesChain(){
   }
 
    /*
-   * The clasqaDB software also provides the accumulated charge for events
+   * The clas12-qadb software also provides the accumulated charge for events
    * that pass the quality assurance requirements.
    */
   cout<<"Accumulated charge past QA: "<< chain.TotalBeamCharge()<<" nC"<<endl;

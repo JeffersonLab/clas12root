@@ -22,10 +22,10 @@ For actual Clas12Banks definitions see [HIPO4 DSTs](https://clasweb.jlab.org/wik
 
 An interface to the c++ [Run Conditions DataBase](https://github.com/JeffersonLab/rcdb/wiki/Cpp) requires downloading the relevant code from https://github.com/JeffersonLab/rcdb . This is optional and depends on the existence of an environment variable containing the path to the RCDB code. The interface also requires having MySQL installed.
 
-clas12root provides an interface to the clasqaDB c++ code to allow skimming of events based on the Data Quality Assurance. This is optional and depends on the existence of an environment variable containing the path to the clasqaDB code, which must be downloaded from https://github.com/c-dilks/clasqaDB/tree/master.
+clas12root provides an interface to the clas12-qadb c++ code to allow skimming of events based on the Data Quality Assurance. This is optional and depends on the existence of an environment variable containing the path to the clas12-qadb code, which must be downloaded from https://github.com/c-dilks/clas12-qadb/tree/master.
 
 
-To simplify installation of the dependencies, ccdb, rcdb, clasqadb are now includes as submodules tagged to specific releases. Now when you clone with   --recurse-submodules all 3 plus lz4 will also be downloaded into your clas12root directory. If you already have your own versions of these you may ignore these and just set the required paths to your own installation.
+To simplify installation of the dependencies, ccdb, rcdb, qadb are now includes as submodules tagged to specific releases. Now when you clone with   --recurse-submodules all 3 plus lz4 will also be downloaded into your clas12root directory. If you already have your own versions of these you may ignore these and just set the required paths to your own installation.
 
 It is still required to build ccdb with scons after you have cloned it (before running installC12Root). You will need to make sure you have the necessary depndencies for ccdb on your system. If you do not and do not want to use ccdb in anycase you may just not set the CCDB_HOME enviroment variable.  [https://github.com/JeffersonLab/ccdb]
 
@@ -64,8 +64,8 @@ setenv RCDB_HOME /Where/Is/rcdb  (e.g. setenv RCDB_HOME ${CLAS12ROOT}/rcdb )
 #To use the CCDB interface 
 setenv CCDB_HOME /Where/Is/ccdb   (e.g. setenv CCDB_HOME ${CLAS12ROOT}/ccdb )
 source ${CCDB_HOME}/environment.csh
-#To use clasqaDB interface 
-setenv QADB /Where/Is/clasqaDB (e.g. setenv QADB ${CLAS12ROOT}/clasqaDB )
+#To use clas12-qadb interface 
+setenv QADB /Where/Is/clas12-qadb (e.g. setenv QADB ${CLAS12ROOT}/clas12-qadb )
 ```
 
 or for bash
@@ -77,8 +77,8 @@ export RCDB_HOME /Where/Is/rcdb
 #To use the CCDB interface 
 export CCDB_HOME /Where/Is/ccdb
 source ${CCDB_HOME}/environment.csh
-#To use clasqaDB interface
-export QADB /Where/Is/clasqaDB
+#To use clas12-qadb interface
+export QADB /Where/Is/clas12-qadb
 ```
 
 ## To install
@@ -411,7 +411,7 @@ To use any database you must set the corresponding environment variables
 
 setenv RCDB_HOME /where/is/rcdb
 setenv CCDB_HOME /where/is/ccdb
-setenv QADB /where/is/clasqaDB
+setenv QADB /where/is/clas12-qadb
 
 ands pecify the location of the database before you create your clas12root object
 
@@ -462,7 +462,7 @@ Where ccdbElSF is a std::vector<std::vector<double>> and so you can access the e
 
 ### Skimming Based on Data Quality Assurance
 
-clas12root can use the Quality Assurance database .json files found at https://github.com/c-dilks/clasqaDB/tree/master to reject events that have been identified as failing to meet certain requirements. This is implemented in an analysis using the clas12reader with the functions
+clas12root can use the Quality Assurance database .json files found at https://github.com/c-dilks/clas12-qadb/tree/master to reject events that have been identified as failing to meet certain requirements. This is implemented in an analysis using the clas12reader with the functions
 
      c12.db()->qadb_requireOkForAsymmetry(true);
      c12.db()->qadb_requireGolden(true);
@@ -490,7 +490,7 @@ where requireOkForAsymmetry(true) requires only events that were identified as s
     LowLiveTime: live time < 0.9
     Misc: miscellaneous defect
 
-The clasqaDB software also returns the accumulated charge for events that have passed the quality assurance requirements. This is accessed with: 
+The clas12-qadb software also returns the accumulated charge for events that have passed the quality assurance requirements. This is accessed with: 
 
     c12.db()->qadb()->getAccCharge();
 

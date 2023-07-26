@@ -39,7 +39,7 @@ void PrepareDatabases(){
    */
 
 
-/* Deprecated - clasqaDB software now premerges the database files
+/* Deprecated - clas12-qadb software now premerges the database files
 and automatically opens these.
 
 
