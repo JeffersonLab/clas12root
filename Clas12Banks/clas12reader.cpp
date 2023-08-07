@@ -684,11 +684,12 @@ namespace clas12 {
     _db=db;
 
     _connectDB=true;
-    
-    _runNo=readQuickRunConfig(_filename);
 
-    if(_verbose )std::cout<<"Connecting databases to run "<<_runNo<<std::endl;
-    if(_runNo!=0)_db->notifyRun(_runNo);
+    auto runNumber =readQuickRunConfig(_filename);
+
+    if(_verbose )std::cout<<"Connecting databases to run "<<runNumber<<std::endl;
+    //Do not need to notify if run number has not changed
+    if(_runNo!=0)_db->notifyRun(runNumber);
   }
   /////////////////////////////////////////////////////////
   ///make a list of banks, required for writer

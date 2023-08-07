@@ -94,6 +94,9 @@ namespace clas12 {
 }
   //update run number to each database
   void clas12databases::notifyRun(int runNb){
+    //check if already set up for this run
+    if( _runNb=runNb) return;
+    
     _runNb=runNb;
 
     open();

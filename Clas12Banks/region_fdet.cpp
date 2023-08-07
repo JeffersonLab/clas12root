@@ -10,14 +10,9 @@ namespace clas12 {
    ///////////////////////////////////////////////////////
   ///Constructor used for event,
   ///give all detector banks to prevent crashes when looking for FT 
-  region_fdet::region_fdet(par_ptr pars,ftbpar_ptr ftbpars,covmat_ptr cm, cal_ptr calp, scint_ptr scp, trck_ptr trp, utrck_ptr utrp, traj_ptr trj,cher_ptr chp, ft_ptr ftp,event_ptr event,mcpar_ptr mcp):
-    region_particle(pars,ftbpars,cm,calp,scp,trp,utrp,trj,chp,ftp,event,mcp)
-  {
-    _region=clas12::FD;  
-  }
 
   region_fdet::region_fdet(par_ptr pars,ftbpar_ptr ftbpars,covmat_ptr cm, cal_ptr calp, scint_ptr scp, trck_ptr trp, utrck_ptr utrp, traj_ptr trj,cher_ptr chp, ft_ptr ftp,event_ptr event,rich_ptr rich,mcpar_ptr mcp):
-    region_particle(pars,ftbpars,cm,calp,scp,trp,utrp,trj,chp,ftp,event,mcp),_rich{rich}
+    region_particle(pars,ftbpars,cm,calp,scp,trp,utrp,trj,chp,ftp,event,rich,mcp)
   {
     _region=clas12::FD;  
   }

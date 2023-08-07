@@ -41,7 +41,7 @@ namespace clas12 {
   // {
     
   // }
-  region_particle::region_particle(par_ptr pars,ftbpar_ptr ftbpars,covmat_ptr cm, cal_ptr calp, scint_ptr scp, trck_ptr trp, utrck_ptr utrp, traj_ptr trj, cher_ptr chp, ft_ptr ftp,event_ptr event, mcpar_ptr mcp):
+  region_particle::region_particle(par_ptr pars,ftbpar_ptr ftbpars,covmat_ptr cm, cal_ptr calp, scint_ptr scp, trck_ptr trp, utrck_ptr utrp, traj_ptr trj, cher_ptr chp, ft_ptr ftp,event_ptr event,rich_ptr rich, mcpar_ptr mcp):
     _parts(pars),
     _ftbparts(ftbpars),
     _covmat(cm),
@@ -53,6 +53,7 @@ namespace clas12 {
     _cher(chp),
     _ft(ftp),
     _event(event),
+    _rich(rich),
     _mcpart(mcp)
   {
     

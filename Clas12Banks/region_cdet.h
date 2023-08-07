@@ -30,7 +30,7 @@ namespace clas12 {
     // 		trck_ptr trp,traj_ptr trj);
     region_cdet(par_ptr pars,ftbpar_ptr ftbpars,covmat_ptr cm, cal_ptr calp, scint_ptr scp,
 		trck_ptr trp,utrck_ptr utrp, traj_ptr trj, cher_ptr chp, ft_ptr ftp,event_ptr event,
-		mcpar_ptr mcp=nullptr);
+		rich_ptr rich,mcpar_ptr mcp=nullptr);
     ~region_cdet() final=default;
 
     
