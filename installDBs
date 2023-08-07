@@ -1,5 +1,5 @@
-#git clone --recurse-submodules https://github.com/c-dilks/clasqaDB.git
-setenv QADB $PWD/clasqaDB/
+#git clone --recurse-submodules https://github.com/c-dilks/clas12-qadb.git
+setenv QADB $PWD/clas12-qadb/
 
 #git clone --recurse-submodules https://github.com/jeffersonlab/rcdb.git
 setenv RCDB_HOME $PWD/rcdb

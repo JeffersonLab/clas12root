@@ -36,7 +36,7 @@ add_definitions(-D__LZ4__)
 #after Lz4 change include to include
 set(CMAKE_INSTALL_INCLUDEDIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-#include clasqaDB c++ library and rapidjson library
+#include clas12-qadb c++ library and rapidjson library
 IF (DEFINED ENV{QADB})
   include_directories($ENV{QADB}/srcC/include)
   include_directories($ENV{QADB}/srcC/rapidjson/include)

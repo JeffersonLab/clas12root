@@ -346,7 +346,7 @@ namespace clas12 {
 
     clas12databases* db(){return _db;};
     
-    //clasqaDB   
+    //clas12-qadb   
     void applyQA() {
       // if(_db)
 	if( _db->qa() )

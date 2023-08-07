@@ -25,7 +25,7 @@ void Ex9_QualityAssurance(){
    * as, for example, a marginal outlier. Several requirements
    * can be assigned at the same time.
    * 
-   * See RGA analysis note and clasqaDB github repository for
+   * See RGA analysis note and clas12-qadb github repository for
    * additional information.
    */
   c12.db()->qadb_requireOkForAsymmetry(true);
@@ -47,7 +47,7 @@ void Ex9_QualityAssurance(){
   }
 
   /*
-   * The clasqaDB software also provides the accumulated charge for events
+   * The clas12-qadb software also provides the accumulated charge for events
    * that pass the quality assurance requirements.
    */
   cout<<"Accumulated charge past QA: "<<c12.qadb()->getAccCharge()<<" nC"<<endl;
