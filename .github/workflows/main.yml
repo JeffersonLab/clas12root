@@ -17,7 +17,7 @@ jobs:
           apt -y install git scons python2
 
       - name: checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: recursive
           path: .
