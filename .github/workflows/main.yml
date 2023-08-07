@@ -3,13 +3,13 @@ name: C++ CI Testing
 on: pull_request
 
 jobs:
-  build:
+  build_and_test:
     runs-on: ubuntu-latest
     container: rootproject/root:${{ matrix.version }}
     strategy:
       matrix:
         version: [6.22.02-ubuntu20.04]
-    
+
     steps:
       - name: system dependancies
         run: |
@@ -41,31 +41,7 @@ jobs:
           cd $CCDB_HOME
           bash environment.bash
           /usr/bin/env python2 $(which scons)
-        
-      - name: build clas12root
-        run: |
-          ./installC12Root
 
-  tests:
-    needs: build
-    runs-on: ubuntu-latest
-    container: rootproject/root:6.22.02-ubuntu20.04
-
-    steps:
-      - name: set paths
-        run: |
-          echo "$PATH:$PWD/bin" >> $GITHUB_PATH
-
-      - name: system dependancies
-        run: |
-          apt update
-          apt -y install git
-      
-      - name: checkout repository
-        uses: actions/checkout@v2
-        with:
-          submodules: recursive
-        
       - name: build clas12root
         run: |
           ./installC12Root
