@@ -30,7 +30,7 @@ namespace clas12 {
 		cal_ptr calp, scint_ptr scp, trck_ptr trp, utrck_ptr utrp,
 		traj_ptr trj, cher_ptr chp, ft_ptr ftp,event_ptr event,
 		rich_ptr rich,mcpar_ptr mcp=nullptr);
-    ~region_fdet() final =default;
+    ~region_fdet() override =default;
 
     
     bool sort() final;
