@@ -686,7 +686,7 @@ namespace clas12 {
     _connectDB=true;
 
     auto runNumber =readQuickRunConfig(_filename);
-
+    _runNo = runNumber;
     if(_verbose )std::cout<<"Connecting databases to run "<<runNumber<<std::endl;
     //Do not need to notify if run number has not changed
     if(_runNo!=0)_db->notifyRun(runNumber);
