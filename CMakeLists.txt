@@ -20,18 +20,9 @@ find_package(ROOT REQUIRED COMPONENTS Proof)  ###########USEROOTSYS
 include(${ROOT_USE_FILE}) ##########USEROOTSYS
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ROOT_CXX_FLAGS}")
 
-#hipo expects lz4 includes to be in lib...
-set(CMAKE_INSTALL_INCLUDEDIR ${CMAKE_CURRENT_SOURCE_DIR}/lib)
-#set(ADD_COMPILER_FLAGS_PREPEND "-O3")
-set(CMAKE_C_FLAGS "-O3 ${CMAKE_C_FLAGS}")
-set(LZ4_BUNDLED_MODE OFF)
-set(BUILD_SHARED_LIBS ON)
-set(BUILD_STATIC_LIBS OFF)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lz4/contrib/cmake_unofficial)
-set(LZ4_LIBRARY lz4)
-set(LZ4_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lz4/lib)
-include_directories(${LZ4_INCLUDE_DIR})
-add_definitions(-D__LZ4__)
+#find_package(hipo4)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(hipo4 REQUIRED IMPORTED_TARGET hipo4)
 
 #after Lz4 change include to include
 set(CMAKE_INSTALL_INCLUDEDIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -46,11 +37,11 @@ ENDIF (DEFINED ENV{QADB})
 
 
 set(CLAS12ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Clas12Root)
-set(CLAS12HIPO_DIR ${CMAKE_CURRENT_SOURCE_DIR}/hipo4)
+#set(CLAS12HIPO_DIR ${CMAKE_CURRENT_SOURCE_DIR}/hipo4)
 set(CLAS12BANKS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Clas12Banks)
 
-include_directories(${CLAS12HIPO_DIR})
-add_subdirectory (${CLAS12HIPO_DIR})
+#include_directories(${CLAS12HIPO_DIR})
+#add_subdirectory (${CLAS12HIPO_DIR})
 
 include_directories(${CLAS12BANKS_DIR})
 add_subdirectory (${CLAS12BANKS_DIR})
