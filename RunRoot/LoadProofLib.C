@@ -25,18 +25,15 @@ void LoadProofLib(Int_t Nworkers=1){
     sandbox=gEnv->GetValue("ProofLite.Sandbox","");
   }
   //  copy pcm files to sandbox/cache
-  gSystem->Exec(Form("cp $CLAS12ROOT/lib/libHipo4_rdict.pcm %s/cache/.",sandbox.Data()));
   gSystem->Exec(Form("cp $CLAS12ROOT/lib/libClas12Banks_rdict.pcm %s/cache/.",sandbox.Data()));
   gSystem->Exec(Form("cp $CLAS12ROOT/lib/libClas12Root_rdict.pcm %s/cache/.",sandbox.Data()));
 
   if(!ISMAC){
-    gProof->Load(TString(gSystem->Getenv("CLAS12ROOT"))+"/lib/libHipo4.so",kTRUE);
     gProof->Load(TString(gSystem->Getenv("CLAS12ROOT"))+"/lib/libClas12Banks.so",kTRUE);
     gProof->Load(TString(gSystem->Getenv("CLAS12ROOT"))+"/lib/libClas12Root.so",kTRUE);
   }
   else{
-    gProof->Load(TString(gSystem->Getenv("CLAS12ROOT"))+"/lib/libHipo4.dylib",kTRUE);
-    gProof->Load(TString(gSystem->Getenv("CLAS12ROOT"))+"/lib/libClas12Banks.dylib",kTRUE);
+     gProof->Load(TString(gSystem->Getenv("CLAS12ROOT"))+"/lib/libClas12Banks.dylib",kTRUE);
     gProof->Load(TString(gSystem->Getenv("CLAS12ROOT"))+"/lib/libClas12Root.dylib",kTRUE);
 
   }

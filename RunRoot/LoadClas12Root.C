@@ -12,8 +12,6 @@ void LoadClas12Root(){
  
   TString CLAS12ROOT=gSystem->Getenv("CLAS12ROOT");
   TString LIB=CLAS12ROOT+"/lib/";
-  gSystem->Load(LIB+"liblz4");
-  gSystem->Load(LIB+"libHipo4");
   gSystem->Load(LIB+"libClas12Banks");
   gSystem->Load(LIB+"libClas12Root");
  
