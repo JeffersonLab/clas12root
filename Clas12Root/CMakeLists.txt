@@ -34,26 +34,19 @@ IF (DEFINED ENV{CCDB_HOME})
 ENDIF (DEFINED ENV{CCDB_HOME})
 
 
-#include_directories(hipo4)
-#include_directories(/home/dglazier/Packages/hipo/hipo4)
-include_directories(PkgConfig::hipo4)
+include_directories(${hipo4_INCLUDE_DIRS})
 include_directories(${CLAS12BANKS_DIR})
 
 ROOT_GENERATE_DICTIONARY(G__${CLAS12ROOT}  BankHist.h HipoHist.h HipoTreeMaker.h HipoChain.h HipoChainWriter.h HipoRootAction.h   HipoROOTOut.h ParticleHist.h HipoSelector.h ParticleTree.h LINKDEF Clas12RootLinkDef.h)
 
 add_library(${CLAS12ROOT} SHARED BankHist.cpp HipoHist.cpp HipoTreeMaker.cpp HipoChain.cpp HipoChainWriter.cpp HipoRootAction.cpp   HipoROOTOut.cpp ParticleHist.cpp  HipoSelector.cpp ParticleTree.cpp G__${CLAS12ROOT}.cxx)
 
-target_link_libraries(${CLAS12ROOT} ${ROOT_LIBRARIES} ${CLAS12BANKS})
-target_link_libraries(${CLAS12ROOT} PUBLIC PkgConfig::hipo4)
+target_link_libraries(${CLAS12ROOT} PUBLIC ${ROOT_LIBRARIES} ${CLAS12BANKS} PkgConfig::hipo4)
 
 
 install(TARGETS ${CLAS12ROOT} 
   LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}")
 
-#FILE(GLOB ROOT_C12ROOT_PCM ${CMAKE_BINARY_DIR}/Clas12Root/*pcm)
-
-#install (FILES  ${ROOT_C12ROOT_PCM}    
-#  DESTINATION "${CMAKE_INSTALL_LIBDIR}")
 
 install (FILES  ${CMAKE_CURRENT_BINARY_DIR}/libClas12Root_rdict.pcm    
   DESTINATION "${CMAKE_INSTALL_LIBDIR}")

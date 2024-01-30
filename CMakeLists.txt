@@ -11,7 +11,7 @@ set(CMAKE_CXX_FLAGS "-fPIC -O3")
 
 ##########For local ROOT cmake files comment in the line below and remove the lines commented ##USEROOTSYS
 #####include("cmake/FindROOT.cmake")
-list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS}) ############USEROOTSYS
+list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS} /home/dglazier/Dropbox/clas12/gagik/hipo) ############USEROOTSYS
 
 #---Locate the ROOT package and defines a number of variables (e.g. ROOT_INCLUDE_DIRS)
 find_package(ROOT REQUIRED COMPONENTS Proof)  ###########USEROOTSYS
@@ -20,9 +20,12 @@ find_package(ROOT REQUIRED COMPONENTS Proof)  ###########USEROOTSYS
 include(${ROOT_USE_FILE}) ##########USEROOTSYS
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ROOT_CXX_FLAGS}")
 
-#find_package(hipo4)
+#find_package(hipo4 REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(hipo4 REQUIRED IMPORTED_TARGET hipo4)
+MESSAGE( STATUS "HIPO4 DIRS: " ${hipo4_INCLUDE_DIRS} )
+MESSAGE( STATUS "HIPO4 DIRS: " ${hipo4} )
+MESSAGE( STATUS "HIPO4 DIRS: " ${hipo4_LIBS} )
 
 #after Lz4 change include to include
 set(CMAKE_INSTALL_INCLUDEDIR ${CMAKE_CURRENT_SOURCE_DIR}/include)

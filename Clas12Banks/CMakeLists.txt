@@ -57,24 +57,17 @@ IF (DEFINED ENV{RCDB_HOME})
 ENDIF (DEFINED ENV{RCDB_HOME})
 
 
-include_directories(PkgConfig::hipo4)
+include_directories(${hipo4_INCLUDE_DIRS})
 include_directories(${CLAS12ROOT_DIR})
 
 
 ROOT_GENERATE_DICTIONARY(G__Clas12Banks ${CLASS_LIST_H} LINKDEF Clas12LinkDef.h)
 add_library(Clas12Banks SHARED ${CLASS_LIST_CPP} G__Clas12Banks.cxx)
 
-target_link_libraries(Clas12Banks ${ROOT_LIBRARIES})
-target_link_libraries(Clas12Banks  PUBLIC PkgConfig::hipo4)
+target_link_libraries(Clas12Banks PUBLIC ${ROOT_LIBRARIES} PkgConfig::hipo4 )
 
 install(TARGETS Clas12Banks
   LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}")
-
-#FILE(GLOB ROOT_CLAS12_PCM ${CMAKE_BINARY_DIR}/Clas12Banks/*pcm)
-
-#install (FILES  ${ROOT_CLAS12_PCM}     
-#  DESTINATION "${CMAKE_INSTALL_LIBDIR}")
-
 
 install (FILES  ${CMAKE_CURRENT_BINARY_DIR}/libClas12Banks_rdict.pcm    
   DESTINATION "${CMAKE_INSTALL_LIBDIR}")
