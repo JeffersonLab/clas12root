@@ -9,7 +9,7 @@
 
 #include "clas12defs.h"
 #include "clas12databases.h"
-#include "reader.h"
+#include <hipo4/reader.h>
 #include "particle.h"
 #include "ftbparticle.h"
 #include "mcparticle.h"
@@ -37,7 +37,7 @@
 #include "region_band.h"
 #include "scaler_reader.h"
 #include "rcdb_vals.h"
-#include "dictionary.h"
+#include <hipo4/dictionary.h>
 
 #include <algorithm>
 #include <set>

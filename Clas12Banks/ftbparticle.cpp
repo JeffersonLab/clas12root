@@ -5,7 +5,7 @@
  */
 
 #include "ftbparticle.h"
-#include "dictionary.h"
+#include <hipo4/bank.h>
 
 
 namespace clas12 {

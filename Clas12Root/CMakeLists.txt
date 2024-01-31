@@ -1,6 +1,6 @@
 set(CLAS12ROOT Clas12Root)
 set(CLAS12BANKS Clas12Banks)
-set(HIPO hipo4)
+set(HIPO4 hipo4)
 
 #include rcdb c++ header library
 IF (DEFINED ENV{RCDB_HOME})
@@ -34,14 +34,14 @@ IF (DEFINED ENV{CCDB_HOME})
 ENDIF (DEFINED ENV{CCDB_HOME})
 
 
-include_directories(${hipo4_INCLUDE_DIRS})
 include_directories(${CLAS12BANKS_DIR})
 
 ROOT_GENERATE_DICTIONARY(G__${CLAS12ROOT}  BankHist.h HipoHist.h HipoTreeMaker.h HipoChain.h HipoChainWriter.h HipoRootAction.h   HipoROOTOut.h ParticleHist.h HipoSelector.h ParticleTree.h LINKDEF Clas12RootLinkDef.h)
 
 add_library(${CLAS12ROOT} SHARED BankHist.cpp HipoHist.cpp HipoTreeMaker.cpp HipoChain.cpp HipoChainWriter.cpp HipoRootAction.cpp   HipoROOTOut.cpp ParticleHist.cpp  HipoSelector.cpp ParticleTree.cpp G__${CLAS12ROOT}.cxx)
 
-target_link_libraries(${CLAS12ROOT} PUBLIC ${ROOT_LIBRARIES} ${CLAS12BANKS} PkgConfig::hipo4)
+target_link_libraries(${CLAS12ROOT} PUBLIC ${ROOT_LIBRARIES} ${CLAS12BANKS} PkgConfig::${HIPO4})
+target_include_directories(${CLAS12ROOT} SYSTEM PUBLIC PkgConfig::${HIPO4})
 
 
 install(TARGETS ${CLAS12ROOT} 

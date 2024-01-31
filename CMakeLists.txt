@@ -24,6 +24,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ROOT_CXX_FLAGS}")
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(hipo4 REQUIRED IMPORTED_TARGET hipo4)
 MESSAGE( STATUS "HIPO4 INCLUDE_DIR : " ${hipo4_INCLUDE_DIRS} )
+MESSAGE( STATUS "HIPO4 LIBRARIES : " ${hipo4_LIBRARIES} )
 
 
 #include clas12-qadb c++ library and rapidjson library

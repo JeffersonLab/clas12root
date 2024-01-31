@@ -13,7 +13,7 @@
 #ifndef MCPARTICLE_H
 #define MCPARTICLE_H
 
-#include "bank.h"
+#include <hipo4/bank.h>
 #include "mcmatch.h"
 #include <cmath>
 #include <memory>

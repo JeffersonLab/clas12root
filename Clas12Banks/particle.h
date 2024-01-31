@@ -14,8 +14,8 @@
 #ifndef PARTICLE_H
 #define PARTICLE_H
 
-#include "bank.h"
-#include "dictionary.h"
+#include <hipo4/bank.h>
+#include <hipo4/dictionary.h>
 #include "ftbparticle.h"
 #include <cmath>
 #include <memory>

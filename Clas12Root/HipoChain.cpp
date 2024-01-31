@@ -1,7 +1,7 @@
 #include <TError.h>
 #include <TFile.h>
 #include "HipoChain.h"
-#include "reader.h"
+#include <hipo4/reader.h>
 #include "clas12reader.h"
 
 namespace clas12root {

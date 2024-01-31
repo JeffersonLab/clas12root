@@ -14,7 +14,7 @@
 #ifndef VTP_H
 #define VTP_H
 
-#include "bank.h"
+#include <hipo4/bank.h>
 #include <bitset>
 #include <memory>
 

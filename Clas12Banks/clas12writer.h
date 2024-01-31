@@ -15,11 +15,11 @@
 
 #include "clas12defs.h"
 #include "clas12reader.h"
-#include "writer.h"
-#include "bank.h"
+#include <hipo4/writer.h>
+#include <hipo4/bank.h>
 #include "event.h"
-#include "utils.h"
-#include "dictionary.h"
+#include <hipo4/utils.h>
+#include <hipo4/bank.h>
 
 #include <algorithm>
 #include <string>

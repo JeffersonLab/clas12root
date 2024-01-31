@@ -18,7 +18,7 @@ void LoadProofLib(Int_t Nworkers=1){
   
   Int_t NCores=Nworkers;
   proof->SetParallel(NCores);
-  if(gProof->Load(TString(gSystem->Getenv("CLAS12ROOT"))+"/lib/liblz4.so",kTRUE)==0){}
+  // if(gProof->Load(TString(gSystem->Getenv("CLAS12ROOT"))+"/lib/liblz4.so",kTRUE)==0){}
   // get the sandbox directroy
   TString sandbox="~/.proof";
   if(TString(gEnv->GetValue("ProofLite.Sandbox",""))!=TString()){

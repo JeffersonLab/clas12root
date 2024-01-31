@@ -11,7 +11,7 @@
 #include <set>
 #include "clas12defs.h"
 #include "clas12reader.h"
-#include "utils.h"
+#include <hipo4/utils.h>
 
 namespace clas12 {
 
