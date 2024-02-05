@@ -46,9 +46,9 @@ build_and_test:
 
       - name: build hipo
         run: |
-	  cd $HIPO
-	  cmake -DCMAKE_INSTALL_PREFIX=$HIPO
-	  cmake --build . --target install
+          cd $HIPO
+          cmake -DCMAKE_INSTALL_PREFIX=$HIPO
+          cmake --build . --target install
 
       - name: build ccdb
         run: |
