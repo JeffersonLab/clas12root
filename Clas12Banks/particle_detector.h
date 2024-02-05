@@ -20,7 +20,7 @@
 #include <string>
 #include <memory>
 #include "clas12defs.h"
-#include "bank.h"
+#include <hipo4/bank.h>
 
 
 namespace clas12 {

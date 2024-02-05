@@ -24,7 +24,7 @@
 #include <map>
 #include <string>
 #include "clas12defs.h"
-#include "bank.h"
+#include <hipo4/bank.h>
 
 
 namespace clas12 {

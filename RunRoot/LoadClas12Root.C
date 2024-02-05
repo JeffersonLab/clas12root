@@ -10,10 +10,11 @@ using namespace clas12root;
 
 void LoadClas12Root(){
  
+  TString HIPO=gSystem->Getenv("HIPO");
+  gSystem->Load(HIPO+"/lib/libhipo4");
+
   TString CLAS12ROOT=gSystem->Getenv("CLAS12ROOT");
   TString LIB=CLAS12ROOT+"/lib/";
-  gSystem->Load(LIB+"liblz4");
-  gSystem->Load(LIB+"libHipo4");
   gSystem->Load(LIB+"libClas12Banks");
   gSystem->Load(LIB+"libClas12Root");
  

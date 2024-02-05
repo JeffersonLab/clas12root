@@ -20,21 +20,28 @@ find_package(ROOT REQUIRED COMPONENTS Proof)  ###########USEROOTSYS
 include(${ROOT_USE_FILE}) ##########USEROOTSYS
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ROOT_CXX_FLAGS}")
 
-#hipo expects lz4 includes to be in lib...
-set(CMAKE_INSTALL_INCLUDEDIR ${CMAKE_CURRENT_SOURCE_DIR}/lib)
-#set(ADD_COMPILER_FLAGS_PREPEND "-O3")
-set(CMAKE_C_FLAGS "-O3 ${CMAKE_C_FLAGS}")
-set(LZ4_BUNDLED_MODE OFF)
-set(BUILD_SHARED_LIBS ON)
-set(BUILD_STATIC_LIBS OFF)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lz4/contrib/cmake_unofficial)
-set(LZ4_LIBRARY lz4)
-set(LZ4_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lz4/lib)
-include_directories(${LZ4_INCLUDE_DIR})
-add_definitions(-D__LZ4__)
+#find_package(hipo4 REQUIRED) #for cmake
+#find_package(PkgConfig REQUIRED) #for pkg
+#pkg_check_modules(hipo4 REQUIRED IMPORTED_TARGET hipo4)
 
-#after Lz4 change include to include
-set(CMAKE_INSTALL_INCLUDEDIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
+#currently load hipo via simple env paths
+MESSAGE( CHECK_START "Checking for installed hipo..."  )
+
+if (DEFINED ENV{HIPO})
+
+  set(HIPOEXT $ENV{HIPO})
+  set(HIPO_INCLUDE_DIR ${HIPOEXT}/include/)
+  set(HIPO_LIBS -L${HIPOEXT}/ -lhipo4)
+
+  MESSAGE( STATUS "HIPO INCLUDE_DIR : " ${HIPO_INCLUDE_DIR} )
+  MESSAGE( STATUS "HIPO LIBRARIES : " ${HIPO_LIBS} )
+  
+else ()
+
+  MESSAGE( CHECK_FAIL "$HIPO not set" )
+  MESSAGE( FATAL_ERROR , "\n ... $HIPO must be set to local install of the hipo library\n ... see clas12root/README.md\n ... cmake exiting")
+
+endif ()
 
 #include clas12-qadb c++ library and rapidjson library
 IF (DEFINED ENV{QADB})
@@ -46,25 +53,11 @@ ENDIF (DEFINED ENV{QADB})
 
 
 set(CLAS12ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Clas12Root)
-set(CLAS12HIPO_DIR ${CMAKE_CURRENT_SOURCE_DIR}/hipo4)
 set(CLAS12BANKS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Clas12Banks)
 
-include_directories(${CLAS12HIPO_DIR})
-add_subdirectory (${CLAS12HIPO_DIR})
 
 include_directories(${CLAS12BANKS_DIR})
 add_subdirectory (${CLAS12BANKS_DIR})
 
 include_directories(${CLAS12ROOT_DIR})
 add_subdirectory (${CLAS12ROOT_DIR})
-
-#include_directories(${CMAKE_CURRENT_SOURCE_DIR}/hipo4)
-#add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/hipo4)
-
-#include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Clas12Banks)
-#add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/Clas12Banks)
-
-#include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Clas12Root)
-#add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/Clas12Root)
-
-

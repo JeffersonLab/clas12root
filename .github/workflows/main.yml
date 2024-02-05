@@ -3,12 +3,12 @@ name: C++ CI Testing
 on: pull_request
 
 jobs:
-  build_and_test:
+build_and_test:
     runs-on: ubuntu-latest
     container: rootproject/root:${{ matrix.version }}
     strategy:
       matrix:
-        version: [6.22.02-ubuntu20.04]
+        version: [6.28.12-ubuntu22.04]
 
     steps:
       - name: system dependancies
@@ -35,6 +35,20 @@ jobs:
           echo "PYTHONPATH=$CCDB_HOME/python:$RCDB_HOME/python:$PYTHONPATH" >> $GITHUB_ENV
           echo "PATH=$PWD/bin:$CCDB_HOME:$CCDB_HOME/bin:$RCDB_HOME/bin:$RCDB_HOME/cpp/bin:$PATH" >> $GITHUB_ENV
           echo "LD_LIBRARY_PATH=$RCDB_HOME/cpp/lib:$CCDB_HOME/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+
+
+      - name: checkout hipo
+        uses: actions/checkout@v4
+        with:
+          repository: gavalian/hipo
+          ref: 4.0.1 # if you want to use a fixed tag; remove if you want to use `main`
+          path: ${HIPO}
+
+      - name: build hipo
+        run: |
+          cd $HIPO
+          cmake -DCMAKE_INSTALL_PREFIX=$HIPO
+          cmake --build . --target install
 
       - name: build ccdb
         run: |

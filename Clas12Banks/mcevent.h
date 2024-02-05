@@ -13,7 +13,7 @@
 #ifndef MCEVENT_H
 #define MCEVENT_H
 
-#include "bank.h"
+#include <hipo4/bank.h>
 #include <cmath>
 #include <memory>
 

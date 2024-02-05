@@ -1,10 +1,7 @@
 #pragma once
 
-#include "reader.h"
-#include "dictionary.h"
-#include "event.h"
-#include "scaler.h"
 #include "runconfig.h"
+#include "scaler.h"
 #include <string>
 #include <float.h>
 

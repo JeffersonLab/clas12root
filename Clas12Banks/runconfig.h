@@ -17,7 +17,7 @@
 #include <iostream>
 #include <vector>
 #include <memory>
-#include "bank.h"
+#include <hipo4/bank.h>
 
 namespace clas12 {
 
