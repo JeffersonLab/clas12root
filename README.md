@@ -16,13 +16,13 @@ A default hipo implementation is now packed with clas12root. If you prefer to us
 
 For Hipo library see https://github.com/gavalian/hipo
 
-##New : from version 1.9.0 an external hipo install is required before building clas12root
+## New : from version 1.9.0 an external hipo install is required before building clas12root
 
-git clone --recurse-submodules https://github.com/gavalian/hipo
-cd hipo/
-git checkout 4.0.1
-cmake -DCMAKE_INSTALL_PREFIX=$PWD/
-cmake --build . --target install
+      git clone --recurse-submodules https://github.com/gavalian/hipo
+      cd hipo/
+      git checkout 4.0.1
+      cmake -DCMAKE_INSTALL_PREFIX=$PWD/
+      cmake --build . --target install
 
 The environment variable HIPO must be set to the path of the hipo install.
 

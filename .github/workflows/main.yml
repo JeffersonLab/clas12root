@@ -41,13 +41,14 @@ jobs:
         with:
           repository: gavalian/hipo
           ref: 4.0.1 # if you want to use a fixed tag; remove if you want to use `main`
-          path: hipo_src
+          path: ${HIPO}
 
       - name: build hipo
         run: |
-	cmake -S hipo_src -B hipo_build -DCMAKE_INSTALL_PREFIX=$HIPO
-	cmake --build hipo_build
-        cmake --install hipo_build
+	     echo ${HIPO}
+	     cd ${HIPO}
+	     cmake -DCMAKE_INSTALL_PREFIX=$HIPO
+	     cmake --build . --target install
 
       - name: build ccdb
         run: |
