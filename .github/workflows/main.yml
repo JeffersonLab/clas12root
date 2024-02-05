@@ -46,6 +46,7 @@ jobs:
 
       - name: build hipo
         run: |
+	  mkdir $HIPO
           cmake -S $HIPO -B $HIPO --install-prefix $HIPO
           cmake --build $HIPO
           cmake --install $HIPO
