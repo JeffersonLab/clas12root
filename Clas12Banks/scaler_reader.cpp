@@ -1,4 +1,7 @@
 #include "scaler_reader.h"
+#include <hipo4/reader.h>
+#include <hipo4/dictionary.h>
+#include <hipo4/event.h>
 #include <algorithm>
 
 namespace clas12{

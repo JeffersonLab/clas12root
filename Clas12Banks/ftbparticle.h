@@ -15,7 +15,7 @@
 #define FTBPARTICLE_H
 
 #include <hipo4/bank.h>
-#include <hipo4/bank.h>
+#include <hipo4/dictionary.h>
 #include <memory>
 
 namespace clas12 {

@@ -17,9 +17,9 @@
 #include "clas12reader.h"
 #include <hipo4/writer.h>
 #include <hipo4/bank.h>
-#include "event.h"
+#include <hipo4/event.h>
 #include <hipo4/utils.h>
-#include <hipo4/bank.h>
+#include <hipo4/dictionary.h>
 
 #include <algorithm>
 #include <string>

@@ -20,12 +20,28 @@ find_package(ROOT REQUIRED COMPONENTS Proof)  ###########USEROOTSYS
 include(${ROOT_USE_FILE}) ##########USEROOTSYS
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ROOT_CXX_FLAGS}")
 
-#find_package(hipo4 REQUIRED)
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(hipo4 REQUIRED IMPORTED_TARGET hipo4)
-MESSAGE( STATUS "HIPO4 INCLUDE_DIR : " ${hipo4_INCLUDE_DIRS} )
-MESSAGE( STATUS "HIPO4 LIBRARIES : " ${hipo4_LIBRARIES} )
+#find_package(hipo4 REQUIRED) #for cmake
+#find_package(PkgConfig REQUIRED) #for pkg
+#pkg_check_modules(hipo4 REQUIRED IMPORTED_TARGET hipo4)
 
+#currently load hipo via simple env paths
+MESSAGE( CHECK_START "Checking for installed hipo..."  )
+
+if (DEFINED ENV{HIPO})
+
+  set(HIPOEXT $ENV{HIPO})
+  set(HIPO_INCLUDE_DIR ${HIPOEXT}/include/)
+  set(HIPO_LIBS -L${HIPOEXT}/ -lhipo4)
+
+  MESSAGE( STATUS "HIPO INCLUDE_DIR : " ${HIPO_INCLUDE_DIR} )
+  MESSAGE( STATUS "HIPO LIBRARIES : " ${HIPO_LIBS} )
+  
+else ()
+
+  MESSAGE( CHECK_FAIL "$HIPO not set" )
+  MESSAGE( FATAL_ERROR , "\n ... $HIPO must be set to local install of the hipo library\n ... see clas12root/README.md\n ... cmake exiting")
+
+endif ()
 
 #include clas12-qadb c++ library and rapidjson library
 IF (DEFINED ENV{QADB})

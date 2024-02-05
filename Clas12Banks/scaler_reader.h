@@ -1,10 +1,7 @@
 #pragma once
 
-#include <hipo4/reader.h>
-#include <hipo4/bank.h>
-#include "event.h"
-#include "scaler.h"
 #include "runconfig.h"
+#include "scaler.h"
 #include <string>
 #include <float.h>
 

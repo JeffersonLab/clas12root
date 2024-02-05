@@ -5,7 +5,6 @@
  */
 
 #include "particle.h"
-#include <hipo4/bank.h>
 
 
 namespace clas12 {
