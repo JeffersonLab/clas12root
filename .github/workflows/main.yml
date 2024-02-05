@@ -25,7 +25,7 @@ jobs:
       - name: set env vars
         run: |
           echo "CLAS12ROOT=$GITHUB_WORKSPACE" >> $GITHUB_ENV
-          echo "HIPO=$GITHUB_WORKSPACE/hipo4" >> $GITHUB_ENV
+          echo "HIPO=$GITHUB_WORKSPACE/hipo" >> $GITHUB_ENV
           echo "CCDB_HOME=$GITHUB_WORKSPACE/ccdb" >> $GITHUB_ENV
           echo "RCDB_HOME=$GITHUB_WORKSPACE/rcdb" >> $GITHUB_ENV
           echo "QADB=$GITHUB_WORKSPACE/clas12-qadb" >> $GITHUB_ENV
@@ -36,7 +36,10 @@ jobs:
           echo "PATH=$PWD/bin:$CCDB_HOME:$CCDB_HOME/bin:$RCDB_HOME/bin:$RCDB_HOME/cpp/bin:$PATH" >> $GITHUB_ENV
           echo "LD_LIBRARY_PATH=$RCDB_HOME/cpp/lib:$CCDB_HOME/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
 
-
+      - name: Create folder
+        run: |
+          mkdir -p $HIPO
+	  
       - name: checkout hipo
         uses: actions/checkout@v4
         with:
