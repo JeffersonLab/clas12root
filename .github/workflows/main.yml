@@ -36,7 +36,7 @@ jobs:
           echo "PATH=$PWD/bin:$CCDB_HOME:$CCDB_HOME/bin:$RCDB_HOME/bin:$RCDB_HOME/cpp/bin:$PATH" >> $GITHUB_ENV
           echo "LD_LIBRARY_PATH=$RCDB_HOME/cpp/lib:$CCDB_HOME/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
 
-      - name: Create folder
+      - name: Create hipo folder
         run: |
           mkdir -p $HIPO
 
@@ -45,13 +45,13 @@ jobs:
         with:
           repository: gavalian/hipo
           ref: 4.0.1 # if you want to use a fixed tag; remove if you want to use `main`
-          path: ${HIPO}
+          path: hipo_src
 
       - name: build hipo
         run: |
-          cmake -S $HIPO/hipo -B $HIPO/hipo --install-prefix $HIPO/hipo
-          cmake --build $HIPO/hipo
-          cmake --install $HIPO/hipo
+          cmake -S hipo_src -B hipo_build --install-prefix $HIPO
+          cmake --build hipo_build
+          cmake --install hipo_build
 
       - name: build ccdb
         run: |
