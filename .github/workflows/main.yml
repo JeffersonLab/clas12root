@@ -3,7 +3,7 @@ name: C++ CI Testing
 on: pull_request
 
 jobs:
-build_and_test:
+  build_and_test:
     runs-on: ubuntu-latest
     container: rootproject/root:${{ matrix.version }}
     strategy:
