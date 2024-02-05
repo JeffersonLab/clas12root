@@ -39,10 +39,10 @@ build_and_test:
 
       - name: checkout hipo
         uses: actions/checkout@v4
-           with:
-           repository: gavalian/hipo
-           ref: 4.0.1 # if you want to use a fixed tag; remove if you want to use `main`
-           path: ${HIPO}
+        with:
+          repository: gavalian/hipo
+          ref: 4.0.1 # if you want to use a fixed tag; remove if you want to use `main`
+          path: ${HIPO}
 
       - name: build hipo
         run: |
