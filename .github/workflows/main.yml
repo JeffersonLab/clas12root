@@ -3,12 +3,12 @@ name: C++ CI Testing
 on: pull_request
 
 jobs:
-  build_and_test:
-    runs-on: ubuntu-latest
-    container: rootproject/root:${{ matrix.version }}
-    strategy:
-      matrix:
-        version: [6.28.12-ubuntu22.04]
+	build_and_test:
+		runs-on: ubuntu-latest
+    		container: rootproject/root:${{ matrix.version }}
+    		strategy:
+      		matrix:
+			version: [6.28.12-ubuntu22.04]
 
     steps:
       - name: system dependancies
