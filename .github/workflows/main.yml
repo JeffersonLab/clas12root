@@ -46,9 +46,9 @@ jobs:
 
       - name: build hipo
         run: |
-          cmake -S hipo_src -B hipo_build --install-prefix $HIPO
-          cmake --build hipo_build
-          cmake --install hipo_build
+          cmake -S $HIPO -B $HIPO --install-prefix $HIPO
+          cmake --build $HIPO
+          cmake --install $HIPO
 
       - name: build ccdb
         run: |
