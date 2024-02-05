@@ -45,10 +45,10 @@ jobs:
 
       - name: build hipo
         run: |
-          cmake -S hipo_src -B hipo_build --install-prefix $HIPO  # you might prefer a different prefix
+	  cmake -S hipo_src -B hipo_build --install-prefix $HIPO  # you might prefer a different prefix
           cmake --build hipo_build -j4
           cmake --install hipo_build
-	  
+
       - name: build ccdb
         run: |
           cd $CCDB_HOME
