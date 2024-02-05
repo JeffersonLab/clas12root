@@ -62,27 +62,7 @@ namespace clas12 {
     return true;
   }
 
-
-#else
-  qadb_reader::qadb_reader(int runNb){
-    _runNb=runNb;
-  }
-
-
-  ///////////////////////////////////////////////////////
-  ///Checks if an event passes all the QA requirements
-
-  bool qadb_reader::passQAReqs(int evNb){
-    return true;
-  }
-  
-#endif
-  void qadb_reader::copySettings(const qadb_reader& other){
-    _reqsQA=other._reqsQA;
-    _reqOKAsymmetry=other._reqOKAsymmetry;
-    _reqGolden=other._reqGolden;
-  }
-  /*This function will take in a list of runs and return the accumulated charge
+ /*This function will take in a list of runs and return the accumulated charge
     past specified requirements.
     Note: This is done on a file per file basis*/
   double qadb_reader::getChargeForRunlist(std::set<int> Runs){
@@ -109,4 +89,30 @@ namespace clas12 {
     return _qa.GetAccumulatedCharge();
   }
 
+#else
+  qadb_reader::qadb_reader(int runNb){
+    _runNb=runNb;
+  }
+
+
+  ///////////////////////////////////////////////////////
+  ///Checks if an event passes all the QA requirements
+
+  bool qadb_reader::passQAReqs(int evNb){
+    return true;
+  }
+   /*This function will take in a list of runs and return the accumulated charge
+    past specified requirements.
+    Note: This is done on a file per file basis*/
+  double qadb_reader::getChargeForRunlist(std::set<int> Runs){
+    return 0; //qadb not defined
+  }
+
+#endif
+  void qadb_reader::copySettings(const qadb_reader& other){
+    _reqsQA=other._reqsQA;
+    _reqOKAsymmetry=other._reqOKAsymmetry;
+    _reqGolden=other._reqGolden;
+  }
+ 
 }
