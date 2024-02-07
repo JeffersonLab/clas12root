@@ -31,7 +31,7 @@ if (DEFINED ENV{HIPO})
 
   set(HIPOEXT $ENV{HIPO})
   set(HIPO_INCLUDE_DIR ${HIPOEXT}/include/)
-  set(HIPO_LIBS -L${HIPOEXT}/ -lhipo4)
+  set(HIPO_LIBS "-L${HIPOEXT}/lib -lhipo4")
 
   MESSAGE( STATUS "HIPO INCLUDE_DIR : " ${HIPO_INCLUDE_DIR} )
   MESSAGE( STATUS "HIPO LIBRARIES : " ${HIPO_LIBS} )
@@ -52,9 +52,13 @@ ENDIF (DEFINED ENV{QADB})
 
 
 
+set(HIPOROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/hipo4)
 set(CLAS12ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Clas12Root)
 set(CLAS12BANKS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Clas12Banks)
 
+
+include_directories(${HIPOROOT_DIR})
+add_subdirectory (${HIPOROOT_DIR})
 
 include_directories(${CLAS12BANKS_DIR})
 add_subdirectory (${CLAS12BANKS_DIR})
