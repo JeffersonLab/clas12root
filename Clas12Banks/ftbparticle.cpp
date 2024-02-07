@@ -5,7 +5,6 @@
  */
 
 #include "ftbparticle.h"
-#include "dictionary.h"
 
 
 namespace clas12 {

@@ -14,7 +14,19 @@ We now use an external hipo4 repository. This must be pointed at with the variab
 A default hipo implementation is now packed with clas12root. If you prefer to use this do not set the enviroment variable HIPO. If you would like to use a different version of the hipo library set HIPO. You may get the most up to data hipo library from
 
 
-For Hipo library see https://github.com/gavalian/hipo 
+For Hipo library see https://github.com/gavalian/hipo
+
+## New : from version 1.9.0 an external hipo install is required before building clas12root
+
+      git clone --recurse-submodules https://github.com/gavalian/hipo
+      cd hipo/
+      git checkout 4.0.1
+      cmake -DCMAKE_INSTALL_PREFIX=$PWD/
+      cmake --build . --target install
+
+The environment variable HIPO must be set to the path of the hipo install.
+
+## Clas12Banks and Clas12Root
 
 The Clas12Banks implementation can be used independent of ROOT, although currently ROOT dictionaries are created for the classes via cmake (this could be removed). This defines the specific CLAS12 DST banks and provides an interface to the data.
 
@@ -66,6 +78,8 @@ setenv CCDB_HOME /Where/Is/ccdb   (e.g. setenv CCDB_HOME ${CLAS12ROOT}/ccdb )
 source ${CCDB_HOME}/environment.csh
 #To use clas12-qadb interface 
 setenv QADB /Where/Is/clas12-qadb (e.g. setenv QADB ${CLAS12ROOT}/clas12-qadb )
+#Preinstalled hipo is a requirement
+setenv HIPO /Where/Is/hipo
 ```
 
 or for bash
@@ -79,6 +93,8 @@ export CCDB_HOME /Where/Is/ccdb
 source ${CCDB_HOME}/environment.csh
 #To use clas12-qadb interface
 export QADB /Where/Is/clas12-qadb
+#Preinstalled hipo is a requirement
+export HIPO /Where/Is/hipo
 ```
 
 ## To install

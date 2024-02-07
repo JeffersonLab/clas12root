@@ -14,7 +14,7 @@
 #ifndef CLAS12_SCINTEXTRAS_H
 #define CLAS12_SCINTEXTRAS_H
 
-#include "bank.h"
+#include <hipo4/bank.h>
 #include <memory>
 //#include "scintillator.h"
 

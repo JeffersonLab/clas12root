@@ -14,7 +14,7 @@
 #ifndef SCALER_H
 #define SCALER_H
 
-#include "bank.h"
+#include <hipo4/bank.h>
 #include <memory>
 
 namespace clas12 {

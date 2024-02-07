@@ -5,7 +5,6 @@
  */
 
 #include "particle.h"
-#include "dictionary.h"
 
 
 namespace clas12 {

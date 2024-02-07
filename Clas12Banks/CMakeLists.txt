@@ -1,3 +1,5 @@
+set(CLAS12BANKS Clas12Banks)
+set(HIPO4 hipo4)
 
 
 set(CLASS_LIST_CPP helflip.cpp helonline.cpp vertdoca.cpp runconfig.cpp event.cpp ftbevent.cpp particle.cpp ftbparticle.cpp mcparticle.cpp mcevent.cpp  mcmatch.cpp scaler.cpp vtp.cpp particle_detector.cpp scintillator.cpp  scintextras.cpp tracker.cpp utracker.cpp traj.cpp forwardtagger.cpp cherenkov.cpp rich.cpp calorimeter.cpp calextras.cpp covmatrix.cpp region_particle.cpp region_ft.cpp region_fdet.cpp region_cdet.cpp region_band.cpp clas12writer.cpp clas12reader.cpp mesonex_trigger.cpp scaler_reader.cpp clas12databases.cpp qadb_reader.cpp ccdb_reader.cpp rcdb_reader.cpp)
@@ -56,23 +58,20 @@ IF (DEFINED ENV{RCDB_HOME})
 
 ENDIF (DEFINED ENV{RCDB_HOME})
 
-
 include_directories(${CLAS12ROOT_DIR})
+include_directories(${HIPO_INCLUDE_DIR})
+#include_directories(${hipo4_INCLUDE_DIRS})#in case change to pkg, this is needed to generate ROOT dict
 
+ROOT_GENERATE_DICTIONARY(G__${CLAS12BANKS} ${CLASS_LIST_H} LINKDEF Clas12LinkDef.h)
+add_library(${CLAS12BANKS} SHARED ${CLASS_LIST_CPP} G__${CLAS12BANKS}.cxx)
 
-ROOT_GENERATE_DICTIONARY(G__Clas12Banks ${CLASS_LIST_H} LINKDEF Clas12LinkDef.h)
-add_library(Clas12Banks SHARED ${CLASS_LIST_CPP} G__Clas12Banks.cxx)
+target_link_libraries(${CLAS12BANKS} PUBLIC ${ROOT_LIBRARIES} ${HIPO_LIBS} )
 
-target_link_libraries(Clas12Banks ${ROOT_LIBRARIES} Hipo4)
+#target_link_libraries(${CLAS12BANKS} PUBLIC ${ROOT_LIBRARIES} PkgConfig::${HIPO4} ) #in case change to pkg
+#target_include_directories(${CLAS12BANKS} SYSTEM  PUBLIC PkgConfig::${HIPO4}) #in case change to pkg
 
-install(TARGETS Clas12Banks
+install(TARGETS ${CLAS12BANKS}
   LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}")
 
-#FILE(GLOB ROOT_CLAS12_PCM ${CMAKE_BINARY_DIR}/Clas12Banks/*pcm)
-
-#install (FILES  ${ROOT_CLAS12_PCM}     
-#  DESTINATION "${CMAKE_INSTALL_LIBDIR}")
-
-
-install (FILES  ${CMAKE_CURRENT_BINARY_DIR}/libClas12Banks_rdict.pcm    
+install (FILES  ${CMAKE_CURRENT_BINARY_DIR}/lib${CLAS12BANKS}_rdict.pcm    
   DESTINATION "${CMAKE_INSTALL_LIBDIR}")

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "writer.h"
-#include "bank.h"
+#include <hipo4/writer.h>
+#include <hipo4/bank.h>
 
 #include <vector>
 #include <string>

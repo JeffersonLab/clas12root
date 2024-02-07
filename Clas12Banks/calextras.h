@@ -9,7 +9,7 @@
 #ifndef CLAS12_CALEXTRAS_H
 #define CLAS12_CALEXTRAS_H
 
-#include "bank.h"
+#include <hipo4/bank.h>
 #include <memory>
 
 

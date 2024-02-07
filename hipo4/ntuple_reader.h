@@ -1,7 +1,7 @@
 #pragma once
 
-#include "reader.h"
-#include "bank.h"
+#include <hipo4/reader.h>
+#include <hipo4/bank.h>
 #include "ntuple_writer.h"
 
 namespace hipo {

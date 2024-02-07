@@ -14,8 +14,8 @@
 #ifndef FTBPARTICLE_H
 #define FTBPARTICLE_H
 
-#include "bank.h"
-#include "dictionary.h"
+#include <hipo4/bank.h>
+#include <hipo4/dictionary.h>
 #include <memory>
 
 namespace clas12 {

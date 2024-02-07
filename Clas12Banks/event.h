@@ -16,7 +16,7 @@
 #include <iostream>
 #include <vector>
 #include <memory>
-#include "bank.h"
+#include <hipo4/bank.h>
 #include "ftbevent.h"
 
 namespace clas12 {

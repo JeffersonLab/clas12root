@@ -22,7 +22,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <map>
-#include "bank.h"
+#include <hipo4/bank.h>
 
 
 namespace clas12 {

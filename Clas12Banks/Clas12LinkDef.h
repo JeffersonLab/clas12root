@@ -45,4 +45,7 @@
 #pragma link C++ class clas12::jsonFileMerger+;
 #pragma link C++ class clas12::qadb_reader+;
 #pragma link C++ class clas12root::TRcdbVals+;
+#pragma link C++ class hipo::bank+;
+#pragma link C++ class hipo::reader+;
+#pragma link C++ class hipo::writer+;
 #endif

@@ -13,7 +13,7 @@
 #ifndef MCMATCH_H
 #define MCMATCH_H
 
-#include "bank.h"
+#include <hipo4/bank.h>
 #include <cmath>
 #include <memory>
 

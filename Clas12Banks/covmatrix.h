@@ -14,7 +14,7 @@
 #ifndef CLAS12_COVMATRIX_H
 #define CLAS12_COVMATRIX_H
 
-#include "bank.h"
+#include <hipo4/bank.h>
 #include <vector>
 #include <map>
 #include <memory>
