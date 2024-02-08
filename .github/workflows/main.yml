@@ -2,6 +2,10 @@ name: C++ CI Testing
 
 on: pull_request
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
