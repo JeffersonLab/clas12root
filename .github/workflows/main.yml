@@ -20,12 +20,7 @@ jobs:
           apt -y update
           apt -y upgrade
           apt -y install git python2 python-pip
-          echo "[+] Python version:"
-          python2 --version
           python2 -m pip install scons
-          echo "[+] scons version:"
-          which scons
-          scons --version
 
       - name: checkout repository
         uses: actions/checkout@v4
