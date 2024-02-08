@@ -15,7 +15,7 @@ jobs:
         run: |
           apt -y update
           apt -y upgrade
-          apt -y install git scons python2
+          apt -y install scons
 
       - name: checkout repository
         uses: actions/checkout@v4
@@ -57,8 +57,8 @@ jobs:
       - name: build ccdb
         run: |
           cd $CCDB_HOME
-          bash environment.bash
-          /usr/bin/env python2 $(which scons)
+          source environment.bash
+          scons
 
       - name: build clas12root
         run: |
