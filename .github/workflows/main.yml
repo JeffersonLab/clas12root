@@ -59,6 +59,7 @@ jobs:
 
       - name: build ccdb
         run: |
+          cp ccdb_patch/SConstruct ccdb/ # FIXME: kluge for Python3 syntax
           cd $CCDB_HOME
           source environment.bash
           scons
