@@ -11,13 +11,14 @@ jobs:
         version: [6.28.12-ubuntu22.04]
 
     steps:
-      - name: system dependancies
+      - name: system dependencies
         run: |
           apt update
+          apt upgrade
           apt -y install git scons python2
 
       - name: checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           path: .
