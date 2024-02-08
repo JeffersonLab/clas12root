@@ -15,13 +15,12 @@ jobs:
         run: |
           apt -y update
           apt -y upgrade
-          apt -y install scons
+          apt -y install git scons
 
       - name: checkout repository
         uses: actions/checkout@v4
         with:
           submodules: recursive
-          path: .
 
       - name: set env vars
         run: |
