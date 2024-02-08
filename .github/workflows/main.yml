@@ -13,8 +13,8 @@ jobs:
     steps:
       - name: system dependencies
         run: |
-          apt update
-          apt upgrade
+          apt -y update
+          apt -y upgrade
           apt -y install git scons python2
 
       - name: checkout repository
