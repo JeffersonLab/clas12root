@@ -62,7 +62,7 @@ jobs:
         run: |
           cd $CCDB_HOME
           source environment.bash
-          scons
+          python2 $(which scons)
 
       - name: build clas12root
         run: |
