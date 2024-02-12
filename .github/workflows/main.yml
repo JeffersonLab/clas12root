@@ -2,6 +2,10 @@ name: C++ CI Testing
 
 on: pull_request
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
@@ -11,16 +15,17 @@ jobs:
         version: [6.28.12-ubuntu22.04]
 
     steps:
-      - name: system dependancies
+      - name: system dependencies
         run: |
-          apt update
-          apt -y install git scons python2
+          apt -y update
+          apt -y upgrade
+          apt -y install git python2 python-pip
+          python2 -m pip install scons
 
       - name: checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
-          path: .
 
       - name: set env vars
         run: |
@@ -56,8 +61,8 @@ jobs:
       - name: build ccdb
         run: |
           cd $CCDB_HOME
-          bash environment.bash
-          /usr/bin/env python2 $(which scons)
+          source environment.bash
+          python2 $(which scons)
 
       - name: build clas12root
         run: |
