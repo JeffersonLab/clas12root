@@ -6,7 +6,7 @@
 using namespace clas12;
 using namespace std;
 
-void Ex10_clas12DatabasesChain(){
+void db(){
 
   /*For a database to be created you must specify the path to
     its database connection. In the case of ccdb this can be a
