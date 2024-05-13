@@ -59,7 +59,9 @@ namespace clas12root{
       Int_t GetCurrentRecord()const noexcept{return _iRecord;}
       Int_t GetCurrentFileNum()const noexcept{return _iFile;}
       Int_t GetCurrentFileRecords()const noexcept{return _NcurrRecords;}
-      
+
+      HipoChain* GetChain() const{return _chain;}
+    
   protected:
       
       std::unique_ptr<clas12::clas12reader> _c12;//!
@@ -75,7 +77,10 @@ namespace clas12root{
       }
       clas12::rcdb_reader* rcdb()const {return _chain->db()->rc();}
       clas12::qadb_reader* qadb()const {return _chain->db()->qa();}
-      
+
+    TNamed _rcdbPath;
+    TNamed _ccdbPath;
+    
     private:
 
       HipoChain* _chain={nullptr};//!
