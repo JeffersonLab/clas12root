@@ -38,23 +38,23 @@ namespace clas12 {
     traj_ptr traj(ushort det,ushort layer=0) const final;
  
 
-    double getTime() final{
+    double getTime() const final{
       _ft->setIndex(_pcal);
       return _ft->getTime();
     }
-    double getPath() final;
+    double getPath() const final;
 
-    double getDetEnergy() final{
+    double getDetEnergy() const final{
       _ft->setIndex(_pcal);
       return _ft->getEnergy();
     }
  
-    double getDeltaEnergy() final{
+    double getDeltaEnergy() const final{
       _ft->setIndex(_phod);
       return _ft->getEnergy();
     }
  
-    short getSector() final{return 0;} 
+    short getSector() const final{return 0;} 
     
     private:
 

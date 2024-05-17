@@ -20,7 +20,7 @@ namespace clas12 {
   
   ///////////////////////////////////////////////////////
   /// Temporary until FT banks updated
-  double region_ft::getPath(){
+  double region_ft::getPath() const {
     if(_pcal>=0){ //currently no FT path reported
       if(_ft)_ft->setIndex(_pcal); 	
       double ftx=_ft->getX();

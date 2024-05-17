@@ -40,7 +40,7 @@ namespace clas12 {
     int _st_order{-1};
     int _chi2pid_order{-1};
     
-    short _entry={0};
+    mutable short _entry={0};
     
   public:
 
@@ -101,7 +101,7 @@ namespace clas12 {
       return sqrt(x*x+y*y+z*z);
     }
     
-    void setEntry(short i){ _entry=i;if(_ftbpar)_ftbpar->setEntry(i);}
+    void setEntry(short i) const { _entry=i;if(_ftbpar)_ftbpar->setEntry(i);}
     void setBankEntry(short i){ _entry=i;} //faster for BankHist
     short getEntry() const noexcept{return _entry;}
     /**

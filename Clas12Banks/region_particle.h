@@ -68,43 +68,43 @@ namespace clas12 {
     }
 
     //solve FTB ambiguity at this stage
-    int getPid(){
+    int getPid() const{
       _parts->setEntry(_pentry);
       if(_ftbparts==nullptr) return _parts->getPid();
       return _useFTBPid*_ftbparts->getRows()?_ftbparts->getPid():_parts->getPid();
     }
-    float getVt(){
+    float getVt() const{
       _parts->setEntry(_pentry);
       if(_ftbparts==nullptr) return _parts->getVt();
       auto vt =  _useFTBPid*_ftbparts->getRows()?_ftbparts->getVt():_parts->getVt();
       if(vt==-1)return getStartTime();
       else return vt;
     }
-    int getStatus(){
+    int getStatus() const{
       _parts->setEntry(_pentry);
        if(_ftbparts==nullptr) return _parts->getStatus();
        return _useFTBPid*_ftbparts->getRows()?_ftbparts->getStatus():_parts->getStatus();
     }
-    float getChi2Pid(){
+    float getChi2Pid() const{
       _parts->setEntry(_pentry);
       if(_ftbparts==nullptr) return  _parts->getChi2Pid();
       return _useFTBPid*_ftbparts->getRows()?_ftbparts->getChi2Pid():_parts->getChi2Pid();
     }
-    float getBeta(){
+    float getBeta() const{
       _parts->setEntry(_pentry);
       if(_ftbparts==nullptr) return  _parts->getBeta();
       return _useFTBPid*_ftbparts->getRows()?_ftbparts->getBeta():_parts->getBeta();
     }
  
     
-    virtual double getTime()=0;
-    virtual double getPath()=0;
-    virtual double getDetEnergy()=0;
-    virtual double getDeltaEnergy()=0;
-    virtual short getSector() =0;
+    virtual double getTime() const=0;
+    virtual double getPath() const=0;
+    virtual double getDetEnergy() const=0;
+    virtual double getDeltaEnergy() const=0;
+    virtual short getSector()  const=0;
 
     event_ptr event() const{return _event;};
-    par_ptr par() const{_parts->setEntry(_pentry);return _parts;};
+    const par_ptr par() const{_parts->setEntry(_pentry);return _parts;};
     ftbpar_ptr ftbpar() const{_ftbparts->setEntry(_pentry);return _ftbparts;};
     covmat_ptr covmat() const{_covmat->setIndex(_pcmat);return _covmat;};
     virtual  cal_ptr cal(ushort lay) const{_cal->setIndex(-1);return _cal;};
@@ -124,39 +124,39 @@ namespace clas12 {
     short getIndex()const {return _pentry;}
       
     short getRegion() const {return _region;}
-    double getTheta() ;
-    double getPhi() ;
-    double getP(){
+    double getTheta()  const;
+    double getPhi()  const;
+    double getP() const{
       _parts->setEntry(_pentry);
       if(_ftbparts==nullptr) return  _parts->getP();
       return _useFTBPid*_ftbparts->getRows()?_parts->getFTBP():_parts->getP();    }
-    double getPx(){
+    double getPx() const{
       _parts->setEntry(_pentry);
       if(_ftbparts==nullptr) return  _parts->getPx();
       return _useFTBPid*_ftbparts->getRows()?_parts->getFTBPx():_parts->getPx();    }
-    double getPy(){
+    double getPy() const{
       _parts->setEntry(_pentry);
       if(_ftbparts==nullptr) return  _parts->getPy();
       return _useFTBPid*_ftbparts->getRows()?_parts->getFTBPy():_parts->getPy();    }
-    double getPz(){
+    double getPz() const{
       _parts->setEntry(_pentry);
       if(_ftbparts==nullptr) return  _parts->getPz();
       return _useFTBPid*_ftbparts->getRows()?_parts->getFTBPz():_parts->getPz();    }
-    double getStartTime(){
+    double getStartTime() const{
       if(_ftbparts==nullptr) return  _event->getStartTime();
       return _useFTBPid*_event->getFTBStartTime()?_event->getFTBStartTime():_event->getStartTime();    }
 
-    double getCalcMass();
-    double getGamma();
-    double getDeltaTime();
-    double getBetaFromP();
-    double getPdgMass();
+    double getCalcMass() const;
+    double getGamma() const;
+    double getDeltaTime() const;
+    double getBetaFromP() const;
+    double getPdgMass() const;
 
     void useFTBPid(){if(_ftbparts)_useFTBPid=1;}
 
-    double getMCThetaDiff() {return getTheta()-mc()->getTheta();}
-    double getMCPhiDiff() {return getPhi()-mc()->getPhi();}
-    double getMCPDiff() {return getP()-mc()->getP();}
+    double getMCThetaDiff() const {return getTheta()-mc()->getTheta();}
+    double getMCPhiDiff() const {return getPhi()-mc()->getPhi();}
+    double getMCPDiff() const {return getP()-mc()->getP();}
 
     //if(_parts->getCharge())
   protected:

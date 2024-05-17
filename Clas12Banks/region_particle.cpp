@@ -59,7 +59,7 @@ namespace clas12 {
     
   }
  
-  double region_particle::getTheta() {
+  double region_particle::getTheta() const {
     _parts->setEntry(_pentry);
     double x=getPx();
     double y=getPy();
@@ -67,13 +67,13 @@ namespace clas12 {
     return  x == 0.0 && y == 0.0 && z == 0.0 ? 0.0
       : atan2(sqrt(x*x+y*y),z);
   }
-  double region_particle::getPhi() {
+  double region_particle::getPhi() const {
     _parts->setEntry(_pentry);
     double x=getPx();
     double y=getPy();
     return atan2(y,x);
   }
-   double region_particle::getCalcMass() {
+   double region_particle::getCalcMass() const {
     double p=getP();
     double t=getTime()-getStartTime();
     double d=getPath()/100;
@@ -93,23 +93,23 @@ namespace clas12 {
   //   float beta= d/t/2.9979246e+08*1E9;
   //   return beta;
   // }
-  double region_particle::getGamma() {
+  double region_particle::getGamma()  const{
     double beta=getBeta();
     double gamma= sqrt(1/(1-beta*beta));
     return gamma;
   }
-  double region_particle::getDeltaTime() {
+  double region_particle::getDeltaTime()  const{
     _parts->setEntry(_pentry);
     double t=getTime()-getVt();
     double d=getPath()/100;
     return t-d/getBetaFromP()/2.99792e+08*1E9;
   }
-  double region_particle::getBetaFromP() {
+  double region_particle::getBetaFromP()  const{
     double pp=getP();
     auto mass=getPdgMass();
     return pp/sqrt(pp*pp+mass*mass);
   }
-  double region_particle::getPdgMass() {
+  double region_particle::getPdgMass() const {
 
     switch (getPid()) {
 

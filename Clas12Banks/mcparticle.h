@@ -81,12 +81,12 @@ namespace clas12 {
       return atan2(y,x);
     }
     
-    void setEntry(short i){
+    void setEntry(short i) const{
       if( i<getRows() )_entry=i;
       else _entry = -1;
       
      }
-    void setMatchEntry(short ip,short imc){
+    void setMatchEntry(short ip,short imc) const{
       _entry=imc;
       _matched_pindex=ip;
       if(_match.get())_match->setEntry(_matched_pindex);
@@ -105,7 +105,7 @@ namespace clas12 {
       _matched_pindex=-1;
       bank::notify();
     }
-    int match_to(int pindex){//pindex is index of reconstructed particle
+    int match_to(int pindex) const{//pindex is index of reconstructed particle
       _matched_pindex=pindex;
       return _match.get()!=nullptr ?
 	_entry=_match->getMCindex(pindex) : _entry=-1 ;
@@ -136,8 +136,8 @@ namespace clas12 {
     int _parent_order{-1};
     int _daughter_order{-1};
     
-    short _entry={0};
-    short _matched_pindex;
+    mutable short _entry={0};
+    mutable short _matched_pindex;
     mcmatch_uptr _match;
   };
   

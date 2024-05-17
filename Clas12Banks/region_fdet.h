@@ -50,7 +50,7 @@ namespace clas12 {
     rich_ptr rich() const final;
      
 
-    double getTime() final{
+    double getTime() const final{
       if(_ptof>-1 && par()->getCharge()!=0){
 	_scint->setIndex(_ptof);
 	return _scint->getTime();
@@ -58,7 +58,7 @@ namespace clas12 {
       _cal->setIndex(_pcal);
       return _cal->getTime();
     }
-    double getPath() final{
+    double getPath() const final{
       if(_ptof>-1 && par()->getCharge()!=0){
 	_scint->setIndex(_ptof);
 	return _scint->getPath();
@@ -67,7 +67,7 @@ namespace clas12 {
       return _cal->getPath();
     }
 
-    double getDetEnergy() final{
+    double getDetEnergy() const final{
       _cal->setIndex(_ppre);
       double energy=_cal->getEnergy();
       _cal->setIndex(_pin);
@@ -77,12 +77,12 @@ namespace clas12 {
       return energy;
     }
  
-    double getDeltaEnergy() final{
+    double getDeltaEnergy() const final{
       _scint->setIndex(_ptof);
       return _scint->getEnergy();
     }
 
-    short getSector() final{
+    short getSector() const final{
       if(_ptrck>-1){
 	_trck->setIndex(_ptrck);
 	return _trck->getSector();

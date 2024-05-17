@@ -43,7 +43,7 @@ namespace clas12 {
     
      
     
-    double getTime() final{
+    double getTime() const final{
       if(_ptof>-1){
 	_scint->setIndex(_ptof);
 	return _scint->getTime();
@@ -52,7 +52,7 @@ namespace clas12 {
       return _scint->getTime();
       
     }
-    double getPath() final{
+    double getPath() const final{
       if(_ptof>-1){
 	_scint->setIndex(_ptof);
 	return _scint->getPath();
@@ -61,7 +61,7 @@ namespace clas12 {
       return _scint->getPath();
     }
 
-    double getDetEnergy() final{
+    double getDetEnergy() const final{
       //sum of cnd layers
       _scint->setIndex(_pcnd1);
       double energy=_scint->getEnergy();
@@ -72,12 +72,12 @@ namespace clas12 {
       return energy;
     }
  
-    double getDeltaEnergy() final{
+    double getDeltaEnergy() const final{
       _scint->setIndex(_ptof);
       return _scint->getEnergy();
     }
 
-    short getSector() final{
+    short getSector() const  final{
       return 0;
     }
 

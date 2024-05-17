@@ -32,7 +32,7 @@ namespace clas12 {
  
     long    getCategory() const  noexcept{ return getLong(_cat_order,0); }
     float  getStartTime() const  noexcept{ return getFloat(_st_order,0); }
-    void setEntry(int ind){}
+    void setEntry(int ind) const {}
     void setBankEntry(int ind){}
 
     /**
