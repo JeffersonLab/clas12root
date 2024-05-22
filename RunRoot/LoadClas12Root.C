@@ -46,4 +46,9 @@ void LoadClas12Root(){
   gSystem->SetFlagsOpt(optFlags.Data());
 
 
+ TString IGUANA = gSystem->Getenv("IGUANA");
+ if(IGUANA.Length()>0){
+   gROOT->ProcessLine(".x $CLAS12ROOT/RunRoot/LoadIguana.C");
+ }
+  
 }
