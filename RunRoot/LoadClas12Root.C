@@ -12,6 +12,7 @@ void LoadClas12Root(){
  
   TString HIPO=gSystem->Getenv("HIPO");
   gSystem->Load(HIPO+"/lib/libhipo4");
+  gInterpreter->AddIncludePath(HIPO+"/include");
 
   TString CLAS12ROOT=gSystem->Getenv("CLAS12ROOT");
   TString LIB=CLAS12ROOT+"/lib/";

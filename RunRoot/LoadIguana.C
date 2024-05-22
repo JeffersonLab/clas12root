@@ -5,7 +5,9 @@
 
 void LoadIguana(){
 
-   
+  TString IGUANA = gSystem->Getenv("IGUANA");
+  gInterpreter->AddIncludePath(IGUANA+"/include");
+  
   gROOT->ProcessLine("#include <iguana/algorithms/AlgorithmBoilerplate.h>");
   gROOT->ProcessLine("#include <iguana/algorithms/AlgorithmSequence.h>");
   gROOT->ProcessLine("#include <iguana/algorithms/Algorithm.h>");
