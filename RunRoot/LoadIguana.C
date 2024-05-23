@@ -19,7 +19,7 @@ void LoadIguana(){
   gSystem->Load("$IGUANA/lib/libIguanaValidators.so");
 
   TString CLAS12ROOT = gSystem->Getenv("CLAS12ROOT");
-  gSystem->AddIncludePath(Form("-I%s/iguana",CLAS12ROOT.Data()));
+  gInterpreter->AddIncludePath(Form("%s/iguana",CLAS12ROOT.Data()));
   gROOT->ProcessLine(Form("#include \"%s/iguana/IguanaAlgo.h\" ",CLAS12ROOT.Data()));
   gROOT->ProcessLine(Form("#include \"%s/iguana/Transformers.h\" ",CLAS12ROOT.Data()));
   gROOT->ProcessLine(Form("#include \"%s/iguana/Filters.h\" ",CLAS12ROOT.Data()));
