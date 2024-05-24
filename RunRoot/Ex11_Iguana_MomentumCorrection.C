@@ -27,8 +27,12 @@ void Ex11_Iguana_MomentumCorrection(){
   config_c12->addExactPid(-211,1);    //exactly 1 pi-
   config_c12->ignoreBank("REC::CovMat");
 
-  // create the algorithms
+  //get run clas12reader
+  auto& c12=chain.C12ref();
+  
+  // create the chosen algorithms
   clas12root::Iguana ig;
+  ig.SetClas12(&c12);//connect to clas12reader
   ig.GetTransformers().Use("clas12::MomentumCorrection");
   ig.GetTransformers().Use("clas12::FTEnergyCorrection");
   ig.GetFilters().Use("clas12::ZVertexFilter");
@@ -37,9 +41,7 @@ void Ex11_Iguana_MomentumCorrection(){
   ig.SetOptionAll("log", "debug");
   ig.Start();
  
-  //get run clas12reader
-  auto& c12=chain.C12ref();
-
+ 
   //decalre 4-vector objects
   auto db=TDatabasePDG::Instance();
   FourVector p4beam(0,0,10.6,10.6);
@@ -60,11 +62,7 @@ void Ex11_Iguana_MomentumCorrection(){
 
   
   while ( chain.Next() ){
-    //IMPORTANT need to set clas12.
-    //If only 1 file, this only needs done once
-    //but safer just to pass every event
-    ig.SetClas12(c12.get());
-    
+     
     //auto ebeam = c12->rcdb()->current().beam_energy/1000;
     //p4beam.SetXYZT(0,0,ebeam,ebeam); //approx. mass =0
     // get particles by type
