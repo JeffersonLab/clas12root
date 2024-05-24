@@ -20,6 +20,7 @@ namespace clas12root{
 	AddAlgo(_zVer.get());
       }
     }
+      
     //interface to vector transforms
     bool doFilters(const std::vector<const clas12::region_particle*>& parts,
 		   std::function< bool ( const clas12::region_particle *p ) > fun) const{
@@ -40,6 +41,14 @@ namespace clas12root{
     }
     
 
+    bool doAllFilters(const std::vector<const clas12::region_particle*> parts){
+
+      bool OK = true;
+      
+      if(_zVer.get())OK*=doZVertexFilter(parts);
+
+      return OK;
+    }
   private:
 	
     std::unique_ptr<iguana::clas12::ZVertexFilter> _zVer;

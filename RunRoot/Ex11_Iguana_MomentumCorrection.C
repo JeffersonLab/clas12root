@@ -30,6 +30,7 @@ void Ex11_Iguana_MomentumCorrection(){
   // create the algorithms
   clas12root::Iguana ig;
   ig.GetTransformers().Use("clas12::MomentumCorrection");
+  ig.GetTransformers().Use("clas12::FTEnergyCorrection");
   ig.GetFilters().Use("clas12::ZVertexFilter");
   ig.GetCreators().Use("physics::InclusiveKinematics");
   
@@ -72,12 +73,13 @@ void Ex11_Iguana_MomentumCorrection(){
     auto pip=c12->getByID(211)[0];
     auto pim=c12->getByID(-211)[0];
     //filter on z-vertices of the particles
-    if( !(ig.GetFilters().doZVertexFilter({electron,pip,pim})) ) {
+    //  if( !(ig.GetFilters().doZVertexFilter({electron,pip,pim})) ) {
+    if( !(ig.GetFilters().doAllFilters({electron,pip,pim})) ) {
       continue;
     }
 
     //correct momentum and get 4-vectors
-    ig.GetTransformers().doMomentumCorrections({electron,pip,pim},{&p4el,&p4pip,&p4pim});
+    ig.GetTransformers().doAllCorrections({electron,pip,pim},{&p4el,&p4pip,&p4pim});
 
     //calculate inclusive kinematics
     auto kine = ig.GetCreators().doInclusiveKinematics(electron);
