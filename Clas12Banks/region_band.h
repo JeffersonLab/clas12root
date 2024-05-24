@@ -38,26 +38,26 @@ namespace clas12 {
     traj_ptr traj(ushort det,ushort layer=0) const final;
  
 
-    double getTime() final{
+    double getTime() const final{
       _scint->setIndex(_ptof);
       return _scint->getTime();
     }
-    double getPath() final{
+    double getPath() const final{
       _scint->setIndex(_ptof);
       return _scint->getPath();
     }
 
-    double getDetEnergy() final{
+    double getDetEnergy() const final{
       _scint->setIndex(_ptof);
       return _scint->getEnergy();
     }
  
-    double getDeltaEnergy() final{
+    double getDeltaEnergy() const final{
       _scint->setIndex(_pveto);
       return _scint->getEnergy();
     }
  
-    short getSector() final{return 0;} 
+    short getSector() const final{return 0;} 
     
     private:
 

@@ -33,7 +33,7 @@ namespace clas12 {
     int _py_order{-1};
     int _pz_order{-1};
     
-    short _entry{0};
+    mutable short _entry{0};
     
   public:
 
@@ -67,7 +67,7 @@ namespace clas12 {
     float  getPz()    const noexcept{ return getFloat(_pz_order,_entry);}
 
     
-    void setEntry(short i){
+    void setEntry(short i) const{
       if( i<getRows() )_entry=i;
       else _entry = -1;
     }

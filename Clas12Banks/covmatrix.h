@@ -40,8 +40,8 @@ namespace clas12 {
     int getPindex() { return getInt(_pindex_order,_index);}
     int getIndex() const {return _index;}
     int getIndex(int pindex);
-    void setIndex(int ind){_index=ind;}
-    void setEntry(int ind){_index=ind;}
+    void setIndex(int ind) const{_index=ind;}
+    void setEntry(int ind) const{_index=ind;}
     void setBankEntry(int ind){_index=ind;}
 
     const  CovMatrix* matrix();
@@ -79,7 +79,7 @@ namespace clas12 {
     CovMatrix _matrix={5,std::vector<float>(5,0)};
     IndMatrix _morder={5,std::vector<int>(5,-1)};
     int  _pindex_order=-1;
-    int _index=-1;
+    mutable int _index=-1;
     //std::map<int,int> _rmap;
     std::vector<int> _rvec;
   };

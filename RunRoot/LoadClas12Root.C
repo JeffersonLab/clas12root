@@ -12,6 +12,7 @@ void LoadClas12Root(){
  
   TString HIPO=gSystem->Getenv("HIPO");
   gSystem->Load(HIPO+"/lib/libhipo4");
+  gInterpreter->AddIncludePath(HIPO+"/include");
 
   TString CLAS12ROOT=gSystem->Getenv("CLAS12ROOT");
   TString LIB=CLAS12ROOT+"/lib/";
@@ -46,4 +47,9 @@ void LoadClas12Root(){
   gSystem->SetFlagsOpt(optFlags.Data());
 
 
+ TString IGUANA = gSystem->Getenv("IGUANA");
+ if(IGUANA.Length()>0){
+   gROOT->ProcessLine(".x $CLAS12ROOT/RunRoot/LoadIguana.C");
+ }
+  
 }
