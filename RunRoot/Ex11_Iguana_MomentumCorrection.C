@@ -27,12 +27,10 @@ void Ex11_Iguana_MomentumCorrection(){
   config_c12->addExactPid(-211,1);    //exactly 1 pi-
   config_c12->ignoreBank("REC::CovMat");
 
-  //get run clas12reader
-  auto& c12=chain.C12ref();
   
   // create the chosen algorithms
   clas12root::Iguana ig;
-  ig.SetClas12(&c12);//connect to clas12reader
+  ig.SetClas12(chain.C12ptr());//connect to clas12reader
   ig.GetTransformers().Use("clas12::MomentumCorrection");
   ig.GetTransformers().Use("clas12::FTEnergyCorrection");
   ig.GetFilters().Use("clas12::ZVertexFilter");
@@ -61,6 +59,8 @@ void Ex11_Iguana_MomentumCorrection(){
   TH1D hcW{"cW","corrected W",100,0,6};
 
   
+  //get run clas12reader
+  auto& c12=chain.C12ref();
   while ( chain.Next() ){
      
     //auto ebeam = c12->rcdb()->current().beam_energy/1000;

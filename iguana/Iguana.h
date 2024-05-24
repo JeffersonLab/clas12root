@@ -14,7 +14,7 @@ namespace clas12root{
 
   public:
     
-    void SetClas12( clas12::clas12reader* c12){
+    void SetClas12( const std::unique_ptr<clas12::clas12reader>* c12 ){
       _transform.SetClas12(c12);
       _filter.SetClas12(c12);
       _creator.SetClas12(c12);

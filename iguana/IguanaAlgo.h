@@ -18,7 +18,7 @@ namespace clas12root{
 
   public:
     
-    void SetClas12( const clas12::clas12reader* c12){_c12=c12;}
+    void SetClas12( const std::unique_ptr<clas12::clas12reader>* c12){_c12=c12;}
 
     void Start(){
 
@@ -54,12 +54,12 @@ namespace clas12root{
       return val;
     }
     
-   const clas12::clas12reader* C12() const {return _c12;}
+    const clas12::clas12reader* C12() const {return _c12->get();}
 
   private:
     
     std::vector<iguana::Algorithm*> _algos;
-    const clas12::clas12reader *_c12=nullptr;
+    const std::unique_ptr<clas12::clas12reader>* _c12=nullptr;
  
     
   };
