@@ -57,9 +57,9 @@ namespace clas12 {
     int getIndex()   const noexcept{return _index;}
     int getIndex(int pindex, int detector=0, int layer=0);
    
-    virtual void setIndex(int ind){_index=ind;}
+    virtual void setIndex(int ind) const{_index=ind;}
     void setBankEntry(short i){ _index=i;} //faster for BankHist
-    void setEntry(int ind){_index=ind;}
+    void setEntry(int ind) const{_index=ind;}
     
     ////////////////////////////////////////////////////////////////
     //virtual functions can be overridden in derived class
@@ -80,7 +80,7 @@ namespace clas12 {
 
     int _detector_id_order=-1;
     int  _pindex_order=-1;
-    int _index=-1;
+    mutable int _index=-1;
     
     // std::map<int,int> _rmap;
     std::vector<int> _rvec{};

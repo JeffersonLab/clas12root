@@ -41,13 +41,13 @@ namespace clas12 {
     void  addVTPTriggerToEvent(long pattern);
 
     void setBankEntry(short i){ _index=i;} //faster for BankHist
-    void setEntry(int ind){_index=ind;}
+    void setEntry(int ind) const {_index=ind;}
  
   private :
 
     int cr_order{-1};
     int wo_order{-1};
-    int _index{0};
+    mutable int _index{0};
     
     std::bitset<32> _VTPBitSet;
   };

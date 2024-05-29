@@ -56,6 +56,7 @@ namespace clas12root {
     
     clas12::clas12reader* GetC12Reader();
     const std::unique_ptr<clas12::clas12reader>& C12ref()const {return _c12;}
+    const std::unique_ptr<clas12::clas12reader>* C12ptr()const {return &_c12;}
     
     Double_t TotalBeamCharge() noexcept{
     

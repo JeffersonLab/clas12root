@@ -58,6 +58,14 @@ namespace clas12root{
 
     
     fInput->Add(_chain);//make chain of files avaialbel on slaves
+
+    //copy database paths for proof. Previous method stopped working around Root 6.28
+    
+    _rcdbPath = TNamed("RCDBPATH",_chain->db()->rcdbPath());
+    _ccdbPath = TNamed("CCDBPATH",_chain->db()->ccdbPath());
+    fInput->Add(&_rcdbPath);
+    fInput->Add(&_ccdbPath);
+
   }
   
   void HipoSelector::SlaveBegin(TTree * /*tree*/)
@@ -68,7 +76,12 @@ namespace clas12root{
     fInput->Print();
     TString option = GetOption();
     _chain=dynamic_cast<HipoChain*>(fInput->FindObject("HIPOFILES"));
-   
+    //retrieve db paths
+    _rcdbPath=*(dynamic_cast<TNamed*>(fInput->FindObject("RCDBPATH")));
+    _ccdbPath=*(dynamic_cast<TNamed*>(fInput->FindObject("CCDBPATH")));
+    _chain->db()->SetRCDBRootConnection(_rcdbPath.GetTitle());
+    _chain->db()->SetCCDBLocalConnection(_ccdbPath.GetTitle());
+    _chain->db()->initDBs();
   }
   Bool_t  HipoSelector::Notify() {
     // Called at the start of a new file

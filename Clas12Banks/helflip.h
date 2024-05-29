@@ -49,7 +49,7 @@ namespace clas12 {
     void notify() final{
       bank::notify();
     }
-   void setEntry(int ind){}
+   void setEntry(int ind) const{}
    void setBankEntry(int ind){}
 
   private :
