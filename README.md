@@ -20,7 +20,7 @@ For Hipo library see https://github.com/gavalian/hipo
 
       git clone --recurse-submodules https://github.com/gavalian/hipo
       cd hipo/
-      git checkout 4.0.1
+      git checkout 4.1.0
       cmake -DCMAKE_INSTALL_PREFIX=$PWD/
       cmake --build . --target install
 
