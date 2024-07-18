@@ -70,8 +70,8 @@ namespace clas12 {
     ////////////////////////////////////////////////////////////////
     //override header notify, called at start of event
     void notify() override {
-      if(_detector_id_order==-1) return;
       bank::notify();
+      if(_detector_id_order==-1) return;
       scanIndex();
     }
 
