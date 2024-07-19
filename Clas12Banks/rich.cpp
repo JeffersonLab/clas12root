@@ -14,7 +14,9 @@ namespace clas12 {
     clas12::particle_detector(aschema),
     _ring{new richring(ringschema)}
   {
- 
+    // std::cout<<"DEBUG "<<"rich::rich()"<< std::endl;
+    //aschema.show();
+    _detector_id_order=0; //dont have a detector bank, but getDetector is fixed
    _id_order   = aschema.getEntryOrder("id");
    _hindex_order   = aschema.getEntryOrder("hindex");
    _pindex_order   = aschema.getEntryOrder("pindex");
@@ -40,10 +42,11 @@ namespace clas12 {
   }
   rich::rich(hipo::schema aschema):
     clas12::particle_detector(aschema)  {
- 
+    
+    _detector_id_order=0; //dont have a detector bank, but getDetector is fixed
     _id_order   = aschema.getEntryOrder("id");
-   _hindex_order   = aschema.getEntryOrder("hindex");
-   _pindex_order   = aschema.getEntryOrder("pindex");
+    _hindex_order   = aschema.getEntryOrder("hindex");
+    _pindex_order   = aschema.getEntryOrder("pindex");
    _emilay_order   = aschema.getEntryOrder("emilay");
    _emico_order   = aschema.getEntryOrder("emico");
    _enico_order   = aschema.getEntryOrder("enico");
