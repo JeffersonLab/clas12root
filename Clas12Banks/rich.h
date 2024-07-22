@@ -89,7 +89,7 @@ namespace clas12 {
       return 0;
     }
 
-
+ 
   private:
      
     friend clas12::rich;
