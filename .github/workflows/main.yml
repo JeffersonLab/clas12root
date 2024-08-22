@@ -7,6 +7,40 @@ defaults:
     shell: bash
 
 jobs:
+
+  build_hipo:
+    runs-on: ubuntu-latest
+    container: rootproject/root:${{ matrix.version }}
+    strategy:
+      matrix:
+        version: [6.28.12-ubuntu22.04]
+    steps:
+      - name: system dependencies
+        run: |
+          apt -y update
+          apt -y upgrade
+          apt -y install git python3-pip
+          python -m pip install meson ninja
+          echo "===== VERSIONS ====="
+          for pkg in meson ninja; do echo "$pkg: $($pkg --version)"; done
+      - name: checkout hipo
+        uses: actions/checkout@v4
+        with:
+          repository: c-dilks/hipo ##### FIXME: should be `master`
+          ref: fix-meson # if you want to use a fixed tag; remove if you want to use `main`
+          path: hipo_src
+      - name: build hipo
+        run: |
+          meson setup hipo_build hipo_src --prefix=hipo_install
+          meson install -C build
+          tar cavf hipo_install{.tar.zst,}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hipo_install-${{ matrix.version }}
+          retention-days: 5
+          path: hipo_install.tar.zst
+
+
   build_and_test:
     runs-on: ubuntu-latest
     container: rootproject/root:${{ matrix.version }}
@@ -19,11 +53,8 @@ jobs:
         run: |
           apt -y update
           apt -y upgrade
-          apt -y install git python2 python-pip python3-pip
+          apt -y install git python2 python-pip
           python2 -m pip install scons
-          python3 -m pip install meson ninja # for HIPO
-          echo "===== VERSIONS ====="
-          for pkg in scons cmake meson ninja; do echo "$pkg: $($pkg --version)"; done
 
       - name: checkout repository
         uses: actions/checkout@v4
@@ -44,21 +75,16 @@ jobs:
           echo "PATH=$PWD/bin:$CCDB_HOME:$CCDB_HOME/bin:$RCDB_HOME/bin:$RCDB_HOME/cpp/bin:$PATH" >> $GITHUB_ENV
           echo "LD_LIBRARY_PATH=$RCDB_HOME/cpp/lib:$CCDB_HOME/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
 
-      - name: Create hipo folder
-        run: |
-          mkdir -p $HIPO
-
-      - name: checkout hipo
-        uses: actions/checkout@v4
+      - name: get HIPO installation
+        uses: actions/download-artifact@v4
         with:
-          repository: c-dilks/hipo
-          ref: fix-meson # if you want to use a fixed tag; remove if you want to use `main`
-          path: hipo_src
+          name: hipo_install-${{ matrix.version }}
 
-      - name: build hipo
+      - name: extract HIPO installation
         run: |
-          meson setup hipo_build hipo_src --prefix=$HIPO
-          meson install -C build
+          tar xvf hipo_install.tar.zst
+          mkdir -p $HIPO
+          mv hipo_install/* $HIPO/
 
       - name: build ccdb
         run: |
