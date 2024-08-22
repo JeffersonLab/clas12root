@@ -21,7 +21,9 @@ jobs:
           apt -y upgrade
           apt -y install git python2 python-pip
           python2 -m pip install scons
-          python -m pip install meson ninja # for HIPO
+          python2 -m pip install meson ninja # for HIPO
+          echo "===== VERSIONS ====="
+          for pkg in scons cmake meson ninja; do echo "$pkg: $($pkg --version)"; done
 
       - name: checkout repository
         uses: actions/checkout@v4
