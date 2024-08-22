@@ -33,12 +33,12 @@ jobs:
         run: |
           meson setup hipo_build hipo_src --prefix=$(pwd)/hipo_install
           meson install -C hipo_build
-          tar cavf hipo_install{.tar.zst,}
+          tar cavf hipo_install{.tar.gz,}
       - uses: actions/upload-artifact@v4
         with:
           name: hipo_install-${{ matrix.version }}
           retention-days: 5
-          path: hipo_install.tar.zst
+          path: hipo_install.tar.gz
 
 
   build_and_test:
@@ -83,7 +83,7 @@ jobs:
 
       - name: extract HIPO installation
         run: |
-          tar xvf hipo_install.tar.zst
+          tar xvf hipo_install.tar.gz
           mkdir -p $HIPO
           mv hipo_install/* $HIPO/
 
