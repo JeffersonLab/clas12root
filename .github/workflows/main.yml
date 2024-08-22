@@ -32,7 +32,7 @@ jobs:
       - name: build hipo
         run: |
           meson setup hipo_build hipo_src --prefix=$(pwd)/hipo_install
-          meson install -C build
+          meson install -C hipo_build
           tar cavf hipo_install{.tar.zst,}
       - uses: actions/upload-artifact@v4
         with:
