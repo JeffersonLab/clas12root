@@ -19,9 +19,9 @@ jobs:
         run: |
           apt -y update
           apt -y upgrade
-          apt -y install git python2 python-pip
+          apt -y install git python2 python-pip python3-pip
           python2 -m pip install scons
-          python2 -m pip install meson ninja # for HIPO
+          python3 -m pip install meson ninja # for HIPO
           echo "===== VERSIONS ====="
           for pkg in scons cmake meson ninja; do echo "$pkg: $($pkg --version)"; done
 
