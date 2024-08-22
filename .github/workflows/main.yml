@@ -42,6 +42,7 @@ jobs:
 
 
   build_and_test:
+    needs: [build_hipo]
     runs-on: ubuntu-latest
     container: rootproject/root:${{ matrix.version }}
     strategy:
