@@ -21,6 +21,7 @@ jobs:
           apt -y upgrade
           apt -y install git python2 python-pip
           python2 -m pip install scons
+          python -m pip install meson ninja # for HIPO
 
       - name: checkout repository
         uses: actions/checkout@v4
@@ -48,15 +49,14 @@ jobs:
       - name: checkout hipo
         uses: actions/checkout@v4
         with:
-          repository: gavalian/hipo
-          ref: 4.0.1 # if you want to use a fixed tag; remove if you want to use `main`
+          repository: c-dilks/hipo
+          ref: fix-meson # if you want to use a fixed tag; remove if you want to use `main`
           path: hipo_src
 
       - name: build hipo
         run: |
-          cmake -S hipo_src -B hipo_build --install-prefix $HIPO
-          cmake --build hipo_build
-          cmake --install hipo_build
+          meson setup hipo_build hipo_src --prefix=$HIPO
+          meson install -C build
 
       - name: build ccdb
         run: |
