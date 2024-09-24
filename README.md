@@ -5,26 +5,14 @@ Data Analysis Tools for hipo4 data format.
 
 Examples are given for running in interactive ROOT sessions and ROOT-Jupyter notebooks.
 
-
-## Clas12Banks -> Clas12Root
-
-We now use an external hipo4 repository. This must be pointed at with the variable HIPO when installing. The files from hipo/hipo4 will be copied here to Hipo4.
-
-
-A default hipo implementation is now packed with clas12root. If you prefer to use this do not set the enviroment variable HIPO. If you would like to use a different version of the hipo library set HIPO. You may get the most up to data hipo library from
-
-
-For Hipo library see https://github.com/gavalian/hipo
-
 ## New : from version 1.9.0 an external hipo install is required before building clas12root
 
-      git clone --recurse-submodules https://github.com/gavalian/hipo
-      cd hipo/
-      git checkout 4.1.0
-      cmake -DCMAKE_INSTALL_PREFIX=$PWD/
-      cmake --build . --target install
+We now use an external hipo4 repository. This must be pointed at with the environment variable `HIPO` when installing.
 
-The environment variable HIPO must be set to the path of the hipo install.
+For convenience, the hipo4 source code is included here in `hipo_src/` as a submodule, and you may compile and install it with `./installHIPO`;
+the default installation location is the top-level directory `hipo/`.
+
+You may get the most up to data hipo library from <https://github.com/gavalian/hipo>
 
 ## Clas12Banks and Clas12Root
 

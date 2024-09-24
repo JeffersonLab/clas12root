@@ -10,3 +10,6 @@
 [submodule "ccdb"]
 	path = ccdb
 	url = https://github.com/baltzell/ccdb.git
+[submodule "hipo_src"]
+	path = hipo_src
+	url = https://github.com/gavalian/hipo.git

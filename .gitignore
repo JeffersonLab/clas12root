@@ -5,6 +5,10 @@ hipo4
 lib
 man
 
+# dependency installations
+##############
+/hipo
+
 # hipo source
 ##############
 ExtraPackages/rhipo/chipo/
