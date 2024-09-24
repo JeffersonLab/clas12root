@@ -19,8 +19,8 @@ jobs:
         run: |
           apt -y update
           apt -y upgrade
-          apt -y install git python2 python-pip
-          python2 -m pip install scons
+          apt -y install git python3-pip
+          python -m pip install scons
 
       - name: checkout repository
         uses: actions/checkout@v4
@@ -62,7 +62,7 @@ jobs:
         run: |
           cd $CCDB_HOME
           source environment.bash
-          python2 $(which scons)
+          python $(which scons)
 
       - name: build clas12root
         run: |
