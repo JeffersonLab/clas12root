@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# install HIPO locally
+
+set -eou pipefail
+
+# set the installation prefix: the default is clas12root/hipo, and it may be overriden by user argument
+top_dir=$(cd $(dirname ${BASH_SOURCE[0]:-$0}) && pwd -P)
+[ $# -ge 1 ] && prefix=$1 || prefix=$top_dir/hipo
+
+# check for meson and ninja
+if ! type meson; then
+  echo "ERROR: 'meson' is needed to build HIPO; you can install it with your package manager or with 'pip'." >&2
+  exit 1
+fi
+if ! type ninja; then
+  echo "WARNING: 'ninja' may be needed for 'meson', unless you prefer a different default backend; building HIPO may fail." >&2
+fi
+
+# compile and install
+source_dir=$top_dir/hipo_src
+build_dir=$source_dir/build
+echo """==================================================================================
+source directory:       $source_dir
+build directory:        $build_dir
+installation directory: $prefix
+==================================================================================
+"""
+meson setup --wipe $build_dir $source_dir --prefix=$prefix  # use --wipe to force a 'clean' build
+meson install -C $build_dir
+echo """==================================================================================
+Done installing HIPO.
+You may now set your environment to point to this installation:
+- for bash or zsh:   export HIPO=$prefix
+- for csh or tcsh:   setenv HIPO $prefix
+"""
