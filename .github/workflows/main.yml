@@ -50,7 +50,7 @@ jobs:
 
       - name: build ccdb
         run: |
-          mkdir ccdb-build && cd ccdb-build && cmake -DCMAKE_INSTALL_PREFIX=$CCDB_HOME ../ccdb
+          mkdir ccdb-build && cd ccdb-build && cmake -DCMAKE_INSTALL_PREFIX=$CCDB_HOME ../ccdb && make && make install
 
       - name: build clas12root
         run: |
