@@ -58,11 +58,11 @@ jobs:
         run: |
           ./installC12Root
 
-      - name: run exampl on data file
+      - name: run example on data file
         run: |
           ./bin/clas12root -q ./tests/read_file.C`
 
-      - name: run exampl on data file
+      - name: run example on data file
         run: |
           ./bin/clas12root -q RunRoot/Ex1_CLAS12Reader.C --in=tests/data/EptopX2pi_sample.hipo
 
