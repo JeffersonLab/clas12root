@@ -4,7 +4,7 @@ namespace clas12 {
 
 #ifdef CLAS_QADB
   
-  qadb_reader::qadb_reader(int runNb):_qa{}{_runNb=runNb;};
+  qadb_reader::qadb_reader(const string& pass,int runNb):_qa{pass}{_runNb=runNb;};
 
   ///////////////////////////////////////////////////////
   /// Add masks for all QA requirements

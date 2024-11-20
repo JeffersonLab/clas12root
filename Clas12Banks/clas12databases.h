@@ -75,6 +75,18 @@ namespace clas12 {
     void turnOffQADB(){_qadb.reset();}
     void turnOffRCDB(){_rcdb.reset();}
     void turnOffCCDB(){_ccdb.reset();}
+
+    void setPass(const string& pass){
+      _pass = pass;
+      initQA();
+    }
+    void initQA(){
+      std::cout<<"clas12databases::initQA pass = "<<_pass<<std::endl;
+     _qadb.reset( new qadb_reader{_pass,0} );
+      qadb_requireOkForAsymmetry(_qadbReqOKAsymmetry);
+      qadb_requireGolden(_qadbReqGolden);
+      qadb_setQARequirements(_qadbReqsQA);  
+    }
   private:
     
    //names for copying to ROOT file for selector
@@ -82,6 +94,7 @@ namespace clas12 {
     string  _myCcdbPath;
     //string  _myQadbPath;
 
+    string _pass; //!
     int _runNb={0};//!
 
     std::unique_ptr<rcdb_reader> _rcdb;//!
