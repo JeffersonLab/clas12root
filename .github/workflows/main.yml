@@ -60,7 +60,7 @@ jobs:
 
       - name: run example on data file
         run: |
-          ./bin/clas12root -q ./tests/read_file.C`
+          ./bin/clas12root -q ./tests/read_file.C
 
       - name: run example on data file
         run: |
