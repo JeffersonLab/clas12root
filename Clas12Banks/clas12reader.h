@@ -371,15 +371,8 @@ namespace clas12 {
     
     //clas12-qadb   
     void applyQA(const string& pass) {
-      // if(_db)
-      // if( _db->qa() ){
-      std::cout<<"clas12reader::applyQA "<<std::endl;
       _applyQA=true;
       _db->setPass(pass);
-      //}
-      // if( _applyQA==false){
-      // 	std::cout<<"Warning, clas12reader  applyQA() not valid"<<std::endl;
-      // }
     }
  
     //double sumChargeFromQA();

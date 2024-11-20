@@ -108,8 +108,11 @@ namespace clas12 {
      if(_ccdb.get()!=nullptr){
       _ccdb->setRun(runNb);
       _ccdb->updateTables();
-    }
-    if(_qadb.get()!=nullptr)_qadb->setRun(runNb);
+     }
+     if(_qadb.get()!=nullptr){
+       //     _qadb->setRun(runNb);
+       initQA();
+     }
     if(_rcdb.get()!=nullptr)_rcdb->readRun(runNb);
 
     close();
