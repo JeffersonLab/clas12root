@@ -61,4 +61,4 @@ jobs:
       - name: run example on data file
         run: |
           export CLAS12ROOT=$PWD
-          ./bin/clas12root -q ./tests/read_file.C
+          ./bin/clas12root -q './tests/read_file.C'
