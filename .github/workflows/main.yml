@@ -20,7 +20,7 @@ jobs:
           apt -y update
           apt -y upgrade
           apt -y install git python3-pip
-          python -m pip install scons meson ninja
+          python -m pip install meson ninja
 
       - name: checkout repository
         uses: actions/checkout@v4
@@ -31,7 +31,7 @@ jobs:
         run: |
           echo "CLAS12ROOT=$GITHUB_WORKSPACE" >> $GITHUB_ENV
           echo "HIPO=$GITHUB_WORKSPACE/hipo" >> $GITHUB_ENV
-          echo "CCDB_HOME=$GITHUB_WORKSPACE/ccdb" >> $GITHUB_ENV
+          echo "CCDB_HOME=$GITHUB_WORKSPACE/ccdb/install" >> $GITHUB_ENV
           echo "RCDB_HOME=$GITHUB_WORKSPACE/rcdb" >> $GITHUB_ENV
           echo "QADB=$GITHUB_WORKSPACE/clas12-qadb" >> $GITHUB_ENV
 
@@ -50,9 +50,14 @@ jobs:
 
       - name: build ccdb
         run: |
-          cd $CCDB_HOME
+          cd ccdb
           source environment.bash
-          python $(which scons)
+          cmake -S . -B build --install-prefix $CCDB_HOME
+          cmake --build build -j4
+          cmake --install build
+
+      - name: tree ccdb
+        run: tree ccdb/install
 
       - name: build clas12root
         run: |
