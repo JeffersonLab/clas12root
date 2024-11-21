@@ -19,7 +19,7 @@ jobs:
         run: |
           apt -y update
           apt -y upgrade
-          apt -y install meson ninja
+          apt -y install meson
 
       - run: cmake --version
       - run: meson --version
