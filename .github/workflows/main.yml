@@ -22,6 +22,8 @@ jobs:
           apt -y install git python3-pip
           python -m pip install meson ninja
 
+      - run: cmake --version
+
       - name: checkout repository
         uses: actions/checkout@v4
         with:
