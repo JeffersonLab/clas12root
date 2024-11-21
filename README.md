@@ -27,11 +27,7 @@ clas12root provides an interface to the clas12-qadb c++ code to allow skimming o
 
 To simplify installation of the dependencies, ccdb, rcdb, qadb are now includes as submodules tagged to specific releases. Now when you clone with   --recurse-submodules all 3 plus lz4 will also be downloaded into your clas12root directory. If you already have your own versions of these you may ignore these and just set the required paths to your own installation.
 
-It is still required to build ccdb with scons after you have cloned it (before running installC12Root). You will need to make sure you have the necessary depndencies for ccdb on your system. If you do not and do not want to use ccdb in anycase you may just not set the CCDB_HOME enviroment variable.  [https://github.com/JeffersonLab/ccdb]
-
-      cd ccdb
-      source environment.csh
-      scons
+It is still required to build ccdb with CMake after you have cloned it (before running installC12Root); see below for example CMake commands. You will need to make sure you have the necessary depndencies for ccdb on your system. If you do not and do not want to use ccdb in anycase you may just not set the CCDB_HOME enviroment variable.  [https://github.com/JeffersonLab/ccdb]
 
 ccdb is prone to giving warnings when you try and compile ROOT scripts via macros. To get rid of these wanrings you may need to copy the Directory.h file from ccdb_patch.
 
@@ -111,14 +107,17 @@ setenv CXX  /myz/c++
 ```
 Or just set the paths to CC and CXX directly.
 
-Remember to build ccdb with scons if you are using it before installing clas12root. If you alredy have CCDB_HOME set to somewhere else on your system then you will not need to do this.
+Remember to build ccdb with CMake if you are using it before installing clas12root. If you alredy have CCDB_HOME set to somewhere else on your system then you will not need to do this. For example,
 
 ```bash
-cd ccdb
-source environment.csh
-scons
-cd..
+cmake -S ccdb -B ccdb_build --install-prefix $CCDB_HOME  # where CCDB_HOME is your preferred installation location for CCDB
+cmake --build ccdb_build
+cmake --install ccdb_build
+```
 
+Then build clas12root:
+
+```bash
 installC12Root
 ```
 

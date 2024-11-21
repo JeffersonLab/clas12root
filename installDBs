@@ -14,6 +14,6 @@ setenv RCDB_HOME $PWD/rcdb
 cd ccdb
 source environment.csh
 
-scons
+scons ## FIXME: use CMake
 
 cd $CLAS12ROOT
