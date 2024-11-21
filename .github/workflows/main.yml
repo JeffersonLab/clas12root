@@ -52,7 +52,7 @@ jobs:
         run: |
           cd ccdb
           source environment.bash
-          cmake -S . -B build --install-prefix $CCDB_HOME
+          cmake -S . -B build -DCMAKE_INSTALL_PREFIX=$CCDB_HOME
           cmake --build build -j4
           cmake --install build
 
