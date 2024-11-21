@@ -19,10 +19,11 @@ jobs:
         run: |
           apt -y update
           apt -y upgrade
-          apt -y install git python3-pip
-          python -m pip install meson ninja
+          apt -y install meson ninja
 
       - run: cmake --version
+      - run: meson --version
+      - run: ninja --version
 
       - name: checkout repository
         uses: actions/checkout@v4
