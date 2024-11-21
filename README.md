@@ -107,13 +107,17 @@ setenv CXX  /myz/c++
 ```
 Or just set the paths to CC and CXX directly.
 
-Remember to build ccdb with CMake if you are using it before installing clas12root. If you alredy have CCDB_HOME set to somewhere else on your system then you will not need to do this.
+Remember to build ccdb with CMake if you are using it before installing clas12root. If you alredy have CCDB_HOME set to somewhere else on your system then you will not need to do this. For example,
 
 ```bash
 cmake -S ccdb -B ccdb_build --install-prefix $CCDB_HOME  # where CCDB_HOME is your preferred installation location for CCDB
-cmake --build ccdb_build -j4
+cmake --build ccdb_build
 cmake --install ccdb_build
+```
 
+Then build clas12root:
+
+```bash
 installC12Root
 ```
 
