@@ -52,7 +52,6 @@ jobs:
 
       - name: build ccdb
         run: |
-          mv -v CMakeLists.ccdb-patch.txt ccdb/CMakeLists.txt
           cd ccdb
           cmake -S . -B build -DCMAKE_INSTALL_PREFIX=$CCDB_HOME -LAH
           cmake --build build -j4
