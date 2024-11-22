@@ -176,7 +176,7 @@ namespace clas12 {
     std::vector<region_part_ptr> getByID(int id);
     std::vector<region_part_ptr> getByRegion(int ir);
     std::vector<region_part_ptr> getByCharge(int ch);
-    
+
     const std::vector<short>& preCheckPids();
     const std::vector<short>& preCheckPidsOrCharge();
 

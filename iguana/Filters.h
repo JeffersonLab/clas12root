@@ -3,6 +3,7 @@
 #include "IguanaAlgo.h"
 #include <iguana/algorithms/clas12/ZVertexFilter/Algorithm.h>
 #include <iguana/algorithms/clas12/FiducialFilter/Algorithm.h>
+#include <iguana/algorithms/clas12/PhotonGBTFilter/Algorithm.h>
 
 namespace clas12root{
 
@@ -13,6 +14,7 @@ namespace clas12root{
 
     iguana::clas12::ZVertexFilter* ZVertexFilter(){return _zVer.get();}
     iguana::clas12::FiducialFilter* FiducialFilter(){return _Fid.get();}
+    iguana::clas12::PhotonGBTFilter* PhotonGBTFilter(){return _PhotGBT.get();}
 
     void Use(const string& name){
 	
@@ -25,26 +27,51 @@ namespace clas12root{
 	_Fid.reset(new iguana::clas12::FiducialFilter);
 	AddAlgo(_Fid.get());
       }
+      if(name=="clas12::PhotonGBTFilter"){
+	_PhotGBT.reset(new iguana::clas12::PhotonGBTFilter);
+	AddAlgo(_PhotGBT.get());
+      }
     }
       
     //interface to vector transforms
-    bool doFilters(const std::vector<const clas12::region_particle*>& parts,
-		   std::function< bool ( const clas12::region_particle *p ) > fun) const{
-      bool filt = true;
-      for(auto* p:parts) filt*=fun(p);
-      return filt;
+    void doFilters(std::function< bool ( const clas12::region_particle *p ) > fun) const{
+      // bool filt = true;
+      // for(auto* p:parts) filt*=fun(p);
+      // return filt;
+
+      //get the clas12root region particles vector for the event
+      auto& particles = C12()->getDetParticles();
+      //save particles to delete
+      //(cannot to it actively when looping over same vector)
+      std::vector<region_part_ptr> to_delete;
+      for(auto* pa:particles){
+	if(fun(pa)==false){//failed filter must remove
+	  to_delete.push_back(pa);
+	}
+      }
+      //remove failed particles from clas12root vector
+      if(to_delete.empty()==false){
+	for(auto* pa:to_delete){
+	  std::cout<<"doFilter will delete "<<pa->getPid()<<" "<<pa<<" previous n particles "<<particles.size()<<std::endl;
+	  //remove this particle pointer from detParticles
+	  particles.erase(find(particles.begin(), particles.end(), pa));
+	  std::cout<<"doFilter will delete "<<" n particles "<<particles.size()<<std::endl;
+	}
+      }
+      //all done
     }
 
-
+    /////////////////
     //specific filters
     //zvertex filter
     bool doZVertexFilter(const clas12::region_particle *p) const{
       return _zVer->Filter(p->par()->getVz());
     }
-    bool doZVertexFilter(const std::vector<const clas12::region_particle*> parts) const{
-      return doFilters(parts,
-		       [this](const clas12::region_particle *p){return doZVertexFilter(p);});
+    void doZVertexFilter() const{
+      doFilters([this](const clas12::region_particle *p){return doZVertexFilter(p);});
     }
+
+    ////////////////
     //fiducial filter
     bool doFiducialFilter(const clas12::region_particle *p) const
     {
@@ -65,25 +92,40 @@ namespace clas12root{
       // return _Fid->Filter(traj,c12->runconfig()->getTorus(),p->par()->getPid());
       return true;
     }
-    bool doFiducialFilter(const std::vector<const clas12::region_particle*> parts) const{
-      return doFilters(parts,
-		       [this](const clas12::region_particle *p){return doFiducialFilter(p);});
+    void doFiducialFilter() const{
+      doFilters([this](const clas12::region_particle *p){return doFiducialFilter(p);});
+    }
+    //////////////////
+    //PhotonGBT filter
+    bool doPhotonGBTFilter(const clas12::region_particle *p, const std::map<int, iguana::clas12::PhotonGBTFilter::calo_row_data>& calo) const{
+
+      if(p->getPid()!=22) return true;
+
+      //Need FiducialFitler to be public!
+      
+      //return _PhotGBT->Filter(*(p->par()),*(p->cal()),calo,p->getIndex(),C12()->getRunNumber() );
+
+      return true;
+      
+    }
+    void doPhotonGBTFilter() const{
+      if(getNParticles()==0) return;
+      auto calo = _PhotGBT->GetCaloMap(*(C12()->getDetParticles(0)->cal(-1)));
+      doFilters([this,&calo](const clas12::region_particle *p){return doPhotonGBTFilter(p,calo);});
     }
  
     ///////////////////////////////////////////////
-    bool doAllFilters(const std::vector<const clas12::region_particle*> parts){
+    void doAllFilters(){
 
-      bool OK = true;
-      
-      if(_zVer.get())OK*=doZVertexFilter(parts);
-      if(_Fid.get())OK*=doFiducialFilter(parts);
-
-      return OK;
+      if(_zVer.get())doZVertexFilter();
+      if(_Fid.get())doFiducialFilter();
+      if(_PhotGBT.get())doPhotonGBTFilter();
     }
   private:
 	
     std::unique_ptr<iguana::clas12::ZVertexFilter> _zVer;
     std::unique_ptr<iguana::clas12::FiducialFilter> _Fid;
+    std::unique_ptr<iguana::clas12::PhotonGBTFilter> _PhotGBT;
  	
   };
       
