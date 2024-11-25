@@ -66,6 +66,11 @@ jobs:
         run: |
           ./bin/clas12root -q RunRoot/Ex1_CLAS12Reader.C --in=tests/data/EptopX2pi_sample.hipo
 
+      - name: run example script in benchmark
+        run: |
+          chmod +x benchmark/Ex1_script.sh  # Make sure the script is executable
+          benchmark/Ex1_script.sh  # Run the test script
+
 
 
 
