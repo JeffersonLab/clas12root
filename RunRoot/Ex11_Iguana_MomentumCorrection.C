@@ -34,8 +34,6 @@ void Ex11_Iguana_MomentumCorrection(){
   ig.GetTransformers().Use("clas12::MomentumCorrection");
   ig.GetTransformers().Use("clas12::FTEnergyCorrection");
   ig.GetFilters().Use("clas12::ZVertexFilter");
-  ig.GetFilters().Use("clas12::FiducialFilter");
-  ig.GetFilters().Use("clas12::PhotonGBTFilter");
   ig.GetCreators().Use("physics::InclusiveKinematics");
   
   ig.SetOptionAll("log", "debug");
@@ -64,7 +62,8 @@ void Ex11_Iguana_MomentumCorrection(){
   //get run clas12reader
   auto& c12=chain.C12ref();
   while ( chain.Next() ){
-     
+    ig.PrepareEvent(c12->getRunNumber());
+    
     //auto ebeam = c12->rcdb()->current().beam_energy/1000;
     //p4beam.SetXYZT(0,0,ebeam,ebeam); //approx. mass =0
     //filter on z-vertices of the particles

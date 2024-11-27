@@ -12,8 +12,9 @@
 
 namespace clas12root{
 
-    using FourVector = ROOT::Math::PxPyPzMVector;
-
+  using FourVector = ROOT::Math::PxPyPzMVector;
+  using concurrent_key_t = std::size_t;
+  
   class IguanaAlgo{
 
   public:
