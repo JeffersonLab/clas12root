@@ -12,8 +12,9 @@
 
 namespace clas12root{
 
-    using FourVector = ROOT::Math::PxPyPzMVector;
-
+  using FourVector = ROOT::Math::PxPyPzMVector;
+  using concurrent_key_t = std::size_t;
+  
   class IguanaAlgo{
 
   public:
@@ -54,7 +55,7 @@ namespace clas12root{
       return val;
     }
     
-    const clas12::clas12reader* C12() const {return _c12->get();}
+   clas12::clas12reader* C12() const {return _c12->get();}
 
   private:
     

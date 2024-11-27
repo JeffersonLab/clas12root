@@ -42,9 +42,6 @@ void Ex10_clas12DatabasesChain(){
 
   //configure qadb requirements
    /*
-   * Several quality assurance requirements can be specified.
-   * requireOkForAsymmetry requires that an event was deemed
-   * suitable for asymmetry measurements.
    *
    * addRequirement requires that the event was not identified
    * as, for example, a marginal outlier. Several requirements
@@ -53,21 +50,14 @@ void Ex10_clas12DatabasesChain(){
    * See RGA analysis note and clas12-qadb github repository for
    * additional information.
    */
-  if(config_c12->qadb()!=nullptr){
-    config_c12->db()->qadb_requireOkForAsymmetry(true);
-    config_c12->db()->qadb_requireGolden(true);
-    config_c12->db()->qadb_addQARequirement("MarginalOutlier");
-    config_c12->db()->qadb_addQARequirement("TotalOutlier");
-   /*
-     * applyQA specifies to the clas12reader that quality assurance
-     * cuts will be applied, based on the .json file given as an 
-     * argument. This file should contain the Clas12 Quality Assurance
-     * database.
-     * i.e. clas12reader will only process events that pass quality assurance
-     * and ignore those which fail
-     */
-    config_c12->applyQA();
-  }
+  config_c12->applyQA(GETPASSSTRINGHERE);//GETPASSSTRINGHERE="latest", "pass1, "pass2",...
+  config_c12->db()->qadb_addQARequirement("MarginalOutlier");
+  config_c12->db()->qadb_addQARequirement("TotalOutlier");
+  config_c12->db()->qadb_addQARequirement("TerminalOutlier");
+  config_c12->db()->qadb_addQARequirement("MarginalOutlier");
+  config_c12->db()->qadb_addQARequirement("SectorLoss");
+  config_c12->db()->qadb_addQARequirement("LowLiveTime");
+     
 
   gBenchmark->Start("db");
  

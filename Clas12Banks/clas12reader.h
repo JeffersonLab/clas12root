@@ -176,7 +176,7 @@ namespace clas12 {
     std::vector<region_part_ptr> getByID(int id);
     std::vector<region_part_ptr> getByRegion(int ir);
     std::vector<region_part_ptr> getByCharge(int ch);
-    
+
     const std::vector<short>& preCheckPids();
     const std::vector<short>& preCheckPidsOrCharge();
 
@@ -370,14 +370,9 @@ namespace clas12 {
     clas12databases* db(){return _db;};
     
     //clas12-qadb   
-    void applyQA() {
-      // if(_db)
-	if( _db->qa() )
-	  _applyQA=true;
-
-      if( _applyQA==false){
-	std::cout<<"Warning, clas12reader  applyQA() not valid"<<std::endl;
-      }
+    void applyQA(const string& pass) {
+      _applyQA=true;
+      _db->setPass(pass);
     }
  
     //double sumChargeFromQA();

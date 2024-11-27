@@ -4,7 +4,7 @@ namespace clas12 {
 
 #ifdef CLAS_QADB
   
-  qadb_reader::qadb_reader(int runNb):_qa{}{_runNb=runNb;};
+  qadb_reader::qadb_reader(const string& pass,int runNb):_qa{pass}{_runNb=runNb;};
 
   ///////////////////////////////////////////////////////
   /// Add masks for all QA requirements
@@ -18,13 +18,13 @@ namespace clas12 {
   ///////////////////////////////////////////////////////
   ///Checks if an event passes all the QA requirements
   bool qadb_reader::passQAReqs(int evNb){
-    //  std::cout<<"DEBUG qadb_reader::passQAReqs "<<_runNb<<" "<<evNb<<std::endl;
+    // std::cout<<"DEBUG qadb_reader::passQAReqs "<<_runNb<<" "<<evNb<<std::endl;
     if(_runNb==0) return true;//e.g. simulation
     
     //isOkForAsymmetry already queries _QA, want to avoid doing it twice
     bool passAsymReq=true;
     bool queried=false;
-    // std::cout<<"DEBUG qadb_reader::passQAReqs "<<_runNb<<" "<<evNb<<"isgolden "<<isGolden(_runNb,evNb)<<" "<<isOkForAsymmetry(_runNb,evNb)<<std::endl;
+    // std::cout<<"DEBUG qadb_reader::passQAReqs "<<_runNb<<" "<<evNb<<"isgolden "<<_reqGolden<<" "<<isGolden(_runNb,evNb)<<" "<<isOkForAsymmetry(_runNb,evNb)<<std::endl;
     if(_reqOKAsymmetry){
       passAsymReq = isOkForAsymmetry(_runNb,evNb);
       queried=true;
@@ -38,7 +38,7 @@ namespace clas12 {
     if(passAsymReq && queried){
       //If an event is Golden it won't have other defects
       if(_reqGolden){
-	//std::cout<<"DEBUG qadb_reader::passQAReqs "<<_runNb<<" "<<evNb<<"isgolden "<<isGolden(_runNb,evNb)<<std::endl;
+	//	std::cout<<"DEBUG qadb_reader::passQAReqs "<<_runNb<<" "<<evNb<<"isgolden "<<isGolden(_runNb,evNb)<<std::endl;
   	  
 	//If the event passes the requirements, add charge
 	if(isGolden(_runNb,evNb)){

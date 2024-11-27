@@ -22,9 +22,9 @@ void Ex11_Iguana_MomentumCorrection(){
   chain.SetReaderTags({0});  //create clas12reader with just tag 0 events
   //add some filters
   auto config_c12=chain.GetC12Reader();
-  config_c12->addExactPid(11,1);    //exactly 1 electron
-  config_c12->addExactPid(211,1);    //exactly 1 pi+
-  config_c12->addExactPid(-211,1);    //exactly 1 pi-
+  config_c12->addAtLeastPid(11,1);    //exactly 1 electron
+  config_c12->addAtLeastPid(211,1);    //exactly 1 pi+
+  config_c12->addAtLeastPid(-211,1);    //exactly 1 pi-
   config_c12->ignoreBank("REC::CovMat");
 
   
@@ -62,20 +62,33 @@ void Ex11_Iguana_MomentumCorrection(){
   //get run clas12reader
   auto& c12=chain.C12ref();
   while ( chain.Next() ){
-     
+    ig.PrepareEvent(c12->getRunNumber());
+    
     //auto ebeam = c12->rcdb()->current().beam_energy/1000;
     //p4beam.SetXYZT(0,0,ebeam,ebeam); //approx. mass =0
-    // get particles by type
-    // note we applied a filter to ensure size of all ==1
-    auto electron=c12->getByID(11)[0];
-    auto pip=c12->getByID(211)[0];
-    auto pim=c12->getByID(-211)[0];
     //filter on z-vertices of the particles
-    //  if( !(ig.GetFilters().doZVertexFilter({electron,pip,pim})) ) {
-    if( !(ig.GetFilters().doAllFilters({electron,pip,pim})) ) {
-      continue;
-    }
+    //filter on fiducial cuts
+    //filter on PhotonGBT
+    ig.GetFilters().doAllFilters();
 
+ 
+    //Check if particles still exist after filters
+    //and if they do assign them
+    auto getFirstParticle=[&c12](short pdg)->clas12::region_particle*{
+      auto particles=c12->getByID(pdg);
+      if(particles.size()>0){
+	return particles[0];
+      }
+      return nullptr;
+    };
+    
+    auto electron=getFirstParticle(11);
+    if(electron==nullptr) continue;
+    auto pip=getFirstParticle(211);
+    if(pip==nullptr) continue;
+    auto pim=getFirstParticle(-211);
+    if(pim==nullptr) continue;
+ 
     //correct momentum and get 4-vectors
     ig.GetTransformers().doAllCorrections({electron,pip,pim},{&p4el,&p4pip,&p4pim});
 
@@ -123,5 +136,6 @@ void Ex11_Iguana_MomentumCorrection(){
   hy.DrawCopy();
   hcy.SetLineColor(2);
   hcy.DrawCopy("same");
- 
+
+  std::cout<<"analysed "<<hQ2.GetEntries()<<" events "<<std::endl;
 }
