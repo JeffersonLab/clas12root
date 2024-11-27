@@ -64,7 +64,12 @@ namespace clas12 {
     //qadb stuff
     //I would rather this was not needed here
     //but it is to make sure it gets passed to PROOF
-    void qadb_addQARequirement(string req){ _qadb->addQARequirement(req);_qadbReqsQA.push_back(req);};
+    void qadb_addQARequirement(string req){
+      if(_qadb.get()==nullptr){
+	throw std::runtime_error("clas12databases::qadb_addQARequirement - Need to call clas12reader::applyQA(cook) first");
+      }
+      _qadb->addQARequirement(req);_qadbReqsQA.push_back(req);
+    }
     void qadb_setQARequirements( std::vector<string> reqs){_qadb->setQARequirements(reqs); _qadbReqsQA = reqs;};
 
     void qadb_requireOkForAsymmetry(bool ok){_qadb->requireOkForAsymmetry(ok);_qadbReqOKAsymmetry=ok;};
@@ -75,6 +80,18 @@ namespace clas12 {
     void turnOffQADB(){_qadb.reset();}
     void turnOffRCDB(){_rcdb.reset();}
     void turnOffCCDB(){_ccdb.reset();}
+
+    void setPass(const string& pass){
+      _pass = pass;
+      initQA();
+    }
+    void initQA(){
+      std::cout<<"clas12databases::initQA pass = "<<_pass<<" run ="<<_runNb<<std::endl;
+     _qadb.reset( new qadb_reader{_pass,_runNb} );
+      qadb_requireOkForAsymmetry(_qadbReqOKAsymmetry);
+      qadb_requireGolden(_qadbReqGolden);
+      qadb_setQARequirements(_qadbReqsQA);  
+    }
   private:
     
    //names for copying to ROOT file for selector
@@ -82,6 +99,7 @@ namespace clas12 {
     string  _myCcdbPath;
     //string  _myQadbPath;
 
+    string _pass; //!
     int _runNb={0};//!
 
     std::unique_ptr<rcdb_reader> _rcdb;//!

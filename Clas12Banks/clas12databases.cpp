@@ -41,10 +41,12 @@ namespace clas12 {
     _myRcdbPath=other._myRcdbPath;
     _myCcdbPath=other._myCcdbPath;
     //_myQadbPath=other._myQadbPath;
-    
+     _pass = other._pass;
+   
     initDBs();
 
-   if(_qadb.get()){
+   if(other._qadb.get()){
+     initQA();
      qadb_requireOkForAsymmetry(other._qadbReqOKAsymmetry);
      qadb_requireGolden(other._qadbReqGolden);
      qadb_setQARequirements(other._qadbReqsQA);
@@ -57,11 +59,12 @@ namespace clas12 {
     _myRcdbPath=other._myRcdbPath;
     _myCcdbPath=other._myCcdbPath;
     //_myQadbPath=other._myQadbPath;
-    
+    _pass = other._pass;
     
     initDBs();
 
-    if(_qadb.get()){
+    if(other._qadb.get()){
+      initQA();
       qadb_requireOkForAsymmetry(other._qadbReqOKAsymmetry);
       qadb_requireGolden(other._qadbReqGolden);
       qadb_setQARequirements(other._qadbReqsQA);
@@ -86,10 +89,10 @@ namespace clas12 {
     }
     
     
-    _qadb.reset( new qadb_reader{0} );
-    qadb_requireOkForAsymmetry(_qadbReqOKAsymmetry);
-    qadb_requireGolden(_qadbReqGolden);
-    qadb_setQARequirements(_qadbReqsQA);  
+    // _qadb.reset( new qadb_reader{0} );
+    // qadb_requireOkForAsymmetry(_qadbReqOKAsymmetry);
+    // qadb_requireGolden(_qadbReqGolden);
+    // qadb_setQARequirements(_qadbReqsQA);  
 
 }
   //update run number to each database
@@ -105,8 +108,11 @@ namespace clas12 {
      if(_ccdb.get()!=nullptr){
       _ccdb->setRun(runNb);
       _ccdb->updateTables();
-    }
-    if(_qadb.get()!=nullptr)_qadb->setRun(runNb);
+     }
+     if(_qadb.get()!=nullptr){
+       //     _qadb->setRun(runNb);
+       initQA();
+     }
     if(_rcdb.get()!=nullptr)_rcdb->readRun(runNb);
 
     close();

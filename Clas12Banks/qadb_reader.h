@@ -16,7 +16,7 @@ namespace clas12 {
   class qadb_reader {
 
   public:
-    qadb_reader(int runNb=0);
+    qadb_reader(const string& pass,int runNb=0);
     //virtual ~qadb_reader()=default;  
 
 
