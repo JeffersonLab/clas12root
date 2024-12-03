@@ -44,13 +44,26 @@ void Ex10_clas12Databases(){
   cout<<"Beam current: "<<rcdbData.beam_current<<endl;
 
   //configure qadb requirements
+   //configure qadb requirements
+   /*
+   *
+   * addRequirement requires that the event was not identified
+   * as, for example, a marginal outlier. Several requirements
+   * can be assigned at the same time.
+   * 
+   * See RGA analysis note and clas12-qadb github repository for
+   * additional information.
+   */
   if(c12.qadb()!=nullptr){
-    c12.db().qadb_requireOkForAsymmetry(true);
-    c12.db().qadb_requireGolden(true);
+    c12.db().applyQA(GETPASSSTRINGHERE);//GETPASSSTRINGHERE="latest", "pass1, "pass2",...
     c12.db().qadb_addQARequirement("MarginalOutlier");
     c12.db().qadb_addQARequirement("TotalOutlier");
-    c12.applyQA();
+    c12.db().qadb_addQARequirement("TerminalOutlier");
+    c12.db().qadb_addQARequirement("MarginalOutlier");
+    c12.db().qadb_addQARequirement("SectorLoss");
+    c12.db().qadb_addQARequirement("LowLiveTime");
   }
+ 
 
   gBenchmark->Start("db");
   
