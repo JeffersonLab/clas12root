@@ -7,8 +7,6 @@ void LoadIguana(){
   //external iguana linking
   TString IGUANA = gSystem->Getenv("IGUANA");
   gInterpreter->AddIncludePath(IGUANA+"/include");
-  //Some algorithms need extra paths
-  gInterpreter->AddIncludePath(IGUANA+"/../src/iguana/algorithms/clas12/PhotonGBTFilter/");
   
   gROOT->ProcessLine("#include <iguana/algorithms/AlgorithmBoilerplate.h>");
   gROOT->ProcessLine("#include <iguana/algorithms/AlgorithmSequence.h>");
