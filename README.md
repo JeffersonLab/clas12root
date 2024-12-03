@@ -480,24 +480,27 @@ Where ccdbElSF is a std::vector<std::vector<double>> and so you can access the e
 
 clas12root can use the Quality Assurance database .json files found at https://github.com/c-dilks/clas12-qadb/tree/master to reject events that have been identified as failing to meet certain requirements. This is implemented in an analysis using the clas12reader with the functions
 
-     c12.db()->qadb_requireOkForAsymmetry(true);
-     c12.db()->qadb_requireGolden(true);
-     c12.db()->qadb_addQARequirement("MarginalOutlier");
-     c12.db()->qadb_addQARequirement("TotalOutlier");
-     c12.applyQA();
+      c12.db().applyQA(GETPASSSTRINGHERE);//GETPASSSTRINGHERE="latest", "pass1, "pass2",...
+      c12.db().qadb_addQARequirement("MarginalOutlier");
+      c12.db().qadb_addQARequirement("TotalOutlier");
+      c12.db().qadb_addQARequirement("TerminalOutlier");
+      c12.db().qadb_addQARequirement("MarginalOutlier");
+      c12.db().qadb_addQARequirement("SectorLoss");
+      c12.db().qadb_addQARequirement("LowLiveTime");
 
 
 Or in case you use HipoChain (also for when running PROOF/HipoSelector)
 
-      auto c12=chain.GetC12Reader();
-
-      c12->db()->qadb_requireOkForAsymmetry(true);
-      c12->db()->qadb_requireGolden(true);
-      c12->db()->qadb_addQARequirement("MarginalOutlier");
-      c12->db()->qadb_addQARequirement("TotalOutlier");
-      c12->applyQA(); 
-    
-where requireOkForAsymmetry(true) requires only events that were identified as suitable for asymmetry calculations, and requireGolden(true) requires only events without any defects. addQARequirement("Requirement") allows to reject events that fail to meet the specified requirement. These can be:
+      auto config_c12=chain.GetC12Reader();
+      config_c12->applyQA(GETPASSSTRINGHERE);//GETPASSSTRINGHERE="latest", "pass1, "pass2",...
+      config_c12->db()->qadb_addQARequirement("MarginalOutlier");
+      config_c12->db()->qadb_addQARequirement("TotalOutlier");
+      config_c12->db()->qadb_addQARequirement("TerminalOutlier");
+      config_c12->db()->qadb_addQARequirement("MarginalOutlier");
+      config_c12->db()->qadb_addQARequirement("SectorLoss");
+      config_c12->db()->qadb_addQARequirement("LowLiveTime");
+  
+addQARequirement("Requirement") allows to reject events that fail to meet the specified requirement. These can be:
 
     TotalOutlier: outlier N/F, but not terminal, marginal, or sector loss
     TerminalOutlier: outlier N/F of first or last file of run
