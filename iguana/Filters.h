@@ -2,8 +2,8 @@
 
 #include "IguanaAlgo.h"
 #include <iguana/algorithms/clas12/ZVertexFilter/Algorithm.h>
-#include <iguana/algorithms/clas12/FiducialFilter/Algorithm.h>
-#include <iguana/algorithms/clas12/PhotonGBTFilter/Algorithm.h>
+//#include <iguana/algorithms/clas12/FiducialFilter/Algorithm.h>
+//#include <iguana/algorithms/clas12/PhotonGBTFilter/Algorithm.h>
 #include <iguana/services/ConcurrentParam.h>
 
 namespace clas12root{
@@ -14,7 +14,7 @@ namespace clas12root{
   public:
 
     iguana::clas12::ZVertexFilter* ZVertexFilter(){return _zVer.get();}
-    iguana::clas12::FiducialFilter* FiducialFilter(){return _Fid.get();}
+    //    iguana::clas12::FiducialFilter* FiducialFilter(){return _Fid.get();}
     //iguana::clas12::PhotonGBTFilter* PhotonGBTFilter(){return _PhotGBT.get();}
 
     void Use(const string& name){
@@ -71,7 +71,7 @@ namespace clas12root{
     void doZVertexFilter() const{
       doFilters([this](const clas12::region_particle *p){return doZVertexFilter(p);});
     }
-
+    /*
     ////////////////
     //fiducial filter
     bool doFiducialFilter(const clas12::region_particle *p) const
@@ -96,6 +96,7 @@ namespace clas12root{
     void doFiducialFilter() const{
       doFilters([this](const clas12::region_particle *p){return doFiducialFilter(p);});
     }
+    */
     //////////////////
     //PhotonGBT filter
     /*
@@ -120,7 +121,7 @@ namespace clas12root{
     void doAllFilters(){
 
       if(_zVer.get())doZVertexFilter();
-      if(_Fid.get())doFiducialFilter();
+      // if(_Fid.get())doFiducialFilter();
       // if(_PhotGBT.get())doPhotonGBTFilter();
     }
 
@@ -138,8 +139,8 @@ namespace clas12root{
   private:
 	
     std::unique_ptr<iguana::clas12::ZVertexFilter> _zVer;
-    std::unique_ptr<iguana::clas12::FiducialFilter> _Fid;
-    std::unique_ptr<iguana::clas12::PhotonGBTFilter> _PhotGBT;
+    //std::unique_ptr<iguana::clas12::FiducialFilter> _Fid;
+    //std::unique_ptr<iguana::clas12::PhotonGBTFilter> _PhotGBT;
 
     mutable Long64_t _runNb =-1;
     mutable int _concurrent_key=0;
