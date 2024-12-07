@@ -10,3 +10,6 @@
 [submodule "hipo_src"]
 	path = hipo_src
 	url = https://github.com/gavalian/hipo.git
+[submodule "rcdb"]
+	path = rcdb
+	url = https://github.com/baltzell/rcdb.git
