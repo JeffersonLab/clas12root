@@ -1,9 +1,6 @@
 [submodule "lz4"]
 	path = lz4
 	url = https://github.com/lz4/lz4.git
-[submodule "rcdb"]
-	path = rcdb
-	url = https://github.com/JeffersonLab/rcdb
 [submodule "clas12-qadb"]
 	path = clas12-qadb
 	url = https://github.com/JeffersonLab/clas12-qadb
@@ -13,3 +10,6 @@
 [submodule "hipo_src"]
 	path = hipo_src
 	url = https://github.com/gavalian/hipo.git
+[submodule "rcdb"]
+	path = rcdb
+	url = https://github.com/baltzell/rcdb.git
