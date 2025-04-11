@@ -90,7 +90,7 @@ namespace clas12 {
   }
 
 #else
-  qadb_reader::qadb_reader(int runNb){
+  qadb_reader::qadb_reader(const string& pass,int runNb){
     _runNb=runNb;
   }
 
