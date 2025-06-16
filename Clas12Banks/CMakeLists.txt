@@ -62,10 +62,10 @@ include_directories(${CLAS12ROOT_DIR})
 include_directories(${HIPO_INCLUDE_DIR})
 #include_directories(${hipo4_INCLUDE_DIRS})#in case change to pkg, this is needed to generate ROOT dict
 
-ROOT_GENERATE_DICTIONARY(G__${CLAS12BANKS} ${CLASS_LIST_H} LINKDEF Clas12LinkDef.h)
+root_generate_dictionary(G__${CLAS12BANKS} ${CLASS_LIST_H} LINKDEF Clas12LinkDef.h)
 add_library(${CLAS12BANKS} SHARED ${CLASS_LIST_CPP} G__${CLAS12BANKS}.cxx)
 
-target_link_libraries(${CLAS12BANKS} PUBLIC ${ROOT_LIBRARIES} ${HIPO_LIBS} )
+target_link_libraries(${CLAS12BANKS} PUBLIC ${ROOT_LIBRARIES} ROOT::Core ${HIPO_LIBS} )
 
 #target_link_libraries(${CLAS12BANKS} PUBLIC ${ROOT_LIBRARIES} PkgConfig::${HIPO4} ) #in case change to pkg
 #target_include_directories(${CLAS12BANKS} SYSTEM  PUBLIC PkgConfig::${HIPO4}) #in case change to pkg

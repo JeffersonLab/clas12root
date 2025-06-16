@@ -5,9 +5,9 @@ ROOT_GENERATE_DICTIONARY(G__Hipo4  ntuple_writer.h ntuple_reader.h LINKDEF HipoL
 add_library(Hipo4 SHARED ntuple_writer.cpp ntuple_reader.cpp  G__Hipo4.cxx)
 
 if( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-  target_link_libraries(Hipo4 ${ROOT_LIBRARIES} "-undefined dynamic_lookup")
+  target_link_libraries(Hipo4 ${ROOT_LIBRARIES}  ROOT::Core "-undefined dynamic_lookup")
 else()
-  target_link_libraries(Hipo4 ${ROOT_LIBRARIES} ${HIPO_LIBS})
+  target_link_libraries(Hipo4 ${ROOT_LIBRARIES}  ROOT::Core ${HIPO_LIBS})
 endif()
 
 install(TARGETS Hipo4

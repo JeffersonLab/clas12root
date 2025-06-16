@@ -17,7 +17,7 @@ list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS}) ############USEROOTSYS
 find_package(ROOT REQUIRED COMPONENTS Proof)  ###########USEROOTSYS
 
 #---Define useful ROOT functions and macros (e.g. ROOT_GENERATE_DICTIONARY)
-include(${ROOT_USE_FILE}) ##########USEROOTSYS
+#include(${ROOT_USE_FILE}) ##########USEROOTSYS
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ROOT_CXX_FLAGS}")
 
 #find_package(hipo4 REQUIRED) #for cmake
