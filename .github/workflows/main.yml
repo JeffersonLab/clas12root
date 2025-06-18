@@ -12,7 +12,7 @@ jobs:
     container: rootproject/root:${{ matrix.version }}
     strategy:
       matrix:
-        version: [rootproject/root:latest]
+        version: [6.36.00-ubuntu22.04]
 
     steps:
       - name: system dependencies
