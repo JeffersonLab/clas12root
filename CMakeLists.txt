@@ -73,11 +73,21 @@ message(STATUS "Installation prefix set to: ${CMAKE_INSTALL_PREFIX}")
 # modern ROOT::* library targets.
 # NOTE: Ensure you have sourced 'thisroot.sh' in your terminal first!
 find_package(ROOT REQUIRED COMPONENTS
-    Core
-    Gpad
-    Gui
-    Hist
-    Rint
+Core      # Fundamental ROOT classes (TObject, TString, TTree, basic I/O)
+    RIO       # ROOT I/O system (reading/writing .root files, crucial for TTree)
+    Hist      # Histogramming (TH1, TH2, TGraph, etc.)
+    Graf      # Basic graphics primitives (TPolyLine, TMarker, etc.)
+    Graf3d    # 3D Graphics primitives (if you use any 3D drawing)
+    Gpad      # Graphics Pads (TPad), crucial for canvases
+    Gui       # GUI elements (buttons, menus, dialogs - if you have a custom GUI)
+    MathCore  # Basic math functions (e.g., TMath, TLorentzVector)
+    # More advanced/specific components you might need based on your code:
+    Tree      # TTree and related classes (often pulled in by Core, but good to be explicit)
+    Geom      # If you use ROOT's geometry package (TGeo)
+    GenVector # ROOT's vector and physics vector classes (TLorentzVector, etc.)
+    Rint      # The ROOT interactive interpreter. Usually not needed for compiled executables.
+                # Only include this if you explicitly link to the interactive shell for some reason.
+                # It can sometimes pull in many dependencies.
 )
 include(${ROOT_USE_FILE})
 
