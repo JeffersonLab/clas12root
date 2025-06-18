@@ -20,7 +20,7 @@ jobs:
           apt -y update
           apt -y upgrade
           apt -y install git python3-pip
-          python -m pip install meson ninja
+          python -m pip install --break-system-packages meson ninja
 
       - name: checkout repository
         uses: actions/checkout@v4
