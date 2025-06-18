@@ -61,10 +61,15 @@ add_library(${CLAS12ROOT_TARGET_NAME} SHARED
 set(CLAS12ROOT_LINK_LIBRARIES
     # Link the ROOT components needed by this library
     ROOT::Core
+    ROOT::RIO
     ROOT::Hist
-    ROOT::Tree
-    ROOT::Rint
     ROOT::Graf
+    ROOT::Gpad
+    ROOT::Gui
+    ROOT::MathCore
+    ROOT::Rint
+    RIO # For reading/writing ROOT files, essential for TTree
+    Tree # For TTree, TChain, TSelector
 
     # Link the HIPO target defined in the parent CMakeLists.txt
     hipo::hipo
