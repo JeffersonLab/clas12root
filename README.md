@@ -70,6 +70,7 @@ setenv IGUANA /Where/Is/Iguana
 setenv ROOT_INCLUDE_PATH ${HIPO}/include:${IGUANA}/include:${ROOT_INCLUDE_PATH}
 #and if you are using clas12root in other programmes it may help to include it
 setenv ROOT_INCLUDE_PATH ${CLAS12ROOT}/Clas12Banks:${CLAS12ROOT}/Clas12Root:${CLAS12ROOT}/hipo4:${ROOT_INCLUDE_PATH}
+setenv LD_LIBRARY_PATH $CLAS12ROOT/lib:$LD_LIBRARY_PATH
 ```
 
 or for bash
@@ -91,6 +92,7 @@ export IGUANA=/Where/Is/Iguana
 export ROOT_INCLUDE_PATH=${HIPO}/include:${IGUANA}/include:${ROOT_INCLUDE_PATH}
 #and if you are using clas12root in other programmes it may help to include it
 export ROOT_INCLUDE_PATH=${CLAS12ROOT}/Clas12Banks:${CLAS12ROOT}/Clas12Root:${CLAS12ROOT}/hipo4:${ROOT_INCLUDE_PATH}
+export LD_LIBRARY_PATH=$CLAS12ROOT/lib:$LD_LIBRARY_PATH
 ```
 
 ## To install
