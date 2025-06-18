@@ -27,8 +27,6 @@ installation directory: $prefix
 """
 meson setup --wipe $build_dir $source_dir --prefix=$prefix  # use --wipe to force a 'clean' build
 meson install -C $build_dir
-ls $prefix
-ls $prefix/include
 echo """==================================================================================
 Done installing HIPO.
 You may now set your environment to point to this installation:
