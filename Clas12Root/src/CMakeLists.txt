@@ -1,20 +1,35 @@
-set(CLAS12ROOT Clas12Root)
+# ==============================================================================
+# Executable Definitions
+#
+# This file defines the final executables for the project.
+# ==============================================================================
 
-add_executable (clas12root clas12root.cpp)
-target_link_libraries(clas12root  ${ROOT_LIBRARIES})
+# List all the executables we want to build from the source files in this directory.
+set(CLAS12_EXECUTABLES
+    clas12root
+    clas12proof
+    particleDraw
+    particleTree
+    makeHipoSelector
+)
 
-add_executable (clas12proof clas12proof.cpp)
-target_link_libraries(clas12proof ${ROOT_LIBRARIES})
+# Loop over the list to create and link each executable.
+foreach(EXEC_NAME ${CLAS12_EXECUTABLES})
 
-add_executable (particleDraw particleDraw.cpp)
-target_link_libraries(particleDraw ${ROOT_LIBRARIES})
+    # 1. Add the executable target from its corresponding .cpp file.
+    add_executable(${EXEC_NAME} ${EXEC_NAME}.cpp)
 
-add_executable (particleTree particleTree.cpp)
-target_link_libraries(particleTree ${ROOT_LIBRARIES})
-install (TARGETS clas12root clas12proof particleDraw particleTree DESTINATION ${CMAKE_INSTALL_BINDIR})
+    # 2. Link the executable to the libraries it needs.
+    # By linking to the Clas12Root target (defined in the parent directory),
+    # this executable will automatically inherit all the necessary link flags
+    # and include paths for ROOT, HIPO, RCDB, etc.
+    target_link_libraries(${EXEC_NAME} PRIVATE
+        Clas12Root  # <-- This is the most important link!
+    )
 
-add_executable (makeHipoSelector makeHipoSelector.cpp)
-target_link_libraries(makeHipoSelector ${ROOT_LIBRARIES})
+    # 3. Install the executable target.
+    install(TARGETS ${EXEC_NAME}
+        RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+    )
 
-
-install (TARGETS makeHipoSelector DESTINATION ${CMAKE_INSTALL_BINDIR})
+endforeach()

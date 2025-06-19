@@ -12,7 +12,7 @@ jobs:
     container: rootproject/root:${{ matrix.version }}
     strategy:
       matrix:
-        version: [6.28.12-ubuntu22.04]
+        version: [6.34.00-ubuntu24.10]
 
     steps:
       - name: system dependencies
@@ -20,7 +20,7 @@ jobs:
           apt -y update
           apt -y upgrade
           apt -y install git python3-pip
-          python -m pip install meson ninja
+          python -m pip install --break-system-packages meson ninja
 
       - name: checkout repository
         uses: actions/checkout@v4
@@ -54,8 +54,17 @@ jobs:
           cmake --build ccdb_build -j4
           cmake --install ccdb_build
 
+      - name: Install Vdt development libraries
+        run: |
+          apt-get update
+          apt-get install -y libvdt-dev
+        # This is often the primary fix for "Could NOT find Vdt"
+
+      - name: Checkout Clas12Root
+        uses: actions/checkout@v4
       - name: build clas12root
         run: |
+	  echo 'check hipo:'
           ./installC12Root
 
       - name: run example on data file

@@ -5,7 +5,7 @@ Data Analysis Tools for hipo4 data format.
 
 Examples are given for running in interactive ROOT sessions and ROOT-Jupyter notebooks.
 
-## New : from version 1.9.0 an external `hipo` install is required before building clas12root
+From version 1.9.0 an external `hipo` install is required before building clas12root
 
 We now use an external `hipo` repository. This must be pointed at with the environment variable `$HIPO` when installing.
 
@@ -70,6 +70,7 @@ setenv IGUANA /Where/Is/Iguana
 setenv ROOT_INCLUDE_PATH ${HIPO}/include:${IGUANA}/include:${ROOT_INCLUDE_PATH}
 #and if you are using clas12root in other programmes it may help to include it
 setenv ROOT_INCLUDE_PATH ${CLAS12ROOT}/Clas12Banks:${CLAS12ROOT}/Clas12Root:${CLAS12ROOT}/hipo4:${ROOT_INCLUDE_PATH}
+setenv LD_LIBRARY_PATH $CLAS12ROOT/lib:$LD_LIBRARY_PATH
 ```
 
 or for bash
@@ -91,6 +92,7 @@ export IGUANA=/Where/Is/Iguana
 export ROOT_INCLUDE_PATH=${HIPO}/include:${IGUANA}/include:${ROOT_INCLUDE_PATH}
 #and if you are using clas12root in other programmes it may help to include it
 export ROOT_INCLUDE_PATH=${CLAS12ROOT}/Clas12Banks:${CLAS12ROOT}/Clas12Root:${CLAS12ROOT}/hipo4:${ROOT_INCLUDE_PATH}
+export LD_LIBRARY_PATH=$CLAS12ROOT/lib:$LD_LIBRARY_PATH
 ```
 
 ## To install
@@ -114,6 +116,10 @@ cmake -S ccdb -B ccdb_build --install-prefix $CCDB_HOME  # where CCDB_HOME is yo
 cmake --build ccdb_build
 cmake --install ccdb_build
 ```
+
+New 
+
+cmake was modernised. You will now need to make sure $CLAS12ROOT/lib is in your LD_LIBRARY_PATH. Report any issues to the forum.
 
 Then build clas12root:
 
