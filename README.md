@@ -117,9 +117,9 @@ cmake --build ccdb_build
 cmake --install ccdb_build
 ```
 
-New
+New 
 
-cmake was modernised. You will now need to make sure $CLAS12ROOT/lib is in your LD_LIBRARY_PATH.
+cmake was modernised. You will now need to make sure $CLAS12ROOT/lib is in your LD_LIBRARY_PATH. Report any issues to the forum.
 
 Then build clas12root:
 
