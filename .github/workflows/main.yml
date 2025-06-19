@@ -65,6 +65,8 @@ jobs:
       - name: build clas12root
         run: |
 	  echo 'check hipo:'
+	  ls $HIPO
+	  ls $HIPO/include
           ./installC12Root
 
       - name: run example on data file
