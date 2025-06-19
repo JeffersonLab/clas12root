@@ -5,7 +5,7 @@ Data Analysis Tools for hipo4 data format.
 
 Examples are given for running in interactive ROOT sessions and ROOT-Jupyter notebooks.
 
-## New : from version 1.9.0 an external `hipo` install is required before building clas12root
+From version 1.9.0 an external `hipo` install is required before building clas12root
 
 We now use an external `hipo` repository. This must be pointed at with the environment variable `$HIPO` when installing.
 
@@ -116,6 +116,10 @@ cmake -S ccdb -B ccdb_build --install-prefix $CCDB_HOME  # where CCDB_HOME is yo
 cmake --build ccdb_build
 cmake --install ccdb_build
 ```
+
+New
+
+cmake was modernised. You will now need to make sure $CLAS12ROOT/lib is in your LD_LIBRARY_PATH.
 
 Then build clas12root:
 
