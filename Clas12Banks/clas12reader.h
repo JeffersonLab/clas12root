@@ -44,6 +44,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <functional>
 
 #ifdef RCDB_MYSQL
    #include "rcdb_reader.h"
@@ -257,6 +258,13 @@ namespace clas12 {
       _verbose=level;
       _reader.setVerbose(level);
     }
+
+    // Set a "read action", a custom lambda function which is executed for every event within `readEvent()`.
+    // The lambda argument is a pointer to an instance of this `clas12reader` class
+    void SetReadAction(std::function<void(clas12reader*)> readEventUserAction) {
+      _readEventUserAction = readEventUserAction;
+    }
+
     
   protected:
 
@@ -345,7 +353,10 @@ namespace clas12 {
     bool _useFTBased{false};
     bool _isOpen{false};
     std::vector<std::string> _addBankNames;
-     
+
+    // user-definable lambda, called in `readEvent()`
+    std::function<void(clas12reader*)> _readEventUserAction = [](clas12reader* r) {};
+
     ///////////////////////////////DB
   private:
     int _runNo{0};

@@ -461,6 +461,8 @@ namespace clas12 {
       _event.getStructure(*ibank.get());
     }
    
+    // call user's custom read action
+    _readEventUserAction(this);
 
     return true;
   }
