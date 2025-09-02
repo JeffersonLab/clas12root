@@ -64,7 +64,7 @@ jobs:
         uses: actions/checkout@v4
       - name: build clas12root
         run: |
-	  echo 'check hipo:'
+          echo 'check hipo:'
           ./installC12Root
 
       - name: run example on data file
