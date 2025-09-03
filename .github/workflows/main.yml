@@ -18,7 +18,6 @@ jobs:
       - name: system dependencies
         run: |
           apt -y update
-          apt -y upgrade
           apt -y install git python3-pip
           python -m pip install --break-system-packages meson ninja
 
