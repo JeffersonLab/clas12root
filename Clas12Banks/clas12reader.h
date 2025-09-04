@@ -116,6 +116,7 @@ namespace clas12 {
      }
 
 
+    par_ptr parts() const{return _bparts.get();};
     helonline_ptr helonline() const{return _bhelonline.get();};
     helflip_ptr helflip() const{return _bhelflip.get();};
     runconfig_ptr runconfig() const{return _brunconfig.get();};
@@ -123,8 +124,9 @@ namespace clas12 {
     ftbevent_ptr ftbevent() const{return _bftbevent.get();};
     vtp_ptr vtp() const{return _bvtp.get();};
     vertdoca_ptr vertdoca() const{return _bvertdoca.get();};
- 
-    
+    cal_ptr cal() const{return _bcal.get();};
+    scint_ptr scint() const{return _bscint.get();};
+    trck_ptr trck() const{return _btrck.get();};
     mcpar_ptr mcparts() const{return _bmcparts.get();};
     mcevt_ptr mcevent() const{return _bmcevent.get();};
 
@@ -259,8 +261,9 @@ namespace clas12 {
       _reader.setVerbose(level);
     }
 
-    // Set a "read action", a custom lambda function which is executed for every event within `readEvent()`.
-    // The lambda argument is a pointer to an instance of this `clas12reader` class
+    /// Set a "read action", a custom lambda function that is executed for every event within `readEvent()`,
+    /// which is called by methods like `clas12reader::next()` and `HipoChain::Next()`
+    /// @param readEventUserAction lambda function, where its argument is a pointer to an instance of this `clas12reader` class
     void SetReadAction(std::function<void(clas12reader*)> readEventUserAction) {
       _readEventUserAction = readEventUserAction;
     }
