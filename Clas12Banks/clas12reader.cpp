@@ -521,6 +521,8 @@ namespace clas12 {
   /// Add appropriate region_partcle to event particle vector
   void clas12reader::sort(){
 
+    // TODO: do we need to make sure loops go over bank rows which survive filters?
+
     if(_nparts==0) return;
    
     _n_rfdets=0;
