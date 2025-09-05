@@ -98,22 +98,28 @@ void Ex1_CLAS12Reader(){
    auto created_bank_sector = algo_sector_finder.CreateBank();
    auto created_bank_inclusive_kinematics = algo_inclusive_kinematics.CreateBank();
 
-   // explain how the iguana algorithms will run on each event
-   // - we need to capture the algorithms and any created banks
-   // - `cr` is a pointer, which is your `clas12reader` instance, whether you are:
-   //   - using `clas12reader` directly (see `RunRoot/Ex1_CLAS12Reader.C`)
-   //   - using `HipoChain` (see `RunRoot/Ex1_CLAS12ReaderChain.C`)
+   // define a lambda function that processes HIPO banks, in particular, with iguana
+   // - this function will be executed by `clas12reader` as soon as each event's `hipo::bank`
+   //   objects are filled, i.e., before `clas12reader` further processes the banks
+   // - this example macro owns algorithm and created bank objects, therefore the lambda
+   //   function must capture them by reference
+   // - the parameter `cr` is a pointer, which is your `clas12reader` instance, whether you are
+   //   using `clas12reader` directly (see `RunRoot/Ex1_CLAS12Reader.C`) or
+   //   using `HipoChain` (see `RunRoot/Ex1_CLAS12ReaderChain.C`)
    auto iguana_action = [
+     // captured algorithms
      &algo_z_vertex_filter,
      &algo_sector_finder,
      &algo_momentum_correction,
      &algo_inclusive_kinematics,
+     // captured banks
      &created_bank_sector,
      &created_bank_inclusive_kinematics
    ](clas12reader* cr)
    {
+     // call Iguana run functions, in your prefered order
      algo_z_vertex_filter.Run(
-         *cr->parts(),
+         *cr->parts(), // `clas12reader` bank accessors are pointers, dereference with `*`
          *cr->runconfig()
          );
      algo_sector_finder.Run(
@@ -123,8 +129,17 @@ void Ex1_CLAS12Reader(){
          *cr->scint(),
          created_bank_sector
          );
-     // FIXME: add the others
-   }
+     algo_momentum_correction.Run(
+         *cr->parts(),
+         created_bank_sector,
+         *cr->runconfig()
+         );
+     algo_inclusive_kinematics.Run(
+         *cr->parts(),
+         *cr->runconfig(),
+         created_bank_inclusive_kinematics
+         );
+   };
    //////////////////////////////////////////////////////////////////////////////////
 
 
@@ -132,11 +147,15 @@ void Ex1_CLAS12Reader(){
      //create the event reader
      clas12reader c12(files->At(i)->GetTitle(),{0});
 
-     // attach the iguana action
+     // attach the iguana-running lambda function to the event reader, so
+     // `c12.next()` will call `iguana_action(c12)` internally
      c12.SetReadAction(iguana_action);
 
       while(c12.next()==true){
-    
+
+        // print the created inclusive kinematics bank
+        created_bank_inclusive_kinematics.show();
+
  	for(auto& p : c12.getDetParticles()){
   	 //  get predefined selected information
 	 p->getTime();
