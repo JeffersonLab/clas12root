@@ -115,9 +115,30 @@ namespace clas12 {
       _rbands.push_back(std::move(reg));
      }
 
+    // bank accessors; the method name convention is `getBankName` where `BankName` is the
+    // bank name without the colons (`::`)
+    particle&      getRECParticle()      const { return *_bparts;     }
+    particle&      getRECFTParticle()    const { return *_bftbparts;  }
+    helonline&     getHELonline()        const { return *_bhelonline; }
+    helflip&       getHELflip()          const { return *_bhelflip;   }
+    runconfig&     getRUNconfig()        const { return *_brunconfig; }
+    event&         getRECEvent()         const { return *_bevent;     }
+    ftbevent&      getRECFTEvent()       const { return *_bftbevent;  }
+    vtp&           getRAWvtp()           const { return *_bvtp;       }
+    vertdoca&      getRECVertDoca()      const { return *_bvertdoca;  }
+    calorimeter&   getRECCalorimeter()   const { return *_bcal;       }
+    scintillator&  getRECScintillator()  const { return *_bscint;     }
+    tracker&       getRECTrack()         const { return *_btrck;      }
+    covmatrix&     getRECCovMat()        const { return *_bcovmat;    }
+    utracker&      getRECUTrack()        const { return *_butrck;     }
+    traj&          getRECTraj()          const { return *_btraj;      }
+    cherenkov&     getRECCherenkov()     const { return *_bcher;      }
+    rich&          getRICHParticle()     const { return *_brich;      }
+    forwardtagger& getRECForwardTagger() const { return *_bft;        }
+    mcparticle&    getMCLund()           const { return *_bmcparts;   }
+    mcevent&       getMCEvent()          const { return *_bmcevent;   }
 
-    par_ptr parts() const{return _bparts.get();};
-    ftbpar_ptr ftbparts() const{return _bftbparts.get();};
+    // bank pointer accessors
     helonline_ptr helonline() const{return _bhelonline.get();};
     helflip_ptr helflip() const{return _bhelflip.get();};
     runconfig_ptr runconfig() const{return _brunconfig.get();};
@@ -125,15 +146,8 @@ namespace clas12 {
     ftbevent_ptr ftbevent() const{return _bftbevent.get();};
     vtp_ptr vtp() const{return _bvtp.get();};
     vertdoca_ptr vertdoca() const{return _bvertdoca.get();};
-    cal_ptr cal() const{return _bcal.get();};
-    scint_ptr scint() const{return _bscint.get();};
-    trck_ptr trck() const{return _btrck.get();};
-    covmat_ptr covmat() const{return _bcovmat.get();};
-    utrck_ptr utrck() const{return _butrck.get();};
-    traj_ptr traj() const{return _btraj.get();};
-    cher_ptr cher() const{return _bcher.get();};
-    rich_ptr rich() const{return _brich.get();};
-    ft_ptr ft() const{return _bft.get();};
+ 
+    
     mcpar_ptr mcparts() const{return _bmcparts.get();};
     mcevt_ptr mcevent() const{return _bmcevent.get();};
 
