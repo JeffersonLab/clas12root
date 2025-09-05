@@ -117,6 +117,7 @@ namespace clas12 {
 
 
     par_ptr parts() const{return _bparts.get();};
+    ftbpar_ptr ftbparts() const{return _bftbparts.get();};
     helonline_ptr helonline() const{return _bhelonline.get();};
     helflip_ptr helflip() const{return _bhelflip.get();};
     runconfig_ptr runconfig() const{return _brunconfig.get();};
@@ -127,6 +128,12 @@ namespace clas12 {
     cal_ptr cal() const{return _bcal.get();};
     scint_ptr scint() const{return _bscint.get();};
     trck_ptr trck() const{return _btrck.get();};
+    covmat_ptr covmat() const{return _bcovmat.get();};
+    utrck_ptr utrck() const{return _butrck.get();};
+    traj_ptr traj() const{return _btraj.get();};
+    cher_ptr cher() const{return _bcher.get();};
+    rich_ptr rich() const{return _brich.get();};
+    ft_ptr ft() const{return _bft.get();};
     mcpar_ptr mcparts() const{return _bmcparts.get();};
     mcevt_ptr mcevent() const{return _bmcevent.get();};
 
