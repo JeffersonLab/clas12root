@@ -115,28 +115,29 @@ namespace clas12 {
       _rbands.push_back(std::move(reg));
      }
 
-    // bank accessors; the method name convention is `getBankName` where `BankName` is the
-    // bank name without the colons (`::`)
-    particle&      getRECParticle()      const { return *_bparts;     }
-    particle&      getRECFTParticle()    const { return *_bftbparts;  }
-    helonline&     getHELonline()        const { return *_bhelonline; }
-    helflip&       getHELflip()          const { return *_bhelflip;   }
-    runconfig&     getRUNconfig()        const { return *_brunconfig; }
-    event&         getRECEvent()         const { return *_bevent;     }
-    ftbevent&      getRECFTEvent()       const { return *_bftbevent;  }
-    vtp&           getRAWvtp()           const { return *_bvtp;       }
-    vertdoca&      getRECVertDoca()      const { return *_bvertdoca;  }
-    calorimeter&   getRECCalorimeter()   const { return *_bcal;       }
-    scintillator&  getRECScintillator()  const { return *_bscint;     }
-    tracker&       getRECTrack()         const { return *_btrck;      }
-    covmatrix&     getRECCovMat()        const { return *_bcovmat;    }
-    utracker&      getRECUTrack()        const { return *_butrck;     }
-    traj&          getRECTraj()          const { return *_btraj;      }
-    cherenkov&     getRECCherenkov()     const { return *_bcher;      }
-    rich&          getRICHParticle()     const { return *_brich;      }
-    forwardtagger& getRECForwardTagger() const { return *_bft;        }
-    mcparticle&    getMCLund()           const { return *_bmcparts;   }
-    mcevent&       getMCEvent()          const { return *_bmcevent;   }
+    // bank accessors
+    // - the method name convention is `getBankName` where `BankName` is the bank name without the colons (`::`)
+    // - the `class` tag is needed disambiguate between classes and `clas12reader` methods with the same name
+    class particle&      getRECParticle()      const { return *_bparts;     }
+    class ftbparticle&   getRECFTParticle()    const { return *_bftbparts;  }
+    class helonline&     getHELonline()        const { return *_bhelonline; }
+    class helflip&       getHELflip()          const { return *_bhelflip;   }
+    class runconfig&     getRUNconfig()        const { return *_brunconfig; }
+    class event&         getRECEvent()         const { return *_bevent;     }
+    class ftbevent&      getRECFTEvent()       const { return *_bftbevent;  }
+    class vtp&           getRAWvtp()           const { return *_bvtp;       }
+    class vertdoca&      getRECVertDoca()      const { return *_bvertdoca;  }
+    class calorimeter&   getRECCalorimeter()   const { return *_bcal;       }
+    class scintillator&  getRECScintillator()  const { return *_bscint;     }
+    class tracker&       getRECTrack()         const { return *_btrck;      }
+    class covmatrix&     getRECCovMat()        const { return *_bcovmat;    }
+    class utracker&      getRECUTrack()        const { return *_butrck;     }
+    class traj&          getRECTraj()          const { return *_btraj;      }
+    class cherenkov&     getRECCherenkov()     const { return *_bcher;      }
+    class rich&          getRICHParticle()     const { return *_brich;      }
+    class forwardtagger& getRECForwardTagger() const { return *_bft;        }
+    class mcparticle&    getMCLund()           const { return *_bmcparts;   }
+    class mcevent&       getMCEvent()          const { return *_bmcevent;   }
 
     // bank pointer accessors
     helonline_ptr helonline() const{return _bhelonline.get();};
