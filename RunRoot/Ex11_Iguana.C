@@ -106,6 +106,9 @@ void Ex1_CLAS12Reader(){
    // - the parameter `cr` is a pointer, which is your `clas12reader` instance, whether you are
    //   using `clas12reader` directly (see `RunRoot/Ex1_CLAS12Reader.C`) or
    //   using `HipoChain` (see `RunRoot/Ex1_CLAS12ReaderChain.C`)
+   // - use `cr` to access DST banks from the `clas12reader`, use `cr->getBankName()` methods,
+   //   where "BankName" is the name of the bank without the colons (`::`); e.g., use
+   //   `cr->getRECFTParticle` to access the `RECFT::Particle` bank
    auto iguana_action = [
      // captured algorithms
      &algo_z_vertex_filter,
@@ -119,24 +122,24 @@ void Ex1_CLAS12Reader(){
    {
      // call Iguana run functions, in your prefered order
      algo_z_vertex_filter.Run(
-         *cr->parts(), // `clas12reader` bank accessors are pointers, dereference with `*`
-         *cr->runconfig()
+         cr->getRECParticle(),
+         cr->getRUNconfig()
          );
      algo_sector_finder.Run(
-         *cr->parts(),
-         *cr->trck(),
-         *cr->cal(),
-         *cr->scint(),
+         cr->getRECParticle(),
+         cr->getRECTrack(),
+         cr->getRECCalorimeter(),
+         cr->getRECScintillator(),
          created_bank_sector
          );
      algo_momentum_correction.Run(
-         *cr->parts(),
+         cr->getRECParticle(),
          created_bank_sector,
-         *cr->runconfig()
+         cr->getRUNconfig()
          );
      algo_inclusive_kinematics.Run(
-         *cr->parts(),
-         *cr->runconfig(),
+         cr->getRECParticle(),
+         cr->getRUNconfig(),
          created_bank_inclusive_kinematics
          );
    };
