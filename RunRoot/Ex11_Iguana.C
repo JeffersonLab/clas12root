@@ -27,7 +27,7 @@ void SetLorentzVector(TLorentzVector &p4,clas12::region_part_ptr rp){
 
 }
 
-void Ex1_CLAS12Reader(){
+void Ex11_Iguana(){
   // Record start time
   auto start = std::chrono::high_resolution_clock::now();
 
@@ -95,8 +95,8 @@ void Ex1_CLAS12Reader(){
    algo_inclusive_kinematics.Start();
 
    // create bank objects, which creator-type algorithms will populate
-   auto created_bank_sector = algo_sector_finder.CreateBank();
-   auto created_bank_inclusive_kinematics = algo_inclusive_kinematics.CreateBank();
+   auto created_bank_sector = algo_sector_finder.GetCreatedBank();
+   auto created_bank_inclusive_kinematics = algo_inclusive_kinematics.GetCreatedBank();
 
    // define a lambda function that processes HIPO banks, in particular, with iguana
    // - this function will be executed by `clas12reader` as soon as each event's `hipo::bank`
