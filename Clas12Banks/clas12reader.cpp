@@ -461,6 +461,8 @@ namespace clas12 {
       _event.getStructure(*ibank.get());
     }
    
+    // call user's custom read action
+    _readEventUserAction(this);
 
     return true;
   }
@@ -518,6 +520,8 @@ namespace clas12 {
   /// Loop over particles and find their region
   /// Add appropriate region_partcle to event particle vector
   void clas12reader::sort(){
+
+    // TODO: do we need to make sure loops go over bank rows which survive filters?
 
     if(_nparts==0) return;
    

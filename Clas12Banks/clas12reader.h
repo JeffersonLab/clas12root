@@ -44,6 +44,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <functional>
 
 #ifdef RCDB_MYSQL
    #include "rcdb_reader.h"
@@ -114,7 +115,31 @@ namespace clas12 {
       _rbands.push_back(std::move(reg));
      }
 
+    // bank accessors
+    // - the method name convention is `getBankName` where `BankName` is the bank name without the colons (`::`)
+    // - the `class` tag is needed disambiguate between classes and `clas12reader` methods with the same name
+    class particle&      getRECParticle()      const { return *_bparts;     }
+    class ftbparticle&   getRECFTParticle()    const { return *_bftbparts;  }
+    class helonline&     getHELonline()        const { return *_bhelonline; }
+    class helflip&       getHELflip()          const { return *_bhelflip;   }
+    class runconfig&     getRUNconfig()        const { return *_brunconfig; }
+    class event&         getRECEvent()         const { return *_bevent;     }
+    class ftbevent&      getRECFTEvent()       const { return *_bftbevent;  }
+    class vtp&           getRAWvtp()           const { return *_bvtp;       }
+    class vertdoca&      getRECVertDoca()      const { return *_bvertdoca;  }
+    class calorimeter&   getRECCalorimeter()   const { return *_bcal;       }
+    class scintillator&  getRECScintillator()  const { return *_bscint;     }
+    class tracker&       getRECTrack()         const { return *_btrck;      }
+    class covmatrix&     getRECCovMat()        const { return *_bcovmat;    }
+    class utracker&      getRECUTrack()        const { return *_butrck;     }
+    class traj&          getRECTraj()          const { return *_btraj;      }
+    class cherenkov&     getRECCherenkov()     const { return *_bcher;      }
+    class rich&          getRICHParticle()     const { return *_brich;      }
+    class forwardtagger& getRECForwardTagger() const { return *_bft;        }
+    class mcparticle&    getMCLund()           const { return *_bmcparts;   }
+    class mcevent&       getMCEvent()          const { return *_bmcevent;   }
 
+    // bank pointer accessors
     helonline_ptr helonline() const{return _bhelonline.get();};
     helflip_ptr helflip() const{return _bhelflip.get();};
     runconfig_ptr runconfig() const{return _brunconfig.get();};
@@ -257,6 +282,14 @@ namespace clas12 {
       _verbose=level;
       _reader.setVerbose(level);
     }
+
+    /// Set a "read action", a custom lambda function that is executed for every event within `readEvent()`,
+    /// which is called by methods like `clas12reader::next()` and `HipoChain::Next()`
+    /// @param readEventUserAction lambda function, where its argument is a pointer to an instance of this `clas12reader` class
+    void SetReadAction(std::function<void(clas12reader*)> readEventUserAction) {
+      _readEventUserAction = readEventUserAction;
+    }
+
     
   protected:
 
@@ -345,7 +378,10 @@ namespace clas12 {
     bool _useFTBased{false};
     bool _isOpen{false};
     std::vector<std::string> _addBankNames;
-     
+
+    // user-definable lambda, called in `readEvent()`
+    std::function<void(clas12reader*)> _readEventUserAction = [](clas12reader* r) {};
+
     ///////////////////////////////DB
   private:
     int _runNo{0};
