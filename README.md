@@ -580,6 +580,20 @@ Note the event number is just its position in the file, not the DST RUN::Config:
 To run iguana routines in clas12root you should first set the environment to point to an
 installed version of iguana, by setting the IGUANA variable to the INSTALLATION directory.
 
+<!--
+-
+-
+-
+-
+-
+FIXME: update this documentation
+-
+-
+-
+-
+-
+-->
+
 There are 2 methods of using Iguana. For speed and simplicity both use just the iguana
 action function and will not operate on the underlying banks structures.
 In the first method, which can use any iguan algorithm, you just directly create the iguana
