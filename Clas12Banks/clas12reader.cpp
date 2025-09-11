@@ -461,10 +461,9 @@ namespace clas12 {
       _event.getStructure(*ibank.get());
     }
    
-    // call user's custom read action
-    _readEventUserAction(this);
-
-    return true;
+    // now that we have read all the banks, call user's custom read action;
+    // return its return value, since it's the last thing `readEvent()` does
+    return _readEventUserAction(this);
   }
   ////////////////////////////////////////////////////////
   ///initialise next event from the reader

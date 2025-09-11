@@ -285,7 +285,8 @@ namespace clas12 {
 
     /// Set a "read action", a custom lambda function that is executed for every event within `readEvent()`,
     /// which is called by methods like `clas12reader::next()` and `HipoChain::Next()`
-    /// @param readEventUserAction lambda function, where its argument is a pointer to an instance of this `clas12reader` class
+    /// @param readEventUserAction lambda function, where its argument is a pointer to an instance of this `clas12reader` class,
+    /// and its `bool` return value controls whether to proceed with the event or not
     void SetReadAction(std::function<void(clas12reader*)> readEventUserAction) {
       _readEventUserAction = readEventUserAction;
     }
@@ -379,8 +380,8 @@ namespace clas12 {
     bool _isOpen{false};
     std::vector<std::string> _addBankNames;
 
-    // user-definable lambda, called in `readEvent()`
-    std::function<void(clas12reader*)> _readEventUserAction = [](clas12reader* r) {};
+    // user-definable lambda, called in `readEvent()`; the default is a no-op returning `true`
+    std::function<bool(clas12reader*)> _readEventUserAction = [](clas12reader* r) {return true;};
 
     ///////////////////////////////DB
   private:
