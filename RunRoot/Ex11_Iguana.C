@@ -89,10 +89,17 @@ void Ex11_Iguana() {
     //     - creators create new banks, i.e., the `created_bank_*` objects will be populated with data
     // - DST banks are read from the `clas12reader` instance, `cr`
     // - created banks must exist so they can be filled; this is why we created them beforehand
-    algo_z_vertex_filter.Run(
-        cr->getRECParticle(),
-        cr->getRUNconfig()
-        );
+    // - `Run` functions return boolean, which we can use to skip an event at any time
+
+    // z-vertex filter returns false if no electrons pass the filter
+    if( ! algo_z_vertex_filter.Run(
+          cr->getRECParticle(),
+          cr->getRUNconfig()
+          )
+      )
+      return false;
+
+    // momentum corrections require sector information, so call the sector finder first
     algo_sector_finder.Run(
         cr->getRECParticle(),
         cr->getRECTrack(),
@@ -105,7 +112,10 @@ void Ex11_Iguana() {
         created_bank_sector,
         cr->getRUNconfig()
         );
-    algo_inclusive_kinematics.Run(
+
+    // finally, calculate inclusive kinematics; just return its return value, which is
+    // true only if the kinematics were calculated (e.g., if a scattered electron was found)
+    return algo_inclusive_kinematics.Run(
         cr->getRECParticle(),
         cr->getRUNconfig(),
         created_bank_inclusive_kinematics
