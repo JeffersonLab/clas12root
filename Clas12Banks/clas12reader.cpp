@@ -56,6 +56,7 @@ namespace clas12 {
       addBank(additionalBank);
 	
     _applyQA=other._applyQA;
+    _readEventUserAction=other._readEventUserAction;
   }
 
   void clas12reader::initReader(){

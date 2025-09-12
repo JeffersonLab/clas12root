@@ -287,7 +287,7 @@ namespace clas12 {
     /// which is called by methods like `clas12reader::next()` and `HipoChain::Next()`
     /// @param readEventUserAction lambda function, where its argument is a pointer to an instance of this `clas12reader` class,
     /// and its `bool` return value controls whether to proceed with the event or not
-    void SetReadAction(std::function<void(clas12reader*)> readEventUserAction) {
+    void SetReadAction(std::function<bool(clas12reader*)> readEventUserAction) {
       _readEventUserAction = readEventUserAction;
     }
 
