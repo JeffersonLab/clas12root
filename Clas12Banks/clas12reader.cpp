@@ -56,6 +56,7 @@ namespace clas12 {
       addBank(additionalBank);
 	
     _applyQA=other._applyQA;
+    _readEventUserAction=other._readEventUserAction;
   }
 
   void clas12reader::initReader(){
@@ -461,8 +462,9 @@ namespace clas12 {
       _event.getStructure(*ibank.get());
     }
    
-
-    return true;
+    // now that we have read all the banks, call user's custom read action;
+    // return its return value, since it's the last thing `readEvent()` does
+    return _readEventUserAction(this);
   }
   ////////////////////////////////////////////////////////
   ///initialise next event from the reader
@@ -518,6 +520,8 @@ namespace clas12 {
   /// Loop over particles and find their region
   /// Add appropriate region_partcle to event particle vector
   void clas12reader::sort(){
+
+    // TODO: do we need to make sure loops go over bank rows which survive filters?
 
     if(_nparts==0) return;
    
