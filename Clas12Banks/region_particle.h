@@ -61,6 +61,7 @@ namespace clas12 {
     /// i.e. how the detector banks relate to that region
     virtual bool sort(){
       _pentry=_parts->getEntry();
+      _allowed=bankAllowsRow(_pentry, _parts);
       //check for covariance matrix
       if(_covmat)_pcmat=_covmat->getIndex(_pentry);
       if(_mcpart)_pmc=_mcpart->match_to(_pentry);
@@ -158,8 +159,19 @@ namespace clas12 {
     double getMCPhiDiff() const {return getPhi()-mc()->getPhi();}
     double getMCPDiff() const {return getP()-mc()->getP();}
 
+    /// @returns true if this particle is "allowed", _e.g._, by a HIPO bank filter,
+    /// which can be applied by an iguana algorithm
+    bool const& isAllowed() const { return _allowed; }
+
     //if(_parts->getCharge())
   protected:
+
+    /// @returns `true` if `bank` contains row `row` in its `hipo::bank::rowlist`
+    /// @param row the row to look up
+    /// @param bank the bank to check
+    bool const bankAllowsRow(int const& row, hipo::bank const* bank) const {
+      return std::find(bank->getRowList().begin(), bank->getRowList().end(), row) != bank->getRowList().end();
+    }
 
     par_ptr _parts={nullptr};
     ftbpar_ptr _ftbparts={nullptr};
@@ -183,6 +195,9 @@ namespace clas12 {
     short _pcmat=-1;
     short _region=-1;
     short _useFTBPid=0;
+
+    // filter status
+    bool _allowed{true};
   };
   //pointer "typedef"
   using region_part_ptr=clas12::region_particle*;
