@@ -30,8 +30,6 @@ namespace clas12 {
     _pltcc=-1;
     //_scint->print();
     
-    // FIXME: should we modify `_allowed` here, since we are looking at additional/other banks?
-
     //prefer tof layer 1,0,2
     if(_scint)_ptof3=_scint->getIndex(_pentry,clas12::FTOF,clas12::FTOF2);
     if(_scint)_ptof1=_scint->getIndex(_pentry,clas12::FTOF,clas12::FTOF1A);
