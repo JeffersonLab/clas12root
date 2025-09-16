@@ -35,6 +35,7 @@ namespace clas12 {
   ///current particle and store the detector indices
   bool region_ft::sort(){
     region_particle::sort();
+    // FIXME: should we modify `_allowed` here, since we are looking at additional/other banks?
     if(_ft){
       _pcal=_ft->getIndex(_pentry,clas12::FTCAL,1); //default layer=1
       if(_pcal==-1)_pcal=_ft->getIndex(_pentry,clas12::FTCAL);//to be deprecated
