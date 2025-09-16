@@ -31,6 +31,7 @@ namespace clas12 {
     _ptof5=-1;
     _pveto=-1;
 
+    // FIXME: should we modify `_allowed` here, since we are looking at additional/other banks?
 
     if(_scint){
       _ptof1=_scint->getIndex(_pentry,clas12::BAND,clas12::BTOF1-clas12::BANDOFF);
