@@ -195,12 +195,39 @@ namespace clas12 {
     }
  
     /////////////////////////////////
-    
+    // region particle accessors
+
+    /// @returns the number of region particles; note that this does not take into account any `hipo::bank` filters (_e.g._, from iguana)
+    int getNParticles() const  noexcept{return _detParticles.size();}
+
+    /// @returns a reference to the full list of region particles
+    /// @see getDetParticles(bool) if you need a `hipo::bank` filter applied
     std::vector<region_part_ptr>& getDetParticles(){return _detParticles;}
+
+    /// @returns a pointer to the full list of region particles
+    /// @see getDetParticles(bool) if you need a `hipo::bank` filter applied
     std::vector<region_part_ptr>* getDetParticlesPtr(){return &_detParticles;}
-    std::vector<region_part_ptr> getByID(int id);
-    std::vector<region_part_ptr> getByRegion(int ir);
-    std::vector<region_part_ptr> getByCharge(int ch);
+
+    /// @returns a _copy_ of the full list of region particles, with or without applying a `hipo::bank` filter
+    /// @param applyBankFilter if `true`, apply any `hipo::bank` filters (_e.g._, from iguana)
+    std::vector<region_part_ptr> getDetParticles(bool applyBankFilter=false);
+
+    /// @returns a subset of region particles, filtered by PDG
+    /// @param id the PDG
+    /// @param applyBankFilter if `true`, apply any `hipo::bank` filters (_e.g._, from iguana)
+    std::vector<region_part_ptr> getByID(int id, bool applyBankFilter=false);
+
+    /// @returns a subset of region particles, filtered by region
+    /// @param ir the region
+    /// @param applyBankFilter if `true`, apply any `hipo::bank` filters (_e.g._, from iguana)
+    std::vector<region_part_ptr> getByRegion(int ir, bool applyBankFilter=false);
+
+    /// @returns a subset of region particles, filtered by charge
+    /// @param ch the charge
+    /// @param applyBankFilter if `true`, apply any `hipo::bank` filters (_e.g._, from iguana)
+    std::vector<region_part_ptr> getByCharge(int ch, bool applyBankFilter=false);
+
+    /////////////////////////////////
 
     const std::vector<short>& preCheckPids();
     const std::vector<short>& preCheckPidsOrCharge();
@@ -220,7 +247,6 @@ namespace clas12 {
 
     void useFTBased(){_useFTBased=true;}
     
-    int getNParticles() const  noexcept{return _detParticles.size();}
     const std::vector<short> &getPids() const  noexcept{return _pids;}
     
     bool checkTriggerBit(uint k){
