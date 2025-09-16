@@ -61,7 +61,9 @@ namespace clas12 {
     /// i.e. how the detector banks relate to that region
     virtual bool sort(){
       _pentry=_parts->getEntry();
+      //check if allowed by particle-bank filters
       _allowed=bankAllowsRow(_pentry, _parts);
+      _allowed_ftb=bankAllowsRow(_pentry, _ftbparts);
       //check for covariance matrix
       if(_covmat)_pcmat=_covmat->getIndex(_pentry);
       if(_mcpart)_pmc=_mcpart->match_to(_pentry);
@@ -161,7 +163,10 @@ namespace clas12 {
 
     /// @returns true if this particle is "allowed", _e.g._, by a HIPO bank filter,
     /// which can be applied by an iguana algorithm
-    bool const& isAllowed() const { return _allowed; }
+    bool const& isAllowed() const {
+      if(_ftbparts==nullptr) return _allowed;
+      return _useFTBPid*_ftbparts->getRows() ? _allowed_ftb : _allowed;
+    }
 
     //if(_parts->getCharge())
   protected:
@@ -172,7 +177,9 @@ namespace clas12 {
     bool const bankAllowsRow(int const& row, hipo::bank const* bank) const {
       // NOTE: `hipo::bank::getRowList()` returns the list of rows which are _allowed_ by `hipo::bank::filter()`; for example,
       // `hipo::bank::filter` is used by iguana fiducial cut algorithms to select particles from `REC::Particle`
-      return std::find(bank->getRowList().begin(), bank->getRowList().end(), row) != bank->getRowList().end();
+      if(bank!=nullptr && bank.getRows()>0)
+        return std::find(bank->getRowList().begin(), bank->getRowList().end(), row) != bank->getRowList().end();
+      return false;
     }
 
     par_ptr _parts={nullptr};
@@ -198,8 +205,9 @@ namespace clas12 {
     short _region=-1;
     short _useFTBPid=0;
 
-    // filter status
-    bool _allowed{true};
+    // filter status (from `hipo::bank::filter`)
+    bool _allowed{true}; // allowed by `_parts`, i.e., `REC::Particle`
+    bool _allowed_ftb{true}; // allowed by `_ftbparts`, i.e., `RECFT::Particle`
   };
   //pointer "typedef"
   using region_part_ptr=clas12::region_particle*;

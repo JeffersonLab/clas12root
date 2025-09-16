@@ -32,8 +32,6 @@ namespace clas12 {
     region_particle::sort();
     _ptof=-1;
     _pcnd=-1;
-
-    // FIXME: should we modify `_allowed` here, since we are looking at additional/other banks?
     
     //tof 1 layer
     if(_scint){
