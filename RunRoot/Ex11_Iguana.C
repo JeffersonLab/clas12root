@@ -148,13 +148,53 @@ void Ex11_Iguana() {
   for(int numEvents=0; chain.Next() && numEvents++ < 3;) // loop over just a few events
   // while(chain.Next()) // loop over all events
   {
+    std::cout << "===== EVENT " << c12->runconfig()->getEvent() << "===========\n";
 
-    // print DST banks
+    // print banks
+    // -----------
+    std::cout << "------- FULL PARTICLE BANK -------\n";
+    c12->getRECParticle().show(true); // use `true`, otherwise only filter-allowed rows are printed
+    std::cout << "----- FILTERED PARTICLE BANK -----\n";
     c12->getRECParticle().show();
-
-    // print iguana algorithms' created banks
+    std::cout << "---------- IGUANA BANKS ----------\n";
     created_bank_sector.show();
     created_bank_inclusive_kinematics.show();
+    std::cout << "----------------------------------\n";
+
+    // Accessing bank rows and filtering
+    // ---------------------------------
+    // if you want to loop over filtered rows, use `hipo::bank::getRowList()`; otherwise,
+    // just use the usual `for` loop from `0` up to `bank->getRows()`
+    std::cout << "REC::Particle filter-allowed rows:";
+    for(const auto row& : c12->getRECParticle().getRowList())
+      std::cout << " " << row;
+    std::cout << " (out of " << c12->getRECParticle().getRows() << " rows total)\n";
+
+    // Get particles by type
+    // ---------------------
+    // NOTE: to make sure that only the particles which passed Iguana filters,
+    // set the additional boolean argument to `true`, otherwise you will get ALL
+    // the particles; this may done in any `region_particle` list accessor, such as:
+    // - `clas12reader::getByID`
+    // - `clas12reader::getByCharge`
+    // - `clas12reader::getByRegion`
+    // - `clas12reader::getDetParticles`
+    auto electrons = c12->getByID(11, true);
+    std::cout << "electrons allowed by Iguana:";
+    for(auto const& electron : electrons)
+      std::cout << " " << electron->getIndex();
+    std::cout << "\n";
+
+    // alternatively, you could use `region_particle::isAllowed()` to filter as needed
+    std::cout << "electrons filtered out by Iguana:";
+    for(auto const& electron : c12->getByID(11)) { // loops over ALL electrons
+      if( ! electron->isAllowed()) { // selects electrons which were filtered OUT
+        std::cout << " " << electron->getIndex();
+      }
+    }
+    std::cout << "\n";
+
+    // from here, refer to other examples on how to proceed
 
   }
 
