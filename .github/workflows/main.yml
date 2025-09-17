@@ -19,14 +19,11 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: codecr.jlab.org/hallb/clas12/container-forge/base_root:latest
-      # options: --user root # uncomment this if you need root, e.g., to install packages
 
     steps:
 
       - name: checkout repository
-        uses: actions/checkout@v4
-        # with:
-        #   submodules: recursive # disabled, since using container-forge
+        uses: actions/checkout@v5
 
       - name: set clas12root env vars
         run: |
@@ -38,37 +35,6 @@ jobs:
           echo PATH=$PATH | tee -a $GITHUB_ENV
           echo LD_LIBRARY_PATH=$LD_LIBRARY_PATH | tee -a $GITHUB_ENV
           echo ROOT_INCLUDE_PATH=$ROOT_INCLUDE_PATH | tee -a $GITHUB_ENV
-
-      # - name: set dependency submodule env vars # disabled, since using container-forge
-      #   run: |
-      #     HIPO=$GITHUB_WORKSPACE/hipo
-      #     CCDB_HOME=$GITHUB_WORKSPACE/ccdb_install
-      #     RCDB_HOME=$GITHUB_WORKSPACE/rcdb
-      #     QADB=$GITHUB_WORKSPACE/clas12-qadb
-      #     PYTHONPATH=$CCDB_HOME/python:$RCDB_HOME/python${PYTHONPATH:+:${PYTHONPATH}}
-      #     PATH=$CCDB_HOME:$CCDB_HOME/bin:$RCDB_HOME/bin:$RCDB_HOME/cpp/bin${PATH:+:${PATH}}
-      #     LD_LIBRARY_PATH=$RCDB_HOME/cpp/lib:$CCDB_HOME/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
-      #     echo HIPO=$HIPO | tee -a $GITHUB_ENV
-      #     echo CCDB_HOME=$CCDB_HOME | tee -a $GITHUB_ENV
-      #     echo RCDB_HOME=$RCDB_HOME | tee -a $GITHUB_ENV
-      #     echo QADB=$QADB | tee -a $GITHUB_ENV
-      #     echo PYTHONPATH=$PYTHONPATH | tee -a $GITHUB_ENV
-      #     echo PATH=$PATH | tee -a $GITHUB_ENV
-      #     echo LD_LIBRARY_PATH=$LD_LIBRARY_PATH | tee -a $GITHUB_ENV
-
-      # - name: build hipo # disabled, since using container-forge
-      #   run: |
-      #     mkdir -p $HIPO
-      #     ./installHIPO $HIPO
-
-      # - name: build ccdb # disabled, since using container-forge
-      #   run: |
-      #     cmake -S ccdb -B ccdb_build --install-prefix $CCDB_HOME
-      #     cmake --build ccdb_build -j4
-      #     cmake --install ccdb_build
-
-      - name: print environment
-        run: env
 
       - name: print versions
         run: |
