@@ -56,16 +56,16 @@ jobs:
       #     cmake --build ccdb_build -j4
       #     cmake --install ccdb_build
 
-      # - name: Install Vdt development libraries
-      #   run: |
-      #     apt-get update
-      #     apt-get install -y libvdt-dev
-      #   # This is often the primary fix for "Could NOT find Vdt"
+      - name: print environment
+        run: env
+
+      - name: print versions
+        run: |
+          cmake --version
+          root --version
 
       - name: build clas12root
-        run: |
-          echo CLAS12ROOT=$CLAS12ROOT
-          ./installC12Root
+        run: ./installC12Root
 
       - name: run example on data file
         run: ./bin/clas12root -q ./tests/read_file.C
