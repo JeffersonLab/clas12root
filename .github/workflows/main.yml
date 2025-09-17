@@ -30,20 +30,31 @@ jobs:
 
       - name: set clas12root env vars
         run: |
-          echo CLAS12ROOT=$GITHUB_WORKSPACE >> $GITHUB_ENV
-          echo PATH=$CLAS12ROOT/bin${PATH:+:${PATH}} >> $GITHUB_ENV
-          echo LD_LIBRARY_PATH=$CLAS12ROOT/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}} >> $GITHUB_ENV
-          echo ROOT_INCLUDE_PATH=$CLAS12ROOT/Clas12Root:$CLAS12ROOT/Clas12Banks${ROOT_INCLUDE_PATH:+:${ROOT_INCLUDE_PATH}} >> $GITHUB_ENV
+          CLAS12ROOT=$GITHUB_WORKSPACE
+          PATH=$CLAS12ROOT/bin${PATH:+:${PATH}}
+          LD_LIBRARY_PATH=$CLAS12ROOT/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+          ROOT_INCLUDE_PATH=$CLAS12ROOT/Clas12Root:$CLAS12ROOT/Clas12Banks${ROOT_INCLUDE_PATH:+:${ROOT_INCLUDE_PATH}}
+          echo CLAS12ROOT=$CLAS12ROOT | tee -a $GITHUB_ENV
+          echo PATH=$PATH | tee -a $GITHUB_ENV
+          echo LD_LIBRARY_PATH=$LD_LIBRARY_PATH | tee -a $GITHUB_ENV
+          echo ROOT_INCLUDE_PATH=$ROOT_INCLUDE_PATH | tee -a $GITHUB_ENV
 
       # - name: set dependency submodule env vars # disabled, since using container-forge
       #   run: |
-      #     echo HIPO=$GITHUB_WORKSPACE/hipo >> $GITHUB_ENV
-      #     echo CCDB_HOME=$GITHUB_WORKSPACE/ccdb_install >> $GITHUB_ENV
-      #     echo RCDB_HOME=$GITHUB_WORKSPACE/rcdb >> $GITHUB_ENV
-      #     echo QADB=$GITHUB_WORKSPACE/clas12-qadb >> $GITHUB_ENV
-      #     echo PYTHONPATH=$CCDB_HOME/python:$RCDB_HOME/python${PYTHONPATH:+:${PYTHONPATH}} >> $GITHUB_ENV
-      #     echo PATH=$PWD/bin:$CCDB_HOME:$CCDB_HOME/bin:$RCDB_HOME/bin:$RCDB_HOME/cpp/bin${PATH:+:${PATH}} >> $GITHUB_ENV
-      #     echo LD_LIBRARY_PATH=$RCDB_HOME/cpp/lib:$CCDB_HOME/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}} >> $GITHUB_ENV
+      #     HIPO=$GITHUB_WORKSPACE/hipo
+      #     CCDB_HOME=$GITHUB_WORKSPACE/ccdb_install
+      #     RCDB_HOME=$GITHUB_WORKSPACE/rcdb
+      #     QADB=$GITHUB_WORKSPACE/clas12-qadb
+      #     PYTHONPATH=$CCDB_HOME/python:$RCDB_HOME/python${PYTHONPATH:+:${PYTHONPATH}}
+      #     PATH=$CCDB_HOME:$CCDB_HOME/bin:$RCDB_HOME/bin:$RCDB_HOME/cpp/bin${PATH:+:${PATH}}
+      #     LD_LIBRARY_PATH=$RCDB_HOME/cpp/lib:$CCDB_HOME/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+      #     echo HIPO=$HIPO | tee -a $GITHUB_ENV
+      #     echo CCDB_HOME=$CCDB_HOME | tee -a $GITHUB_ENV
+      #     echo RCDB_HOME=$RCDB_HOME | tee -a $GITHUB_ENV
+      #     echo QADB=$QADB | tee -a $GITHUB_ENV
+      #     echo PYTHONPATH=$PYTHONPATH | tee -a $GITHUB_ENV
+      #     echo PATH=$PATH | tee -a $GITHUB_ENV
+      #     echo LD_LIBRARY_PATH=$LD_LIBRARY_PATH | tee -a $GITHUB_ENV
 
       # - name: build hipo # disabled, since using container-forge
       #   run: |
