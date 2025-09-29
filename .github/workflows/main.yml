@@ -1,6 +1,14 @@
 name: C++ CI Testing
 
-on: pull_request
+on:
+  pull_request:
+  push:
+    branches: [ master ]
+    tags: [ '*' ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true # cancel in-progress workflows on the same PR branch
 
 defaults:
   run:
@@ -9,64 +17,32 @@ defaults:
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
-    container: rootproject/root:${{ matrix.version }}
-    strategy:
-      matrix:
-        version: [6.34.00-ubuntu24.10]
+    container:
+      image: codecr.jlab.org/hallb/clas12/container-forge/base_root:latest
 
     steps:
-      - name: system dependencies
-        run: |
-          apt -y update
-          apt -y install git python3-pip
-          python -m pip install --break-system-packages meson ninja
 
       - name: checkout repository
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
+        uses: actions/checkout@v5
 
-      - name: set env vars
+      - name: set clas12root env vars
         run: |
-          echo "CLAS12ROOT=$GITHUB_WORKSPACE" >> $GITHUB_ENV
-          echo "HIPO=$GITHUB_WORKSPACE/hipo" >> $GITHUB_ENV
-          echo "CCDB_HOME=$GITHUB_WORKSPACE/ccdb_install" >> $GITHUB_ENV
-          echo "RCDB_HOME=$GITHUB_WORKSPACE/rcdb" >> $GITHUB_ENV
-          echo "QADB=$GITHUB_WORKSPACE/clas12-qadb" >> $GITHUB_ENV
+          CLAS12ROOT=$GITHUB_WORKSPACE
+          PATH=$CLAS12ROOT/bin${PATH:+:${PATH}}
+          LD_LIBRARY_PATH=$CLAS12ROOT/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+          ROOT_INCLUDE_PATH=$CLAS12ROOT/Clas12Root:$CLAS12ROOT/Clas12Banks${ROOT_INCLUDE_PATH:+:${ROOT_INCLUDE_PATH}}
+          echo CLAS12ROOT=$CLAS12ROOT | tee -a $GITHUB_ENV
+          echo PATH=$PATH | tee -a $GITHUB_ENV
+          echo LD_LIBRARY_PATH=$LD_LIBRARY_PATH | tee -a $GITHUB_ENV
+          echo ROOT_INCLUDE_PATH=$ROOT_INCLUDE_PATH | tee -a $GITHUB_ENV
 
-      - name: set paths
+      - name: print versions
         run: |
-          echo "PYTHONPATH=$CCDB_HOME/python:$RCDB_HOME/python:$PYTHONPATH" >> $GITHUB_ENV
-          echo "PATH=$PWD/bin:$CCDB_HOME:$CCDB_HOME/bin:$RCDB_HOME/bin:$RCDB_HOME/cpp/bin:$PATH" >> $GITHUB_ENV
-          echo "LD_LIBRARY_PATH=$RCDB_HOME/cpp/lib:$CCDB_HOME/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+          cmake --version
+          root --version
 
-      - name: Create hipo folder
-        run: |
-          mkdir -p $HIPO
-
-      - name: build hipo
-        run: ./installHIPO $HIPO
-
-      - name: build ccdb
-        run: |
-          cmake -S ccdb -B ccdb_build --install-prefix $CCDB_HOME
-          cmake --build ccdb_build -j4
-          cmake --install ccdb_build
-
-      - name: Install Vdt development libraries
-        run: |
-          apt-get update
-          apt-get install -y libvdt-dev
-        # This is often the primary fix for "Could NOT find Vdt"
-
-      - name: Checkout Clas12Root
-        uses: actions/checkout@v4
       - name: build clas12root
-        run: |
-          echo 'check hipo:'
-          ./installC12Root
+        run: ./installC12Root
 
       - name: run example on data file
-        run: |
-          export CLAS12ROOT=$PWD
-          ./bin/clas12root -q ./tests/read_file.C
+        run: ./bin/clas12root -q ./tests/read_file.C
