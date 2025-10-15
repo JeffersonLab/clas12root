@@ -44,6 +44,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <functional>
 
 #ifdef RCDB_MYSQL
    #include "rcdb_reader.h"
@@ -114,7 +115,31 @@ namespace clas12 {
       _rbands.push_back(std::move(reg));
      }
 
+    // bank accessors
+    // - the method name convention is `getBankName` where `BankName` is the bank name without the colons (`::`)
+    // - the `class` tag is needed disambiguate between classes and `clas12reader` methods with the same name
+    class particle&      getRECParticle()      const { return *_bparts;     }
+    class ftbparticle&   getRECFTParticle()    const { return *_bftbparts;  }
+    class helonline&     getHELonline()        const { return *_bhelonline; }
+    class helflip&       getHELflip()          const { return *_bhelflip;   }
+    class runconfig&     getRUNconfig()        const { return *_brunconfig; }
+    class event&         getRECEvent()         const { return *_bevent;     }
+    class ftbevent&      getRECFTEvent()       const { return *_bftbevent;  }
+    class vtp&           getRAWvtp()           const { return *_bvtp;       }
+    class vertdoca&      getRECVertDoca()      const { return *_bvertdoca;  }
+    class calorimeter&   getRECCalorimeter()   const { return *_bcal;       }
+    class scintillator&  getRECScintillator()  const { return *_bscint;     }
+    class tracker&       getRECTrack()         const { return *_btrck;      }
+    class covmatrix&     getRECCovMat()        const { return *_bcovmat;    }
+    class utracker&      getRECUTrack()        const { return *_butrck;     }
+    class traj&          getRECTraj()          const { return *_btraj;      }
+    class cherenkov&     getRECCherenkov()     const { return *_bcher;      }
+    class rich&          getRICHParticle()     const { return *_brich;      }
+    class forwardtagger& getRECForwardTagger() const { return *_bft;        }
+    class mcparticle&    getMCLund()           const { return *_bmcparts;   }
+    class mcevent&       getMCEvent()          const { return *_bmcevent;   }
 
+    // bank pointer accessors
     helonline_ptr helonline() const{return _bhelonline.get();};
     helflip_ptr helflip() const{return _bhelflip.get();};
     runconfig_ptr runconfig() const{return _brunconfig.get();};
@@ -170,12 +195,39 @@ namespace clas12 {
     }
  
     /////////////////////////////////
-    
+    // region particle accessors
+
+    /// @returns the number of region particles; note that this does not take into account any `hipo::bank` filters (_e.g._, from iguana)
+    int getNParticles() const  noexcept{return _detParticles.size();}
+
+    /// @returns a reference to the full list of region particles
+    /// @see getDetParticles(bool) if you need a `hipo::bank` filter applied
     std::vector<region_part_ptr>& getDetParticles(){return _detParticles;}
+
+    /// @returns a pointer to the full list of region particles
+    /// @see getDetParticles(bool) if you need a `hipo::bank` filter applied
     std::vector<region_part_ptr>* getDetParticlesPtr(){return &_detParticles;}
-    std::vector<region_part_ptr> getByID(int id);
-    std::vector<region_part_ptr> getByRegion(int ir);
-    std::vector<region_part_ptr> getByCharge(int ch);
+
+    /// @returns a _copy_ of the full list of region particles, with or without applying a `hipo::bank` filter
+    /// @param applyBankFilter if `true`, apply any `hipo::bank` filters (_e.g._, from iguana)
+    std::vector<region_part_ptr> getDetParticles(bool applyBankFilter=false);
+
+    /// @returns a subset of region particles, filtered by PDG
+    /// @param id the PDG
+    /// @param applyBankFilter if `true`, apply any `hipo::bank` filters (_e.g._, from iguana)
+    std::vector<region_part_ptr> getByID(int id, bool applyBankFilter=false);
+
+    /// @returns a subset of region particles, filtered by region
+    /// @param ir the region
+    /// @param applyBankFilter if `true`, apply any `hipo::bank` filters (_e.g._, from iguana)
+    std::vector<region_part_ptr> getByRegion(int ir, bool applyBankFilter=false);
+
+    /// @returns a subset of region particles, filtered by charge
+    /// @param ch the charge
+    /// @param applyBankFilter if `true`, apply any `hipo::bank` filters (_e.g._, from iguana)
+    std::vector<region_part_ptr> getByCharge(int ch, bool applyBankFilter=false);
+
+    /////////////////////////////////
 
     const std::vector<short>& preCheckPids();
     const std::vector<short>& preCheckPidsOrCharge();
@@ -195,7 +247,6 @@ namespace clas12 {
 
     void useFTBased(){_useFTBased=true;}
     
-    int getNParticles() const  noexcept{return _detParticles.size();}
     const std::vector<short> &getPids() const  noexcept{return _pids;}
     
     bool checkTriggerBit(uint k){
@@ -257,6 +308,15 @@ namespace clas12 {
       _verbose=level;
       _reader.setVerbose(level);
     }
+
+    /// Set a "read action", a custom lambda function that is executed for every event within `readEvent()`,
+    /// which is called by methods like `clas12reader::next()` and `HipoChain::Next()`
+    /// @param readEventUserAction lambda function, where its argument is a pointer to an instance of this `clas12reader` class,
+    /// and its `bool` return value controls whether to proceed with the event or not
+    void SetReadAction(std::function<bool(clas12reader*)> readEventUserAction) {
+      _readEventUserAction = readEventUserAction;
+    }
+
     
   protected:
 
@@ -345,7 +405,10 @@ namespace clas12 {
     bool _useFTBased{false};
     bool _isOpen{false};
     std::vector<std::string> _addBankNames;
-     
+
+    // user-definable lambda, called in `readEvent()`; the default is a no-op returning `true`
+    std::function<bool(clas12reader*)> _readEventUserAction = [](clas12reader* r) {return true;};
+
     ///////////////////////////////DB
   private:
     int _runNo{0};
