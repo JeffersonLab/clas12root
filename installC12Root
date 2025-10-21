@@ -2,7 +2,6 @@
 # build and install clas12root
 # - additional arguments will be passed to `cmake`, such as build options
 set -euo pipefail
-mkdir build
 cmake -B build -S . "$@"
 cmake --build build
 cmake --install build
