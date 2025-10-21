@@ -16,6 +16,11 @@ message(STATUS "Using cmake version ${CMAKE_VERSION}"  )
 project(clas12root VERSION 1.9 LANGUAGES CXX)
 
 # ==============================================================================
+# Options
+# ==============================================================================
+option(WITH_HIPO4_WRAPPER "Compile HIPO4 wrapper library, for ROOT dictionary support for HIPO ntuple classes" OFF)
+
+# ==============================================================================
 # Set Project-Wide Build Output Directories
 # ==============================================================================
 # The root_generate_dictionary command needs to know
@@ -217,11 +222,10 @@ include(GNUInstallDirs)
 # and public include paths.
 # ==============================================================================
 
-set(HIPOROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/hipo4)
+if(WITH_HIPO4_WRAPPER)
+  add_subdirectory(hipo4)
+endif()
 
-#include_directories(${HIPOROOT_DIR})
-#add_subdirectory (${HIPOROOT_DIR})
-add_subdirectory(hipo4)
 add_subdirectory(Clas12Banks)
 add_subdirectory(Clas12Root)
 
