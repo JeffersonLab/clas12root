@@ -3,13 +3,13 @@
 	url = https://github.com/lz4/lz4.git
 [submodule "clas12-qadb"]
 	path = clas12-qadb
-	url = https://github.com/JeffersonLab/clas12-qadb
+	url = https://github.com/JeffersonLab/clas12-qadb.git
 [submodule "ccdb"]
 	path = ccdb
-	url = https://github.com/baltzell/ccdb.git
+	url = https://code.jlab.org/hallb/clas12/ccdb.git
 [submodule "hipo_src"]
 	path = hipo_src
-	url = https://github.com/gavalian/hipo.git
+	url = https://code.jlab.org/hallb/clas12/hipo-cpp.git
 [submodule "rcdb"]
 	path = rcdb
-	url = https://github.com/baltzell/rcdb.git
+	url = https://code.jlab.org/hallb/clas12/rcdb.git
