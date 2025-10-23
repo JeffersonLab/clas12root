@@ -44,6 +44,29 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # ==============================================================================
+# Library extension detection (handles .so, .dylib, etc.)
+# ==============================================================================
+# Priority for determining the extension:
+# 1) CMake cache variable LIBRARY_EXT (e.g. -DLIBRARY_EXT=.dylib)
+# 2) Environment variable LIB_EXT (e.g. export LIB_EXT=.dylib)
+# 3) CMake-provided CMAKE_SHARED_LIBRARY_SUFFIX (when available)
+# 4) Platform default: .dylib on Apple, .so otherwise
+if(DEFINED LIBRARY_EXT)
+  set(LIBRARY_EXT "${LIBRARY_EXT}")
+elseif(DEFINED ENV{LIB_EXT})
+  set(LIBRARY_EXT "$ENV{LIB_EXT}")
+elseif(DEFINED CMAKE_SHARED_LIBRARY_SUFFIX)
+  set(LIBRARY_EXT "${CMAKE_SHARED_LIBRARY_SUFFIX}")
+else()
+  if(APPLE)
+    set(LIBRARY_EXT ".dylib")
+  else()
+    set(LIBRARY_EXT ".so")
+  endif()
+endif()
+message(STATUS "Using shared library extension: ${LIBRARY_EXT}")
+
+# ==============================================================================
 # Set Default Installation Prefix from Environment Variable
 # ==============================================================================
 
@@ -109,6 +132,13 @@ if(DEFINED ENV{HIPO})
   add_library(hipo::hipo INTERFACE IMPORTED)
   target_include_directories(hipo::hipo INTERFACE ${HIPO_INSTALL_DIR}/include)
   target_link_libraries(hipo::hipo INTERFACE ${HIPO_INSTALL_DIR}/lib/libhipo4.so)
+  
+  set(HIPO_LIB "${HIPO_INSTALL_DIR}/lib/libhipo4${LIBRARY_EXT}")
+  if(NOT EXISTS "${HIPO_LIB}")
+      message(FATAL_ERROR "Could not find hipo4 library at ${HIPO_INSTALL_DIR}/lib (tried find_library and ${HIPO_LIB}).\nPlease ensure HIPO is set correctly or set LIBRARY_EXT (CMake) or LIB_EXT (env) to the platform library suffix, e.g. .dylib on macOS.")
+  endif()
+
+  target_link_libraries(hipo::hipo INTERFACE ${HIPO_LIB})
 
 else()
   message(FATAL_ERROR "HIPO environment variable not set. Please set HIPO to point to your hipo4 installation directory.")
@@ -135,7 +165,19 @@ if(DEFINED ENV{CCDB_HOME})
     message(STATUS "Configuring dependency: CCDB")
     add_library(clas12::ccdb INTERFACE IMPORTED)
     target_include_directories(clas12::ccdb INTERFACE $ENV{CCDB_HOME}/include)
-    target_link_libraries(clas12::ccdb INTERFACE $ENV{CCDB_HOME}/lib/libccdb.so) # Assumes .so, adjust if needed
+    # Fallback to constructed filename with detected extension
+    set(CCDB_LIB "$ENV{CCDB_HOME}/lib/libccdb${LIBRARY_EXT}")
+    if(NOT EXISTS "${CCDB_LIB}")
+      message(WARNING "Could not find libccdb in ${ENV{CCDB_HOME}}/lib via find_library or ${CCDB_LIB}. Proceeding without linking an explicit ccdb library; add it manually if needed.")
+      unset(CCDB_LIB)
+    endif()
+  
+    if(CCDB_LIB)
+      target_link_libraries(clas12::ccdb INTERFACE ${CCDB_LIB})
+    endif()
+    
+##    target_link_libraries(clas12::ccdb INTERFACE $ENV{CCDB_HOME}/lib/libccdb.so) # Assumes .so, adjust if needed
+
     target_compile_definitions(clas12::ccdb INTERFACE -DCLAS_CCDB)
     include_directories($ENV{CCDB_HOME}/include)
  endif()
