@@ -131,7 +131,7 @@ if(DEFINED ENV{HIPO})
   # This encapsulates its usage requirements in a single target: "hipo::hipo"
   add_library(hipo::hipo INTERFACE IMPORTED)
   target_include_directories(hipo::hipo INTERFACE ${HIPO_INSTALL_DIR}/include)
-  target_link_libraries(hipo::hipo INTERFACE ${HIPO_INSTALL_DIR}/lib/libhipo4.so)
+  target_link_libraries(hipo::hipo INTERFACE ${HIPO_INSTALL_DIR}/lib/libhipo4${LIBRARY_EXT})
   
   set(HIPO_LIB "${HIPO_INSTALL_DIR}/lib/libhipo4${LIBRARY_EXT}")
   if(NOT EXISTS "${HIPO_LIB}")
