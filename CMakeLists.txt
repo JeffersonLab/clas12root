@@ -131,8 +131,7 @@ if(DEFINED ENV{HIPO})
   # This encapsulates its usage requirements in a single target: "hipo::hipo"
   add_library(hipo::hipo INTERFACE IMPORTED)
   target_include_directories(hipo::hipo INTERFACE ${HIPO_INSTALL_DIR}/include)
-  target_link_libraries(hipo::hipo INTERFACE ${HIPO_INSTALL_DIR}/lib/libhipo4.so)
-  
+   
   set(HIPO_LIB "${HIPO_INSTALL_DIR}/lib/libhipo4${LIBRARY_EXT}")
   if(NOT EXISTS "${HIPO_LIB}")
       message(FATAL_ERROR "Could not find hipo4 library at ${HIPO_INSTALL_DIR}/lib (tried find_library and ${HIPO_LIB}).\nPlease ensure HIPO is set correctly or set LIBRARY_EXT (CMake) or LIB_EXT (env) to the platform library suffix, e.g. .dylib on macOS.")
