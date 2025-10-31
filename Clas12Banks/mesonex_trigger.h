@@ -27,9 +27,9 @@ namespace clas12 {
     
   private:
     
-    int _superlayer_sector_thres=0;
-    int _ftof_pcal_distance=0;
-    int _pcal_cluster_energy_threshold=0;
+    double _superlayer_sector_thres=0;
+    double _ftof_pcal_distance=0;
+    double _pcal_cluster_energy_threshold=0;
 
     hipo::bank* _TBHits{};
     hipo::bank* _FTOF{};
