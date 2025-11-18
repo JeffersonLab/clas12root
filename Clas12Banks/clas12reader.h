@@ -59,6 +59,15 @@ namespace clas12 {
   using std::endl;
   using std::cerr;
 
+  /// @par Accessors
+  /// - Use the following methods to access `region_particle` objects:
+  ///   - getDetParticles
+  ///   - getDetParticlesPtr
+  ///   - @link getDetParticles(bool const&) const `getDetParticles(bool)` @endlink
+  ///   - getByID
+  ///   - getByRegion
+  ///   - getByCharge
+  /// - To access `hipo::bank` objects, @ref bank_acc "see the list of bank accessors".
   class clas12reader  {
 
 
@@ -118,26 +127,46 @@ namespace clas12 {
     // bank accessors
     // - the method name convention is `getBankName` where `BankName` is the bank name without the colons (`::`)
     // - the `class` tag is needed disambiguate between classes and `clas12reader` methods with the same name
-    class particle&      getRECParticle()      const { return *_bparts;     }
-    class ftbparticle&   getRECFTParticle()    const { return *_bftbparts;  }
-    class helonline&     getHELonline()        const { return *_bhelonline; }
-    class helflip&       getHELflip()          const { return *_bhelflip;   }
-    class runconfig&     getRUNconfig()        const { return *_brunconfig; }
-    class event&         getRECEvent()         const { return *_bevent;     }
-    class ftbevent&      getRECFTEvent()       const { return *_bftbevent;  }
-    class vtp&           getRAWvtp()           const { return *_bvtp;       }
-    class vertdoca&      getRECVertDoca()      const { return *_bvertdoca;  }
-    class calorimeter&   getRECCalorimeter()   const { return *_bcal;       }
-    class scintillator&  getRECScintillator()  const { return *_bscint;     }
-    class tracker&       getRECTrack()         const { return *_btrck;      }
-    class covmatrix&     getRECCovMat()        const { return *_bcovmat;    }
-    class utracker&      getRECUTrack()        const { return *_butrck;     }
-    class traj&          getRECTraj()          const { return *_btraj;      }
-    class cherenkov&     getRECCherenkov()     const { return *_bcher;      }
-    class rich&          getRICHParticle()     const { return *_brich;      }
-    class forwardtagger& getRECForwardTagger() const { return *_bft;        }
-    class mcparticle&    getMCLund()           const { return *_bmcparts;   }
-    class mcevent&       getMCEvent()          const { return *_bmcevent;   }
+    /// @bank_accessor{REC::Particle}
+    class particle& getRECParticle() const { return *_bparts; }
+    /// @bank_accessor{REC::FTParticle}
+    class ftbparticle& getRECFTParticle() const { return *_bftbparts; }
+    /// @bank_accessor{HEL::online}
+    class helonline& getHELonline() const { return *_bhelonline; }
+    /// @bank_accessor{HEL::flip}
+    class helflip& getHELflip() const { return *_bhelflip; }
+    /// @bank_accessor{RUN::config}
+    class runconfig& getRUNconfig() const { return *_brunconfig; }
+    /// @bank_accessor{REC::Event}
+    class event& getRECEvent() const { return *_bevent; }
+    /// @bank_accessor{REC::FTEvent}
+    class ftbevent& getRECFTEvent() const { return *_bftbevent; }
+    /// @bank_accessor{RAW::vtp}
+    class vtp& getRAWvtp() const { return *_bvtp; }
+    /// @bank_accessor{REC::VertDoca}
+    class vertdoca& getRECVertDoca() const { return *_bvertdoca; }
+    /// @bank_accessor{REC::Calorimeter}
+    class calorimeter& getRECCalorimeter() const { return *_bcal; }
+    /// @bank_accessor{REC::Scintillator}
+    class scintillator& getRECScintillator() const { return *_bscint; }
+    /// @bank_accessor{REC::Track}
+    class tracker& getRECTrack() const { return *_btrck; }
+    /// @bank_accessor{REC::CovMat}
+    class covmatrix& getRECCovMat() const { return *_bcovmat; }
+    /// @bank_accessor{REC::UTrack}
+    class utracker& getRECUTrack() const { return *_butrck; }
+    /// @bank_accessor{REC::Traj}
+    class traj& getRECTraj() const { return *_btraj; }
+    /// @bank_accessor{REC::Cherenkov}
+    class cherenkov& getRECCherenkov() const { return *_bcher; }
+    /// @bank_accessor{RICH::Particle}
+    class rich& getRICHParticle() const { return *_brich; }
+    /// @bank_accessor{REC::ForwardTagger}
+    class forwardtagger& getRECForwardTagger() const { return *_bft; }
+    /// @bank_accessor{MC::Lund}
+    class mcparticle& getMCLund() const { return *_bmcparts; }
+    /// @bank_accessor{MC::Event}
+    class mcevent& getMCEvent() const { return *_bmcevent; }
 
     // bank pointer accessors
     helonline_ptr helonline() const{return _bhelonline.get();};
@@ -197,34 +226,61 @@ namespace clas12 {
     /////////////////////////////////
     // region particle accessors
 
-    /// @returns the number of region particles; note that this does not take into account any `hipo::bank` filters (_e.g._, from iguana)
+    /// @brief Get the number of `region_particle`s
+    /// @note This method does not take into account any `hipo::bank` filters (_e.g._, from iguana)
+    /// @returns The number of `region_particle`s
     int getNParticles() const  noexcept{return _detParticles.size();}
 
-    /// @returns a reference to the full list of region particles; note that this does not take into account any `hipo::bank` filters (_e.g._, from iguana)
-    /// @see getDetParticles(bool) if you need a `hipo::bank` filter applied
+    /// @brief Get the _full_ list of `region_particle`s
+    /// @note This method does not take into account any `hipo::bank` filters (_e.g._, from iguana)
+    /// @returns A reference to the _full_ list of `region_particle`s
+    /// @see Use @link getDetParticles(bool const&) const `getDetParticles(bool)` @endlink if you need a `hipo::bank` filter applied
     std::vector<region_part_ptr>& getDetParticles(){return _detParticles;}
 
-    /// @returns a pointer to the full list of region particles; note that this does not take into account any `hipo::bank` filters (_e.g._, from iguana)
-    /// @see getDetParticles(bool) if you need a `hipo::bank` filter applied
+    /// @brief Get the _full_ list of `region_particle`s
+    /// @note This method does not take into account any `hipo::bank` filters (_e.g._, from iguana)
+    /// @returns A pointer to the _full_ list of `region_particle`s
+    /// @see Use @link getDetParticles(bool const&) const `getDetParticles(bool)` @endlink if you need a `hipo::bank` filter applied
     std::vector<region_part_ptr>* getDetParticlesPtr(){return &_detParticles;}
 
-    /// @returns a _copy_ of the full list of region particles, with or without applying a `hipo::bank` filter
-    /// @param applyBankFilter if `true`, apply any `hipo::bank` filters (_e.g._, from iguana)
+    /// @brief Get the list of `region_particle`s
+    /// @param applyBankFilter If `true`, apply any `hipo::bank` filters (_e.g._, from iguana)
+    /// @returns A _copy_ of the list of `region_particle`s, with or without applying a `hipo::bank` filter
+    /// @see Use getDetParticles() or getDetParticlesPtr() if you don't need the filter, and you want to avoid copying
+    /// @see Additional methods:
+    /// - getByID
+    /// - getByRegion
+    /// - getByCharge
     std::vector<region_part_ptr> getDetParticles(bool const& applyBankFilter) const;
 
-    /// @returns a subset of region particles, filtered by PDG
-    /// @param id the PDG
-    /// @param applyBankFilter if `true`, apply any `hipo::bank` filters (_e.g._, from iguana)
+    /// @brief Get the list of `region_particle`s, filtered by PDG
+    /// @returns A _copy_ of the list of corresponding `region_particle`s
+    /// @param id The PDG
+    /// @param applyBankFilter If `true`, apply any `hipo::bank` filters (_e.g._, from iguana)
+    /// @see Additional methods:
+    /// - getByRegion
+    /// - getByCharge
+    /// - getDetParticles
     std::vector<region_part_ptr> getByID(int id, bool const& applyBankFilter=false) const;
 
-    /// @returns a subset of region particles, filtered by region
-    /// @param ir the region
-    /// @param applyBankFilter if `true`, apply any `hipo::bank` filters (_e.g._, from iguana)
+    /// @brief Get the list of `region_particle`s, filtered by region
+    /// @returns A _copy_ of the list of corresponding `region_particle`s
+    /// @param ir The region
+    /// @param applyBankFilter If `true`, apply any `hipo::bank` filters (_e.g._, from iguana)
+    /// @see Additional methods:
+    /// - getByID
+    /// - getByCharge
+    /// - getDetParticles
     std::vector<region_part_ptr> getByRegion(int ir, bool const& applyBankFilter=false) const;
 
-    /// @returns a subset of region particles, filtered by charge
-    /// @param ch the charge
-    /// @param applyBankFilter if `true`, apply any `hipo::bank` filters (_e.g._, from iguana)
+    /// @brief Get the list of `region_particle`s, filtered by charge
+    /// @returns A _copy_ of the list of corresponding `region_particle`s
+    /// @param ch The charge
+    /// @param applyBankFilter If `true`, apply any `hipo::bank` filters (_e.g._, from iguana)
+    /// @see Additional methods:
+    /// - getByID
+    /// - getByRegion
+    /// - getDetParticles
     std::vector<region_part_ptr> getByCharge(int ch, bool const& applyBankFilter=false) const;
 
     /////////////////////////////////

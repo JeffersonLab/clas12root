@@ -645,8 +645,8 @@ namespace clas12 {
     return true;
   }
   
-   ////////////////////////////////////////////////////////
-  ///Filter and return detParticles
+  ////////////////////////////////////////////////////////
+  // Filter and return detParticles
 
   std::vector<region_part_ptr> clas12reader::getDetParticles(bool const& applyBankFilter) const
   {
