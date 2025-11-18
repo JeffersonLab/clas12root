@@ -59,14 +59,15 @@ namespace clas12 {
   using std::endl;
   using std::cerr;
 
+  /// @details
   /// @par Accessors
   /// - Use the following methods to access `region_particle` objects:
-  ///   - getDetParticles
-  ///   - getDetParticlesPtr
+  ///   - `getDetParticles`
+  ///   - `getDetParticlesPtr`
   ///   - @link getDetParticles(bool const&) const `getDetParticles(bool)` @endlink
-  ///   - getByID
-  ///   - getByRegion
-  ///   - getByCharge
+  ///   - `getByID`
+  ///   - `getByRegion`
+  ///   - `getByCharge`
   /// - To access `hipo::bank` objects, @ref bank_acc "see the list of bank accessors".
   class clas12reader  {
 
