@@ -584,4 +584,3 @@ you have set the `IGUANA` environment variable.
 
 For usage of Iguana with `clas12root`, see the examples, such as
 - [`Ex11_Iguana.C`](/RunRoot/Ex11_Iguana.C)
-- [`Ex11_Iguana_example_01_bank_rows.C`](/RunRoot/Ex11_Iguana_example_01_bank_rows.C)
