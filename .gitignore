@@ -3,6 +3,7 @@ bin
 build
 lib
 man
+/share
 
 # dependency installations
 ##############
