@@ -58,9 +58,10 @@ jobs:
           pacman -Sy --noconfirm
           pacman -S --noconfirm doxygen graphviz
       - name: doxygen
-        run: |
-          doxygen clas12root_src/Doxyfile
-          mv clas12rootDoxy/html pages
+        working_directory: clas12root_src
+        run: doxygen Doxyfile
+      - name: rename
+        run: mv clas12rootDoxy/html pages
       - uses: actions/upload-pages-artifact@v4
         with:
           retention-days: 3
