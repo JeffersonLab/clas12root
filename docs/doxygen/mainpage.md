@@ -1,4 +1,4 @@
-# Clas12root User's Guide
+# Clas12root Code Documentation
 
 @todo Add more user documentation here! Populating CLAS12 Software documentation in general is an open service work project...
 

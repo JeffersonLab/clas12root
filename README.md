@@ -2,6 +2,7 @@
 
 Data Analysis Tools for hipo4 data format.
 
+[:star: **Click here for the Source Code Documentation (doxygen)** :star:](https://jeffersonlab.github.io/clas12root)
 
 Examples are given for running in interactive ROOT sessions and ROOT-Jupyter notebooks.
 
