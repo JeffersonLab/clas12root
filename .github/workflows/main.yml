@@ -51,17 +51,14 @@ jobs:
       options: --user root
     steps:
       - uses: actions/checkout@v5
-        with:
-          path: clas12root_src
       - name: install dependencies
         run: |
           pacman -Sy --noconfirm
           pacman -S --noconfirm doxygen graphviz
       - name: doxygen
-        working-directory: clas12root_src
-        run: doxygen docs/doxygen/Doxyfile
+        run: docs/doxygen/generate.sh
       - name: rename
-        run: mv clas12rootDoxy/html pages
+        run: mv share/doc/clas12root/html pages
       - uses: actions/upload-pages-artifact@v4
         with:
           retention-days: 3
