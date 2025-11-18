@@ -2,6 +2,8 @@
  * Example demonstrating how to read a HIPO file with clas12root,
  * and use Iguana algorithms to process its banks
  *
+ * NOTE: this requires Iguana version 1.0.0 or newer
+ *
  * USAGE:
  * ```
  * clas12root RunRoot/Ex11_Iguana.C+ --in=hipo_file_1.hipo --in=hipo_file_2.hipo
