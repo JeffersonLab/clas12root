@@ -54,6 +54,7 @@ ehthumbs.db
 Thumbs.db
 .nfs*
 *~
+.cache
 
 #Dropbox 
 .dropbox.attr
