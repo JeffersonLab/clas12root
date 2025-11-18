@@ -15,16 +15,15 @@ defaults:
     shell: bash
 
 jobs:
+
   build_and_test:
+    name: Build and test
     runs-on: ubuntu-latest
     container:
       image: codecr.jlab.org/hallb/clas12/container-forge/base_root:latest
-
     steps:
-
       - name: checkout repository
         uses: actions/checkout@v5
-
       - name: set clas12root env vars
         run: |
           CLAS12ROOT=$GITHUB_WORKSPACE
@@ -35,14 +34,51 @@ jobs:
           echo PATH=$PATH | tee -a $GITHUB_ENV
           echo LD_LIBRARY_PATH=$LD_LIBRARY_PATH | tee -a $GITHUB_ENV
           echo ROOT_INCLUDE_PATH=$ROOT_INCLUDE_PATH | tee -a $GITHUB_ENV
-
       - name: print versions
         run: |
           cmake --version
           root --version
-
       - name: build clas12root
         run: ./installC12Root
-
       - name: run example on data file
         run: ./bin/clas12root -q ./tests/read_file.C
+
+  generate_documentation:
+    name: Generate documentation
+    runs-on: ubuntu-latest
+    container:
+      image: codecr.jlab.org/hallb/clas12/container-forge/base_root:latest
+      options: --user root
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          path: clas12root_src
+      - name: install dependencies
+        run: |
+          pacman -Sy --noconfirm
+          pacman -S --noconfirm doxygen graphviz
+      - name: doxygen
+        run: |
+          doxygen clas12root_src/Doxyfile
+          mv clas12rootDoxy/html pages
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          retention-days: 3
+          path: pages/
+
+  deploy_webpages:
+    if: ${{ github.ref == 'refs/heads/master' }}
+    name: Deploy documentation webpage
+    needs:
+      - generate_documentation
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: deployment
+        id: deployment
+        uses: actions/deploy-pages@v4
