@@ -200,32 +200,32 @@ namespace clas12 {
     /// @returns the number of region particles; note that this does not take into account any `hipo::bank` filters (_e.g._, from iguana)
     int getNParticles() const  noexcept{return _detParticles.size();}
 
-    /// @returns a reference to the full list of region particles
+    /// @returns a reference to the full list of region particles; note that this does not take into account any `hipo::bank` filters (_e.g._, from iguana)
     /// @see getDetParticles(bool) if you need a `hipo::bank` filter applied
     std::vector<region_part_ptr>& getDetParticles(){return _detParticles;}
 
-    /// @returns a pointer to the full list of region particles
+    /// @returns a pointer to the full list of region particles; note that this does not take into account any `hipo::bank` filters (_e.g._, from iguana)
     /// @see getDetParticles(bool) if you need a `hipo::bank` filter applied
     std::vector<region_part_ptr>* getDetParticlesPtr(){return &_detParticles;}
 
     /// @returns a _copy_ of the full list of region particles, with or without applying a `hipo::bank` filter
     /// @param applyBankFilter if `true`, apply any `hipo::bank` filters (_e.g._, from iguana)
-    std::vector<region_part_ptr> getDetParticles(bool applyBankFilter=false);
+    std::vector<region_part_ptr> getDetParticles(bool const& applyBankFilter) const;
 
     /// @returns a subset of region particles, filtered by PDG
     /// @param id the PDG
     /// @param applyBankFilter if `true`, apply any `hipo::bank` filters (_e.g._, from iguana)
-    std::vector<region_part_ptr> getByID(int id, bool applyBankFilter=false);
+    std::vector<region_part_ptr> getByID(int id, bool const& applyBankFilter=false) const;
 
     /// @returns a subset of region particles, filtered by region
     /// @param ir the region
     /// @param applyBankFilter if `true`, apply any `hipo::bank` filters (_e.g._, from iguana)
-    std::vector<region_part_ptr> getByRegion(int ir, bool applyBankFilter=false);
+    std::vector<region_part_ptr> getByRegion(int ir, bool const& applyBankFilter=false) const;
 
     /// @returns a subset of region particles, filtered by charge
     /// @param ch the charge
     /// @param applyBankFilter if `true`, apply any `hipo::bank` filters (_e.g._, from iguana)
-    std::vector<region_part_ptr> getByCharge(int ch, bool applyBankFilter=false);
+    std::vector<region_part_ptr> getByCharge(int ch, bool const& applyBankFilter=false) const;
 
     /////////////////////////////////
 

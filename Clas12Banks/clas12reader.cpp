@@ -647,21 +647,33 @@ namespace clas12 {
   
    ////////////////////////////////////////////////////////
   ///Filter and return detParticles
-  std::vector<region_part_ptr> clas12reader::getByID(int id, bool applyBankFilter){
-    return container_filter(_detParticles, [id,applyBankFilter](region_part_ptr dr)
-			    {return dr->getPid()==id && (!applyBankFilter || dr->isAllowed());});
+
+  std::vector<region_part_ptr> clas12reader::getDetParticles(bool const& applyBankFilter) const
+  {
+    return applyBankFilter ?
+      container_filter(_detParticles, [](region_part_ptr dr) { return dr->isAllowed(); }) :
+      _detParticles;
   }
-  std::vector<region_part_ptr> clas12reader::getByRegion(int ir, bool applyBankFilter){
-    return container_filter(_detParticles, [ir,applyBankFilter](region_part_ptr dr)
-			    {return dr->getRegion()==ir && (!applyBankFilter || dr->isAllowed());});
+
+  std::vector<region_part_ptr> clas12reader::getByID(int id, bool const& applyBankFilter) const
+  {
+    return applyBankFilter ?
+      container_filter(_detParticles, [&id](region_part_ptr dr) { return dr->getPid()==id && dr->isAllowed(); }) :
+      container_filter(_detParticles, [&id](region_part_ptr dr) { return dr->getPid()==id; });
   }
-  std::vector<region_part_ptr> clas12reader::getByCharge(int ch, bool applyBankFilter){
-    return container_filter(_detParticles, [ch,applyBankFilter](region_part_ptr dr)
-			    {return dr->par()->getCharge()==ch && (!applyBankFilter || dr->isAllowed());});
+
+  std::vector<region_part_ptr> clas12reader::getByRegion(int ir, bool const& applyBankFilter) const
+  {
+    return applyBankFilter ?
+      container_filter(_detParticles, [&ir](region_part_ptr dr) { return dr->getRegion()==ir && dr->isAllowed(); }) :
+      container_filter(_detParticles, [&ir](region_part_ptr dr) { return dr->getRegion()==ir; });
   }
-  std::vector<region_part_ptr> clas12reader::getDetParticles(bool applyBankFilter){
-    return container_filter(_detParticles, [applyBankFilter](region_part_ptr dr)
-			    {return applyBankFilter ? dr->isAllowed() : true;});
+
+  std::vector<region_part_ptr> clas12reader::getByCharge(int ch, bool const& applyBankFilter) const
+  {
+    return applyBankFilter ?
+      container_filter(_detParticles, [&ch](region_part_ptr dr) { return dr->par()->getCharge()==ch && dr->isAllowed(); }) :
+      container_filter(_detParticles, [&ch](region_part_ptr dr) { return dr->par()->getCharge()==ch; });
   }
 
   ////////////////////////////////////////////////////////////////
