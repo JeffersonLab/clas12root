@@ -15,6 +15,8 @@
 namespace clas12root {
 
   
+  /// @brief Clas12root reader of multiple HIPO files
+  /// @see `clas12::clas12reader`
   class HipoChain : public TNamed {
 
 

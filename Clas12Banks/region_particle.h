@@ -62,8 +62,8 @@ namespace clas12 {
     virtual bool sort(){
       _pentry=_parts->getEntry();
       //check if allowed by particle-bank filters
-      _allowed=bankAllowsRow(_pentry, _parts);
-      _allowed_ftb=bankAllowsRow(_pentry, _ftbparts);
+      _allowed     = bankAllowsRow(_pentry, _parts);
+      _allowed_ftb = bankAllowsRow(_pentry, _ftbparts);
       //check for covariance matrix
       if(_covmat)_pcmat=_covmat->getIndex(_pentry);
       if(_mcpart)_pmc=_mcpart->match_to(_pentry);
@@ -161,7 +161,8 @@ namespace clas12 {
     double getMCPhiDiff() const {return getPhi()-mc()->getPhi();}
     double getMCPDiff() const {return getP()-mc()->getP();}
 
-    /// @returns true if this particle is "allowed", _e.g._, by a HIPO bank filter,
+    /// @brief Whether or not this `region_particle` is allowed
+    /// @returns true if this `region_particle` is "allowed", _e.g._, by a HIPO bank filter,
     /// which can be applied by an iguana algorithm
     bool const& isAllowed() const {
       if(_ftbparts==nullptr) return _allowed;

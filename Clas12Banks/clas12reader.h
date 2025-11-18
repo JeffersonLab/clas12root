@@ -59,6 +59,7 @@ namespace clas12 {
   using std::endl;
   using std::cerr;
 
+  /// @brief Clas12root HIPO file reader
   /// @details
   /// @par Accessors
   /// - Use the following methods to access `region_particle` objects:
@@ -69,6 +70,7 @@ namespace clas12 {
   ///   - `getByRegion`
   ///   - `getByCharge`
   /// - To access `hipo::bank` objects, @ref bank_acc "see the list of bank accessors".
+  /// @see `clas12root::HipoChain` to read a set of HIPO files
   class clas12reader  {
 
 
@@ -170,16 +172,23 @@ namespace clas12 {
     class mcevent& getMCEvent() const { return *_bmcevent; }
 
     // bank pointer accessors
+    /// @bank_ptr_accessor{HEL::online|getHELonline}
     helonline_ptr helonline() const{return _bhelonline.get();};
+    /// @bank_ptr_accessor{HEL::flip|getHELflip}
     helflip_ptr helflip() const{return _bhelflip.get();};
+    /// @bank_ptr_accessor{RUN::config|getRUNconfig}
     runconfig_ptr runconfig() const{return _brunconfig.get();};
+    /// @bank_ptr_accessor{REC::Event|getRECEvent}
     event_ptr event() const{return _bevent.get();};
+    /// @bank_ptr_accessor{REC::FTEvent|getRECFTEvent}
     ftbevent_ptr ftbevent() const{return _bftbevent.get();};
+    /// @bank_ptr_accessor{RAW::vtp|getRAWvtp}
     vtp_ptr vtp() const{return _bvtp.get();};
+    /// @bank_ptr_accessor{REC::VertDoca|getRECVertDoca}
     vertdoca_ptr vertdoca() const{return _bvertdoca.get();};
- 
-    
+    /// @bank_ptr_accessor{MC::Lund|getMCLund}
     mcpar_ptr mcparts() const{return _bmcparts.get();};
+    /// @bank_ptr_accessor{MC::Event|getMCEvent}
     mcevt_ptr mcevent() const{return _bmcevent.get();};
 
 
@@ -366,8 +375,8 @@ namespace clas12 {
       _reader.setVerbose(level);
     }
 
-    /// Set a "read action", a custom lambda function that is executed for every event within `readEvent()`,
-    /// which is called by methods like `clas12reader::next()` and `HipoChain::Next()`
+    /// @brief Set a "read action", a custom lambda function that is executed for every event within `readEvent()`.
+    /// @details `readEvent()` is called by methods like `clas12reader::next()` and `clas12root::HipoChain::Next()`
     /// @param readEventUserAction lambda function, where its argument is a pointer to an instance of this `clas12reader` class,
     /// and its `bool` return value controls whether to proceed with the event or not
     void SetReadAction(std::function<bool(clas12reader*)> readEventUserAction) {
@@ -463,7 +472,7 @@ namespace clas12 {
     bool _isOpen{false};
     std::vector<std::string> _addBankNames;
 
-    // user-definable lambda, called in `readEvent()`; the default is a no-op returning `true`
+    /// user-definable lambda, called in `readEvent()`; the default is a no-op returning `true`
     std::function<bool(clas12reader*)> _readEventUserAction = [](clas12reader* r) {return true;};
 
     ///////////////////////////////DB
