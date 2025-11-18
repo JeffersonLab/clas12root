@@ -177,7 +177,7 @@ namespace clas12 {
     bool const bankAllowsRow(int const& row, hipo::bank const* bank) const {
       // NOTE: `hipo::bank::getRowList()` returns the list of rows which are _allowed_ by `hipo::bank::filter()`; for example,
       // `hipo::bank::filter` is used by iguana fiducial cut algorithms to select particles from `REC::Particle`
-      if(bank!=nullptr && bank.getRows()>0)
+      if(bank!=nullptr && bank->getRows()>0)
         return std::find(bank->getRowList().begin(), bank->getRowList().end(), row) != bank->getRowList().end();
       return false;
     }
