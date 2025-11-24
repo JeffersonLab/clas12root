@@ -61,6 +61,9 @@ namespace clas12 {
     /// i.e. how the detector banks relate to that region
     virtual bool sort(){
       _pentry=_parts->getEntry();
+      //check if allowed by particle-bank filters
+      _allowed     = bankAllowsRow(_pentry, _parts);
+      _allowed_ftb = bankAllowsRow(_pentry, _ftbparts);
       //check for covariance matrix
       if(_covmat)_pcmat=_covmat->getIndex(_pentry);
       if(_mcpart)_pmc=_mcpart->match_to(_pentry);
@@ -158,8 +161,27 @@ namespace clas12 {
     double getMCPhiDiff() const {return getPhi()-mc()->getPhi();}
     double getMCPDiff() const {return getP()-mc()->getP();}
 
+    /// @brief Whether or not this `region_particle` is allowed
+    /// @returns true if this `region_particle` is "allowed", _e.g._, by a HIPO bank filter,
+    /// which can be applied by an iguana algorithm
+    bool const& isAllowed() const {
+      if(_ftbparts==nullptr) return _allowed;
+      return _useFTBPid*_ftbparts->getRows() ? _allowed_ftb : _allowed;
+    }
+
     //if(_parts->getCharge())
   protected:
+
+    /// @returns `true` if `bank` contains row `row` in its `hipo::bank::rowlist`
+    /// @param row the row to look up
+    /// @param bank the bank to check
+    bool const bankAllowsRow(int const& row, hipo::bank const* bank) const {
+      // NOTE: `hipo::bank::getRowList()` returns the list of rows which are _allowed_ by `hipo::bank::filter()`; for example,
+      // `hipo::bank::filter` is used by iguana fiducial cut algorithms to select particles from `REC::Particle`
+      if(bank!=nullptr && bank->getRows()>0)
+        return std::find(bank->getRowList().begin(), bank->getRowList().end(), row) != bank->getRowList().end();
+      return false;
+    }
 
     par_ptr _parts={nullptr};
     ftbpar_ptr _ftbparts={nullptr};
@@ -183,6 +205,10 @@ namespace clas12 {
     short _pcmat=-1;
     short _region=-1;
     short _useFTBPid=0;
+
+    // filter status (from `hipo::bank::filter`)
+    bool _allowed{true}; // allowed by `_parts`, i.e., `REC::Particle`
+    bool _allowed_ftb{true}; // allowed by `_ftbparts`, i.e., `RECFT::Particle`
   };
   //pointer "typedef"
   using region_part_ptr=clas12::region_particle*;
