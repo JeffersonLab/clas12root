@@ -27,19 +27,22 @@ void Ex9_QualityAssurance(){
    * 
    * See RGA analysis note and clas12-qadb github repository for
    * additional information.
-   */
-  c12.db()->qadb_requireOkForAsymmetry(true);
-  c12.db()->qadb_requireGolden(true);
-  c12.db()->qadb_addQARequirement("MarginalOutlier");
-  c12.db()->qadb_addQARequirement("TotalOutlier");
-
-  /*
+   *
    * applyQA specifies to the clas12reader that quality assurance
-   * cuts will be applied, based on the .json file given as an 
+   * cuts will be applied, based on the cook pass given as an 
    * argument. This file should contain the Clas12 Quality Assurance
    * database.
+
    */
-  c12.applyQA();
+  c12.applyQA(GETPASSSTRINGHERE);//GETPASSSTRINGHERE="latest", "pass1, "pass2",...
+  c12.db()db()->qadb_addQARequirement("MarginalOutlier");
+  c12.db()db()->qadb_addQARequirement("TotalOutlier");
+  c12.db()db()->qadb_addQARequirement("TerminalOutlier");
+  c12.db()db()->qadb_addQARequirement("MarginalOutlier");
+  c12.db()db()->qadb_addQARequirement("SectorLoss");
+  c12.db()db()->qadb_addQARequirement("LowLiveTime");
+  
+ 
 
   //The analysis can then proceed as usual.
   while(c12.next()) {
