@@ -1,0 +1,8 @@
+# ignore configuration file for some IDE tools
+
+# submodule source code
+lz4/**
+clas12-qadb/**
+ccdb/**
+hipo_src/**
+rcdb/**
