@@ -131,8 +131,10 @@ namespace clas12 {
     // - the method name convention is `getBankName` where `BankName` is the bank name without the colons (`::`)
     // - the `class` tag is needed disambiguate between classes and `clas12reader` methods with the same name
     /// @bank_accessor{REC::Particle}
+    /// @see getParticleBank
     class particle& getRECParticle() const { return *_bparts; }
     /// @bank_accessor{REC::FTParticle}
+    /// @see getParticleBank
     class ftbparticle& getRECFTParticle() const { return *_bftbparts; }
     /// @bank_accessor{HEL::online}
     class helonline& getHELonline() const { return *_bhelonline; }
@@ -191,6 +193,23 @@ namespace clas12 {
     /// @bank_ptr_accessor{MC::Event|getMCEvent}
     mcevt_ptr mcevent() const{return _bmcevent.get();};
 
+    // additional bank accessors
+
+    /// @brief get the particle bank, depending on your configuration
+    /// @returns a reference to `REC::Particle` by default, or a reference to `RECFT::Particle` if you are using
+    /// FT-based PID (you have called `useFTBased`) and the `RECFT::Particle` bank is not empty
+    /// (the empty check ignores `hipo::bank::rowlist` filtering, _e.g._, applied by an Iguana filter algorithm)
+    /// @note this method returns a base-class reference, `hipo::bank&`, while many other bank reference accessors
+    /// return derived-class references, such as `getRECParticle`
+    /// @see specific particle-bank accessors:
+    /// - getRECParticle
+    /// - getRECFTParticle
+    hipo::bank& getParticleBank() const {
+      if(_useFTBased && getRECFTParticle().getRows()>0)
+        return getRECFTParticle();
+      else
+        return getRECParticle();
+    }
 
     //support for generic non-DST banks
     uint addBank(const std::string& name){
@@ -311,7 +330,13 @@ namespace clas12 {
     
     bool passPidSelect();
 
+    /// @brief use FT-based PID, rather than the default
+    /// @see usingFTBased
     void useFTBased(){_useFTBased=true;}
+
+    /// @returns whether or not FT-based PID is used
+    /// @see useFTBased
+    bool const usingFTBased() const { return _useFTBased; }
     
     const std::vector<short> &getPids() const  noexcept{return _pids;}
     
