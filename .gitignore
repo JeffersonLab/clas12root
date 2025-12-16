@@ -3,6 +3,7 @@ bin
 build
 lib
 man
+/share
 
 # dependency installations
 ##############
@@ -54,6 +55,7 @@ ehthumbs.db
 Thumbs.db
 .nfs*
 *~
+.cache
 
 #Dropbox 
 .dropbox.attr
