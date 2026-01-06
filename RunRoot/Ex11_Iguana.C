@@ -93,17 +93,27 @@ void Ex11_Iguana() {
   //////////////////////////////////////////////////////////////////////////////////
 
   // define a lambda function that processes HIPO banks, in particular, with iguana
-  // - this function will be executed by `clas12reader` as soon as each event's `hipo::bank`
-  //   objects are filled, i.e., before `clas12reader` further processes the banks, within
-  //   functions such as:
+  //
+  // - this function will be executed by `clas12reader` just after each event's `hipo::bank`
+  //   objects are filled, and before `clas12reader` further processes the banks; this happens
+  //   within functions such as:
   //   - `clas12reader::next()`
   //   - `HipoChain::Next()`
-  // - if, for example, a momentum corrections algorithm is used, which corrects momenta
-  //   of particles in the `REC::Particle` bank, then clas12root objects which are based
-  //   on `REC::Particle`, such as `region_particle`, will have the corrected momenta
-  // - this example macro owns algorithm and created bank objects, therefore the lambda
+  //
+  // - behavior from iguana algorithm types:
+  //   - filter algorithms typically filter certain bank rows, such as a z-vertex
+  //     filter will choose rows of `REC::Particle`; accessors such as `clas12reader::getDetParticles`
+  //     and `clas12reader::getByID` can be used to access the filtered (or unfiltered) particles
+  //   - transformer algorithms modify values within banks, for example, a momentum corrections algorithm
+  //     corrects momenta of particles in the `REC::Particle` bank; then clas12root objects which are based
+  //     on `REC::Particle`, such as `region_particle`, will simply have the corrected momenta
+  //   - creator algorithms create new banks that are not known by clas12root; they are `hipo::bank`
+  //     objects and you may use them as any other bank directly
+  //
+  // - this example macro owns algorithm instances and created bank objects, therefore the lambda
   //   function must capture them by reference
-  // - the parameter `cr` is a pointer, which is a `clas12reader` instance, whether you are
+  //
+  // - the lambda function's parameter `cr` is a pointer, which is a `clas12reader` instance, whether you are
   //   using `clas12reader` directly (see `RunRoot/Ex1_CLAS12Reader.C`) or
   //   using `HipoChain` (see `RunRoot/Ex1_CLAS12ReaderChain.C`)
   //   - when you call functions like `clas12reader::next()` or `HipoChain::Next()`, the
@@ -111,21 +121,26 @@ void Ex11_Iguana() {
   //   - use `cr` to access DST banks from the `clas12reader`, using `cr->getBankName()` methods,
   //     where "BankName" is the name of the bank without the colons (`::`); for example, use
   //     `cr->getRECFTParticle` to access the `RECFT::Particle` bank
+  //
+  // - the lambda function's return value type must be `bool`:
+  //   - return `true` if you want the event to proceed
+  //   - return `false` if you want to skip the event
+  //
   auto iguana_action = [
-    // captured algorithms; use the ampersand (`&`) to capture them by reference
+    // capture the algorithm instances; use the ampersand (`&`) to capture them by reference
     &algo_vz_filter,
     &algo_sec_finder,
     &algo_fidu_filter,
     &algo_mom_corr,
     &algo_inc_kin,
-    // captured banks, again by reference
+    // capture the iguana-created banks, again by reference
     &iguana_bank_sec,
     &iguana_bank_inc_kin,
-    // also capture our `p_measured` cache, since we want to use it outside the lambda
+    // also capture our `p_measured` cache, since we want to populate it
     &p_measured
   ](clas12::clas12reader* cr)
   {
-    // before anything, let's "cache" our momentum magnitudes: loop over `REC::Particle`
+    // before anything, let's "cache" our original momentum magnitudes: loop over `REC::Particle`
     // and store |p| for each particle
     p_measured.clear();
     for(auto const& row : cr->getRECParticle().getRowList())
@@ -135,7 +150,7 @@ void Ex11_Iguana() {
             cr->getRECParticle().getFloat("pz", row)));
 
     // call Iguana `Run` functions
-    // - the choice of ordering is yours; for example, do you correct momenta before or after
+    // - think carefully about the ordering; for example, do you correct momenta before or after
     //   applying a filter which depends on momenta?
     // - these `Run` functions take `hipo::bank` objects as parameters (technically, lvalue references)
     //   - some bank objects may be updated, depending on the algorithm type
@@ -153,7 +168,7 @@ void Ex11_Iguana() {
           cr->getRUNconfig()    // RUN::config
           )) return false;
 
-    // next, let's apply the fiducial cuts; we'll skip FT cuts for now, but take a look
+    // next, let's apply the fiducial cuts; we'll skip FT cuts for this example, but take a look
     // at the algorithm's documentation for other `Run` functions that use FT data
     if(!algo_fidu_filter.Run(
           cr->getRECParticle(),    // REC::Particle
@@ -202,9 +217,8 @@ void Ex11_Iguana() {
   // this will point to the correct place when file changes
   auto const& c12 = chain.C12ref();
 
-  // loop over events
-  for(int numEvents=0; chain.Next(); numEvents++) // loop over all events
-  {
+  // loop over all events
+  for(int numEvents=0; chain.Next(); numEvents++) {
 
     // let's be verbose for the first few events, to demonstrate what Iguana did
     if(numEvents < 30) {
@@ -275,7 +289,8 @@ void Ex11_Iguana() {
         // electron vertex
         auto vz = electron->par()->getVz();
         vz_dist->Fill(vz);
-        // electron momentum, which was corrected by Iguana's momentum corrections
+        // electron momentum, which was corrected by Iguana's momentum corrections;
+        // notice we use the `p_measured` cache here, to plot the momentum correction amount
         auto p_corrected = electron->getP();
         deltaP_vs_P->Fill(p_corrected, p_corrected - p_measured.at(pindex_ele));
         // note: alternatively, we could have just gotten these values directly
