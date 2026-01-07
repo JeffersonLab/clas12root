@@ -56,6 +56,7 @@ namespace clas12 {
       addBank(additionalBank);
 	
     _applyQA=other._applyQA;
+    _readEventUserAction=other._readEventUserAction;
   }
 
   void clas12reader::initReader(){
@@ -461,8 +462,9 @@ namespace clas12 {
       _event.getStructure(*ibank.get());
     }
    
-
-    return true;
+    // now that we have read all the banks, call user's custom read action;
+    // return its return value, since it's the last thing `readEvent()` does
+    return _readEventUserAction(this);
   }
   ////////////////////////////////////////////////////////
   ///initialise next event from the reader
@@ -643,19 +645,35 @@ namespace clas12 {
     return true;
   }
   
-   ////////////////////////////////////////////////////////
-  ///Filter and return detParticles by given PID
-  std::vector<region_part_ptr> clas12reader::getByID(int id){
-    return container_filter(_detParticles, [id](region_part_ptr dr)
-			    {return dr->getPid()==id;});
+  ////////////////////////////////////////////////////////
+  // Filter and return detParticles
+
+  std::vector<region_part_ptr> clas12reader::getDetParticles(bool const& applyBankFilter) const
+  {
+    return applyBankFilter ?
+      container_filter(_detParticles, [](region_part_ptr dr) { return dr->isAllowed(); }) :
+      _detParticles;
   }
-  std::vector<region_part_ptr> clas12reader::getByRegion(int ir){
-    return container_filter(_detParticles, [ir](region_part_ptr dr)
-			    {return dr->getRegion()==ir;});
+
+  std::vector<region_part_ptr> clas12reader::getByID(int id, bool const& applyBankFilter) const
+  {
+    return applyBankFilter ?
+      container_filter(_detParticles, [&id](region_part_ptr dr) { return dr->getPid()==id && dr->isAllowed(); }) :
+      container_filter(_detParticles, [&id](region_part_ptr dr) { return dr->getPid()==id; });
   }
-  std::vector<region_part_ptr> clas12reader::getByCharge(int ch){
-    return container_filter(_detParticles, [ch](region_part_ptr dr)
-			    {return dr->par()->getCharge()==ch;});
+
+  std::vector<region_part_ptr> clas12reader::getByRegion(int ir, bool const& applyBankFilter) const
+  {
+    return applyBankFilter ?
+      container_filter(_detParticles, [&ir](region_part_ptr dr) { return dr->getRegion()==ir && dr->isAllowed(); }) :
+      container_filter(_detParticles, [&ir](region_part_ptr dr) { return dr->getRegion()==ir; });
+  }
+
+  std::vector<region_part_ptr> clas12reader::getByCharge(int ch, bool const& applyBankFilter) const
+  {
+    return applyBankFilter ?
+      container_filter(_detParticles, [&ch](region_part_ptr dr) { return dr->par()->getCharge()==ch && dr->isAllowed(); }) :
+      container_filter(_detParticles, [&ch](region_part_ptr dr) { return dr->par()->getCharge()==ch; });
   }
 
   ////////////////////////////////////////////////////////////////

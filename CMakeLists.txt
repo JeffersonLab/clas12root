@@ -13,7 +13,7 @@ endif()
 message(STATUS "Using cmake version ${CMAKE_VERSION}"  )
 
 # Define the project name, version, and language
-project(clas12root VERSION 1.9 LANGUAGES CXX)
+project(clas12root VERSION 1.9.0 LANGUAGES CXX)
 
 # ==============================================================================
 # Options
