@@ -578,10 +578,13 @@ Note the event number is just its position in the file, not the DST RUN::Config:
 
 ## Ex 11 Iguana interface
 
-To run iguana routines in clas12root you should first set the environment to point to an
+To run iguana routines in Clas12root you should first set the environment to point to an
 installed version of iguana, by setting the `IGUANA` variable to the INSTALLATION directory.
 Clas12root does _not_ depend on Iguana, but running `clas12root` will load its libraries for you if
 you have set the `IGUANA` environment variable.
 
 For usage of Iguana with `clas12root`, see the examples, such as
 - [`Ex11_Iguana.C`](/RunRoot/Ex11_Iguana.C)
+
+For tutorial slides, which illustrate how Iguana is used with Clas12root, see:
+- [Tutorial Slides (Software Meeting 15 January 2026)](https://clasweb.jlab.org/wiki/index.php/File:Iguana-and-clas12root.pdf)
