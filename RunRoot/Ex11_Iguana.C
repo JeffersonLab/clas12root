@@ -30,19 +30,23 @@
 
 void Ex11_Iguana() {
 
-  // parse arguments, which should be HIPO filename(s) prefixed with `--in=`; add them to a `HipoChain`
+  // create a HipoChain
   clas12root::HipoChain chain;
-  for(int i=2; i<gApplication->Argc(); i++) {
-    TString inputFile = gApplication->Argv(2);
-    inputFile(TRegexp("^--in=")) = "";
-    std::cout << "reading file " << inputFile << std::endl;
-    chain.Add(inputFile);
-    chain.SetReaderTags({0}); // read tag-0 events only
+
+  // parse CLI arguments
+  for(Int_t i = 2; i < gApplication->Argc(); i++) {
+    // if the argument starts with `--in=` and ends with `.hipo`, assume it's a HIPO file and add it to `chain`
+    if(TString opt = gApplication->Argv(i); opt.Contains(TRegexp("^--in=.*\\.hipo$"))) {
+      opt.ReplaceAll("--in=", "");
+      std::cout << "Add file " << opt << std::endl;
+      chain.Add(opt);
+    }
   }
-  if(chain.GetNFiles() == 0) {
-    std::cerr << " *** please provide HIPO file name(s)" << std::endl;
-    exit(1);
-  }
+  if(chain.GetNFiles() == 0)
+    throw std::runtime_error("please provide HIPO file name(s): --in=file1.hipo --in=file2.hipo ...");
+
+  // read tag-0 (physics) events only
+  chain.SetReaderTags({0}); // read tag-0 events only
 
   //////////////////////////////////////////////////////////////////////////////////
 
